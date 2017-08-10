@@ -37,7 +37,7 @@ export default {
   /**
    * 用户注册
    */
-  Regist(params, config) {
-    return fetch('/medicalsystem/rest/medUsers/medUsersList', params)
+  getScheduleList(params, config) {
+    return fetch('/medicalsystem/medOperationSchedule/medOperationScheduleList', params)
   }
 }

@@ -10,6 +10,9 @@ const index = resolve => {
 };
 export default new Router({
   routes: [ {
+    path: '/',
+    redirect: '/index'
+  },{
     path: '/login',
     component: login
   },{
