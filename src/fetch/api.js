@@ -2,7 +2,6 @@ import axios from 'axios'
 
 axios.defaults.baseURL = 'http://119.29.6.121:8080';
 
-
 //返回状态判断
 axios.interceptors.response.use((res) => {
   return res;
@@ -18,12 +17,17 @@ export function fetch(url, params, config) {
     config.timeout = 5000;
   }
   return new Promise((resolve, reject) => {
-    params = params?params:'';
+    params = params ? params : '';
     axios({
         method: 'post',
         url: url,
-        data: params,
-        timeout: config.timeout
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype : "json",
       })
       .then(function(response) {
         resolve(response.data);
@@ -35,9 +39,32 @@ export function fetch(url, params, config) {
 
 export default {
   /**
-   * 用户注册
+   * 获取预备排班手术列表
+   * 
    */
   getScheduleList(params, config) {
-    return fetch('/medicalsystem/medOperationSchedule/medOperationScheduleList', params)
+    return fetch('/medicalsystem/rest/medOperationSchedule/medOperationScheduleList', params)
+  },
+  /**
+   * 获取预备排班手术列表
+   * 
+   */
+  getScheduleList1(params, config) {
+    return fetch('/medicalsystem/rest/medOperationSchedule/medOperationScheduleList', params)
+  },
+  /**
+   * 预备排班手术编辑
+   * 
+   */
+  editSchedule(params, config) {
+    return fetch('medicalsystem/rest/medOperationSchedule/updateMedOperationSchedule', params)
+  },
+  /**
+   * 预备排班手术编辑
+   * 
+   */
+  getSupplyNurseList(params, config) {
+    return fetch('medicalsystem/rest/medHisUsers/getHsUsers', params)
   }
+
 }

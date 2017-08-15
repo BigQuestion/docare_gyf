@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
+  <meta charset="UTF-8">
+  <title>Document</title>
 </head>
+
 <body>
-	
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
 <script type="text/javascript">
-	$.ajax({
-		url: 'http://119.29.6.121:8080/medicalsystem/rest/medUsers/medUsersList',
-		type: 'POST',
-		data: '',
-	})
-	.done(function() {
-		console.log("success");
-	})
-	.fail(function() {
-		console.log("error");
-	})
-	.always(function(res) {
-		console.log(res);
-		console.log("complete");
-	});
-	
+$(function() {
+      var url1="http://119.29.6.121:8080/";
+  
+  $.ajax({
+      type:"post",
+      url:url1+"medicalsystem/rest/medOperationSchedule/medOperationScheduleList", 
+      data:{
+        "dateTime":"2014/07/08", //查询日期
+        "page":1,   //第几页
+        "count":2   //每页显示条数
+      },  
+      success:function(data){ 
+        debugger
+      }
+    });
+})
+
 </script>
+
 </html>
