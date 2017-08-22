@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 axios.defaults.baseURL = 'http://119.29.6.121:8080';
+axios.defaults.baseURL = 'http://192.168.0.103:8088';
 
 //返回状态判断
 axios.interceptors.response.use((res) => {
@@ -17,7 +18,7 @@ export function fetch(url, params, config) {
     config.timeout = 5000;
   }
   return new Promise((resolve, reject) => {
-    params = params ? params : '';
+    params = params ? params : {};
     axios({
         method: 'post',
         url: url,
@@ -38,6 +39,20 @@ export function fetch(url, params, config) {
 }
 
 export default {
+  /**
+   * 登录
+   * 
+   */
+  login(params, config) {
+    return fetch('/medicalsystem/rest/medUsers/userLogin', params)
+  },
+  /**
+   * 获取预备排班手术列表
+   * 
+   */
+  getUserList(params, config) {
+    return fetch('/medicalsystem/rest/medUsers/medUsersList', params)
+  },
   /**
    * 获取预备排班手术列表
    * 
@@ -65,6 +80,30 @@ export default {
    */
   getSupplyNurseList(params, config) {
     return fetch('medicalsystem/rest/medHisUsers/getHsUsers', params)
+  },
+  /**
+   * 提交安排手术排班
+   * 
+   */
+  submitMedOperationScheduleList(params, config) {
+    return fetch('medicalsystem/rest/medOperationSchedule/submitMedOperationScheduleList', params)
+
+  },
+  /**
+   * 提交安排手术排班
+   * 
+   */
+  scheduleReportView(params, config) {
+    return fetch('medicalsystem/rest/medOperationSchedule/scheduleReportView', params)
+
+  },
+  /**
+   * 提交安排手术排班
+   * 
+   */
+  getScheduleReportView(params, config) {
+    return fetch('medicalsystem/rest/medOperationSchedule/getScheduleReportView', params)
+
   }
 
 }

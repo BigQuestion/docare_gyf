@@ -2,21 +2,23 @@
 	<div>
 		<div class="flex w100">
             <div class="flex1">
-                <datepicker :value="dateValue" language="zh" @selected="dateChange"></datepicker>
+                <!-- <datepicker :value="dateValue" language="zh" @change="dateChange"></datepicker> -->
+                <input type="text" name="" v-model="dateValue" >
+                <button @click="dateChange">查询</button>
             </div>
             <div class="flex1">1.手术排班</div>
             <div class="flex1">2.手术申请</div>
             <div class="flex1">3.手术撤销</div>
-            <div class="flex1">4.手术通知单</div>
+            <div class="flex1" @click="goScheduleReportView()">4.手术通知单</div>
             <div class="flex1">5.系统配置</div>
             <div class="flex1">6.HIS同步</div>
             <div class="flex1">7.退出系统</div>
         </div>
-        <div>
+        <div class="tableBox">
             <div class="flex head">
                 <div v-for="item in tableConfig" class="cell resizeAble">{{item.text}}</div>
             </div>
-            <div v-for="item in scheduleList" class="flex rows" @dblclick="edit(item)">
+            <div v-for="item in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
                 <div  v-for="cell in tableConfig" class="cell" >
                     <div v-if="cell.type!='select'">
                         {{item[cell.value]}}
@@ -29,8 +31,10 @@
                         </select>
                     </div>
                 </div>
-                
             </div>
+        </div>
+        <div>
+            <button @click="submit">提交</button>
         </div>
         <div class="mask pCenter" v-if="mask">
             <div class="infoModal">
@@ -136,12 +140,43 @@ name: 'login',
             }
             ],
       		msg: '欢迎登陆！',
-            dateValue:new Date(2014,6,8),
+            dateValue:'2014/07/08',
             scheduleList:[],
             mask:false,
     	}
     },
     methods:{
+        goScheduleReportView(){
+            debugger
+            this.$router.push({
+                path:'/goScheduleReportView'
+            })
+        },
+        submit(){
+            let params = [];
+            for (var i = this.scheduleList.length - 1; i >= 0; i--) {
+                console.log(this.scheduleList[i].state);
+                if(this.scheduleList[i].state==1||this.scheduleList[i].state==0){
+                    params.push({
+                        patientId:this.scheduleList[i].patientId,
+                        scheduleId:this.scheduleList[i].scheduleId,
+                        visitId:this.scheduleList[i].visitId
+                    })
+                }
+            }
+            debugger
+            // params  = [{
+            //             patientId:'10710099',
+            //             scheduleId:'1',
+            //             visitId:'1'
+            //         }]
+            this.api.submitMedOperationScheduleList(params)
+            .then(
+                res=>{
+                    debugger
+                    this.getList(this.dateValue);
+                })
+        },
         modalSure(){
             let params = this.handleItem
             this.api.editSchedule(params)
@@ -161,45 +196,48 @@ name: 'login',
             this.mask = true;
         },
         dateChange(){
-            console.log(this.dateValue);
-            let date = new Date(this.dateValue);
-            let y = date.getFullYear();
-            let m = date.getMonth()+1;
-            if(m<10){
-                m = '0'+m;
-            }
-            let d = date.getDate()+1;
-            if(d<10){
-                d = '0'+d;
-            }
-            let dateStr = y+m+d;
-            this.getList(dateStr)
+            // console.log(this.dateValue);
+            // debugger
+            // let date = new Date(this.dateValue);
+            // let y = date.getFullYear();
+            // let m = date.getMonth()+1;
+            // if(m<10){
+            //     m = '0'+m;
+            // }
+            // let d = date.getDate()+1;
+            // if(d<10){
+            //     d = '0'+d;
+            // }
+            // let dateStr = y+'/'+m+'/'+d;
+            this.getList(this.dateValue)
         },
         getList(date){
+            debugger
+
             let params = {
-                "dateTime":"2014/07/08", //查询日期
-                "page":1,   //第几页
-                "count":2   //每页显示条数
+                "dateTime":date, //"2014/07/08"查询日期
+                // "page":1,   //第几页
+                // "count":2   //每页显示条数
             }
             this.api.getScheduleList(params)
                 .then(res=>{
-                    this.scheduleList = res;
+                    debugger
+                    this.scheduleList = res.list;
                      console.log(res);
                  });
         },
         getSupplyNurseList(){
-            let params = {
-
-            }
-            this.api.getSupplyNurseList(params)
+            this.api.getSupplyNurseList()
                 .then(res=>{
+                    debugger
                     console.log(res);
-                    this.options = res;
-                    this.getList();
+                    this.options = res.list;
+                    this.getList(this.dateValue);
                 })
         }
     },
     mounted(){
+                    // this.getList();
         
         this.getSupplyNurseList();
     },
@@ -211,6 +249,18 @@ name: 'login',
 }
 </script>
 <style scoped>
+.state2{
+    background: #0080FF;
+}
+.state3{
+    background:#FF6666;
+}
+.tableBox{
+    width:100%;
+    overflow-x: auto;
+    height:400px;
+    border:1px solid #999999;
+}
 .mySelect{
     width:100%;
     height:20px;

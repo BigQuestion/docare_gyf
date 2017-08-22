@@ -8,15 +8,27 @@ const login = resolve => {
 const index = resolve => {
     require(['../components/index/index.vue'], resolve)
 };
+const userManage = resolve => {
+    require(['../components/userManage/userManage.vue'], resolve)
+};
+const goScheduleReportView = resolve => {
+    require(['../components/goScheduleReportView/goScheduleReportView.vue'], resolve)
+};
 export default new Router({
   routes: [ {
     path: '/',
-    redirect: '/index'
+    redirect: '/login'
   },{
     path: '/login',
     component: login
   },{
     path: '/index',
     component: index
+  },{
+    path: '/userManage',
+    component: userManage
+  },{
+    path: '/goScheduleReportView',
+    component: goScheduleReportView
   },]
 })
