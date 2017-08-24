@@ -1,9 +1,11 @@
 # docare改版系统前端部署及部分技术说明
 
 ## 部分涉及技术
-1.js框架：[vue](https://cn.vuejs.org/v2/guide/)
-2.前端自动化部署：[webpack](https://doc.webpack-china.org/)
-3.跨平台桌面应用（客户端）打包工具：[electron](https://electron.org.cn/)（建设中。。。）
+> 1.js框架：[vue](https://cn.vuejs.org/v2/guide/)
+
+> 2.前端自动化部署：[webpack](https://doc.webpack-china.org/)
+
+> 3.跨平台桌面应用（客户端）打包工具：[electron](https://electron.org.cn/)（建设中。。。）
 
 ## 安装部署
 运行命令(如果无git命令,参照[git安装](https://git-scm.com/downloads))
@@ -46,4 +48,4 @@ npm run dev
 
 * 邮件(419like#163.com, 把#换成@)
 * QQ: 897996541
-* github: [layuiPlus](https://github.com/419like/docare_front)
+* 提问: [layuiPlus](https://github.com/419like/docare_front/issues)
