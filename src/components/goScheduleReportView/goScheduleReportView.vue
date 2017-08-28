@@ -58,7 +58,7 @@ export default {
             this.api.getScheduleReportView(params)
                 .then(res=>{
                     debugger
-                    this.scheduleList = res;
+                    this.scheduleList = res.list;
                      console.log(res);
                  });
         },
