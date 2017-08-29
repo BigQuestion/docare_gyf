@@ -20,6 +20,9 @@ const menu = resolve => {
 const statistics = resolve => {
     require(['../components/statistics/statistics.vue'], resolve)
 };
+const operationMaster = resolve => {
+    require(['../components/operationMaster/operationMaster.vue'], resolve)
+};
 export default new Router({
   routes: [ {
     path: '/',
@@ -42,5 +45,8 @@ export default new Router({
   },{
     path: '/statistics',
     component: statistics
+  },{
+    path: '/operationMaster',
+    component: operationMaster
   },]
 })

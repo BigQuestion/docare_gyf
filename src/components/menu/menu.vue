@@ -1,7 +1,7 @@
 <template>
 	<div style="display: flex">
-        <div class="flex1" @click="goUrl('/scheduleList')">排班</div>
-        <div class="flex1" @click="goUrl('/operationMaster')">麻醉系统</div>
+        <div class="flex1" @click="goUrl('/scheduleList')">排班系统</div>
+        <div class="flex1" @click="goUrl('/operationMaster')">麻醉手术系统</div>
         <div class="flex1" @click="goUrl('/statistics')">工作量统计</div>
 	</div>
 </template>
