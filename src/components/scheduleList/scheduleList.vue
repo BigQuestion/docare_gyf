@@ -164,12 +164,6 @@ name: 'login',
                     })
                 }
             }
-            debugger
-            // params  = [{
-            //             patientId:'10710099',
-            //             scheduleId:'1',
-            //             visitId:'1'
-            //         }]
             this.api.submitMedOperationScheduleList(params)
             .then(
                 res=>{

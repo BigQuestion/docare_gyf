@@ -33,7 +33,7 @@ function moveFun(e){
     block.style.width = e.x+'px';
 }
 export default {
-name: 'login',
+    name: 'login',
 	data () {
   		return {
       		msg: '欢迎登陆！',
@@ -64,9 +64,9 @@ name: 'login',
                 loginName:this.loginName,
                 loginPwd:this.loginPwd
             }
-    		// debugger
+            debugger
     		this.$router.push({
-                path: 'index'
+                path: 'menu'
             })
     	},
         move(e){

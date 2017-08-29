@@ -5,14 +5,20 @@ Vue.use(Router)
 const login = resolve => {
     require(['../components/login/login.vue'], resolve)
 };
-const index = resolve => {
-    require(['../components/index/index.vue'], resolve)
+const scheduleList = resolve => {
+    require(['../components/scheduleList/scheduleList.vue'], resolve)
 };
 const userManage = resolve => {
     require(['../components/userManage/userManage.vue'], resolve)
 };
 const goScheduleReportView = resolve => {
     require(['../components/goScheduleReportView/goScheduleReportView.vue'], resolve)
+};
+const menu = resolve => {
+    require(['../components/menu/menu.vue'], resolve)
+};
+const statistics = resolve => {
+    require(['../components/statistics/statistics.vue'], resolve)
 };
 export default new Router({
   routes: [ {
@@ -22,13 +28,19 @@ export default new Router({
     path: '/login',
     component: login
   },{
-    path: '/index',
-    component: index
+    path: '/menu',
+    component: menu
+  },{
+    path: '/scheduleList',
+    component: scheduleList
   },{
     path: '/userManage',
     component: userManage
   },{
     path: '/goScheduleReportView',
     component: goScheduleReportView
+  },{
+    path: '/statistics',
+    component: statistics
   },]
 })
