@@ -23,6 +23,9 @@ const statistics = resolve => {
 const operationMaster = resolve => {
     require(['../components/operationMaster/operationMaster.vue'], resolve)
 };
+const formDesigner = resolve => {
+    require(['../components/formDesigner/formDesigner.vue'], resolve)
+};
 export default new Router({
   routes: [ {
     path: '/',
@@ -48,5 +51,8 @@ export default new Router({
   },{
     path: '/operationMaster',
     component: operationMaster
+  },{
+    path: '/formDesigner',
+    component: formDesigner
   },]
 })

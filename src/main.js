@@ -13,6 +13,7 @@ Vue.config.productionTip = false
 import api from '@/fetch/api.js';
 Vue.prototype.api = api;
 
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

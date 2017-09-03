@@ -112,6 +112,14 @@ export default {
   getScheduleReportView(params, config) {
     return fetch('medicalsystem/rest/medOperationSchedule/getScheduleReportView', params)
 
+  },
+  /**
+   * 提交安排手术排班
+   * 
+   */
+  getMedOperationMasterList(params, config) {
+    return fetch('medicalsystem/rest/medOperationMaster/getMedOperationMasterList', params)
+
   }
 
 }
