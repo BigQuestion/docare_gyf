@@ -1,11 +1,17 @@
 <template>
 	<div>
 		<div>
-			
+			Docare登录
 		</div>
-        用户：<input type="" name="" v-model="loginName">
-        密码：<input type="" name="" v-model="loginPwd">
-        <button @click="login">login</button>
+        <div>
+            用户：<input type="" name="" v-model="loginName">
+        </div>
+        <div>
+            密码：<input type="" name="" v-model="loginPwd">
+        </div>
+        <div>
+            <button @click="login">login</button>
+        </div>
         <!-- <div class="flex" style="height:40px;" ref="row" >
             <div ref="block" id="block" style="width:100px;">1</div>
             <div class="line" @mousedown="dragstart"></div>
