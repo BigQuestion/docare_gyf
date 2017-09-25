@@ -120,6 +120,13 @@ export default {
   getMedOperationMasterList(params, config) {
     return fetch('medicalsystem/rest/medOperationMaster/getMedOperationMasterList', params)
 
+  },
+  /**
+   * 获取患者信息详情
+   * 
+   */
+  getPatienDetailInfo(params, config){
+     return fetch('medicalsystem/rest/medOperationMaster/selectPatientInfoMaster', params)
   }
 
 }

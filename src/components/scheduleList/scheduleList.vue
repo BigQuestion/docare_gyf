@@ -80,7 +80,7 @@ name: 'login',
                 value:'patientName'
             },{
                 text:'年龄',
-                value:'operatingRoomNo'
+                value:'patienAge'
             },{
                 text:'住院号',
                 value:'inpNo'
@@ -95,22 +95,22 @@ name: 'login',
                 value:'diagBeforeOperation'
             },{
                 text:'手术名称',
-                value:'operationName'
+                value:'operationSchName'
             },{
                 text:'手术医师',
-                value:'surgeon'
+                value:'surgeonName'
             },{
                 text:'助手1',
-                value:'firstAssistant'
+                value:'firstAssistantName'
             },{
                 text:'助手2',
-                value:'secondAssistant'
+                value:'secondAssistantName'
             },{
                 text:'麻醉方法',
                 value:'anesthesiaMethod'
             },{
                 text:'主麻',
-                value:'anesthesiaDoctor'
+                value:'anesthesiaDoctorName'
             },{
                 text:'副麻1',
                 value:'anesthesiaAssistant'
@@ -119,17 +119,17 @@ name: 'login',
                 value:'secondAnesthesiaAssistant'
             },{
                 text:'洗手1',
-                value:'firstOperationNurse'
+                value:'firstOperationNurseName'
             },{
                 text:'洗手2',
-                value:'secondOperationNurse'
+                value:'secondOperationNurseName'
             },{
                 text:'巡回1',
-                value:'firstSupplyNurse',
+                value:'firstSupplyNurseName',
                 type:'select'
             },{
                 text:'巡回2',
-                value:'secondSupplyNurse',
+                value:'secondtSupplyNurseName',
                 type:'select'
             },{
                 text:'隔离',
