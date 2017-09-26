@@ -40,6 +40,7 @@
                 
             </div>
         </div>-->
+        
 	</div>
 </template>
 <script>
@@ -135,7 +136,7 @@ export default {
     background: #808080;
 }
 .content{
-    display: flex;
+    display: flex; 
     width:calc(100% - 100px);
     height:100%;
     background: rgb(227,239,255);
