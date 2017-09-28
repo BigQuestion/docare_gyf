@@ -11,35 +11,42 @@
             </div>
             <div class="content">
                 <div class="patientList">
-                    <div>
-                        <input v-model="getTime" type="" name="">
+                    <div style="padding-left: 5px;">
+                        日期 <input v-model="getTime" type="" name="">
                     </div>
-                    <div>
+                    <div style="padding-left: 5px;">
                         <button @click='searchPatientList'>搜索</button>
                     </div>
                     <div>
-                        <div style="display: flex;">
+                        <div class="container" style="padding-left: 5px;">
                             <div>
-                                <input type="radio" id="one" value="10" v-model="operStatus">
+                                <input type="radio" id="all"  v-model="operStatus">
+                                <label for="all">全部</label>
+                                <input type="radio" id="one" value="0" v-model="operStatus">
                                 <label for="one">术前</label>
                                 <input type="radio" id="two" value="15" v-model="operStatus">
                                 <label for="two">术中</label>
-                                <input type="radio" id="two" value="25" v-model="operStatus">
-                                <label for="two">术后</label>
-                                <br>
-                                
+                                <input type="radio" id="three" value="25" v-model="operStatus">
+                                <label for="three">术后</label>
+                                <br> 
                             </div>
                         </div>
+                        <div class="container" style="padding-left: 5px;">
+                            <div>ID</div>
+                            <div class="left15"><input style="width: 100px;" type="text" v-model="patientId"></div>
+                            <div class="left15">姓名</div>
+                            <div class="left15"><input style="width: 100px;" type="text" v-model="patientName"></div>
+                        </div>
                     </div>
-                    <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)">
-                        <!-- <div>{{item.patientName}}</div> -->
+                    <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="test">
                         <div class="patientContent">
                             <span>手术间 {{item.operatingRoom}}</span>
                         </div>
                         <ul>
                             <li>患者 {{item.patientName}}  {{item.patientId}} 住院号 {{item.inpNo}}</li>
                             <li>手术 {{item.operationName}}</li>
-                            <li>时间 {{item.scheduledDateTime}}</li>
+                            <li v-if="item.inDateTime==null">时间 {{item.scheduledDateTime}}</li>
+                            <li v-if="item.inDateTime!=null">时间 {{item.inDateTime}}</li>
                             <li>术者 {{item.surgeonName}} 麻醉 {{item.anesthesiaDoctorName}} {{item.anesthesiaAssistantName}}</li>
                         </ul>
                     </div>
@@ -217,7 +224,9 @@ export default {
             dateTime:"",
             count:"",
             getTime:"2014/07/08",
-            operStatus:""
+            operStatus:"",
+            patientId:"",
+            patientName:""
 
     	}
     },
@@ -227,7 +236,9 @@ export default {
             let params = {
                 count:10,
                 dateTime:this.getTime,
-                operStatus:this.operStatus
+                operStatus:this.operStatus,
+                patientName:this.patientName,
+                patientId:this.patientId
             }
             this.api.getMedOperationMasterList(params)
             .then(
@@ -285,6 +296,9 @@ export default {
                 minute + ":" + second;
             _this.nowTime = t;
         }, 1000);
+        },
+        test(){
+            alert("双击了");
         },
 
     },
@@ -355,6 +369,7 @@ export default {
 .listBorder{
     border:1px solid rgb(177,207,243);
     padding-bottom: 5px;
+    padding-left: 5px;
 }
 .patientInfo{
     width: calc(100% - 350px);

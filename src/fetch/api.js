@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 //axios.defaults.baseURL = 'http://119.29.6.121:8080';
- axios.defaults.baseURL = 'http://192.168.0.100:8088';
+ axios.defaults.baseURL = 'http://localhost:8088';
 
 //返回状态判断
 axios.interceptors.response.use((res) => {
@@ -15,7 +15,7 @@ export function fetch(url, params, config) {
     config = {};
   }
   if (!config.timeout) {
-    config.timeout = 5000;
+    config.timeout = 50000;
   }
   return new Promise((resolve, reject) => {
     params = params ? params : {};
