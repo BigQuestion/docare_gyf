@@ -127,6 +127,22 @@ export default {
    */
   getPatienDetailInfo(params, config){
      return fetch('medicalsystem/rest/medOperationMaster/selectPatientInfoMaster', params)
+  },
+
+  /**
+   * 获取字典里面常用术语
+   * 
+   */
+  getMedAnesthesiaCommType(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/medAnesthesiaCommType/getAllType', params)
+  },
+
+  /**
+   * 获取常用术语字典列表
+   * 
+   */
+  getMedAnesthesiaCommDictByItemClass(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/medAnesthesiaCommDictByItemClass', params)
   }
 
 }

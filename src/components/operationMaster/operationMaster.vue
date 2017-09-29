@@ -2,17 +2,17 @@
 	<div style="height:100%;position:relative;">
 		<div class="head">
             <div class="logo">{{nowTime}}</div>
-            <div class="currentPatientInfo">currentPatientInfo</div>
+            <div class="currentPatientInfo">{{patientId}}</div>
             <div class="procedure">procedure</div>
         </div>
         <div class="down">
             <div class="left">
-                <button>字典</button>
+                <button @click="dictShow">字典</button>
             </div>
             <div class="content">
                 <div class="patientList">
                     <div style="padding-left: 5px;">
-                        日期 <input v-model="getTime" type="" name="">
+                        日期 <input v-model="getTime" type="date" name="">
                     </div>
                     <div style="padding-left: 5px;">
                         <button @click='searchPatientList'>搜索</button>
@@ -38,7 +38,7 @@
                             <div class="left15"><input style="width: 100px;" type="text" v-model="patientName"></div>
                         </div>
                     </div>
-                    <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="test">
+                    <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
                         <div class="patientContent">
                             <span>手术间 {{item.operatingRoom}}</span>
                         </div>
@@ -205,11 +205,46 @@
                 </div>
             </div>
         </div>
-        <!--<div class="mask">
+<!--         <div class="mask">
             <div class="">
                 
             </div>
-        </div>-->
+        </div> -->
+        <div v-if="dictView" style="position: absolute;width: 60%;height: 80%;left:20%;top:10%;background:rgb(227,239,255);border:2px solid rgb(60,163,203);">
+            <div style="height: 30px;line-height: 30px;background:rgb(60,163,203);color: white;">
+                <span>字典</span>
+            </div>
+            <div style="height: 50px;line-height: 50px;font-weight: bold;border-bottom: 2px solid rgb(177,207,243);">
+                <span style="margin-left: 30px;">字典维护</span>
+            </div>
+            <div style="display: flex;padding-left:10px;padding-top: 5px;">
+                <div class="tab_div" @click="getComType"><span>常用术语</span></div>
+                <div class="tab_div"><span>麻醉事件</span></div>
+                <div class="tab_div"><span>麻醉方法</span></div>
+
+            </div>
+            <div style="display: flex;height: 65%;background:white;margin:10px;">
+            <!-- 显示类别 -->
+                <div style="height: 100%;width: 30%;overflow-x: auto;margin-top:5px;border-right: 2px solid rgb(177,207,243);">
+                    <ul v-for="item in comTypeList">
+                        <li style="cursor:pointer;" @click="getTypeDetail(item)">
+                            <div style="margin-left: 20px;">{{item.typeName}}</div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 显示详细内容 -->
+                <div style="width: 70%;margin-top:5px;">
+                    <div style="display: flex;margin-left: 10px;">
+                        <div style="width: 24%;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
+                    </div>
+                    <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;">
+                        <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
+                            {{list[cl.value]}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 	</div>
 </template>
@@ -223,10 +258,33 @@ export default {
             nowTime:"",
             dateTime:"",
             count:"",
-            getTime:"2014/07/08",
+            getTime:"",
             operStatus:"",
             patientId:"",
-            patientName:""
+            patientName:"",
+            comTypeList:[],
+            itemClass:"",
+            contentConfig:[
+                {
+                    text:"序号",
+
+                },
+                {
+                    text:"分类",
+                    value:"typeName"
+                },
+                {
+                    text:"名称",
+                    value:"itemName"
+                },
+                {
+                    text:"编码",
+                    value:"itemCode"
+                },
+
+            ],
+            commonTypeList:[],
+            dictView:false
 
     	}
     },
@@ -297,9 +355,31 @@ export default {
             _this.nowTime = t;
         }, 1000);
         },
-        test(){
-            alert("双击了");
+        lockedPatient(item){
+             this.patientId = item.patientId;
         },
+        getComType(){
+            let params = {
+            }
+            this.api.getMedAnesthesiaCommType(params)
+            .then(
+                res=>{
+                    this.comTypeList = res.list;
+                });
+        },
+        getTypeDetail(item){
+             let params = {
+                itemClass:item.typeId
+            }
+            this.api.getMedAnesthesiaCommDictByItemClass(params)
+            .then(
+                res=>{
+                    this.commonTypeList = res.list;
+                });
+        },
+        dictShow(){
+            this.dictView = !this.dictView;
+        }
 
     },
     mounted(){
@@ -404,5 +484,17 @@ export default {
 }
 .left30{
     margin-left: 30px;
+}
+.tab_div{
+    height: 30px;
+    line-height: 30px;
+    width: 100px;
+    border:1px solid rgb(177,207,243);
+    background:rgb(76,121,187);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    text-align: center;
+    color: white;
+    margin-left: 2px;
 }
 </style>
