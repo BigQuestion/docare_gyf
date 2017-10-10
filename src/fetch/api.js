@@ -15,7 +15,7 @@ export function fetch(url, params, config) {
     config = {};
   }
   if (!config.timeout) {
-    config.timeout = 50000;
+    config.timeout = 500000;
   }
   return new Promise((resolve, reject) => {
     params = params ? params : {};
@@ -143,6 +143,14 @@ export default {
    */
   getMedAnesthesiaCommDictByItemClass(params, config){
      return fetch('medicalsystem/rest/medAnesthesiaComm/medAnesthesiaCommDictByItemClass', params)
+  },
+
+  /**
+   * 删除常用术语具体某条数据
+   * 
+   */
+  deleteByMedAnesthesiaInputDict(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/deleteByMedAnesthesiaInputDict', params)
   }
 
 }

@@ -98,7 +98,7 @@
                             </div>
                             <div class="container">
                                 <div>身份证号</div>
-                                <div class="in_con">
+                                <div class="in_con" style="width: 200px;">
                                     {{patientInfo.ID_NO}}
                                 </div>
                                 <div class="left15">联系电话</div>
@@ -211,8 +211,10 @@
             </div>
         </div> -->
         <div v-if="dictView" style="position: absolute;width: 60%;height: 80%;left:20%;top:10%;background:rgb(227,239,255);border:2px solid rgb(60,163,203);">
-            <div style="height: 30px;line-height: 30px;background:rgb(60,163,203);color: white;">
+            <div style="height: 30px;line-height: 30px;background:rgb(60,163,203);color: white;display: flex;
+            ">
                 <span>字典</span>
+                <span>X</span>
             </div>
             <div style="height: 50px;line-height: 50px;font-weight: bold;border-bottom: 2px solid rgb(177,207,243);">
                 <span style="margin-left: 30px;">字典维护</span>
@@ -233,16 +235,29 @@
                     </ul>
                 </div>
                 <!-- 显示详细内容 -->
-                <div style="width: 70%;margin-top:5px;">
+                <div style="width: 70%;margin-top:5px;overflow-y: auto;">
                     <div style="display: flex;margin-left: 10px;">
                         <div style="width: 24%;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
                     </div>
-                    <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;">
-                        <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
-                            {{list[cl.value]}}
+                    <div style="overflow-y: auto;">
+                        <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
+                            <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
+                            <div v-if="cl.status=='inable'">
+                                <input type="text" v-model="list[cl.value]" />
+                            </div>
+                            <div v-if="cl.status!='inable'">
+                                {{list[cl.value]}}
+                            </div> 
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div style="text-align: right;margin-right: 30px;">
+                <button style="width: 100px;height: 30px;">新增</button>
+                <button style="width: 100px;height: 30px;">保存</button>
+                <button style="width: 100px;height: 30px;">取消</button>
+                <button style="width: 100px;height: 30px;" @click="deleteByMedAnesthesiaInputDict">删除</button>
             </div>
         </div>
 
@@ -264,22 +279,28 @@ export default {
             patientName:"",
             comTypeList:[],
             itemClass:"",
+            obj:"",
+            tempTypeItem:"",
+            itemName:"",
             contentConfig:[
                 {
                     text:"序号",
+                    value:"serialNo"
 
                 },
                 {
                     text:"分类",
-                    value:"typeName"
+                    value:"itemClass"
                 },
                 {
                     text:"名称",
-                    value:"itemName"
+                    value:"itemName",
+                    status:"inable"
                 },
                 {
                     text:"编码",
-                    value:"itemCode"
+                    value:"itemCode",
+                    status:"inable"
                 },
 
             ],
@@ -368,8 +389,9 @@ export default {
                 });
         },
         getTypeDetail(item){
+            this.tempTypeItem = item;
              let params = {
-                itemClass:item.typeId
+                itemClass:item.typeName
             }
             this.api.getMedAnesthesiaCommDictByItemClass(params)
             .then(
@@ -379,6 +401,22 @@ export default {
         },
         dictShow(){
             this.dictView = !this.dictView;
+        },
+        getItem(item){
+            this.obj = item;
+        },
+        deleteByMedAnesthesiaInputDict(){
+            console.log(this.obj.itemCode);
+             let params = {
+                itemClass:this.obj.itemClass,
+                itemName:this.obj.itemName
+            }
+            this.api.deleteByMedAnesthesiaInputDict(params)
+            .then(
+                res=>{
+                    console.log("sadsads");
+                    this.getTypeDetail(this.tempTypeItem);
+                });
         }
 
     },
