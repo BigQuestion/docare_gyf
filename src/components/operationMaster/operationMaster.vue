@@ -242,12 +242,12 @@
                     <div style="overflow-y: auto;">
                         <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
                             <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
-                            <div v-if="cl.status=='inable'">
-                                <input type="text" v-model="list[cl.value]" />
+                            <div v-if="cl.status=='inable'" @dblclick="changeInputEdit(cl)">
+                                <input type="text" v-model="list[cl.value]" v-bind:readonly="cl.isWriteAble" v-on:input="getEditItem(list)">
                             </div>
                             <div v-if="cl.status!='inable'">
                                 {{list[cl.value]}}
-                            </div> 
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -295,12 +295,14 @@ export default {
                 {
                     text:"名称",
                     value:"itemName",
-                    status:"inable"
+                    status:"inable",
+                    isWriteAble:true,
                 },
                 {
                     text:"编码",
                     value:"itemCode",
-                    status:"inable"
+                    status:"inable",
+                    isWriteAble:true
                 },
 
             ],
@@ -414,9 +416,16 @@ export default {
             this.api.deleteByMedAnesthesiaInputDict(params)
             .then(
                 res=>{
-                    console.log("sadsads");
                     this.getTypeDetail(this.tempTypeItem);
                 });
+        },
+        changeInputEdit(item){
+            console.log(item.isWriteAble);
+            item.isWriteAble = false;
+            console.log(item.isWriteAble);
+        },
+        getEditItem(item){
+            console.log(item.itemName);
         }
 
     },
