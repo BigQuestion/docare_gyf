@@ -243,7 +243,8 @@
                         <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
                             <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
                             <div v-if="cl.status=='inable'" @dblclick="changeInputEdit(cl)">
-                                <input type="text" v-model="list[cl.value]" v-bind:readonly="cl.isWriteAble" v-on:input="getEditItem(list)">
+                                <input v-if="list.writeAble" type="text" v-model="list[cl.value]" v-on:input="getEditItem(list)" @blur="inputBlur(list)" >
+                                <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" v-on:input="getEditItem(list)" @click="valueWriteAble(list)">
                             </div>
                             <div v-if="cl.status!='inable'">
                                 {{list[cl.value]}}
@@ -314,6 +315,12 @@ export default {
     	}
     },
     methods:{
+        inputBlur(list){
+            list.writeAble = false;
+        },
+        valueWriteAble(list){
+            list.writeAble = true;
+        },
         searchPatientList(){
 
             let params = {
