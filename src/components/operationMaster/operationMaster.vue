@@ -250,13 +250,13 @@
                             </div>
                             </div>
                         </div>
-                    </div>
+                    </div>  
                 </div>
             </div>
             <div style="text-align: right;margin-right: 30px;">
-                <button style="width: 100px;height: 30px;">新增</button>
+                <button style="width: 100px;height: 30px;" @click="addMedAnesthesiaInputDict" :disabled="isAdd">新增</button>
                 <button style="width: 100px;height: 30px;">保存</button>
-                <button style="width: 100px;height: 30px;">取消</button>
+                <button style="width: 100px;height: 30px;" @click="cancleEdit" :disabled="isCancle">取消</button>
                 <button style="width: 100px;height: 30px;" @click="deleteByMedAnesthesiaInputDict">删除</button>
             </div>
         </div>
@@ -282,6 +282,8 @@ export default {
             obj:"",
             tempTypeItem:"",
             itemName:"",
+            isAdd:false,
+            isCancle:true,
             contentConfig:[
                 {
                     text:"序号",
@@ -420,13 +422,20 @@ export default {
                 });
         },
         changeInputEdit(item){
-            console.log(item.isWriteAble);
             item.isWriteAble = false;
-            console.log(item.isWriteAble);
         },
         getEditItem(item){
             console.log(item.itemName);
+        },
+        addMedAnesthesiaInputDict(){
+            this.commonTypeList.push({serialNo:'22',itemClass:"用药途径",itemName:"",});
+            this.isAdd = !this.isCancle;
+            this.isCancle = !this.isAdd;
+        },
+        cancleEdit(){
+            this.getTypeDetail(this.tempTypeItem);
         }
+
 
     },
     mounted(){
