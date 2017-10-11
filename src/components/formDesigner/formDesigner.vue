@@ -8,9 +8,12 @@
             </div>
             <div>
                 <div class="designArea" ref="area" @dragover.prevent @drop="drop" @click="clearClick($event)" @mousedown="areaMouseDown($event)">
-                    <div class="item"  style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" draggable="true" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @dragstart.stop="itemDrag($event,item)" @click.stop="itemChoose($event,item);" @mousedown.stop>
+                    <div class="item"  style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="itemChoose($event,item);" @mousedown.stop="itemMouseDown">
                         <form-element :value="item"></form-element>
                     </div>
+                    <!-- <div class="item"  style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" draggable="true" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @dragstart.stop="itemDrag($event,item)" @click.stop="itemChoose($event,item);" @mousedown.stop="itemMouseDown">
+                        <form-element :value="item"></form-element>
+                    </div> -->
                     <div class="mask">
                         <div v-if="chooseRect.endX" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',
                         height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
@@ -70,9 +73,14 @@ export default {
             chooseRect:{},
             area:'',
             chooseMode:false,
+            domItems:[],
     	}
     },
     methods:{
+        itemMouseDown(e){
+            // this.area.addEventListener('mousemove',itemMove);
+            // this.area.addEventListener('mouseup',itemStop);
+        },
         keyD(e){
             if(e.key=='Shift'){
                 this.chooseMode = true;
@@ -111,9 +119,10 @@ export default {
             e.preventDefault();
         },
         itemChoose(e,item){
-            debugger
             if(this.chooseMode){
                 this.chooseItems.push(item);
+                debugger
+                this.domItems.push(e.currentTarget)
                 item.chosen = true;
                 e.preventDefault();
             }else{
@@ -121,6 +130,7 @@ export default {
                     this.chooseItems[0].chosen = false;
                 }
                 this.chooseItems = [item];
+                this.domItems = [e.currentTarget];
                 item.chosen = true;
             }
         },
