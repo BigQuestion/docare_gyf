@@ -151,6 +151,22 @@ export default {
    */
   deleteByMedAnesthesiaInputDict(params, config){
      return fetch('medicalsystem/rest/medAnesthesiaComm/deleteByMedAnesthesiaInputDict', params)
+  },
+
+  /**
+   * 修改常用术语具体某条数据
+   * 
+   */
+  updateMedAnesthesiaInputDict(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/updateMedAnesthesiaInputDict', params)
+  },
+
+  /**
+   * 新增常用术语具体某条数据
+   * 
+   */
+  insertMedAnesthesiaInputDict(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/insertMedAnesthesiaInputDict', params)
   }
 
 }

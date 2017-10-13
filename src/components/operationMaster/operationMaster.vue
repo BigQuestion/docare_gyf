@@ -20,13 +20,13 @@
                     <div>
                         <div class="container" style="padding-left: 5px;">
                             <div>
-                                <input type="radio" id="all"  v-model="operStatus">
-                                <label for="all">全部</label>
-                                <input type="radio" id="one" value="0" v-model="operStatus">
+                                <input  type="radio" id="all" @click="searchPatientList"  v-model="operStatus" value="">
+                                <label for="all" >全部</label>
+                                <input type="radio" id="one" @click="searchPatientList" value="0" v-model="operStatus">
                                 <label for="one">术前</label>
-                                <input type="radio" id="two" value="15" v-model="operStatus">
+                                <input type="radio" id="two" @click="searchPatientList" value="15" v-model="operStatus">
                                 <label for="two">术中</label>
-                                <input type="radio" id="three" value="25" v-model="operStatus">
+                                <input type="radio" id="three" @click="searchPatientList" value="25" v-model="operStatus">
                                 <label for="three">术后</label>
                                 <br> 
                             </div>
@@ -242,9 +242,9 @@
                     <div style="overflow-y: auto;">
                         <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
                             <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
-                            <div v-if="cl.status=='inable'" @dblclick="changeInputEdit(cl)">
-                                <input v-if="list.writeAble" type="text" v-model="list[cl.value]" v-on:input="getEditItem(list)" @blur="inputBlur(list)" >
-                                <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" v-on:input="getEditItem(list)" @click="valueWriteAble(list)">
+                            <div v-if="cl.status=='inable'" >
+                                <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change">
+                                <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)">
                             </div>
                             <div v-if="cl.status!='inable'">
                                 {{list[cl.value]}}
@@ -256,9 +256,9 @@
             </div>
             <div style="text-align: right;margin-right: 30px;">
                 <button style="width: 100px;height: 30px;" @click="addMedAnesthesiaInputDict" :disabled="isAdd">新增</button>
-                <button style="width: 100px;height: 30px;">保存</button>
+                <button style="width: 100px;height: 30px;" :disabled="isSave" @click="saveValue">保存</button>
                 <button style="width: 100px;height: 30px;" @click="cancleEdit" :disabled="isCancle">取消</button>
-                <button style="width: 100px;height: 30px;" @click="deleteByMedAnesthesiaInputDict">删除</button>
+                <button style="width: 100px;height: 30px;" :disabled="isDelete" @click="deleteByMedAnesthesiaInputDict">删除</button>
             </div>
         </div>
 
@@ -283,8 +283,11 @@ export default {
             obj:"",
             tempTypeItem:"",
             itemName:"",
-            isAdd:false,
+            isAdd:true,
             isCancle:true,
+            tempSerNo:"",
+            isSave:true,
+            isDelete:true,
             contentConfig:[
                 {
                     text:"序号",
@@ -297,15 +300,13 @@ export default {
                 },
                 {
                     text:"名称",
-                    value:"itemName",
-                    status:"inable",
-                    isWriteAble:true,
+                    value:"newItemName",
+                    status:"inable"
                 },
                 {
                     text:"编码",
-                    value:"itemCode",
-                    status:"inable",
-                    isWriteAble:true
+                    value:"newItemCode",
+                    status:"inable"
                 },
 
             ],
@@ -322,6 +323,20 @@ export default {
             list.writeAble = true;
         },
         searchPatientList(){
+            if(this.getTime==""&&this.operStatus==""&&this.patientName==""&&this.patientId=="")
+            {
+                var now = new Date();
+                var year = now.getFullYear();
+                var month =(now.getMonth() + 1).toString();
+                var day = (now.getDate()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+            this.getTime = year + "-"+ month +"-"+  day;
+            }
 
             let params = {
                 count:10,
@@ -401,12 +416,18 @@ export default {
         },
         getTypeDetail(item){
             this.tempTypeItem = item;
+            this.isAdd = false;
              let params = {
                 itemClass:item.typeName
             }
             this.api.getMedAnesthesiaCommDictByItemClass(params)
             .then(
                 res=>{
+                    var m = res.list.length;
+                    for (var i = 0; i < m; i++) {
+                        res.list[i].newItemName = res.list[i].itemName;
+                        res.list[i].newItemCode = res.list[i].itemCode;
+                    }
                     this.commonTypeList = res.list;
                 });
         },
@@ -415,6 +436,7 @@ export default {
         },
         getItem(item){
             this.obj = item;
+            this.isDelete = false;
         },
         deleteByMedAnesthesiaInputDict(){
             console.log(this.obj.itemCode);
@@ -428,19 +450,59 @@ export default {
                     this.getTypeDetail(this.tempTypeItem);
                 });
         },
-        changeInputEdit(item){
-            item.isWriteAble = false;
-        },
-        getEditItem(item){
-            console.log(item.itemName);
-        },
         addMedAnesthesiaInputDict(){
-            this.commonTypeList.push({serialNo:'22',itemClass:"用药途径",itemName:"",});
-            this.isAdd = !this.isCancle;
+            this.commonTypeList.push({serialNo:this.commonTypeList.length,itemClass:this.tempTypeItem.typeName,newItemName:"",newItemCode:"",itemName:"",itemCode:""});
+            this.isAdd = this.isCancle;
             this.isCancle = !this.isAdd;
         },
         cancleEdit(){
             this.getTypeDetail(this.tempTypeItem);
+            this.isCancle = this.isAdd;
+            this.isAdd = !this.isCancle;
+            this.isSave = true;
+        },
+        change(){
+            this.isSave = false;
+        },
+        saveValue(){
+            var li = this.commonTypeList;
+            var k = li.length;
+            let params = [];
+            for (var i = 0; i < k; i++) {
+                if((li[i].newItemName!=li[i].itemName ||li[i].newItemCode!=li[i].itemCode)&&li[i].itemName!=""){
+                    params.push({
+                        itemClass:li[i].itemClass,
+                        oldItemName:li[i].itemName,
+                        itemName:li[i].newItemName,
+                        itemCode:li[i].newItemCode,
+                    });
+                }
+                if(li[i].itemName==""&&li[i].itemCode==""){
+                    let params1 = {
+                        itemClass:li[i].itemClass,
+                        oldItemName:li[i].itemName,
+                        itemName:li[i].newItemName,
+                        itemCode:li[i].newItemCode,
+                        serialNo:this.commonTypeList.length-1
+                    }
+                    this.api.insertMedAnesthesiaInputDict(params1)
+                    .then(
+                        res=>{
+                            this.getTypeDetail(this.tempTypeItem);
+                        });
+                        }
+            }
+            if(params.length>0){
+                this.api.updateMedAnesthesiaInputDict(params)
+                .then(
+                    res=>{
+                        this.getTypeDetail(this.tempTypeItem);
+                        
+                    });
+                }
+            this.isCancle = true;
+            this.isAdd = false;
+            this.isSave = true;
         }
 
 
@@ -449,6 +511,7 @@ export default {
         this.searchPatientList();
         this.setIntervaled();
     },
+
     components: {
         
     }
