@@ -16,6 +16,9 @@
                         height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
                     </div>
                 </div>
+                <div>
+                    <button @click="save">保存</button>
+                </div>
             </div>
             <div class="editBox">
                 <div>
@@ -31,6 +34,7 @@
                     <input type="" name="" v-model="chooseItems[0].height">
                 </div>
             </div>
+            
         </div>
     </div>
 </template>
@@ -62,6 +66,11 @@ export default {
                 text: '竖线',
                 type: 'verticalLine',
                 height: '100'
+            },{
+                text:"文本区",
+                type:"textarea",
+                height:"100",
+                width:"300"
             }],
             handleItem: {},
             offsetX: '',
@@ -215,13 +224,38 @@ export default {
                 this.formItems.push(data);
                 this.handleItem = {};
             }
+        },
+        save(){
+            let params = {
+                 formContent:JSON.stringify(this.formItems),
+                 formName:"麻醉",
+                 id:2
+            }
+            this.api.updateMedFormContent(params)
+             .then(
+                res=>{
+                     
+                }); 
+        },
+        selectMedFormTemp(){
+            let params = {
+                 formName:"麻醉记录单",
+                 id:2
+            }
+            this.api.selectMedFormTemp(params)
+             .then(
+                res=>{
+                    this.formItems= JSON.parse(res.formContent);
+                }); 
         }
+
     },
     components: {
         formElement
     },
     mounted() {
         this.area = this.$refs.area;
+        this.selectMedFormTemp();
     },
     created() {
         let component = this;
@@ -268,7 +302,7 @@ export default {
     position: relative;
     background: #CCCCCC;
     height: 600px;
-    width: 600px;
+    width: 800px;
 }
 
 </style>

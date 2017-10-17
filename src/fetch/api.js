@@ -167,6 +167,38 @@ export default {
    */
   insertMedAnesthesiaInputDict(params, config){
      return fetch('medicalsystem/rest/medAnesthesiaComm/insertMedAnesthesiaInputDict', params)
-  }
+  },
+
+  /**
+   * 新增单子名称
+   * 
+   */
+  insertMedFormTemp(params, config){
+     return fetch('medicalsystem/rest/medFormCon/insertMedFormTemp', params)
+  },
+
+  /**
+   * 获取单子信息
+   * 
+   */
+   selectMedFormTemp(params, config){
+     return fetch('medicalsystem/rest/medFormCon/selectMedFormTemp', params)
+  },
+
+  /**
+   * 修改单子信息
+   * 
+   */
+   updateMedFormContent(params, config){
+     return fetch('medicalsystem/rest/medFormCon/updateMedFormContent', params)
+  },
+
+  /**
+   * 获取所有单子信息
+   * 
+   */
+   selectMedFormList(params, config){
+     return fetch('medicalsystem/rest/medFormCon/selectMedFormList', params)
+  },
 
 }

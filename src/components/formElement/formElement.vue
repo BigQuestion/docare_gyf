@@ -18,6 +18,9 @@
         <div v-if="value.type=='verticalLine'">
             <div style="margin-left:1px;width:1px;background: #000;":style="{height:value.height+'px'}"></div>
         </div>
+        <div v-if="value.type=='textarea'" v-model="value.text">
+            <textarea :style="{height:value.height+'px',width:value.width+'px'}"></textarea>
+        </div>
 	</div>
 </template>
 <script>

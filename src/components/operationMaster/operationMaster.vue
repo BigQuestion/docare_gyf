@@ -2,8 +2,22 @@
 	<div style="height:100%;position:relative;">
 		<div class="head">
             <div class="logo">{{nowTime}}</div>
-            <div class="currentPatientInfo">{{patientId}}</div>
-            <div class="procedure">procedure</div>
+            <div class="currentPatientInfo">{{lockedPatientInfo.patientId}}</div>
+            <div class="procedure" style="position: relative;">
+                <div>
+                    <div>
+                        入手术室
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+                <div style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;" v-if="lockedPatientInfo.patientId">
+                    <div style="width: 150px;border-right: 1px solid black;height: 100%;text-align: center;line-height: 30px;" v-for="item in medBillList">
+                        {{item.formName}}
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="down">
             <div class="left">
@@ -288,6 +302,8 @@ export default {
             tempSerNo:"",
             isSave:true,
             isDelete:true,
+            medBillList:[],
+            lockedPatientInfo:"",
             contentConfig:[
                 {
                     text:"序号",
@@ -403,7 +419,7 @@ export default {
         }, 1000);
         },
         lockedPatient(item){
-             this.patientId = item.patientId;
+             this.lockedPatientInfo = item;
         },
         getComType(){
             let params = {
@@ -503,6 +519,15 @@ export default {
             this.isCancle = true;
             this.isAdd = false;
             this.isSave = true;
+        },
+        selectMedFormList(){
+            let params={}
+            this.api.selectMedFormList(params)
+                .then(
+                    res=>{
+                        this.medBillList = res.list;
+                        
+                    });
         }
 
 
@@ -510,6 +535,7 @@ export default {
     mounted(){
         this.searchPatientList();
         this.setIntervaled();
+        this.selectMedFormList();
     },
 
     components: {
