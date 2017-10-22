@@ -3,14 +3,14 @@
 		<div v-if="value.type=='text'">
             {{value.value}}
 		</div>
-        <div v-if="value.type=='input'" v-model="value.text">
-            <input :style="{width:value.width+'px'}" type="" name="" >
+        <div v-if="value.type=='input'" >
+            <input :style="{width:value.width+'px'}" type="" name="" v-model="value.text">
         </div>
-        <div v-if="value.type=='radio'" v-model="value.text">
-            <input type="radio" name="" >
+        <div v-if="value.type=='radio'" >
+            <input type="radio" name="" v-model="value.text">
         </div>
-        <div v-if="value.type=='checkbox'" v-model="value.text">
-            <input type="checkbox" name="" >
+        <div v-if="value.type=='checkbox'" >
+            <input type="checkbox" name="" v-model="value.text">
         </div>
         <div v-if="value.type=='line'">
             <div style="margin-top:1px;height:1px;background: #000;":style="{width:value.width+'px'}"></div>
@@ -18,8 +18,11 @@
         <div v-if="value.type=='verticalLine'">
             <div style="margin-left:1px;width:1px;background: #000;":style="{height:value.height+'px'}"></div>
         </div>
-        <div v-if="value.type=='textarea'" v-model="value.text">
-            <textarea :style="{height:value.height+'px',width:value.width+'px'}"></textarea>
+        <div v-if="value.type=='textarea'" >
+            <textarea :style="{height:value.height+'px',width:value.width+'px'}" v-model="value.text"></textarea>
+        </div>
+        <div v-if="value.type=='autoInput'" >
+            <textarea :style="{height:value.height+'px',width:value.width+'px'}" v-model="value.text"></textarea>
         </div>
 	</div>
 </template>

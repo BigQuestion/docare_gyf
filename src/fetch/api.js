@@ -201,4 +201,12 @@ export default {
      return fetch('medicalsystem/rest/medFormCon/selectMedFormList', params)
   },
 
+  /**
+   * 修改病人在手术间状态
+   * 
+   */
+   changeOperationStatus(params, config){
+     return fetch('medicalsystem/rest/medOperationMaster/changeOperationStatus', params)
+  },
+
 }

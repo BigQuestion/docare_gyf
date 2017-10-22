@@ -25,13 +25,16 @@
                     数据编辑区域
                 </div>
                 <div v-if="chooseItems[0]&&chooseItems[0].value">
-                    <input type="" name="" v-model="chooseItems[0].value">
+                    值：<input type="" name="" v-model="chooseItems[0].value">
                 </div>
                 <div v-if="chooseItems[0]&&chooseItems[0].width">
-                    <input type="" name="" v-model="chooseItems[0].width">
+                    宽度：<input type="" name="" v-model="chooseItems[0].width">
                 </div>
                 <div v-if="chooseItems[0]&&chooseItems[0].height">
-                    <input type="" name="" v-model="chooseItems[0].height">
+                    高度：<input type="" name="" v-model="chooseItems[0].height">
+                </div>
+                <div v-if="chooseItems[0]&&chooseItems[0].height">
+                    高度：<input type="" name="" v-model="chooseItems[0].height">
                 </div>
             </div>
             
@@ -46,12 +49,18 @@ export default {
         return {
             formItems: [],
             btns: [{
+                text: '自动获取',
+                type: 'autoInput',
+                value: '输入文字',
+                selectKeyfield:'id',
+            },{
                 text: '文本',
                 type: 'text',
                 value: '输入文字'
             }, {
                 text: '输入',
                 type: 'input'
+                
             }, {
                 text: '单选',
                 type: 'radio'
@@ -228,7 +237,7 @@ export default {
         save(){
             let params = {
                  formContent:JSON.stringify(this.formItems),
-                 formName:"麻醉",
+                 formName:"麻醉记录单",
                  id:2
             }
             this.api.updateMedFormContent(params)
@@ -302,7 +311,7 @@ export default {
     position: relative;
     background: #CCCCCC;
     height: 600px;
-    width: 800px;
+    width: 900px;
 }
 
 </style>

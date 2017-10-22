@@ -4,16 +4,26 @@
             <div class="logo">{{nowTime}}</div>
             <div class="currentPatientInfo">{{lockedPatientInfo.patientId}}</div>
             <div class="procedure" style="position: relative;">
-                <div>
-                    <div>
-                        入手术室
+                <div style="display: flex;" v-if="lockedPatientInfo.patientId">
+                    <div style="margin:0px 5px;">
+                        <div>
+                            入手术室
+                        </div>
+                         <div>
+                             <input type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5')">
+                         </div>
                     </div>
-                    <div>
-                        
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                        <div>
+                            麻醉开始
+                        </div>
+                         <div>
+                             <input type="datetime-local" name="" v-model="anesStartDateTime">
+                         </div>
                     </div>
                 </div>
                 <div style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;" v-if="lockedPatientInfo.patientId">
-                    <div style="width: 150px;border-right: 1px solid black;height: 100%;text-align: center;line-height: 30px;" v-for="item in medBillList">
+                    <div style="width: 150px;border-right: 1px solid black;height: 100%;text-align: center;line-height: 30px;" v-for="item in medBillList" @click="selectMedFormTemp">
                         {{item.formName}}
                     </div>
                 </div>
@@ -217,6 +227,16 @@
                         </div>
                     </div>
                 </div>
+
+                <!--单子信息-->
+                
+                    <div class="designArea" v-if="formDetail">
+                        <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
+                            <form-element :value="item"></form-element>
+                        </div>
+                    </div> 
+
+
             </div>
         </div>
 <!--         <div class="mask">
@@ -279,10 +299,12 @@
 	</div>
 </template>
 <script>
+import formElement from '@/components/formElement/formElement.vue';
 export default {
 	data () {
   		return {
             patientList:[],
+            formItems: [],
             viewInfo:false,
             patientInfo:{},
             nowTime:"",
@@ -304,6 +326,9 @@ export default {
             isDelete:true,
             medBillList:[],
             lockedPatientInfo:"",
+            formDetail:false,
+            inRoomDateTime:"",
+            anesStartDateTime:"",
             contentConfig:[
                 {
                     text:"序号",
@@ -369,7 +394,7 @@ export default {
 
         },
         patientDeatilInfo(item){
-
+            this.formDetail = false;
             let params = {
                 patientId:item.patientId,
                 operId:item.operId,
@@ -413,7 +438,7 @@ export default {
             // 程序计时的月从0开始取值后+1
             var m = time.getMonth() + 1;
             var t = year + "-" + month + "-" +
-                day + " " + time.getHours() + ":" +
+                date + " " + time.getHours() + ":" +
                 minute + ":" + second;
             _this.nowTime = t;
         }, 1000);
@@ -526,6 +551,37 @@ export default {
                 .then(
                     res=>{
                         this.medBillList = res.list;
+                    });
+        },
+        selectMedFormTemp(){
+            this.formDetail = true;
+            this.viewInfo = false;
+            let params = {
+                 formName:"麻醉记录单",
+                 id:2
+            }
+            this.api.selectMedFormTemp(params)
+             .then(
+                res=>{
+                    this.formItems= JSON.parse(res.formContent);
+                }); 
+        },
+        changeStatus(status){
+            console.log(this.lockedPatientInfo);
+            let params={}
+            if(status == 5){
+                params={
+                    patientId:this.lockedPatientInfo.patientId,
+                    visitId:this.lockedPatientInfo.visitId,
+                    operId:this.lockedPatientInfo.operId,
+                    inDateTime:this.inRoomDateTime,
+                    operStatus:5,
+                    operatingRoom:this.lockedPatientInfo.operatingRoom,
+                }
+            }
+            this.api.changeOperationStatus(params)
+            .then(
+                    res=>{
                         
                     });
         }
@@ -539,8 +595,8 @@ export default {
     },
 
     components: {
-        
-    }
+        formElement
+    },
 }
 </script>
 <style scoped>
@@ -648,5 +704,12 @@ export default {
     text-align: center;
     color: white;
     margin-left: 2px;
+}
+.designArea {
+    position: relative;
+    height: 600px;
+    width: 900px;
+    background: white;
+    border: 1px solid black;
 }
 </style>
