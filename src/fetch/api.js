@@ -209,4 +209,52 @@ export default {
      return fetch('medicalsystem/rest/medOperationMaster/changeOperationStatus', params)
   },
 
+  /**
+   * 获取术中登记病人的麻醉事件
+   * 
+   */
+   selectMedAnesthesiaEventList(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/selectMedAnesthesiaEventList', params)
+  },
+  
+  /**
+   * 获取麻醉事件类型
+   * 
+   */
+   allMedAnesthesiaEventType(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/allMedAnesthesiaEventType', params)
+  },
+
+  /**
+   * 获取某项麻醉事件内容
+   * 
+   */
+   medAnesthesiaEventOpenByItemClass(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/medAnesthesiaEventOpenByItemClass', params)
+  },
+
+  /**
+   * 插入病人麻醉事件记录
+   * 
+   */
+   insertMedAnesthesiaEvent(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/insertMedAnesthesiaEvent', params)
+  },
+
+  /**
+   * 修改病人麻醉事件记录
+   * 
+   */
+   updateMedAnesthesiaEvent(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/updateMedAnesthesiaEvent', params)
+  },
+
+  /**
+   * 删除病人麻醉事件记录
+   * 
+   */
+   deleteMedAnesthesiaEvent(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnesthesiaEvent', params)
+  },
+
 }

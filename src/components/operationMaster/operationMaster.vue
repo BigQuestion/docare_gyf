@@ -18,7 +18,39 @@
                             麻醉开始
                         </div>
                          <div>
-                             <input type="datetime-local" name="" v-model="anesStartDateTime">
+                             <input type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10')">
+                         </div>
+                    </div>
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                        <div>
+                            手术开始
+                        </div>
+                         <div>
+                             <input type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15')">
+                         </div>
+                    </div>
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                        <div>
+                            手术结束
+                        </div>
+                         <div>
+                             <input type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25')">
+                         </div>
+                    </div>
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                        <div>
+                            麻醉结束
+                        </div>
+                         <div>
+                             <input type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30')">
+                         </div>
+                    </div>
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                        <div>
+                            出手术室
+                        </div>
+                         <div>
+                             <input type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35')">
                          </div>
                     </div>
                 </div>
@@ -32,6 +64,10 @@
         <div class="down">
             <div class="left">
                 <button @click="dictShow">字典</button>
+
+                <button v-if="lockedPatientInfo.patientId" @click="getPatientOperationInfo">手术信息</button>
+
+                <button v-if="lockedPatientInfo.patientId" @click="getOperationRegister">术中登记</button>
             </div>
             <div class="content">
                 <div class="patientList">
@@ -64,7 +100,7 @@
                     </div>
                     <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
                         <div class="patientContent">
-                            <span>手术间 {{item.operatingRoom}}</span>
+                            <span>手术间 {{item.operatingRoomNo}}</span>
                         </div>
                         <ul>
                             <li>患者 {{item.patientName}}  {{item.patientId}} 住院号 {{item.inpNo}}</li>
@@ -75,6 +111,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <div class="patientInfo" v-if="viewInfo">
                     <div class="pat_title">患者详情</div>
                     <div style="margin-top: 5px;">
@@ -239,11 +276,13 @@
 
             </div>
         </div>
-<!--         <div class="mask">
+<!-- <div class="mask">
             <div class="">
                 
             </div>
         </div> -->
+        <patientOperationInfo v-if="patientOperationInfoView"></patientOperationInfo>
+        <operationRegister v-if="operationRegisterView" :objectItem="lockedPatientInfo"></operationRegister>
         <div v-if="dictView" style="position: absolute;width: 60%;height: 80%;left:20%;top:10%;background:rgb(227,239,255);border:2px solid rgb(60,163,203);">
             <div style="height: 30px;line-height: 30px;background:rgb(60,163,203);color: white;display: flex;
             ">
@@ -276,13 +315,13 @@
                     <div style="overflow-y: auto;">
                         <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
                             <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
-                            <div v-if="cl.status=='inable'" >
-                                <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change">
-                                <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)">
-                            </div>
-                            <div v-if="cl.status!='inable'">
-                                {{list[cl.value]}}
-                            </div>
+                                <div v-if="cl.status=='inable'" >
+                                    <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change">
+                                    <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)">
+                                </div>
+                                <div v-if="cl.status!='inable'">
+                                    {{list[cl.value]}}
+                                </div>
                             </div>
                         </div>
                     </div>  
@@ -300,6 +339,8 @@
 </template>
 <script>
 import formElement from '@/components/formElement/formElement.vue';
+import patientOperationInfo from '@/components/patientOperationInfo/patientOperationInfo.vue';
+import operationRegister from '@/components/operationRegister/operationRegister.vue';
 export default {
 	data () {
   		return {
@@ -328,7 +369,13 @@ export default {
             lockedPatientInfo:"",
             formDetail:false,
             inRoomDateTime:"",
-            anesStartDateTime:"",
+            anesStartTime:"",
+            startDateTime:"",
+            endDateTime:"",
+            anesEndTime:"",
+            outDateTime:"",
+            patientOperationInfoView:false,
+            operationRegisterView:false,
             contentConfig:[
                 {
                     text:"序号",
@@ -445,6 +492,12 @@ export default {
         },
         lockedPatient(item){
              this.lockedPatientInfo = item;
+              this.inRoomDateTime =this.changeDateFormat(item.inDateTime);
+             this.anesStartTime = this.changeDateFormat(item.anesStartTime);
+             this.startDateTime = this.changeDateFormat(item.startDateTime);
+             this.endDateTime = this.changeDateFormat(item.endDateTime);
+             this.anesEndTime = this.changeDateFormat(item.anesEndTime);
+             this.outDateTime = this.changeDateFormat(item.outDateTime);
         },
         getComType(){
             let params = {
@@ -566,25 +619,39 @@ export default {
                     this.formItems= JSON.parse(res.formContent);
                 }); 
         },
+        //修改病人手术状态
         changeStatus(status){
-            console.log(this.lockedPatientInfo);
-            let params={}
-            if(status == 5){
-                params={
+            console.log(this.datetimeLocalToDate(this.inRoomDateTime));
+            let params= {
                     patientId:this.lockedPatientInfo.patientId,
                     visitId:this.lockedPatientInfo.visitId,
                     operId:this.lockedPatientInfo.operId,
-                    inDateTime:this.inRoomDateTime,
-                    operStatus:5,
+                    inDateTime:this.datetimeLocalToDate(this.inRoomDateTime),
+                    anesStartTime:this.datetimeLocalToDate(this.anesStartTime),
+                    startDateTime:this.datetimeLocalToDate(this.startDateTime),
+                    endDateTime:this.datetimeLocalToDate(this.endDateTime),
+                    anesEndTime:this.datetimeLocalToDate(this.anesEndTime),
+                    outDateTime:this.datetimeLocalToDate(this.outDateTime),
+                    operStatus:status,
                     operatingRoom:this.lockedPatientInfo.operatingRoom,
+                    operatingRoomNo:this.lockedPatientInfo.operatingRoomNo
                 }
-            }
+
             this.api.changeOperationStatus(params)
             .then(
                     res=>{
-                        
+                        this.searchPatientList();
                     });
-        }
+        },
+        //手术信息
+        getPatientOperationInfo(){
+            this.patientOperationInfoView = !this.patientOperationInfoView;
+        },
+        //术中登记
+        getOperationRegister(){
+            this.operationRegisterView = !this.operationRegisterView;
+        },
+
 
 
     },
@@ -595,7 +662,9 @@ export default {
     },
 
     components: {
-        formElement
+        formElement,
+        patientOperationInfo,
+        operationRegister
     },
 }
 </script>
