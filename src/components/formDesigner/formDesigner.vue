@@ -255,7 +255,7 @@ export default {
              .then(
                 res=>{
                     this.formItems= JSON.parse(res.formContent);
-                }); 
+                });
         }
 
     },
