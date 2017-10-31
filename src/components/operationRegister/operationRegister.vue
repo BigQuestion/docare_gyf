@@ -17,10 +17,10 @@
 	                <div >
 	                	<div v-for="item in eventList" style="display:flex;" @click="clickItem(item)">
 							<div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'"> 
-		                       <input @change=""  type="text" :style="{width:cl.width+'px'}" v-model="item[cl.fieldObj]">
+		                       <input @change="getChangeValue(item)"  type="text" :style="{width:cl.width+'px'}" v-model="item[cl.fieldObj]">
 		                    </div>
-		                    <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'"> 
-		                    	<input readonly="readonly"  type="text" :style="{width:cl.width+'px'}" v-model="item[cl.fieldObj]"> 
+		                    <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
+		                    	<input readonly="readonly" type="text" :style="{width:cl.width+'px'}" v-model="item[cl.fieldObj]">
 		                    </div>
 						</div>
 	                </div>
@@ -88,11 +88,11 @@
 					</div>
 				</div> -->
 				<div v-for="sItem in signdataList">
-					 <div style="width: 60px;">
+					<div style="width: 60px;">
 					 	{{sItem.time | discount}}
-					 </div>
-					 <div v-for="secItem in itemNameList">
-						<input type="text" style="width: 60px;" >
+					</div>
+					<div v-for="(num,index) in itemNameList">
+						<input type="text" style="width: 60px;" :value="sItem.dataValue[index]?sItem.dataValue[index]:''">
 					</div>
 				</div>
 			</div>
@@ -301,7 +301,6 @@
 	        				})
         		}
         	}
-        	console.log(addParams)
         },
 
         getSignName(){
@@ -337,6 +336,19 @@
         				 this.signdataList = res;
         		})
         },
+        //获取改变的值
+        getChangeValue(item){
+        	debugger
+        	console.log(item.CONCENTRATION);
+        	let params = {
+        		patientId:this.objectItem.patientId,
+        		operId:this.objectItem.operId,
+        		visitId:this.objectItem.visitId,
+
+        	}
+
+        },
+
 
     },
     props:['objectItem'],
