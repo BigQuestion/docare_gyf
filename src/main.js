@@ -38,6 +38,15 @@ Vue.prototype.changeDateFormat = function(dateObj){
 	    	var str1 = str[0]+"T"+str[1];
 	    	return str1;
 }
+Vue.filter('discount', function(time) {
+
+    return time.split(" ")[1];
+});
+
+Vue.filter('strtoarry', function(srt) {
+
+    return time.split(",");
+});
 
 
 /* eslint-disable no-new */

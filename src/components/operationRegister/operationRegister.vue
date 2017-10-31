@@ -73,12 +73,34 @@
 		<div style="height: 40px;padding-left: 15px;">
 			<span style="line-height: 40px;">体征数据</span>
 		</div>
-		<div style="height: 180px;overflow:auto;">
-			
+		<div style="height: 200px;overflow:auto;">
+			<div style="display: flex;padding-left: 10px;">
+				<div>
+					<div style="width: 100px;">名称</div>
+					<div v-for="item in itemNameList">{{item}}</div>
+				</div>
+<!-- 				<div v-for="sItem in signdataList">
+					 <div style="width: 60px;">
+					 	{{sItem.time | discount}}
+					 </div>
+					 <div v-for="secItem in sItem.dataValue">
+						<input type="" name="" :value="secItem" style="width: 60px;">
+					</div>
+				</div> -->
+				<div v-for="sItem in signdataList">
+					 <div style="width: 60px;">
+					 	{{sItem.time | discount}}
+					 </div>
+					 <div v-for="secItem in itemNameList">
+						<input type="text" style="width: 60px;" >
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
 <script>
+
 	export default{
 		data () {
   		return {
@@ -149,6 +171,8 @@
   			eventNameList:[],
   			selectedItem:"",
   			selectTypeTemp:"",
+  			itemNameList:[],
+  			signdataList:[],
 
     	}
     },
@@ -278,7 +302,41 @@
         		}
         	}
         	console.log(addParams)
-        }
+        },
+
+        getSignName(){
+        	let params={
+        		patientId:this.objectItem.patientId,
+        		operId:this.objectItem.operId,
+        		visitId:this.objectItem.visitId
+        	}
+
+        	this.api.getSignName(params)
+        		.then(
+        			res=>{
+        				 this.itemNameList = res;
+        		})
+        },
+
+        getSignTimeData(){
+        	let params={
+        		patientId:this.objectItem.patientId,
+        		operId:this.objectItem.operId,
+        		visitId:this.objectItem.visitId
+        	}
+
+        	this.api.getSignTimeData(params)
+        		.then(
+        			res=>{
+        				 
+        				 for (var i = 0; i < res.length; i++) {
+        				 	res[i].dataValue=res[i].dataValue.replace("[","");
+							res[i].dataValue=res[i].dataValue.replace("]","");
+    				 		res[i].dataValue = res[i].dataValue.split(",");
+        				 }
+        				 this.signdataList = res;
+        		})
+        },
 
     },
     props:['objectItem'],
@@ -288,6 +346,8 @@
     mounted(){
     	this.selectMedAnesthesiaEventList();
     	this.allMedAnesthesiaEventType();
+    	this.getSignName();
+    	this.getSignTimeData();
     }
 	}
 </script>

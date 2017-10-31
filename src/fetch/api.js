@@ -257,4 +257,20 @@ export default {
      return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnesthesiaEvent', params)
   },
 
+  /**
+   * 获取病人生命体征数据显示名称
+   * 
+   */
+   getSignName(params, config){
+     return fetch('medicalsystem/rest/medSignData/getSignName', params)
+  },
+
+  /**
+   * 获取病人生命体征数据
+   * 
+   */
+   getSignTimeData(params, config){
+     return fetch('medicalsystem/rest/medSignData/getSignTimeData', params)
+  },
+
 }
