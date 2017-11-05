@@ -322,7 +322,6 @@ export default {
                 operId: this.objectItem.operId,
                 visitId: this.objectItem.visitId
             }
-
             this.api.getSignTimeData(params)
                 .then(
                     res => {
