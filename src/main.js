@@ -12,8 +12,9 @@ Vue.config.productionTip = false
 
 import api from '@/fetch/api.js';
 Vue.prototype.api = api;
-Vue.prototype.datetimeLocalToDate = function(time){
 
+//datatimelocal的格式转换为date
+Vue.prototype.datetimeLocalToDate = function(time){
 		var dateChange = new Date();
         dateChange.setFullYear(parseInt(time.substring(0, 4)));
         dateChange.setMonth(parseInt(time.substring(5, 7)) - 1);
@@ -23,7 +24,8 @@ Vue.prototype.datetimeLocalToDate = function(time){
         return dateChange;
 }
 
-Vue.prototype.stringToDate = function(remindTime) { 
+//字符串转换date
+Vue.prototype.stringToDate = function(remindTime) {
 	if (remindTime) {
 	var str = remindTime.toString();
 	str = str.replace("/-/g", "/");
@@ -31,21 +33,40 @@ Vue.prototype.stringToDate = function(remindTime) {
 	var oDate1 = new Date(str);
 	return oDate1;
 	}
+	else
+	{
+		return null;
+	}
 }
 //为了设置datetime-local 必须要加个T格式
 Vue.prototype.changeDateFormat = function(dateObj){
-	    	var str = dateObj.split(" ");
+		if(dateObj){
+			var str = dateObj.split(" ");
 	    	var str1 = str[0]+"T"+str[1];
 	    	return str1;
+		}
+	    	
 }
+
+//date转换格式
+Date.prototype.Format = function (fmt) { //author: meizz 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
 Vue.filter('discount', function(time) {
-
     return time.split(" ")[1];
-});
-
-Vue.filter('strtoarry', function(srt) {
-
-    return time.split(",");
 });
 
 

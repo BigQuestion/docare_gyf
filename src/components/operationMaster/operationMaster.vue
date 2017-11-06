@@ -72,7 +72,7 @@
             <div class="content">
                 <div class="patientList">
                     <div style="padding-left: 5px;">
-                        日期 <input v-model="getTime" type="date" name="">
+                        日期 <input v-model="getTime" type="date" name="" @keyup.enter='searchPatientList'>
                     </div>
                     <div style="padding-left: 5px;">
                         <button @click='searchPatientList'>搜索</button>
@@ -93,9 +93,9 @@
                         </div>
                         <div class="container" style="padding-left: 5px;">
                             <div>ID</div>
-                            <div class="left15"><input style="width: 100px;" type="text" v-model="patientId"></div>
+                            <div class="left15"><input @keyup.enter='searchPatientList' style="width: 100px;" type="text" v-model="patientId"></div>
                             <div class="left15">姓名</div>
-                            <div class="left15"><input style="width: 100px;" type="text" v-model="patientName"></div>
+                            <div class="left15"><input @keyup.enter='searchPatientList' style="width: 100px;" type="text" v-model="patientName"></div>
                         </div>
                     </div>
                     <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
@@ -491,8 +491,9 @@ export default {
         }, 1000);
         },
         lockedPatient(item){
+            debugger
              this.lockedPatientInfo = item;
-              this.inRoomDateTime =this.changeDateFormat(item.inDateTime);
+             this.inRoomDateTime =this.changeDateFormat(item.inDateTime);
              this.anesStartTime = this.changeDateFormat(item.anesStartTime);
              this.startDateTime = this.changeDateFormat(item.startDateTime);
              this.endDateTime = this.changeDateFormat(item.endDateTime);

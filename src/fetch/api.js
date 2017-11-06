@@ -273,4 +273,28 @@ export default {
      return fetch('medicalsystem/rest/medSignData/getSignTimeData', params)
   },
 
+  /**
+   * 删除病人某个时间点的生命体征数据
+   * 
+   */
+   deleteMedPatientMonitorData(params, config){
+     return fetch('medicalsystem/rest/medSignData/deleteMedPatientMonitorData', params)
+  },
+
+  /**
+   * 插入生命体征数据
+   * 
+   */
+   insertBatchMedPatientMonitorData(params, config){
+     return fetch('medicalsystem/rest/medSignData/insertBatchMedPatientMonitorData', params)
+  },
+
+  /**
+   * 修改病人生命体征数据
+   * 
+   */
+   updateMedPatientMonitorDatas(params, config){
+     return fetch('medicalsystem/rest/medSignData/updateMedPatientMonitorDatas', params)
+  },
+
 }

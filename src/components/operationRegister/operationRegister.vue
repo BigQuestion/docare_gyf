@@ -1,5 +1,6 @@
 <template>
-	<div style="background-color: white;width: 80%;z-index: 2;position: absolute;top: 5%;height: 90%;left: 10%;">
+	
+	<div style="background-color: white;width: 80%;z-index: 2;position: absolute;top: 5%;height: 90%;left: 10%;"> 
 		<div style="height: 30px;background-color: rgb(54,157,200);line-height: 30px;">
 			<span style="color: white;font-size: 18px;">术中登记</span>
 		</div>
@@ -16,7 +17,7 @@
 	                </div>
 	                <div >
 	                	<div v-for="item in eventList" style="display:flex;" @click="clickItem(item)">
-							<div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'"> 
+							<div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
 		                       <input @change="getChangeValue(item)"  type="text" :style="{width:cl.width+'px'}" v-model="item[cl.fieldObj]">
 		                    </div>
 		                    <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
@@ -69,62 +70,6 @@
                 </div>
             </div>
         </div>
-        <div style="height: 40px;padding-left: 15px;">
-            <span style="line-height: 40px;">体征数据</span>
-        </div>
-        <div style="height: 200px;overflow:auto;">
-            <div style="display: flex;padding-left: 10px;">
-                <div>
-                    <div style="width: 100px;">名称</div>
-                    <div v-for="item in itemNameList">{{item}}</div>
-                </div>
-                <div v-for="sItem in signdataList">
-                    <div style="width: 60px;">
-                        {{sItem.time | discount}}
-                    </div>
-                    <div v-for="secItem in sItem.dataValue">
-                        <input type="" name="" :value="secItem" style="width: 60px;">
-                    </div>
-                </div>
-			</div>
-			<div style="width:25%;padding: 0px 5px;">
-				<div style="height: 180px;flex-wrap:wrap;display: flex;">
-					 <div v-for="item in eventTypeList" style="width: 80px;height: 30px;line-height: 30px;border:1px solid blue;text-align: center;" @click="medAnesthesiaEventOpenByItemClass(item)">
-					 	{{item.typeName}}
-					 </div>
-				</div>
-				<div style="display: flex;margin-top: 5px;border:2px solid balck;width: 90%;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
-					<div style="width: 70%;border:1px solid black;">
-						事件名称
-					</div>
-					<div style="width: 30%;border:1px solid black;">
-						规格
-					</div>
-				</div>
-				<div v-else style="display: flex;margin-top: 5px;border:2px solid balck;width: 90%;">
-					<div style="width: 100%;border:1px solid black;">
-						事件名称
-					</div>
-				</div>
-				<div style="height: 150px;overflow-y: auto;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
-					<div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex" @dblclick="addEvent(item)">
-						<div style="width: 70%;border:1px solid black;">
-							{{item.itemName}}
-						</div>
-						<div style="width: 30%;border:1px solid black;">
-							{{item.itemSpec}}
-						</div>
-					</div>
-				</div>
-				<div v-else style="height: 150px;overflow-y: auto;">
-					<div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex">
-						<div style="width: 100%;border:1px solid black;" @dblclick="addEvent(item)">
-							{{item.itemName}}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div style="height: 40px;padding-left: 15px;">
 			<span style="line-height: 40px;">体征数据</span>
 		</div>
@@ -132,23 +77,56 @@
 			<div style="display: flex;padding-left: 10px;">
 				<div>
 					<div style="width: 100px;">名称</div>
-					<div v-for="item in itemNameList">{{item}}</div>
+					<div v-for="item in itemNameList">{{item.itemName}}</div>
 				</div>
-<!-- 				<div v-for="sItem in signdataList">
+				<div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
 					 <div style="width: 60px;">
 					 	{{sItem.time | discount}}
 					 </div>
-					 <div v-for="secItem in sItem.dataValue">
-						<input type="" name="" :value="secItem" style="width: 60px;">
+					 <div v-for="(secItem,index) in sItem.dataValue">
+						<input :value="secItem"  style="width: 60px;" @change="signChange($event,index,sItem)">
 					</div>
-				</div> -->
-				<div v-for="sItem in signdataList">
-					<div style="width: 60px;">
-					 	{{sItem.time | discount}}
+				</div>
+			</div>
+		</div>
+		<div>
+			<button @click="saveSignChange" style="width: 80px;">保存</button>
+			<button style="width: 80px;" @click="deleteMedPatientMonitorData">删除</button>
+			<button style="width: 80px;" @click="insertView">插入数据</button>
+			<button style="width: 80px;" @click="addSignItem">添加项目</button>
+
+		</div>
+		<!-- 插入数据位置 -->
+		<div v-if="addView" style="width: 700px;min-height: 400px;background-color: white;z-index: 3;position: absolute;top: 20%;left: 30%;border:2px solid rgb(61,164,206);">
+			<div style="height: 40px;background-color: rgb(61,164,206);">
+				<span style="line-height: 40px;font-size: 20px;color:white;">插入体征数据</span>
+			</div>
+			<div style="padding: 15px;">
+				<div style="display: flex;">
+					<div style="width: 100px;text-align: center;">开始时间</div>
+					<div>
+						<input type="datetime-local" v-model="insertStartTime">
 					</div>
-					<div v-for="(num,index) in itemNameList">
-						<input type="text" style="width: 60px;" :value="sItem.dataValue[index]?sItem.dataValue[index]:''">
+					<div style="width: 100px;text-align: center;">结束时间</div>
+					<div>
+						<input type="datetime-local" v-model="insertEndTime">
 					</div>
+				</div>
+				<div style="display: flex;">
+					<div style="width: 100px;text-align: center;">时间间隔</div>
+					<div>
+						<input type="text" v-model="spaceTime"> <span>秒</span>
+					</div>
+				</div>
+				<div style="display: flex;" v-for="item in itemNameList">
+					<div style="width: 100px;text-align: center;">{{item.itemName}}</div>
+					<div>
+						<input v-model="item.itemValue" type="" name="" @change="getaddItem(item)"> <span>{{item.itemUnit}}</span>
+					</div>
+				</div>
+				<div style="margin-top: 20px;">
+					<button @click="addItem" style="width: 80px;">确定</button>
+					<button @click="insertView" style="width: 80px;">取消</button>
 				</div>
 			</div>
 		</div>
@@ -211,11 +189,13 @@ export default {
                 {
                     title: "发生时间",
                     fieldObj: "START_TIME",
+                    timeEdit:true,
                     width: 150
                 },
                 {
                     title: "结束时间",
                     fieldObj: "ENDDATE",
+                    timeEdit:true,
                     width: 150
                 }
             ],
@@ -226,6 +206,14 @@ export default {
             selectTypeTemp: "",
             itemNameList: [],
             signdataList: [],
+            changeEvent:[],
+            getClickSignData:"",
+            addItemList:[],
+            insertStartTime:"",
+            insertEndTime:"",
+            addView:false,
+            updateDataList:[],
+            spaceTime:300,
 
         }
     },
@@ -365,6 +353,9 @@ export default {
             this.api.getSignName(params)
                 .then(
                     res => {
+                        for (var i = 0; i < res.length; i++) {
+                        	res[i].itemValue = "";
+                        }
                         this.itemNameList = res;
                         this.getSignTimeData(res.length);
                     })
@@ -374,17 +365,19 @@ export default {
             let params = {
                 patientId: this.objectItem.patientId,
                 operId: this.objectItem.operId,
-                visitId: this.objectItem.visitId
+                visitId: this.objectItem.visitId,
+                eventNo:0
             }
 
             this.api.getSignTimeData(params)
                 .then(
                     res => {
+                    	var sortArray = [];
                         for (var i = 0; i < res.length; i++) {
                             let item = res[i].dataValue;
-                            item = JSON.parse(item);
-                            console.log(item);
-                            let xL = len - item.length;
+                            item = eval('('+item+')');
+                            //item = JSON.parse(item);
+                            let xL = len - item.length
                             if (xL > 0) {
                                 for (var j = 0; j < xL; j++) {
                                     item.push('');
@@ -392,20 +385,168 @@ export default {
                             }
                             res[i].dataValue = item;
                         }
-                        this.signdataList = res;
+                        res.sort(function(a,b){
+						    return Date.parse(a.time) - Date.parse(b.time);//时间正序
+						});
+						for(var i =0,l=res.length;i<l;i++){
+							sortArray.push(res[i]);
+						}
+                        this.signdataList = sortArray;
                     })
         },
         //获取改变的值
         getChangeValue(item){
-        	debugger
-        	console.log(item.CONCENTRATION);
         	let params = {
         		patientId:this.objectItem.patientId,
         		operId:this.objectItem.operId,
         		visitId:this.objectItem.visitId,
+        		itemNo:item.ITEM_NO,
+        		eventNo:item.EVENT_NO,
+        		itemName:item.ITEM_NAME,
+        		administrator:item.ADMINISTRATOR,
+        		concentration:item.CONCENTRATION,
+        		concentrationUnit:item.CONCENTRATION_UNIT,
+        		performSpeed:item.PERFORM_SPEED,
+        		speedUnit:item.SPEED_UNIT,
+        		dosage:item.DOSAGE,
+        		dosageUnits:item.DOSAGE_UNITS,
+        		startTime:this.stringToDate(item.START_TIME),
+        		endDate:this.stringToDate(item.END_DATE),
+        	}
+        	this.changeEvent.push(params);
+        	this.api.updateMedAnesthesiaEvent(params)
+        		.then(res =>{
+        			 this.selectMedAnesthesiaEventList();
+        		})
 
+        },
+        //获取生命体征选中列
+        getSignClickData(item){
+        	this.getClickSignData = item;
+        },
+        //删除生命体征某个时间点
+        deleteMedPatientMonitorData(){
+        	let params = {
+        		patientId:this.objectItem.patientId,
+        		operId:this.objectItem.operId,
+        		visitId:this.objectItem.visitId,
+        		eventNo:0,
+        		timePoint:this.stringToDate(this.getClickSignData.time),
         	}
 
+        	this.api.deleteMedPatientMonitorData(params)
+        		.then(res =>{
+        			 this.getSignName();
+        		})
+        },
+        insertView(){
+        	this.addView = !this.addView;
+        	var lastTime = this.signdataList[this.signdataList.length-1].time;
+        	var myDate = new Date();
+        	var m1 = lastTime.split(" ");
+        	var m2 = myDate.toLocaleDateString()+" "+m1[1];
+        	var time = new Date(m2.replace("-","/"));
+           	time.setMinutes(time.getMinutes() + 5, time.getSeconds(), 0);
+        	var time2 = new Date(m2.replace("-","/"));
+        	time2.setMinutes(time2.getMinutes() + 10, time2.getSeconds(), 0);
+        	var nowTime = time.Format("yyyy-MM-dd hh:mm");
+        	var endTime = time2.Format("yyyy-MM-dd hh:mm");
+        	this.insertStartTime = this.changeDateFormat(nowTime);
+        	this.insertEndTime = this.changeDateFormat(endTime);
+        },
+        //获取插入体征的数据
+        getaddItem(item){
+        	if(this.insertStartTime&&this.insertEndTime){
+        		this.addItemList.push({
+	        		patientId:this.objectItem.patientId,
+	        		operId:this.objectItem.operId,
+	        		visitId:this.objectItem.visitId,
+	        		eventNo:0,
+	        		itemName:item.itemCode,
+	        		itemValue:item.itemValue,
+	        		timePoint:this.datetimeLocalToDate(this.insertStartTime),
+	        		recordingDate:new Date(),
+	        		operator:'mdsd'
+        		});
+        	}
+        	else
+        	{
+        		alert("输入时间");
+        	}
+        	
+        },
+        //点击确定插入体征数据
+        addItem(){
+        	debugger
+        		//计算开始时间与结束时间差值单位是毫秒
+        		var k =parseInt(this.datetimeLocalToDate(this.insertEndTime)-this.datetimeLocalToDate(this.insertStartTime));
+        		//单位是分钟
+        		var k1 = parseInt(k/1000/60);
+        		//与定义时间间隔的倍数
+        		var k2 = parseInt(k1/(parseInt(this.spaceTime/60)));
+        		//四舍五入
+        		var k3 = parseInt(k2);
+        		//获取开始时间为js的date格式
+        		var time1 = this.datetimeLocalToDate(this.insertStartTime);
+        		//
+        		var m1 = this.addItemList.length;
+        		for (var i = 1; i <= k3; i++) {
+        			var time2 = new Date(time1.getTime() + parseInt(this.spaceTime/60) * i*1000*60);
+        			console.log(time2);
+        				for (var j = 0; j < m1; j++) {
+        					this.addItemList.push({
+				        		patientId:this.objectItem.patientId,
+				        		operId:this.objectItem.operId,
+				        		visitId:this.objectItem.visitId,
+				        		eventNo:0,
+				        		itemName:this.addItemList[j].itemName,
+				        		itemValue:this.addItemList[j].itemValue,
+				        		timePoint:time2,
+				        		recordingDate:new Date(),
+				        		operator:'mdsd'
+			        		});
+        				}
+        			
+        		}
+        	this.api.insertBatchMedPatientMonitorData(this.addItemList)
+        		.then(res =>{
+        			 this.addItemList = [];
+        			 this.addView = !this.addView;
+        			 this.getSignName();
+        		})
+        },
+
+        //
+        signChange(e,index,sItem){
+        	this.updateDataList.push({
+        		itemName:this.itemNameList[index].itemCode,
+        		patientId:this.objectItem.patientId,
+        		operId:this.objectItem.operId,
+        		visitId:this.objectItem.visitId,
+        		eventNo:0,
+        		timePoint:new Date(sItem.time),
+        		itemValue:e.currentTarget.value,
+        		operator:"mdsd"
+
+        	});
+        	
+        },
+        //保存修改
+        saveSignChange(){
+        	let params = this.updateDataList;
+        	this.api.updateMedPatientMonitorDatas(params)
+        		.then(res =>{
+        			 this.getSignName();
+        			 this.updateDataList = [];
+        		})
+        },
+
+        //添加生命体征项目
+        addSignItem(){
+        	// this.itemNameList.push({
+        	// 	itemName:"数据"
+        	// });
+        	// this.getSignTimeData(this.itemNameList.length);
         },
 
 
