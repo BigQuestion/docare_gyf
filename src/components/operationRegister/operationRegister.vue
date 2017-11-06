@@ -368,7 +368,6 @@ export default {
                 visitId: this.objectItem.visitId,
                 eventNo:0
             }
-
             this.api.getSignTimeData(params)
                 .then(
                     res => {
