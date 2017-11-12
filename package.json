@@ -12,11 +12,12 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "publish":"npm run build && npm run upload",
-    "upload":"node nodeFtp/nodeFtp.js"
+    "publish": "npm run build && npm run upload",
+    "upload": "node nodeFtp/nodeFtp.js"
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "d3": "^4.11.0",
     "ftp": "^0.3.10",
     "ftp-deploy": "^1.2.2",
     "vue": "^2.3.3",
