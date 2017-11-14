@@ -62,12 +62,20 @@
             </div>
         </div>
         <div class="down">
-            <div class="left">
-                <button @click="dictShow">字典</button>
-
-                <button v-if="lockedPatientInfo.patientId" @click="getPatientOperationInfo">手术信息</button>
-
-                <button v-if="lockedPatientInfo.patientId" @click="getOperationRegister">术中登记</button>
+            <div class="left" style="overflow-y: auto;">
+                <div style="height: 200px;" v-if="lockedPatientInfo.patientId">
+                    <div style="height: 30px;background-color: rgb(0,22,116);color:white;"> 患者操作</div>
+                    <div>
+                        <button v-if="formDetail" style="width: 90px;" @click="getOperationRegister">术中登记</button>
+                        <button v-if="lockedPatientInfo.patientId" style="width: 90px;" @click="getPatientOperationInfo">手术信息</button>
+                    </div>
+                </div>
+                <div style="height: 200px;">
+                    <div style="height: 30px;background-color: rgb(0,22,116);color:white;"> 常用功能</div>
+                    <div style="padding:5px;">
+                         <button @click="dictShow" style="width: 90px;">字典</button>
+                    </div>
+                </div>
             </div>
             <div class="content">
                 <div class="patientList">
@@ -281,7 +289,7 @@
                 
             </div>
         </div> -->
-        <patientOperationInfo v-if="patientOperationInfoView"></patientOperationInfo>
+        <patientOperationInfo v-if="patientOperationInfoView" :info="patientInfo"></patientOperationInfo>
         <operationRegister v-if="operationRegisterView" :objectItem="lockedPatientInfo"></operationRegister>
         <div v-if="dictView" style="position: absolute;width: 60%;height: 80%;left:20%;top:10%;background:rgb(227,239,255);border:2px solid rgb(60,163,203);">
             <div style="height: 30px;line-height: 30px;background:rgb(60,163,203);color: white;display: flex;
@@ -491,7 +499,6 @@ export default {
         }, 1000);
         },
         lockedPatient(item){
-            debugger
              this.lockedPatientInfo = item;
              this.inRoomDateTime =this.changeDateFormat(item.inDateTime);
              this.anesStartTime = this.changeDateFormat(item.anesStartTime);
@@ -714,13 +721,13 @@ export default {
     display: flex;
 }
 .left{
-    width:100px;
+    width:200px;
     height:100%;
     background: #808080;
 }
 .content{
     display: flex; 
-    width:calc(100% - 100px);
+    width:calc(100% - 200px);
     height:100%;
     background: rgb(227,239,255);
 }

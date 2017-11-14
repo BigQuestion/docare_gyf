@@ -82,6 +82,13 @@ export default {
     return fetch('medicalsystem/rest/medHisUsers/getHsUsers', params)
   },
   /**
+   * 获取获取麻醉科的医生
+   * 
+   */
+  getMzkUsers(params, config) {
+    return fetch('medicalsystem/rest/medHisUsers/getMzkUsers', params)
+  },
+  /**
    * 提交安排手术排班
    * 
    */
@@ -250,11 +257,27 @@ export default {
   },
 
   /**
+   * 批量修改病人麻醉事件记录
+   * 
+   */
+   updateMedAnesthesiaEventBatch(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/updateMedAnesthesiaEventBatch', params)
+  },
+
+  /**
    * 删除病人麻醉事件记录
    * 
    */
    deleteMedAnesthesiaEvent(params, config){
      return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnesthesiaEvent', params)
+  },
+
+  /**
+   * 获取所有生命体征选项
+   * 
+   */
+   selectAllItems(params, config){
+     return fetch('medicalsystem/rest/medSignData/selectAllItems', params)
   },
 
   /**
@@ -295,6 +318,22 @@ export default {
    */
    updateMedPatientMonitorDatas(params, config){
      return fetch('medicalsystem/rest/medSignData/updateMedPatientMonitorDatas', params)
+  },
+
+  /**
+   * 删除生命体征项目
+   * 
+   */
+   deleteMedPatientMonitorDataCode(params, config){
+     return fetch('medicalsystem/rest/medSignData/deleteMedPatientMonitorDataCode', params)
+  },
+
+  /**
+   * 获取麻醉方法
+   * 
+   */
+   medAnaesthesiaDictList(params, config){
+     return fetch('medicalsystem/rest/medAnaesthesiaDict/medAnaesthesiaDictList', params)
   },
 
 }

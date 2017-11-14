@@ -18,10 +18,21 @@
 	                <div >
 	                	<div v-for="item in eventList" style="display:flex;" @click="clickItem(item)">
 							<div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
-		                       <input @change="getChangeValue(item)"  type="text" :style="{width:cl.width+'px'}" v-model="item[cl.fieldObj]">
+		                       
+		                       <div v-if="cl.timeEdit">
+		                       		<input @change="getChangeValue(item)"  type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+		                       </div>
+		                       <div v-else>
+		                       		<input @change="getChangeValue(item)"  type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+		                       </div>
 		                    </div>
 		                    <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
-		                    	<input readonly="readonly" type="text" :style="{width:cl.width+'px'}" v-model="item[cl.fieldObj]">
+		                    	<div v-if="cl.timeEdit">
+		                    		<input @change="getChangeValue(item)"  type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+		                    	</div>
+		                    	<div v-else>
+		                       		<input readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+		                       </div>
 		                    </div>
 						</div>
 	                </div>
@@ -77,23 +88,32 @@
 			<div style="display: flex;padding-left: 10px;">
 				<div>
 					<div style="width: 100px;">名称</div>
-					<div v-for="item in itemNameList">{{item.itemName}}</div>
+					<div style="height: 22px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
 				</div>
 				<div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
 					 <div style="width: 60px;">
 					 	{{sItem.time | discount}}
 					 </div>
-					 <div v-for="(secItem,index) in sItem.dataValue">
+					 <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
 						<input :value="secItem"  style="width: 60px;" @change="signChange($event,index,sItem)">
 					</div>
 				</div>
+				
 			</div>
 		</div>
-		<div>
+		<div v-if="signItemView">
+			<select v-model="selected" v-on:change="getSeclectItem">  
+                  <option v-for="option in allSignItems" v-bind:value="option">  
+                    {{ option.itemName }}
+                  </option>
+            </select>
+		</div>
+		<div style="margin-top: 20px;">
 			<button @click="saveSignChange" style="width: 80px;">保存</button>
 			<button style="width: 80px;" @click="deleteMedPatientMonitorData">删除</button>
 			<button style="width: 80px;" @click="insertView">插入数据</button>
 			<button style="width: 80px;" @click="addSignItem">添加项目</button>
+			<button style="width: 80px;" @click="deleteSignItem">删除项目</button>
 
 		</div>
 		<!-- 插入数据位置 -->
@@ -190,13 +210,18 @@ export default {
                     title: "发生时间",
                     fieldObj: "START_TIME",
                     timeEdit:true,
-                    width: 150
+                    width: 180
+                },
+                {
+                    title: "",
+                    fieldObj: "DURATIVE_INDICATOR",
+                    width: 30
                 },
                 {
                     title: "结束时间",
                     fieldObj: "ENDDATE",
                     timeEdit:true,
-                    width: 150
+                    width: 180
                 }
             ],
             eventList: [],
@@ -214,6 +239,11 @@ export default {
             addView:false,
             updateDataList:[],
             spaceTime:300,
+            updateEvent:"",
+            deleteTzItem:"",
+            allSignItems:[],
+            selected:"",
+            signItemView:false,
 
         }
     },
@@ -227,6 +257,15 @@ export default {
             this.api.selectMedAnesthesiaEventList(params)
                 .then(
                     res => {
+                    	for (var i = 0; i < res.list.length; i++) {
+                    		if(res.list[i].START_TIME){
+                    			res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
+                    		}
+
+                    		if(res.list[i].ENDDATE){
+                    			res.list[i].ENDDATE = this.changeDateFormat(res.list[i].ENDDATE);
+                    		}
+                    	}
                         this.eventList = res.list;
                     });
         },
@@ -295,12 +334,21 @@ export default {
                 ENDDATE: "",
                 ITEM_CLASS: item.itemClass,
                 ITEM_SPEC: item.itemSpec,
-                addFlag: true
+                addFlag: true,
+                DURATIVE_INDICATOR:0,
             };
             this.eventList.push(obj);
         },
         //保存按钮
         saveBtn() {
+        	if(this.changeEvent){
+	        	this.api.updateMedAnesthesiaEventBatch(this.changeEvent)
+        		.then(res =>{
+        			 this.selectMedAnesthesiaEventList();
+        		})
+        	}
+
+
             var list = this.eventList;
             let addParams = [];
             let updateParams = [];
@@ -347,7 +395,8 @@ export default {
             let params = {
                 patientId: this.objectItem.patientId,
                 operId: this.objectItem.operId,
-                visitId: this.objectItem.visitId
+                visitId: this.objectItem.visitId,
+                eventNo:0,
             }
 
             this.api.getSignName(params)
@@ -409,14 +458,17 @@ export default {
         		speedUnit:item.SPEED_UNIT,
         		dosage:item.DOSAGE,
         		dosageUnits:item.DOSAGE_UNITS,
-        		startTime:this.stringToDate(item.START_TIME),
-        		endDate:this.stringToDate(item.END_DATE),
+        		durativeIndicator:item.DURATIVE_INDICATOR,
+        		startTime:this.datetimeLocalToDate(item.START_TIME),
+        		endDate:this.datetimeLocalToDate(item.END_DATE),
         	}
         	this.changeEvent.push(params);
-        	this.api.updateMedAnesthesiaEvent(params)
-        		.then(res =>{
-        			 this.selectMedAnesthesiaEventList();
-        		})
+        	this.updateEvent = params;
+        	// return false;
+        	// this.api.updateMedAnesthesiaEvent(params)
+        	// 	.then(res =>{
+        	// 		 this.selectMedAnesthesiaEventList();
+        	// 	})
 
         },
         //获取生命体征选中列
@@ -476,7 +528,6 @@ export default {
         },
         //点击确定插入体征数据
         addItem(){
-        	debugger
         		//计算开始时间与结束时间差值单位是毫秒
         		var k =parseInt(this.datetimeLocalToDate(this.insertEndTime)-this.datetimeLocalToDate(this.insertStartTime));
         		//单位是分钟
@@ -542,10 +593,49 @@ export default {
 
         //添加生命体征项目
         addSignItem(){
-        	// this.itemNameList.push({
-        	// 	itemName:"数据"
-        	// });
-        	// this.getSignTimeData(this.itemNameList.length);
+        	
+        	let params={}
+        	this.api.selectAllItems(params)
+        	.then(res =>{
+        			 this.allSignItems = res.list;
+        			 this.signItemView = !this.signItemView;
+        		})
+        },
+
+        //删除体征项目
+        deleteSignItem(){
+        	debugger
+        	let params={
+        		patientId:this.objectItem.patientId,
+        		operId:this.objectItem.operId,
+        		visitId:this.objectItem.visitId,
+        		eventNo:0,
+        		itemName:this.deleteTzItem.itemCode
+        	}
+        	this.api.deleteMedPatientMonitorDataCode(params)
+        		.then(res =>{
+        			this.deleteTzItem = "";
+        			 this.getSignName();
+        		})
+        },
+
+        //获取选中删除的体征项目
+        getDeleteItem(item){
+        	this.deleteTzItem = item;
+        },
+
+        //得到添加生命体征项目
+        getSeclectItem(){
+        	this.signItemView = !this.signItemView;
+        	console.log(this.selected.itemName);
+        	if(this.selected.itemName){
+        		this.itemNameList.push({
+        		itemName:this.selected.itemName,
+        		itemCode:this.selected.itemCode,
+        	});
+        	this.getSignTimeData(this.itemNameList.length);
+        	this.selected = [];
+        	}
         },
 
 
@@ -558,7 +648,7 @@ export default {
         this.selectMedAnesthesiaEventList();
         this.allMedAnesthesiaEventType();
         this.getSignName();
-
+        
     }
 }
 
