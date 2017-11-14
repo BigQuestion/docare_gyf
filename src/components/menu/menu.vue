@@ -5,6 +5,7 @@
         <div class="flex1" @click="goUrl('/statistics')">工作量统计</div>
         <div class="flex1" @click="goUrl('/statistics')">用户管理</div>
         <div class="flex1" @click="goUrl('/formDesigner')">表单设计器</div>
+        <div class="flex1" @click="goUrl('/drawTable')">表格组件</div>
 	</div>
 </template>
 <script>

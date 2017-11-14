@@ -26,6 +26,9 @@ const operationMaster = resolve => {
 const formDesigner = resolve => {
     require(['../components/formDesigner/formDesigner.vue'], resolve)
 };
+const drawTable = resolve => {
+    require(['../components/drawTable/drawTable.vue'], resolve)
+};
 export default new Router({
   routes: [ {
     path: '/',
@@ -54,5 +57,8 @@ export default new Router({
   },{
     path: '/formDesigner',
     component: formDesigner
+  },,{
+    path: '/drawTable',
+    component: drawTable
   },]
 })
