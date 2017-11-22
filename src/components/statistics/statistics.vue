@@ -27,6 +27,7 @@ export default {
     data () {
         return {
             sql:'select * from med_anesthesia_comm_dict t where rownum<10',
+            //sql:'select NAME from med_pat_master_index where  patient_id=\'10966589\';',
             result:'',
             obj:{},
         }

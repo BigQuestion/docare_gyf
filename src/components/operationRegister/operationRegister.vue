@@ -22,14 +22,35 @@
 		                       <div v-if="cl.timeEdit">
 		                       		<input @change="getChangeValue(item)"  type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
 		                       </div>
+                               <div v-else-if="cl.isChixu">
+                                   <select v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">  
+                                          <option  v-bind:value="0">  
+                                            0
+                                          </option>
+                                          <option  v-bind:value="1">  
+                                            1
+                                          </option>
+                                    </select>
+                               </div>
 		                       <div v-else>
 		                       		<input @change="getChangeValue(item)"  type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
 		                       </div>
+                               
 		                    </div>
 		                    <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
 		                    	<div v-if="cl.timeEdit">
-		                    		<input @change="getChangeValue(item)"  type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+		                    		<input @change="getChangeValue(item)"  type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
 		                    	</div>
+                                <div v-else-if="cl.isChixu">
+                                   <select disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">  
+                                          <option  v-bind:value="0">  
+                                            0
+                                          </option>
+                                          <option  v-bind:value="1">  
+                                            1
+                                          </option>
+                                    </select>
+                               </div>
 		                    	<div v-else>
 		                       		<input readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
 		                       </div>
@@ -38,10 +59,20 @@
 	                </div>
 				</div>
                 <div style="height: 90px;text-align: right;padding-top: 15px;">
+                    <span>类型筛选</span>
+                    <select v-model="filterType" @change="selectTypeFun">  
+                          <option value="">
+                            全部
+                          </option>
+                          <option v-for="option in eventTypeList" v-bind:value="option.typeId">  
+                            {{ option.typeName }}
+                          </option>
+                    </select>
                     <button style="margin-right: 20px;width: 80px;" @click='saveBtn'>保存</button>
                     <button style="margin-right: 20px;width: 80px;" @click="deleteMedAnesthesiaEvent">删除</button>
                     <button style="margin-right: 20px;width: 80px;" @click="selectMedAnesthesiaEventList">取消</button>
                 </div>
+                
             </div>
             <div style="width:25%;padding: 0px 5px;">
                 <div style="height: 180px;flex-wrap:wrap;display: flex;">
@@ -78,6 +109,9 @@
                             {{item.itemName}}
                         </div>
                     </div>
+                </div>
+                <div>
+                    <input v-model="serchZm"  placeholder="无字符过滤" @keyup="serchEvent">
                 </div>
             </div>
         </div>
@@ -150,9 +184,16 @@
 				</div>
 			</div>
 		</div>
+        
+        <!-- 显示事件模板 -->
+        <div style="position: absolute;top: 10%;left: 7%;width: 100%;">
+            <event-templet></event-templet>
+        </div>
 	</div>
 </template>
 <script>
+import eventTemplet from '@/components/eventTemplet/eventTemplet.vue';
+
 export default {
     data() {
         return {
@@ -179,7 +220,7 @@ export default {
                 {
                     title: "浓度",
                     fieldObj: "CONCENTRATION",
-                    width: 60
+                    width: 40
                 },
                 {
                     title: "单位",
@@ -189,7 +230,7 @@ export default {
                 {
                     title: "速度",
                     fieldObj: "PERFORM_SPEED",
-                    width: 60
+                    width: 50
                 },
                 {
                     title: "单位",
@@ -215,7 +256,8 @@ export default {
                 {
                     title: "",
                     fieldObj: "DURATIVE_INDICATOR",
-                    width: 30
+                    width: 40,
+                    isChixu:true,
                 },
                 {
                     title: "结束时间",
@@ -225,8 +267,10 @@ export default {
                 }
             ],
             eventList: [],
+            eventTempList:[],
             eventTypeList: [],
             eventNameList: [],
+            newEvenNameList:[],
             selectedItem: "",
             selectTypeTemp: "",
             itemNameList: [],
@@ -244,6 +288,8 @@ export default {
             allSignItems:[],
             selected:"",
             signItemView:false,
+            serchZm:"",
+            filterType:"全部"
 
         }
     },
@@ -267,6 +313,7 @@ export default {
                     		}
                     	}
                         this.eventList = res.list;
+                        this.eventTempList = res.list;
                     });
         },
         allMedAnesthesiaEventType() {
@@ -289,6 +336,7 @@ export default {
                 .then(
                     res => {
                         this.eventNameList = res.list;
+                        this.newEvenNameList = res.list;
                     });
         },
 
@@ -330,7 +378,7 @@ export default {
                 SPEED_UNIT: item.speedUnit,
                 DOSAGE: item.dosage,
                 DOSAGE_UNITS: item.dosageUnits,
-                START_TIME: "",
+                START_TIME: this.changeDateFormat(new Date().Format('yyyy-MM-dd hh:mm')),
                 ENDDATE: "",
                 ITEM_CLASS: item.itemClass,
                 ITEM_SPEC: item.itemSpec,
@@ -365,9 +413,10 @@ export default {
                         dosageUnits: list[i].DOSAGE_UNITS,
                         dosage: list[i].DOSAGE,
                         administrator: list[i].ADMINISTRATOR,
-                        startTime: list[i].START_TIME,
-                        endDate: list[i].ENDDATE,
+                        startTime: this.datetimeLocalToDate(list[i].START_TIME),
+                        endDate:this.datetimeLocalToDate(list[i].ENDDATE),
                         eventNo: 0,
+                        durativeIndicator:0,
         			})
         			let par = {
         				patientId:list[i].PATIENT_ID,
@@ -379,9 +428,10 @@ export default {
         				dosageUnits:list[i].DOSAGE_UNITS,
         				dosage:list[i].DOSAGE,
         				administrator:list[i].ADMINISTRATOR,
-        				startTime:list[i].START_TIME,
-        				endDate:list[i].ENDDATE,
+        				startTime:this.datetimeLocalToDate(list[i].START_TIME),
+        				endDate:this.datetimeLocalToDate(list[i].ENDDATE),
         				eventNo:0,
+                        durativeIndicator:0,
         			}
         			this.api.insertMedAnesthesiaEvent(par)
         				.then(res=>{
@@ -637,12 +687,47 @@ export default {
         	this.selected = [];
         	}
         },
+        test(item){
+            alert(item.DURATIVE_INDICATOR);
+        },
+        //搜索事件
+        serchEvent(){
+                var list = this.newEvenNameList;
+                var newList = [];
+                for (var i = 0; i < list.length; i++) {
+                    if(list[i].nameJm.indexOf(this.serchZm.toUpperCase())>=0){
+                        newList.push(list[i]);
+                    }
+                }
+                this.eventNameList = newList;
+            
+        },
+        //筛选类型
+        selectTypeFun(){
+            if(this.filterType==""){
+                this.eventList = this.eventTempList;
+            }
+
+            if(this.filterType){
+                var list = this.eventTempList;
+                var newList = [];
+                for (var i = 0; i < list.length; i++) {
+                    if(list[i].ITEM_CLASS == this.filterType){
+                        newList.push(list[i]);
+                    }
+                }
+                this.eventList = newList;
+            }
+        },
 
 
     },
     props: ['objectItem'],
     computed: {
 
+    },
+    components:{
+        eventTemplet
     },
     mounted() {
         this.selectMedAnesthesiaEventList();

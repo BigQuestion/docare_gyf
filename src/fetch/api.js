@@ -336,4 +336,20 @@ export default {
      return fetch('medicalsystem/rest/medAnaesthesiaDict/medAnaesthesiaDictList', params)
   },
 
+  /**
+   * 获取模板里面麻醉方法名称
+   * 
+   */
+   getMethodNames(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/getMethodNames', params)
+  },
+
+  /**
+   * 根据麻醉方法和模板类别获取模板名称
+   * 
+   */
+   getTempletNames(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/getTempletNames', params)
+  },
+
 }

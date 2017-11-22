@@ -15,3 +15,34 @@
   align-items: center;
   justify-content: center;
 }
+
+.btn{
+    width: 80px;
+    background-color: rgb(216, 225, 236);
+    border: none;
+    color: rgb(35,78,147);
+    height: 22px;
+    border-radius: 3px;
+    font-size:15px;
+}
+.btn:hover{
+	cursor: pointer;
+	background-color: rgb(233, 236, 241);
+}
+button{
+  width: 80px;
+    background-color:rgb(198, 229, 253);
+    border: none;
+    color: rgb(35,78,147);
+    height: 22px;
+    border-radius: 3px;
+    font-size:15px;
+}
+button:hover{
+	cursor: pointer;
+}
+
+ul{  
+list-style-type: none;  
+margin:0px;  
+}  

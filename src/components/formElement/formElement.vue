@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div v-if="value.type=='text'">
+		<div v-if="value.type=='text'" :style="{width:value.width+'px'}" style="min-width: 20px;min-height: 20px;">
             {{value.value}}
 		</div>
         <div v-if="value.type=='input'" >

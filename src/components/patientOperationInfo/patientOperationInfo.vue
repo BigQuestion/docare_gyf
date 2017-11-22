@@ -219,6 +219,11 @@
         test(){
         	this.$refs.inputDiv.showView();
         },
+        //保存修改数据
+        updateMasterInfo(){
+        	let params = {}
+        	
+        },
     },
     
     computed:{

@@ -1,7 +1,15 @@
 <template>
 	<div style="height:100%;position:relative;">
 		<div class="head">
-            <div class="logo">{{nowTime}}</div>
+            <div class="logo">
+                <div :style="logo">
+                    <!-- <img src="../../assets/logo.jpg"> -->
+                </div>
+                 <div :style="logo1" style="background-color: rgb(21,111,174);color:white;line-height: 30px;">
+                     <span style="margin-left: 30px;">{{nowTime}}</span>
+                 </div>
+                 
+            </div>
             <div class="currentPatientInfo">{{lockedPatientInfo.patientId}}</div>
             <div class="procedure" style="position: relative;">
                 <div style="display: flex;" v-if="lockedPatientInfo.patientId">
@@ -63,14 +71,14 @@
         </div>
         <div class="down">
             <div class="left" style="overflow-y: auto;">
-                <div style="height: 200px;" v-if="lockedPatientInfo.patientId">
+                <div style="height: 200px;background-color: rgb(29,117,181);" v-if="lockedPatientInfo.patientId">
                     <div style="height: 30px;background-color: rgb(0,22,116);color:white;"> 患者操作</div>
-                    <div>
+                    <div style="padding:5px;">
                         <button v-if="formDetail" style="width: 90px;" @click="getOperationRegister">术中登记</button>
                         <button v-if="lockedPatientInfo.patientId" style="width: 90px;" @click="getPatientOperationInfo">手术信息</button>
                     </div>
                 </div>
-                <div style="height: 200px;">
+                <div style="height: 200px;background-color: rgb(29,117,181);">
                     <div style="height: 30px;background-color: rgb(0,22,116);color:white;"> 常用功能</div>
                     <div style="padding:5px;">
                          <button @click="dictShow" style="width: 90px;">字典</button>
@@ -407,7 +415,19 @@ export default {
 
             ],
             commonTypeList:[],
-            dictView:false
+            dictView:false,
+            res:'',
+            logo: {
+                backgroundImage: "url(" + require("../../assets/Logo.jpg") + ")",
+                backgroundRepeat: "no-repeat",
+                height:"70px",
+                backgroundSize:"cover",
+              },
+            logo1: {
+                backgroundImage: "url(" + require("../../assets/clock.jpg") + ")",
+                backgroundRepeat: "no-repeat",
+                height:"30px",
+              },
 
     	}
     },
@@ -625,7 +645,23 @@ export default {
              .then(
                 res=>{
                     this.formItems= JSON.parse(res.formContent);
-                }); 
+                    let list = this.formItems;
+                     for (let i = 0; i < list.length; i++) {
+                         if(list[i].fieldName){
+                            let params1 = {
+                                sql:'select '+list[i].fieldName+' from '+list[i].tableName+' where  patient_id='+'\''+this.lockedPatientInfo.patientId+'\'',
+                            }
+                            this.api.doSql(params1).then(
+                                res=>{
+                                    this.res = res[0];
+                                    list[i].value = this.res[list[i].fieldName];
+                                }
+                            )
+                            
+                         }
+                     }
+                });
+
         },
         //修改病人手术状态
         changeStatus(status){
@@ -701,29 +737,29 @@ export default {
     flex:1;
 }
 .logo{
-    width:150px;
+    width:200px;
     /*background: #0080FF;*/
 }
 .currentPatientInfo{
-    width:150px;
+    width:200px;
     background: #E6E6E6;
 }
 .head{
-    height:120px;
+    height:100px;
     width:100%;
     background: #CCCCCC;
     display: flex;
 }
 .down{
     width:100%;
-    height:calc(100% - 120px);
+    height:calc(100% - 100px);
     background: #B3B3B3;
     display: flex;
 }
 .left{
     width:200px;
     height:100%;
-    background: #808080;
+    background: rgb(142,193,238);
 }
 .content{
     display: flex; 

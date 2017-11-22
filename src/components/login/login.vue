@@ -1,6 +1,16 @@
 <template>
-	<div>
-		<div>
+	<div :style="note" style="background-color: rgb(0,0,0);position: relative;">
+        <div style="position: absolute;left:51%;top:54%;">
+            <input type="" name="" style="width: 180px;" v-model="loginName">
+        </div>
+        <div style="position: absolute;left:51%;top:57%;">
+            <input type="password" name="" style="width: 180px;" v-model="loginPwd">
+        </div>
+        <div style="position: absolute;left:51%;top:63%;">
+            <button class="btn" @click="login">登录</button>
+            <button class="btn">取消</button>
+        </div>
+		<!-- <div>
 			Docare登录
 		</div>
         <div>
@@ -11,7 +21,7 @@
         </div>
         <div>
             <button @click="login">login</button>
-        </div>
+        </div> -->
         <!-- <div class="flex" style="height:40px;" ref="row" >
             <div ref="block" id="block" style="width:100px;">1</div>
             <div class="line" @mousedown="dragstart"></div>
@@ -48,7 +58,13 @@ export default {
             draging:false,
             target:'',
             sql:'select * from med_anesthesia_comm_dict t where rownum<10',
-            result:'暂无结果'
+            result:'暂无结果',
+            note: {
+                backgroundImage: "url(" + require("../../assets/login.jpg") + ")",
+                backgroundRepeat: "no-repeat",
+                height:"100%",
+                backgroundPosition:"center",
+              },
     	}
     },
     methods:{

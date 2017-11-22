@@ -7,8 +7,8 @@
                 </div>
             </div>
             <div>
-                <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)">
-                    <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item)">
+                <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)"  @keydown="show($event)">
+                    <div class="item" style="position:absolute;min-height: 3px;min-width:10px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item)">
                         <form-element :value="item"></form-element>
                     </div>
                     <div class="mask">
@@ -22,9 +22,9 @@
             </div>
             <div class="editBox">
                 <div>
-                    数据编辑区域
+                    属性
                 </div>
-                <div v-if="chooseItems[0]&&chooseItems[0].value">
+                <div v-if="chooseItems[0]">
                     值：<input type="" name="" v-model="chooseItems[0].value">
                 </div>
                 <div v-if="chooseItems[0]&&chooseItems[0].width">
@@ -33,8 +33,11 @@
                 <div v-if="chooseItems[0]&&chooseItems[0].height">
                     高度：<input type="" name="" v-model="chooseItems[0].height">
                 </div>
-                <div v-if="chooseItems[0]&&chooseItems[0].height">
-                    高度：<input type="" name="" v-model="chooseItems[0].height">
+                <div v-if="chooseItems[0]&&chooseItems[0].fieldName">
+                    字段名称：<input type="" name="" v-model="chooseItems[0].fieldName">
+                </div>
+                <div v-if="chooseItems[0]&&chooseItems[0].tableName">
+                    数据源表名称：<input type="" name="" v-model="chooseItems[0].tableName">
                 </div>
             </div>
             
@@ -56,7 +59,10 @@ export default {
             },{
                 text: '文本',
                 type: 'text',
-                value: '输入文字'
+                value: '输入文字',
+                width:'80',
+                fieldName:'NAME',
+                tableName:'med_pat_master_index',
             }, {
                 text: '输入',
                 type: 'input'
@@ -193,7 +199,7 @@ export default {
             // console.log('click');
             this.chooseItems = [];
             for (var i = this.formItems.length - 1; i >= 0; i--) {
-                debugger
+                //debugger
                 this.formItems[i].chosen = false;
             }
             e.preventDefault();
@@ -208,7 +214,7 @@ export default {
                 e.preventDefault();
             } else {
                 if (this.chooseItems[0]) {
-                    debugger
+                    //debugger
                     this.chooseItems[0].chosen = false;
                 }
                 this.chooseItems = [item];
@@ -256,6 +262,12 @@ export default {
                 res=>{
                     this.formItems= JSON.parse(res.formContent);
                 });
+        },
+
+        show(ev){
+             if(ev.keyCode==46){
+              alert('你按了回车键！')
+            }
         }
 
     },
