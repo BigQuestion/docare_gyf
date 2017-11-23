@@ -21,27 +21,27 @@
 								<div>
 									公用
 								</div>
-								<ul v-if="publicNameView" style="padding-left: 10px;">
+								<ul  style="padding-left: 10px;">
 									<li v-for="item in publicNameList">
-									<div style="display: flex;align-items: center;">
-										<div @click="getPublicTempletNames(item)" style="background-color: grey;color: white;height: 12px;line-height: 12px;width: 12px;text-align: center;">
-											+
-										</div>
-										<div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
-										<div style="width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
-											{{item.anesthesiaMethod}}
-										</div>
-									</div>
-									<ul v-if="publicTempNameView" style="padding-left: 10px;">
-										<li v-for="item in publicTempNameList">
 										<div style="display: flex;align-items: center;">
+											<div @click="getPublicTempletNames(item)" style="background-color: grey;color: white;height: 12px;line-height: 12px;width: 12px;text-align: center;">
+												+
+											</div>
 											<div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
 											<div style="width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
-												{{item.templet}}
+												{{item.anesthesiaMethod}}
 											</div>
 										</div>
-										</li>
-									</ul>
+										<ul style="padding-left: 10px;">
+											<li v-for="itemTemp in item.listTempName">
+											<div style="display: flex;align-items: center;">
+												<div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
+												<div style="width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+													{{itemTemp.templet}}
+												</div>
+											</div>
+											</li>
+										</ul>
 									</li>
 								</ul>
 							</ul>
@@ -147,18 +147,36 @@
     	
     },
     methods:{
-    	//获取所有模板的麻醉方法
+    	//获取所有模板的麻醉方法 
     	getMethodNames(){
          	let params={
          		createBy:'公用'
          	}
          	this.api.getMethodNames(params)
 	     		.then(res=>{
-        				this.publicNameList = res.list;
-        				if(res.list.length>0){
-        					this.publicNameView = true;
-        				}
+        				//this.publicNameList = res.list;
+        				//let listTemp = res.list;
+        				this.getAllTempName(res.list);
+        				// if(listTemp.length>0){
+        				// 	for (let i = 0; i < listTemp.length; i++) {
+        				// 		let params={
+					       //   		anesthesiaMethod:listTemp[i].anesthesiaMethod,
+					       //   		createBy:'公用'
+					       //   	}
+					       //   	this.api.getTempletNames(params)
+					       //   		.then(res=>{
+				        // 				//this.publicTempNameList = res.list;
+				        // 				listTemp[i].list = res.list;
+				        // 				})
+        				// 	}
+        				// 	this.publicNameList = listTemp;
+        				// 	//console.log(listTemp);
+        				// 	this.publicNameView = true;
+        				// 	//this.publicTempNameView = true;
+        				// }
         				})
+	     		
+
 	     	let params1={
          		createBy:'MDSD'
          	}
@@ -168,7 +186,7 @@
         				if(res.list.length>0){
         					this.privateNameView = true;
         				}
-        				})
+        		})
          },
          //获取模板名称
          getPublicTempletNames(item){
@@ -184,6 +202,26 @@
         				}
         				})
          },
+         getAllTempName(listItem){
+         	var temp = listItem
+         	if(listItem.length>0)
+         	{
+				for (let i = 0; i < listItem.length; i++) {
+					let params={
+		         		anesthesiaMethod:listItem[i].anesthesiaMethod,
+		         		createBy:'公用'
+		         	}
+		         	this.api.getTempletNames(params)
+		         		.then(res=>{
+		         			//console.log(res.list)
+	        				temp[i].listTempName = res.list;
+	        				})
+				}
+				console.log(JSON.parse(JSON.stringify(temp)))
+				this.$set(this.publicNameList,JSON.parse(JSON.stringify(temp)));
+				console.log(this.publicNameList);
+			}
+         }
     },
     computed:{
          
