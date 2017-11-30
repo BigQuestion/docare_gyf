@@ -350,6 +350,22 @@ export default {
    */
    getTempletNames(params, config){
      return fetch('medicalsystem/rest/medAnesthesiaComm/getTempletNames', params)
+  },  
+
+  /**
+   * 获取模板对应的详细记录内容
+   * 
+   */
+   getTempletDetail(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/getTempletDetail', params)
+  },
+
+  /**
+   * 批量插入模板内容
+   * 
+   */
+   insertBtchMedAnesthesiaEventTemplet(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/insertBtchMedAnesthesiaEventTemplet', params)
   },
 
 }

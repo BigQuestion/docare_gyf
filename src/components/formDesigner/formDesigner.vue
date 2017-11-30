@@ -7,8 +7,8 @@
                 </div>
             </div>
             <div>
-                <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)"  @keydown="show($event)">
-                    <div class="item" style="position:absolute;min-height: 3px;min-width:10px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item)">
+                <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)"  >
+                    <div  @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 3px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item)" tabindex = "0" >
                         <form-element :value="item"></form-element>
                     </div>
                     <div class="mask">
@@ -24,20 +24,41 @@
                 <div>
                     属性
                 </div>
-                <div v-if="chooseItems[0]">
-                    值：<input type="" name="" v-model="chooseItems[0].value">
+                <div v-if="chooseItems[0]&&chooseItems[0].value" style="display: flex;">
+                    <div style="min-width: 100px;">
+                        TEXT：
+                    </div>
+                    <div>
+                        <input type="" name="" v-model="chooseItems[0].value">
+                    </div>
+                    
                 </div>
-                <div v-if="chooseItems[0]&&chooseItems[0].width">
+                <div v-if="chooseItems[0]">
                     宽度：<input type="" name="" v-model="chooseItems[0].width">
                 </div>
-                <div v-if="chooseItems[0]&&chooseItems[0].height">
+                <div v-if="chooseItems[0]">
                     高度：<input type="" name="" v-model="chooseItems[0].height">
                 </div>
-                <div v-if="chooseItems[0]&&chooseItems[0].fieldName">
+                <div v-if="chooseItems[0]">
                     字段名称：<input type="" name="" v-model="chooseItems[0].fieldName">
                 </div>
-                <div v-if="chooseItems[0]&&chooseItems[0].tableName">
+                <div v-if="chooseItems[0]">
                     数据源表名称：<input type="" name="" v-model="chooseItems[0].tableName">
+                </div>
+                <div v-if="chooseItems[0]">
+                    字典表名称：<input type="" name="" v-model="chooseItems[0].dictTableName">
+                </div>
+                <div v-if="chooseItems[0]">
+                    字典录入筛选条件：<input type="" name="" v-model="chooseItems[0].dictSelect">
+                </div>
+                <div v-if="chooseItems[0]">
+                    字典显示字段名称：<input type="" name="" v-model="chooseItems[0].dictShowFiled">
+                </div>
+                <div v-if="chooseItems[0]">
+                    字典字段名称：<input type="" name="" v-model="chooseItems[0].dictField">
+                </div>
+                <div v-if="chooseItems[0]">
+                    BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
                 </div>
             </div>
             
@@ -56,16 +77,31 @@ export default {
                 type: 'autoInput',
                 value: '输入文字',
                 selectKeyfield:'id',
+            },
+            {
+                text: '文本控件',
+                type: 'title',
+                value: '输入文字',
+                width:'80',
             },{
                 text: '文本',
                 type: 'text',
                 value: '输入文字',
                 width:'80',
-                fieldName:'NAME',
-                tableName:'med_pat_master_index',
+                fieldName:'',
+                tableName:'',
             }, {
-                text: '输入',
-                type: 'input'
+                text: '输入框',
+                type: 'input',
+                width:'80',
+                fieldName:'',
+                tableName:'',
+                dictTableName:'',
+                dictSelect:'',
+                dictShowFiled:'',
+                dictField:'',
+                borderStyle:'',
+                value:'',
                 
             }, {
                 text: '单选',
@@ -141,7 +177,7 @@ export default {
         },
         areaMouseUp(e) {
             if (this.dragX == e.clientX && this.dragY == e.clientY) {
-                console.log('click');
+                //console.log('click');
                 this.itemChoose(e, this.currentItem)
             }
             this.area.removeEventListener('mousemove', this.areaMouseMove);
@@ -153,7 +189,7 @@ export default {
             //     chooseItems[i].x += dX;
             //     chooseItems[i].y += dY;
             // }
-            console.log(JSON.stringify(this.chooseItems));
+            //console.log(JSON.stringify(this.chooseItems));
             this.currentItem = {};
 
         },
@@ -184,7 +220,7 @@ export default {
                 if ((this.formItems[i].x > this.chooseRect.startX) && (this.formItems[i].x < this.chooseRect.endX)
                     &&(this.formItems[i].y > this.chooseRect.startY) && (this.formItems[i].y < this.chooseRect.endY)) {
                     this.chooseItems.push(this.formItems[i]);
-                    console.log(this.formItems[i].chosen);
+                    //console.log(this.formItems[i].chosen);
                     this.formItems[i].chosen = true;
                 }
             }
@@ -192,7 +228,7 @@ export default {
             this.drawing = false;
             this.area.removeEventListener('mousemove', this.drawStart);
             this.area.removeEventListener('mouseup', this.drawEnd);
-            console.log(this.chooseRect);
+            //console.log(this.chooseRect);
 
         },
         clearClick(e) {
@@ -207,7 +243,7 @@ export default {
         itemChoose(e, item) {
             if (this.chooseMode) {
                 this.chooseItems.push(item);
-                console.log('长度:' + this.chooseItems.length);
+                //console.log('长度:' + this.chooseItems.length);
                 // debugger
                 // this.domItems.push(e.currentTarget)
                 item.chosen = true;
@@ -264,9 +300,9 @@ export default {
                 });
         },
 
-        show(ev){
+         show(index,ev){
              if(ev.keyCode==46){
-              alert('你按了回车键！')
+              this.formItems.splice(index,1);
             }
         }
 
@@ -277,6 +313,7 @@ export default {
     mounted() {
         this.area = this.$refs.area;
         this.selectMedFormTemp();
+        
     },
     created() {
         let component = this;
@@ -315,13 +352,13 @@ export default {
 .btn {
     background: #00FFFF;
     margin-top: 10px;
-    width: 50px;
+    /*width: 50px;*/
     text-align: center;
 }
 
 .designArea {
     position: relative;
-    background: #CCCCCC;
+   /* background: #CCCCCC;*/
     height: 600px;
     width: 900px;
 }

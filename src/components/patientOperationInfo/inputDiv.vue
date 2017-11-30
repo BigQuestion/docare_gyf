@@ -1,7 +1,7 @@
 <template>
 	<div style="position: relative;">
-		<input @dblclick="showView"  v-model="conInfo[attrName]"  >
-		<div v-if="nameView" style="position: absolute;top: 0px;width: 150px;height: 300px;overflow-y: auto;border:1px solid;z-index: 1;" v-on:blur="disShowView">
+		<input @dblclick="showView"  v-model="conInfo[attrName]">
+		<div v-if="nameView" style="position: absolute;top: 0px;width: 200px;height: 300px;overflow-y: auto;border:1px solid;z-index: 1;" v-on:blur="disShowView">
 			<div @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" style="background-color: white;">
 				{{item[toAttrName]}}
 			</div>

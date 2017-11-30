@@ -1,10 +1,13 @@
 <template>
 	<div>
-		<div v-if="value.type=='text'" :style="{width:value.width+'px'}" style="min-width: 20px;min-height: 20px;">
+		<div v-if="value.type=='text'" :style="{width:value.width+'px'}"  style="min-width: 20px;min-height: 20px;">
             {{value.value}}
 		</div>
+        <div v-if="value.type=='title'" :style="{width:value.width+'px'}"  style="min-width: 20px;min-height: 20px;">
+            {{value.value}}
+        </div>
         <div v-if="value.type=='input'" >
-            <input :style="{width:value.width+'px'}" type="" name="" v-model="value.text">
+            <input :style="{width:value.width+'px',border:value.borderStyle}" v-model="value.value" style="min-width: 20px;min-height: 20px;"  >
         </div>
         <div v-if="value.type=='radio'" >
             <input type="radio" name="" v-model="value.text">
@@ -35,13 +38,14 @@ export default {
     	}
     },
     methods:{
-        
+       
     },
     props:['value'],// 设置value为props属性-必须
     computed:{
         
     },
     mounted(){
+
     }
 }
 </script>

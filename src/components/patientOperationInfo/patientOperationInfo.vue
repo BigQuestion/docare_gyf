@@ -26,7 +26,7 @@
 					</div>
 					<div style="margin-right: 15px;">
 						<!-- <input  type="" name="" v-model="info.FIRST_ASSISTANT_NAME"> -->
-						<inputDiv :conInfo="info" methodName="getSupplyNurseList" attrName="FIRST_ASSISTANT_NAME" toAttrName="userName"></inputDiv>
+						<inputDiv :conInfo="info" methodName="medAnaesthesiaDictList" attrName="FIRST_ASSISTANT_NAME" toAttrName="userName"></inputDiv>
 					</div>
 					<div style="margin-right: 15px;">
 						<!-- <input v-model="info.SECOND_ASSISTANT_NAME"> -->

@@ -59,6 +59,8 @@
 	                </div>
 				</div>
                 <div style="height: 90px;text-align: right;padding-top: 15px;">
+                    <button @click="saveTempletViewFun">保存模板</button>
+                    <button @click="openTempLet">套用模板</button>
                     <span>类型筛选</span>
                     <select v-model="filterType" @change="selectTypeFun">  
                           <option value="">
@@ -184,15 +186,37 @@
 				</div>
 			</div>
 		</div>
-        
+
+        <!-- 保存模板输入内容 -->
+        <div v-if="saveTempletView" style="width: 500px;min-height: 200px;background-color: white;z-index: 3;position: absolute;top: 20%;left: 20%;border:2px solid rgb(61,164,206);">
+            <div style="height: 30px;background-color:rgb(47,150,196);color: white;padding-left: 15px;line-height: 30px;">
+                <span>保存模板</span>
+            </div>
+            <div style="padding: 15px;display: flex;">
+                <span>麻醉方法:&nbsp;</span>
+                <!-- <input type="" name="" style="width: 200px;"> -->
+                <inputDiv :conInfo="methodObj" methodName="medAnaesthesiaDictList" attrName="anaesthesiaName" toAttrName="anaesthesiaName"></inputDiv>
+            </div>
+            <div style="padding: 15px;">
+                <span>模板名称:</span>
+                <input v-model="templetName" style="width: 200px;" >
+            </div>
+            <div style="padding-left: 15px;">
+                <input type="checkbox" name="" :checked="checkState">
+                <span>是否私有</span>
+                <button @click="saveTemplet">保存</button>
+                <button @click="cancleSaveTemp">取消</button>
+            </div>
+        </div>
         <!-- 显示事件模板 -->
-        <div style="position: absolute;top: 10%;left: 7%;width: 100%;">
-            <event-templet></event-templet>
+        <div style="position: absolute;top: 10%;left: 7%;width: 100%;" v-if="tempLetView.view=='t'">
+            <event-templet :tempView="tempLetView" :itemList="eventList"></event-templet>
         </div>
 	</div>
 </template>
 <script>
 import eventTemplet from '@/components/eventTemplet/eventTemplet.vue';
+import inputDiv from '@/components/patientOperationInfo/inputDiv.vue';
 
 export default {
     data() {
@@ -289,7 +313,14 @@ export default {
             selected:"",
             signItemView:false,
             serchZm:"",
-            filterType:"全部"
+            filterType:"全部",
+            tempLetView:{view:'f'},
+            checkState:true,
+            methodObj:{
+                anaesthesiaName:""
+            },
+            templetName:'',
+            saveTempletView:false,
 
         }
     },
@@ -389,7 +420,7 @@ export default {
         },
         //保存按钮
         saveBtn() {
-        	if(this.changeEvent){
+        	if(this.changeEvent.length>0){
 	        	this.api.updateMedAnesthesiaEventBatch(this.changeEvent)
         		.then(res =>{
         			 this.selectMedAnesthesiaEventList();
@@ -592,7 +623,7 @@ export default {
         		var m1 = this.addItemList.length;
         		for (var i = 1; i <= k3; i++) {
         			var time2 = new Date(time1.getTime() + parseInt(this.spaceTime/60) * i*1000*60);
-        			console.log(time2);
+        			 
         				for (var j = 0; j < m1; j++) {
         					this.addItemList.push({
 				        		patientId:this.objectItem.patientId,
@@ -677,7 +708,6 @@ export default {
         //得到添加生命体征项目
         getSeclectItem(){
         	this.signItemView = !this.signItemView;
-        	console.log(this.selected.itemName);
         	if(this.selected.itemName){
         		this.itemNameList.push({
         		itemName:this.selected.itemName,
@@ -719,6 +749,68 @@ export default {
                 this.eventList = newList;
             }
         },
+        //套用模板
+        openTempLet(){
+            this.tempLetView.view = 't';
+        },
+        //打开保存模板界面
+        saveTempletViewFun(){
+            this.saveTempletView = true;
+            
+        },
+        //取消保存模板界面
+        cancleSaveTemp(){
+            this.saveTempletView = false;
+            this.methodObj.anaesthesiaName='';
+            this.templetName='';
+            this.checkState = true;
+        },
+        //保存模板方法
+        saveTemplet(){
+            var list = this.eventTempList;
+            var createBy = '公用';
+            if(this.methodObj.anaesthesiaName=="")
+            {
+                alert("请选择方法名称");
+                return
+            }
+
+            if(this.templetName==""){
+                alert("请输入模板名称");
+                return
+            }
+            if(this.checkState){
+                createBy=this.config.userId;
+            }
+            let params=[]
+            for (var i = 0; i < list.length; i++) {
+                 var obj = {
+                    itemNo:list[i].ITEM_NO,
+                    createBy:createBy,
+                    templetClass:0,
+                    templet:this.templetName,
+                    anesthesiaMethod:this.methodObj.anaesthesiaName,
+                    itemClass:list[i].ITEM_CLASS,
+                    itemName:list[i].ITEM_NAME,
+                    itemCode:list[i].ITEM_CODE,
+                    itemSpec:list[i].ITEM_SPEC,
+                    concentration:list[i].CONCENTRATION,
+                    performSpeed:list[i].PERFORM_SPEED,
+                    speedUnit:list[i].SPEED_UNIT,
+                    dosage:list[i].DOSAGE,
+                    dosageUnits:list[i].DOSAGE_UNITS,
+                    administrator:list[i].ADMINISTRATOR,
+                    durativeIndicator:list[i].DURATIVE_INDICATOR,
+                 };
+                 params.push(obj);
+
+            }
+            this.api.insertBtchMedAnesthesiaEventTemplet(params)
+                .then(res =>{
+                    this.cancleSaveTemp();
+                })
+            debugger
+        }
 
 
     },
@@ -727,7 +819,8 @@ export default {
 
     },
     components:{
-        eventTemplet
+        eventTemplet,
+        inputDiv
     },
     mounted() {
         this.selectMedAnesthesiaEventList();

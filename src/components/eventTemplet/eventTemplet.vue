@@ -22,9 +22,9 @@
 									公用
 								</div>
 								<ul  style="padding-left: 10px;">
-									<li v-for="item in publicNameList">
+									<li v-for="(item,index) in publicNameList">
 										<div style="display: flex;align-items: center;">
-											<div @click="getPublicTempletNames(item)" style="background-color: grey;color: white;height: 12px;line-height: 12px;width: 12px;text-align: center;">
+											<div @click="getPublicTempletNames(item,index)" style="background-color: grey;color: white;cursor:pointer;height: 12px;line-height: 12px;width: 12px;text-align: center;">
 												+
 											</div>
 											<div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
@@ -32,11 +32,11 @@
 												{{item.anesthesiaMethod}}
 											</div>
 										</div>
-										<ul style="padding-left: 10px;">
-											<li v-for="itemTemp in item.listTempName">
+										<ul style="padding-left: 20px;">
+											<li v-if="item.tempView" v-for="itemTemp in item.listTempName" @click="getPublicTempletDetail(itemTemp.templet,item.anesthesiaMethod,0)">
 											<div style="display: flex;align-items: center;">
 												<div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
-												<div style="width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+												<div style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
 													{{itemTemp.templet}}
 												</div>
 											</div>
@@ -49,17 +49,27 @@
 						<li>
 							<ul>
 								<div>私有</div>
-								<ul v-if="publicNameView" style="padding-left: 10px;">
-									<li v-for="item in privateNameList">
-									<div style="display: flex;align-items: center;">
-										<div @click="getTempletNames" style="background-color: grey;color: white;height: 12px;line-height: 12px;width: 12px;text-align: center;">
-											+
+								<ul style="padding-left: 10px;">
+									<li v-for="(item,index) in privateNameList">
+										<div style="display: flex;align-items: center;">
+											<div @click="getPrivateTempletNames(item,index)" style="background-color: grey;color: white;cursor:pointer;height: 12px;line-height: 12px;width: 12px;text-align: center;">
+														+
+											</div>
+											<div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
+											<div style="width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+												{{item.anesthesiaMethod}}
+											</div>
 										</div>
-										<div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
-										<div style="width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
-											{{item.anesthesiaMethod}}
-										</div>
-									</div>
+										<ul style="padding-left: 20px;">
+											<li v-if="item.tempView" v-for="itemTemp in item.listTempName" @click="getPublicTempletDetail(itemTemp.templet,item.anesthesiaMethod,1)">
+												<div style="display: flex;align-items: center;">
+													<div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
+													<div style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+														{{itemTemp.templet}}
+													</div>
+												</div>
+											</li>
+										</ul>
 									</li>
 								</ul>
 							</ul>
@@ -73,10 +83,21 @@
                     	{{cell.title}}
                     </div>
                 </div>
+                <div>
+                	<div v-for="item in tempDetailList" style="display: flex;margin-left: 10px;">
+                		<div v-for="cell in contentConfig" :style="{width:cell.width+'px'}">
+                			{{item[cell.fieldObj]}} 
+                		</div>
+                	</div>
+                </div>
 			</div>
 		</div>
-		<div style="position: absolute;height: 50px;bottom: 0px;">
-			<button>取消</button>
+		<div style="position: absolute;height: 50px;bottom: 0px;padding-left: 20px;">
+			<input type="checkbox" name="" :checked="state" @click="getSelectState">
+			<span>不套用剂量</span>
+			<button @click="closeWin">取消</button>
+			<button @click="selectTemplet">套用模板</button>
+			<button @click="deleteTemplet">删除模板</button>
 		</div>
 	</div>
 </template>
@@ -92,7 +113,7 @@
   			},
   			{
   				title:'类型',
-  				fieldObj:'itemClassName',
+  				fieldObj:'itemTypeName',
   				width:'60'
   			},
   			{
@@ -139,14 +160,16 @@
     		privateNameList:[],
     		publicTempNameList:[],
     		privateTempNameList:[],
-    		publicNameView:false,
-    		privateNameView:false,
-    		privateTempNameView:false,
-    		publicTempNameView:false,
+    		tempDetailList:[],
+    		state:false,
+
     	}
     	
     },
     methods:{
+    	closeWin(){
+    		 this.tempView.view = 'f';
+    	},
     	//获取所有模板的麻醉方法 
     	getMethodNames(){
          	let params={
@@ -154,55 +177,32 @@
          	}
          	this.api.getMethodNames(params)
 	     		.then(res=>{
-        				//this.publicNameList = res.list;
-        				//let listTemp = res.list;
-        				this.getAllTempName(res.list);
-        				// if(listTemp.length>0){
-        				// 	for (let i = 0; i < listTemp.length; i++) {
-        				// 		let params={
-					       //   		anesthesiaMethod:listTemp[i].anesthesiaMethod,
-					       //   		createBy:'公用'
-					       //   	}
-					       //   	this.api.getTempletNames(params)
-					       //   		.then(res=>{
-				        // 				//this.publicTempNameList = res.list;
-				        // 				listTemp[i].list = res.list;
-				        // 				})
-        				// 	}
-        				// 	this.publicNameList = listTemp;
-        				// 	//console.log(listTemp);
-        				// 	this.publicNameView = true;
-        				// 	//this.publicTempNameView = true;
-        				// }
+        				this.publicNameList = res.list;
+        				this.getAllPublicTempName(res.list);
         				})
 	     		
 
 	     	let params1={
-         		createBy:'MDSD'
+         		createBy:this.config.userId
          	}
          	this.api.getMethodNames(params1)
 	     		.then(res=>{
         				this.privateNameList = res.list;
-        				if(res.list.length>0){
-        					this.privateNameView = true;
-        				}
+        				this.getAllPrivateTempName(res.list)
         		})
          },
          //获取模板名称
-         getPublicTempletNames(item){
-         	let params={
-         		anesthesiaMethod:item.anesthesiaMethod,
-         		createBy:'公用'
-         	}
-         	this.api.getTempletNames(params)
-         		.then(res=>{
-        				 this.publicTempNameList = res.list;
-        				if(res.list.length>0){
-        					this.publicTempNameView = true;
-        				}
-        				})
+         getPublicTempletNames(item,index){
+         	item.tempView = !item.tempView;
+         	this.$set(this.publicNameList,index,item);
          },
-         getAllTempName(listItem){
+         //获取模板名称
+         getPrivateTempletNames(item,index){
+         	item.tempView = !item.tempView;
+         	this.$set(this.privateNameList,index,item);
+         },
+         //获取公用模板名称
+         getAllPublicTempName(listItem){
          	var temp = listItem
          	if(listItem.length>0)
          	{
@@ -213,22 +213,125 @@
 		         	}
 		         	this.api.getTempletNames(params)
 		         		.then(res=>{
-		         			//console.log(res.list)
 	        				temp[i].listTempName = res.list;
+	        				temp[i].tempView = true;
+	        				this.$set(this.publicNameList,i,temp[i]);
 	        				})
 				}
-				console.log(JSON.parse(JSON.stringify(temp)))
-				this.$set(this.publicNameList,JSON.parse(JSON.stringify(temp)));
-				console.log(this.publicNameList);
 			}
+         },
+         //获取私有的模板名称
+         getAllPrivateTempName(listItem){
+         	var temp = listItem
+         	if(listItem.length>0)
+         	{
+				for (let i = 0; i < listItem.length; i++) {
+					let params={
+		         		anesthesiaMethod:listItem[i].anesthesiaMethod,
+		         		createBy:this.config.userId
+		         	}
+		         	this.api.getTempletNames(params)
+		         		.then(res=>{
+	        				temp[i].listTempName = res.list;
+	        				temp[i].tempView = true;
+	        				this.$set(this.privateNameList,i,temp[i]);
+	        				})
+				}
+			}
+         },
+
+         //获取模板的详细内容
+         getPublicTempletDetail(tempLetName,methodName,typeItem){
+         	let params = {
+         		templet:tempLetName,
+         		anesthesiaMethod:methodName,
+         		createBy:''
+         		}
+         	//typeItem---0表示公用，1表示私有
+         	if(typeItem==0){
+         		params.createBy = '公用'
+         	}
+         	if(typeItem==1){
+         		params.createBy = this.config.userId;
+         	}
+         	this.api.getTempletDetail(params)
+         		.then(res=>{
+         				this.tempDetailList = res.list;
+    				})
+         },
+         //套用模板
+         selectTemplet(){
+         	var list = this.tempDetailList;
+         	if(this.state){
+         		for (var i = 0; i < list.length; i++) {
+         		var obj = {
+                TYPE_NAME: list[i].itemTypeName,
+                PATIENT_ID: 10966589,
+                VISIT_ID: 1,
+                OPER_ID: 1,
+                ITEM_NAME: list[i].itemName,
+                ADMINISTRATOR: list[i].administrator,
+                CONCENTRATION: list[i].concentration,
+                CONCENTRATION_UNIT: list[i].concentrationUnit,
+                PERFORM_SPEED: list[i].performSpeed,
+                SPEED_UNIT: list[i].speedUnit,
+                DOSAGE: "",
+                DOSAGE_UNITS: list[i].dosageUnits,
+                START_TIME: this.changeDateFormat(new Date().Format('yyyy-MM-dd hh:mm')),
+                ENDDATE: "",
+                ITEM_CLASS: list[i].itemClass,
+                ITEM_SPEC: list[i].itemSpec,
+                addFlag: true,
+                DURATIVE_INDICATOR:0,
+	            };
+	            this.itemList.push(obj);
+	    		this.tempView.view = 'f';
+	         	}
+         	}
+         	else
+         	{
+         		for (var i = 0; i < list.length; i++) {
+	         		var obj = {
+	                TYPE_NAME: list[i].itemTypeName,
+	                PATIENT_ID: 10966589,
+	                VISIT_ID: 1,
+	                OPER_ID: 1,
+	                ITEM_NAME: list[i].itemName,
+	                ADMINISTRATOR: list[i].administrator,
+	                CONCENTRATION: list[i].concentration,
+	                CONCENTRATION_UNIT: list[i].concentrationUnit,
+	                PERFORM_SPEED: list[i].performSpeed,
+	                SPEED_UNIT: list[i].speedUnit,
+	                DOSAGE: list[i].dosage,
+	                DOSAGE_UNITS: list[i].dosageUnits,
+	                START_TIME: this.changeDateFormat(new Date().Format('yyyy-MM-dd hh:mm')),
+	                ENDDATE: "",
+	                ITEM_CLASS: list[i].itemClass,
+	                ITEM_SPEC: list[i].itemSpec,
+	                addFlag: true,
+	                DURATIVE_INDICATOR:0,
+	            };
+	            this.itemList.push(obj);
+	    		this.tempView.view = 'f';
+	         	}
+         	}
+         	
+         },
+
+         //是否套用剂量
+         getSelectState(){
+         	this.state = !this.state;
          }
+
+
     },
     computed:{
          
     },
-    props:[],
+    props:['tempView','itemList'],
     mounted(){
     	this.getMethodNames();
+    	 
     }
 	}
 </script>

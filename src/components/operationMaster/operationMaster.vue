@@ -645,21 +645,24 @@ export default {
              .then(
                 res=>{
                     this.formItems= JSON.parse(res.formContent);
-                    let list = this.formItems;
+                    var list = this.formItems;
                      for (let i = 0; i < list.length; i++) {
                          if(list[i].fieldName){
                             let params1 = {
                                 sql:'select '+list[i].fieldName+' from '+list[i].tableName+' where  patient_id='+'\''+this.lockedPatientInfo.patientId+'\'',
                             }
                             this.api.doSql(params1).then(
-                                res=>{
-                                    this.res = res[0];
-                                    list[i].value = this.res[list[i].fieldName];
+                                result=>{
+                                    var rt = result[0];
+                                    let obj = this.formItems[i];
+                                    obj.value = rt[list[i].fieldName];
+                                    this.$set(this.formItems,i,obj);
                                 }
                             )
                             
                          }
                      }
+
                 });
 
         },
