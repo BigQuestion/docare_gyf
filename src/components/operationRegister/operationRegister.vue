@@ -725,7 +725,7 @@ export default {
                 var list = this.newEvenNameList;
                 var newList = [];
                 for (var i = 0; i < list.length; i++) {
-                    if(list[i].nameJm.indexOf(this.serchZm.toUpperCase())>=0){
+                    if(list[i].nameJm&&list[i].nameJm.indexOf(this.serchZm.toUpperCase())>=0){
                         newList.push(list[i]);
                     }
                 }

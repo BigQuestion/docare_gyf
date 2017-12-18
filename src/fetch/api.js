@@ -368,4 +368,27 @@ export default {
      return fetch('medicalsystem/rest/medAnesthesiaComm/insertBtchMedAnesthesiaEventTemplet', params)
   },
 
+  /**
+   * 根据单子读取相关信息
+   * 
+   */
+  getFormSqlResult(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/getFormSqlResult', params)
+  },
+
+  /**
+   * 获取单子下拉部分内容
+   * 
+   */
+   getColumContext(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/getColumContext', params)
+  },
+
+  /**
+   * 获取单子下拉全部内容
+   * 
+   */
+   allColumContext(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/allColumContext', params)
+  },
 }

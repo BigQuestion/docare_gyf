@@ -24,7 +24,7 @@
                 <div>
                     属性
                 </div>
-                <div v-if="chooseItems[0]&&chooseItems[0].value" style="display: flex;">
+                <div v-if="chooseItems[0]" style="display: flex;">
                     <div style="min-width: 100px;">
                         TEXT：
                     </div>
@@ -59,6 +59,12 @@
                 </div>
                 <div v-if="chooseItems[0]">
                     BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
+                </div>
+                <div v-if="chooseItems[0]">
+                    是否可编辑:<input type="" name="" v-model="chooseItems[0].isRead">
+                </div>
+                <div v-if="chooseItems[0]">
+                    字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor">
                 </div>
             </div>
             
@@ -100,8 +106,10 @@ export default {
                 dictSelect:'',
                 dictShowFiled:'',
                 dictField:'',
-                borderStyle:'',
+                borderStyle:'none',
                 value:'',
+                isRead:true,
+                ForeColor:'blue',
                 
             }, {
                 text: '单选',

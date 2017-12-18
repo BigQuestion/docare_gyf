@@ -287,7 +287,10 @@
                         <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
                             <form-element :value="item"></form-element>
                         </div>
-                    </div> 
+                    </div>
+                    <div>
+                        <button>保存</button>
+                    </div>
 
 
             </div>
@@ -641,27 +644,37 @@ export default {
                  formName:"麻醉记录单",
                  id:2
             }
+            let arry=[];
             this.api.selectMedFormTemp(params)
              .then(
                 res=>{
                     this.formItems= JSON.parse(res.formContent);
                     var list = this.formItems;
-                     for (let i = 0; i < list.length; i++) {
-                         if(list[i].fieldName){
-                            let params1 = {
-                                sql:'select '+list[i].fieldName+' from '+list[i].tableName+' where  patient_id='+'\''+this.lockedPatientInfo.patientId+'\'',
-                            }
-                            this.api.doSql(params1).then(
+                    console.log(list);
+                    for (var i = 0; i < list.length; i++) {
+                       if(list[i].fieldName){
+                        arry.push({
+                            "patientId":"10966589",
+                            "visitId":"1",
+                            "operId":"1",
+                            "tableName":list[i].tableName,
+                            "coluName":list[i].fieldName,
+                        })
+                       }
+                    }
+                     
+                    this.api.getFormSqlResult(arry)
+                        .then(
                                 result=>{
-                                    var rt = result[0];
-                                    let obj = this.formItems[i];
-                                    obj.value = rt[list[i].fieldName];
-                                    this.$set(this.formItems,i,obj);
+                                    for (var i = 0; i < list.length; i++) {
+                                       if(list[i].fieldName){
+                                            let obj = this.formItems[i];
+                                            obj.value = result[list[i].fieldName];
+                                            this.$set(this.formItems,i,obj);
+                                       }
+                                    }
                                 }
                             )
-                            
-                         }
-                     }
 
                 });
 

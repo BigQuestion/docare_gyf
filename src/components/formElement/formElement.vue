@@ -7,7 +7,13 @@
             {{value.value}}
         </div>
         <div v-if="value.type=='input'" >
-            <input :style="{width:value.width+'px',border:value.borderStyle}" v-model="value.value" style="min-width: 20px;min-height: 20px;"  >
+            <common-select :conInfo="value" attrName="value" :data="updateData"></common-select>
+            <!-- <div v-if="value.dictTableName">
+                
+            </div> -->
+            <!-- <div v-else>
+                <input :style="{width:value.width+'px',border:value.borderStyle,color:value.ForeColor,}" v-model="value.value" style="min-width: 20px;min-height: 20px;">
+            </div> -->
         </div>
         <div v-if="value.type=='radio'" >
             <input type="radio" name="" v-model="value.text">
@@ -30,19 +36,21 @@
 	</div>
 </template>
 <script>
-
+import commonSelect from '@/components/commonSelect/commonSelect.vue';
 export default {
 	data () {
   		return {
-
+            updateData:[],
     	}
     },
     methods:{
-       
     },
     props:['value'],// 设置value为props属性-必须
     computed:{
         
+    },
+    components: {
+        commonSelect
     },
     mounted(){
 
