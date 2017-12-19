@@ -40,6 +40,9 @@
                     高度：<input type="" name="" v-model="chooseItems[0].height">
                 </div>
                 <div v-if="chooseItems[0]">
+                    MultiSelect:<input type="" name="" v-model="chooseItems[0].MultiSelect">
+                </div>
+                <div v-if="chooseItems[0]">
                     字段名称：<input type="" name="" v-model="chooseItems[0].fieldName">
                 </div>
                 <div v-if="chooseItems[0]">
@@ -61,10 +64,13 @@
                     BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
                 </div>
                 <div v-if="chooseItems[0]">
-                    是否可编辑:<input type="" name="" v-model="chooseItems[0].isRead">
+                    是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit">
                 </div>
                 <div v-if="chooseItems[0]">
                     字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor">
+                </div>
+                <div v-if="chooseItems[0]">
+                    isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly">
                 </div>
             </div>
             
@@ -106,10 +112,12 @@ export default {
                 dictSelect:'',
                 dictShowFiled:'',
                 dictField:'',
-                borderStyle:'none',
+                borderStyle:'',
                 value:'',
-                isRead:true,
+                isEdit:true,
                 ForeColor:'blue',
+                MultiSelect:false,//真为多选，假为单选
+                isReadOnly:true,
                 
             }, {
                 text: '单选',
@@ -322,7 +330,7 @@ export default {
         this.area = this.$refs.area;
         this.selectMedFormTemp();
         
-    },
+    },  
     created() {
         let component = this;
         document.onkeydown = function(e) {
