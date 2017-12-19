@@ -1,14 +1,14 @@
 <template>
-	<div style="height:100%;position:relative;">
-		<div class="head">
+    <div style="height:100%;position:relative;">
+        <div class="head">
             <div class="logo">
                 <div :style="logo">
                     <!-- <img src="../../assets/logo.jpg"> -->
                 </div>
-                 <div :style="logo1" style="background-color: rgb(21,111,174);color:white;line-height: 30px;">
-                     <span style="margin-left: 30px;">{{nowTime}}</span>
-                 </div>
-                 
+                <div :style="logo1" style="background-color: rgb(21,111,174);color:white;line-height: 30px;">
+                    <span style="margin-left: 30px;">{{nowTime}}</span>
+                </div>
+
             </div>
             <div class="currentPatientInfo">{{lockedPatientInfo.patientId}}</div>
             <div class="procedure" style="position: relative;">
@@ -17,49 +17,49 @@
                         <div>
                             入手术室
                         </div>
-                         <div>
-                             <input type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5')">
-                         </div>
+                        <div>
+                            <input type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5')">
+                        </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
                         <div>
                             麻醉开始
                         </div>
-                         <div>
-                             <input type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10')">
-                         </div>
+                        <div>
+                            <input type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10')">
+                        </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
                         <div>
                             手术开始
                         </div>
-                         <div>
-                             <input type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15')">
-                         </div>
+                        <div>
+                            <input type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15')">
+                        </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
                         <div>
                             手术结束
                         </div>
-                         <div>
-                             <input type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25')">
-                         </div>
+                        <div>
+                            <input type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25')">
+                        </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
                         <div>
                             麻醉结束
                         </div>
-                         <div>
-                             <input type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30')">
-                         </div>
+                        <div>
+                            <input type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30')">
+                        </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
                         <div>
                             出手术室
                         </div>
-                         <div>
-                             <input type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35')">
-                         </div>
+                        <div>
+                            <input type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35')">
+                        </div>
                     </div>
                 </div>
                 <div style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;" v-if="lockedPatientInfo.patientId">
@@ -71,17 +71,44 @@
         </div>
         <div class="down">
             <div class="left" style="overflow-y: auto;">
-                <div style="height: 200px;background-color: rgb(29,117,181);" v-if="lockedPatientInfo.patientId">
-                    <div style="height: 30px;background-color: rgb(0,22,116);color:white;"> 患者操作</div>
-                    <div style="padding:5px;">
-                        <button v-if="formDetail" style="width: 90px;" @click="getOperationRegister">术中登记</button>
-                        <button v-if="lockedPatientInfo.patientId" style="width: 90px;" @click="getPatientOperationInfo">手术信息</button>
+                <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
+                    <div class="stretch">
+                        <div>电子病历</div>
+                        <div class="active_back" @click="concealmentOne"><img :class="{transform:isTransformOne}" src="../../assets/bottom.png"></div>
+                    </div>
+                    <div v-if="concealmentOneData" style="padding:5px;">
+                        <button class="list_button">检查信息</button>
+                        <button class="list_button">检查结果</button>
+                        <button class="list_button">医嘱信息</button>
                     </div>
                 </div>
-                <div style="height: 200px;background-color: rgb(29,117,181);">
-                    <div style="height: 30px;background-color: rgb(0,22,116);color:white;"> 常用功能</div>
-                    <div style="padding:5px;">
-                         <button @click="dictShow" style="width: 90px;">字典</button>
+                <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;" v-if="lockedPatientInfo.patientId">
+                    <div class="stretch">
+                        <div>患者操作</div>
+                        <div class="active_back" @click="concealmentTwe"><img :class="{transform:isTransformTwe}" src="../../assets/bottom.png"></div>
+                    </div>
+                    <div v-if="concealmentTweData" style="padding:5px;">
+                        <button v-if="formDetail" class="list_button" @click="getOperationRegister">术中登记</button>
+                        <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button>
+                    </div>
+                </div>
+                <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
+                    <div class="stretch">
+                        <div>常用功能</div>
+                        <div class="active_back" @click="concealmentThree"><img :class="{transform:isTransformThree}" src="../../assets/bottom.png"></div>
+                    </div>
+                    <div v-if="concealmentThreeData" style="padding:5px;">
+                        <button @click="dictShow" class="list_button">字典</button>
+                    </div>
+                </div>
+                <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
+                    <div class="stretch">
+                        <div>其他</div>
+                        <div class="active_back" @click="concealmentFour"><img :class="{transform:isTransformFour}" src="../../assets/bottom.png"></div>
+                    </div>
+                    <div v-if="concealmentFourData" style="padding:5px;">
+                        <button class="list_button">系统配置</button>
+                        <button @click="getAboutUs" class="list_button">关于</button>
                     </div>
                 </div>
             </div>
@@ -96,15 +123,15 @@
                     <div>
                         <div class="container" style="padding-left: 5px;">
                             <div>
-                                <input  type="radio" id="all" @click="searchPatientList"  v-model="operStatus" value="">
-                                <label for="all" >全部</label>
+                                <input type="radio" id="all" @click="searchPatientList" v-model="operStatus" value="">
+                                <label for="all">全部</label>
                                 <input type="radio" id="one" @click="searchPatientList" value="0" v-model="operStatus">
                                 <label for="one">术前</label>
                                 <input type="radio" id="two" @click="searchPatientList" value="15" v-model="operStatus">
                                 <label for="two">术中</label>
                                 <input type="radio" id="three" @click="searchPatientList" value="25" v-model="operStatus">
                                 <label for="three">术后</label>
-                                <br> 
+                                <br>
                             </div>
                         </div>
                         <div class="container" style="padding-left: 5px;">
@@ -119,7 +146,7 @@
                             <span>手术间 {{item.operatingRoomNo}}</span>
                         </div>
                         <ul>
-                            <li>患者 {{item.patientName}}  {{item.patientId}} 住院号 {{item.inpNo}}</li>
+                            <li>患者 {{item.patientName}} {{item.patientId}} 住院号 {{item.inpNo}}</li>
                             <li>手术 {{item.operationName}}</li>
                             <li v-if="item.inDateTime==null">时间 {{item.scheduledDateTime}}</li>
                             <li v-if="item.inDateTime!=null">时间 {{item.inDateTime}}</li>
@@ -167,7 +194,7 @@
                                 <div class="left15">付费方式</div>
                                 <div class="in_con">
                                     {{patientInfo.NAME}}
-                                </div> 
+                                </div>
                             </div>
                             <div class="container">
                                 <div>住址</div>
@@ -185,7 +212,7 @@
                                 <div class="left15">联系人</div>
                                 <div class="in_con">
                                     {{patientInfo.NEXT_OF_KIN}}
-                                </div> 
+                                </div>
                             </div>
                             <div class="container">
                                 <div>职业</div>
@@ -269,7 +296,7 @@
                                 <div class="in_con100">{{patientInfo.FOURTH_ASSISTANT_NAME}}</div>
                             </div>
                             <div class="container">
-                                <div>洗手护士</div> 
+                                <div>洗手护士</div>
                                 <div class="in_con100">{{patientInfo.FIRST_OPERATION_NURSE_NAME}}</div>
                                 <div class="in_con100">{{patientInfo.SECOND_OPERATION_NURSE_NAME}}</div>
                                 <div class="left30">巡回护士</div>
@@ -282,171 +309,186 @@
                 </div>
 
                 <!--单子信息-->
-                
-                    <div class="designArea" v-if="formDetail">
-                        <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-                            <form-element :value="item"></form-element>
-                        </div>
-                    </div>
-                    <div>
-                        <button>保存</button>
-                    </div>
 
+                <div class="designArea" v-if="formDetail">
+                    <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
+                        <form-element :value="item"></form-element>
+                    </div>
+                </div>
+                <div>
+                    <button>保存</button>
+                </div>
 
             </div>
         </div>
-<!-- <div class="mask">
-            <div class="">
-                
-            </div>
-        </div> -->
+        <!-- <div class="mask">
+                                        <div class="">
+                                            
+                                        </div>
+                                    </div> -->
         <patientOperationInfo v-if="patientOperationInfoView" :info="patientInfo"></patientOperationInfo>
         <operationRegister v-if="operationRegisterView" :objectItem="lockedPatientInfo"></operationRegister>
-        <div v-if="dictView" style="position: absolute;width: 60%;height: 80%;left:20%;top:10%;background:rgb(227,239,255);border:2px solid rgb(60,163,203);">
-            <div style="height: 30px;line-height: 30px;background:rgb(60,163,203);color: white;display: flex;
-            ">
-                <span>字典</span>
-                <span>X</span>
-            </div>
-            <div style="height: 50px;line-height: 50px;font-weight: bold;border-bottom: 2px solid rgb(177,207,243);">
-                <span style="margin-left: 30px;">字典维护</span>
-            </div>
-            <div style="display: flex;padding-left:10px;padding-top: 5px;">
-                <div class="tab_div" @click="getComType"><span>常用术语</span></div>
-                <div class="tab_div"><span>麻醉事件</span></div>
-                <div class="tab_div"><span>麻醉方法</span></div>
-
-            </div>
-            <div style="display: flex;height: 65%;background:white;margin:10px;">
-            <!-- 显示类别 -->
-                <div style="height: 100%;width: 30%;overflow-x: auto;margin-top:5px;border-right: 2px solid rgb(177,207,243);">
-                    <ul v-for="item in comTypeList">
-                        <li style="cursor:pointer;" @click="getTypeDetail(item)">
-                            <div style="margin-left: 20px;">{{item.typeName}}</div>
-                        </li>
-                    </ul>
+        <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
+        <div v-if="dictView" class="dictionaries">
+            <div class="window_load">
+                <div class="load_top">
+                    <div>字典</div>
+                    <div @click="dictNone" class="top_active">X</div>
                 </div>
-                <!-- 显示详细内容 -->
-                <div style="width: 70%;margin-top:5px;overflow-y: auto;">
-                    <div style="display: flex;margin-left: 10px;">
-                        <div style="width: 24%;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
+                <div style="height: 50px;line-height: 50px;font-weight: bold;border-bottom: 2px solid rgb(177,207,243);">
+                    <span style="margin-left: 30px;">字典维护</span>
+                </div>
+                <div style="display: flex;padding-left:10px;padding-top: 5px;">
+                    <div class="tab_div" @click="getComType">
+                        <span>常用术语</span>
                     </div>
-                    <div style="overflow-y: auto;">
-                        <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
-                            <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
-                                <div v-if="cl.status=='inable'" >
-                                    <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change">
-                                    <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)">
-                                </div>
-                                <div v-if="cl.status!='inable'">
-                                    {{list[cl.value]}}
+                    <div class="tab_div">
+                        <span>麻醉事件</span>
+                    </div>
+                    <div class="tab_div">
+                        <span>麻醉方法</span>
+                    </div>
+
+                </div>
+                <div style="display: flex;height: 65%;background:white;margin:10px;">
+                    <!-- 显示类别 -->
+                    <div style="height: 100%;width: 30%;overflow-x: auto;margin-top:5px;border-right: 2px solid rgb(177,207,243);">
+                        <ul v-for="item in comTypeList">
+                            <li style="cursor:pointer;" @click="getTypeDetail(item)">
+                                <div style="margin-left: 20px;">{{item.typeName}}</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 显示详细内容 -->
+                    <div style="width: 70%;margin-top:5px;overflow-y: auto;">
+                        <div style="display: flex;margin-left: 10px;">
+                            <div style="width: 24%;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
+                        </div>
+                        <div style="overflow-y: auto;">
+                            <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
+                                <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
+                                    <div v-if="cl.status=='inable'">
+                                        <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change">
+                                        <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)">
+                                    </div>
+                                    <div v-if="cl.status!='inable'">
+                                        {{list[cl.value]}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>  
+                    </div>
+                </div>
+                <div style="text-align: right;margin-right: 30px;">
+                    <button style="width: 100px;height: 30px;" @click="addMedAnesthesiaInputDict" :disabled="isAdd">新增</button>
+                    <button style="width: 100px;height: 30px;" :disabled="isSave" @click="saveValue">保存</button>
+                    <button style="width: 100px;height: 30px;" @click="cancleEdit" :disabled="isCancle">取消</button>
+                    <button style="width: 100px;height: 30px;" :disabled="isDelete" @click="deleteByMedAnesthesiaInputDict">删除</button>
                 </div>
             </div>
-            <div style="text-align: right;margin-right: 30px;">
-                <button style="width: 100px;height: 30px;" @click="addMedAnesthesiaInputDict" :disabled="isAdd">新增</button>
-                <button style="width: 100px;height: 30px;" :disabled="isSave" @click="saveValue">保存</button>
-                <button style="width: 100px;height: 30px;" @click="cancleEdit" :disabled="isCancle">取消</button>
-                <button style="width: 100px;height: 30px;" :disabled="isDelete" @click="deleteByMedAnesthesiaInputDict">删除</button>
-            </div>
         </div>
-
-	</div>
+    </div>
 </template>
 <script>
 import formElement from '@/components/formElement/formElement.vue';
 import patientOperationInfo from '@/components/patientOperationInfo/patientOperationInfo.vue';
 import operationRegister from '@/components/operationRegister/operationRegister.vue';
+import aboutUs from '@/components/aboutUs/aboutUs.vue'
 export default {
-	data () {
-  		return {
-            patientList:[],
+    data() {
+        return {
+            patientList: [],
             formItems: [],
-            viewInfo:false,
-            patientInfo:{},
-            nowTime:"",
-            dateTime:"",
-            count:"",
-            getTime:"",
-            operStatus:"",
-            patientId:"",
-            patientName:"",
-            comTypeList:[],
-            itemClass:"",
-            obj:"",
-            tempTypeItem:"",
-            itemName:"",
-            isAdd:true,
-            isCancle:true,
-            tempSerNo:"",
-            isSave:true,
-            isDelete:true,
-            medBillList:[],
-            lockedPatientInfo:"",
-            formDetail:false,
-            inRoomDateTime:"",
-            anesStartTime:"",
-            startDateTime:"",
-            endDateTime:"",
-            anesEndTime:"",
-            outDateTime:"",
-            patientOperationInfoView:false,
-            operationRegisterView:false,
-            contentConfig:[
+            viewInfo: false,
+            patientInfo: {},
+            nowTime: "",
+            dateTime: "",
+            count: "",
+            getTime: "",
+            operStatus: "",
+            patientId: "",
+            patientName: "",
+            comTypeList: [],
+            itemClass: "",
+            obj: "",
+            tempTypeItem: "",
+            itemName: "",
+            isAdd: true,
+            isCancle: true,
+            tempSerNo: "",
+            isSave: true,
+            isDelete: true,
+            medBillList: [],
+            lockedPatientInfo: "",
+            formDetail: false,
+            inRoomDateTime: "",
+            anesStartTime: "",
+            startDateTime: "",
+            endDateTime: "",
+            anesEndTime: "",
+            outDateTime: "",
+            patientOperationInfoView: false,
+            operationRegisterView: false,
+            aboutUsData: { dataInParent: false },
+            contentConfig: [
                 {
-                    text:"序号",
-                    value:"serialNo"
+                    text: "序号",
+                    value: "serialNo"
 
                 },
                 {
-                    text:"分类",
-                    value:"itemClass"
+                    text: "分类",
+                    value: "itemClass"
                 },
                 {
-                    text:"名称",
-                    value:"newItemName",
-                    status:"inable"
+                    text: "名称",
+                    value: "newItemName",
+                    status: "inable"
                 },
                 {
-                    text:"编码",
-                    value:"newItemCode",
-                    status:"inable"
+                    text: "编码",
+                    value: "newItemCode",
+                    status: "inable"
                 },
 
             ],
-            commonTypeList:[],
-            dictView:false,
-            res:'',
+            commonTypeList: [],
+            dictView: false,
+            res: '',
             logo: {
                 backgroundImage: "url(" + require("../../assets/Logo.jpg") + ")",
                 backgroundRepeat: "no-repeat",
-                height:"70px",
-                backgroundSize:"cover",
-              },
+                height: "70px",
+                backgroundSize: "cover",
+            },
             logo1: {
                 backgroundImage: "url(" + require("../../assets/clock.jpg") + ")",
                 backgroundRepeat: "no-repeat",
-                height:"30px",
-              },
+                height: "30px",
+            },
+            concealmentOneData: true,
+            concealmentTweData: true,
+            concealmentThreeData: true,
+            concealmentFourData: true,
+            isTransformOne: false,
+            isTransformTwe: false,
+            isTransformThree: false,
+            isTransformFour: false,
 
-    	}
+        }
     },
-    methods:{
-        inputBlur(list){
+    methods: {
+        inputBlur(list) {
             list.writeAble = false;
         },
-        valueWriteAble(list){
+        valueWriteAble(list) {
             list.writeAble = true;
         },
-        searchPatientList(){
-            if(this.getTime==""&&this.operStatus==""&&this.patientName==""&&this.patientId=="")
-            {
+        searchPatientList() {
+            if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
                 var now = new Date();
                 var year = now.getFullYear();
-                var month =(now.getMonth() + 1).toString();
+                var month = (now.getMonth() + 1).toString();
                 var day = (now.getDate()).toString();
                 if (month.length == 1) {
                     month = "0" + month;
@@ -454,100 +496,100 @@ export default {
                 if (day.length == 1) {
                     day = "0" + day;
                 }
-            this.getTime = year + "-"+ month +"-"+  day;
+                this.getTime = year + "-" + month + "-" + day;
             }
 
             let params = {
-                count:10,
-                dateTime:this.getTime,
-                operStatus:this.operStatus,
-                patientName:this.patientName,
-                patientId:this.patientId
+                count: 10,
+                dateTime: this.getTime,
+                operStatus: this.operStatus,
+                patientName: this.patientName,
+                patientId: this.patientId
             }
             this.api.getMedOperationMasterList(params)
-            .then(
-                res=>{
+                .then(
+                res => {
                     this.patientList = res.list;
                 });
 
         },
-        patientDeatilInfo(item){
+        patientDeatilInfo(item) {
             this.formDetail = false;
             let params = {
-                patientId:item.patientId,
-                operId:item.operId,
-                visitId:item.visitId
+                patientId: item.patientId,
+                operId: item.operId,
+                visitId: item.visitId
             }
-             this.api.getPatienDetailInfo(params)
-             .then(
-                res=>{
+            this.api.getPatienDetailInfo(params)
+                .then(
+                res => {
                     this.patientInfo = res;
                 });
-             this.viewInfo=true;
+            this.viewInfo = true;
         },
-        setIntervaled(){
+        setIntervaled() {
             var _this = this;
             setInterval(function() {
-            var dateObj = new Date(); //表示当前系统时间的Date对象
-            var year = dateObj.getFullYear(); //当前系统时间的完整年份值
-            var month = dateObj.getMonth() + 1; //当前系统时间的月份值
-            var date = dateObj.getDate(); //当前系统时间的月份中的日
-            var day = dateObj.getDay(); //当前系统时间中的星期值 
-            var hour = dateObj.getHours(); //当前系统时间的小时值
-            var minute = dateObj.getMinutes(); //当前系统时间的分钟值
-            var second = dateObj.getSeconds(); //当前系统时间的秒钟值
-            //如果月、日、小时、分、秒的值小于10，在前面补0
-            if(month < 10) {
-                month = "0" + month;
-            }
-            if(date < 10) {
-                date = "0" + date;
-            }
-            if(hour < 10) {
-                hour = "0" + hour;
-            }
-            if(minute < 10) {
-                minute = "0" + minute;
-            }
-            if(second < 10) {
-                second = "0" + second;
-            }
-            var time = new Date();
-            // 程序计时的月从0开始取值后+1
-            var m = time.getMonth() + 1;
-            var t = year + "-" + month + "-" +
-                date + " " + time.getHours() + ":" +
-                minute + ":" + second;
-            _this.nowTime = t;
-        }, 1000);
+                var dateObj = new Date(); //表示当前系统时间的Date对象
+                var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+                var month = dateObj.getMonth() + 1; //当前系统时间的月份值
+                var date = dateObj.getDate(); //当前系统时间的月份中的日
+                var day = dateObj.getDay(); //当前系统时间中的星期值 
+                var hour = dateObj.getHours(); //当前系统时间的小时值
+                var minute = dateObj.getMinutes(); //当前系统时间的分钟值
+                var second = dateObj.getSeconds(); //当前系统时间的秒钟值
+                //如果月、日、小时、分、秒的值小于10，在前面补0
+                if (month < 10) {
+                    month = "0" + month;
+                }
+                if (date < 10) {
+                    date = "0" + date;
+                }
+                if (hour < 10) {
+                    hour = "0" + hour;
+                }
+                if (minute < 10) {
+                    minute = "0" + minute;
+                }
+                if (second < 10) {
+                    second = "0" + second;
+                }
+                var time = new Date();
+                // 程序计时的月从0开始取值后+1
+                var m = time.getMonth() + 1;
+                var t = year + "-" + month + "-" +
+                    date + " " + time.getHours() + ":" +
+                    minute + ":" + second;
+                _this.nowTime = t;
+            }, 1000);
         },
-        lockedPatient(item){
-             this.lockedPatientInfo = item;
-             this.inRoomDateTime =this.changeDateFormat(item.inDateTime);
-             this.anesStartTime = this.changeDateFormat(item.anesStartTime);
-             this.startDateTime = this.changeDateFormat(item.startDateTime);
-             this.endDateTime = this.changeDateFormat(item.endDateTime);
-             this.anesEndTime = this.changeDateFormat(item.anesEndTime);
-             this.outDateTime = this.changeDateFormat(item.outDateTime);
+        lockedPatient(item) {
+            this.lockedPatientInfo = item;
+            this.inRoomDateTime = this.changeDateFormat(item.inDateTime);
+            this.anesStartTime = this.changeDateFormat(item.anesStartTime);
+            this.startDateTime = this.changeDateFormat(item.startDateTime);
+            this.endDateTime = this.changeDateFormat(item.endDateTime);
+            this.anesEndTime = this.changeDateFormat(item.anesEndTime);
+            this.outDateTime = this.changeDateFormat(item.outDateTime);
         },
-        getComType(){
+        getComType() {
             let params = {
             }
             this.api.getMedAnesthesiaCommType(params)
-            .then(
-                res=>{
+                .then(
+                res => {
                     this.comTypeList = res.list;
                 });
         },
-        getTypeDetail(item){
+        getTypeDetail(item) {
             this.tempTypeItem = item;
             this.isAdd = false;
-             let params = {
-                itemClass:item.typeName
+            let params = {
+                itemClass: item.typeName
             }
             this.api.getMedAnesthesiaCommDictByItemClass(params)
-            .then(
-                res=>{
+                .then(
+                res => {
                     var m = res.list.length;
                     for (var i = 0; i < m; i++) {
                         res.list[i].newItemName = res.list[i].itemName;
@@ -556,166 +598,190 @@ export default {
                     this.commonTypeList = res.list;
                 });
         },
-        dictShow(){
-            this.dictView = !this.dictView;
+        dictShow() {
+            this.dictView = true;
         },
-        getItem(item){
+        dictNone() {
+            this.dictView = false;
+        },
+        getItem(item) {
             this.obj = item;
             this.isDelete = false;
         },
-        deleteByMedAnesthesiaInputDict(){
+        deleteByMedAnesthesiaInputDict() {
             console.log(this.obj.itemCode);
-             let params = {
-                itemClass:this.obj.itemClass,
-                itemName:this.obj.itemName
+            let params = {
+                itemClass: this.obj.itemClass,
+                itemName: this.obj.itemName
             }
             this.api.deleteByMedAnesthesiaInputDict(params)
-            .then(
-                res=>{
+                .then(
+                res => {
                     this.getTypeDetail(this.tempTypeItem);
                 });
         },
-        addMedAnesthesiaInputDict(){
-            this.commonTypeList.push({serialNo:this.commonTypeList.length,itemClass:this.tempTypeItem.typeName,newItemName:"",newItemCode:"",itemName:"",itemCode:""});
+        addMedAnesthesiaInputDict() {
+            this.commonTypeList.push({ serialNo: this.commonTypeList.length, itemClass: this.tempTypeItem.typeName, newItemName: "", newItemCode: "", itemName: "", itemCode: "" });
             this.isAdd = this.isCancle;
             this.isCancle = !this.isAdd;
         },
-        cancleEdit(){
+        cancleEdit() {
             this.getTypeDetail(this.tempTypeItem);
             this.isCancle = this.isAdd;
             this.isAdd = !this.isCancle;
             this.isSave = true;
         },
-        change(){
+        change() {
             this.isSave = false;
         },
-        saveValue(){
+        saveValue() {
             var li = this.commonTypeList;
             var k = li.length;
             let params = [];
             for (var i = 0; i < k; i++) {
-                if((li[i].newItemName!=li[i].itemName ||li[i].newItemCode!=li[i].itemCode)&&li[i].itemName!=""){
+                if ((li[i].newItemName != li[i].itemName || li[i].newItemCode != li[i].itemCode) && li[i].itemName != "") {
                     params.push({
-                        itemClass:li[i].itemClass,
-                        oldItemName:li[i].itemName,
-                        itemName:li[i].newItemName,
-                        itemCode:li[i].newItemCode,
+                        itemClass: li[i].itemClass,
+                        oldItemName: li[i].itemName,
+                        itemName: li[i].newItemName,
+                        itemCode: li[i].newItemCode,
                     });
                 }
-                if(li[i].itemName==""&&li[i].itemCode==""){
+                if (li[i].itemName == "" && li[i].itemCode == "") {
                     let params1 = {
-                        itemClass:li[i].itemClass,
-                        oldItemName:li[i].itemName,
-                        itemName:li[i].newItemName,
-                        itemCode:li[i].newItemCode,
-                        serialNo:this.commonTypeList.length-1
+                        itemClass: li[i].itemClass,
+                        oldItemName: li[i].itemName,
+                        itemName: li[i].newItemName,
+                        itemCode: li[i].newItemCode,
+                        serialNo: this.commonTypeList.length - 1
                     }
                     this.api.insertMedAnesthesiaInputDict(params1)
-                    .then(
-                        res=>{
+                        .then(
+                        res => {
                             this.getTypeDetail(this.tempTypeItem);
                         });
-                        }
-            }
-            if(params.length>0){
-                this.api.updateMedAnesthesiaInputDict(params)
-                .then(
-                    res=>{
-                        this.getTypeDetail(this.tempTypeItem);
-                        
-                    });
                 }
+            }
+            if (params.length > 0) {
+                this.api.updateMedAnesthesiaInputDict(params)
+                    .then(
+                    res => {
+                        this.getTypeDetail(this.tempTypeItem);
+
+                    });
+            }
             this.isCancle = true;
             this.isAdd = false;
             this.isSave = true;
         },
-        selectMedFormList(){
-            let params={}
+        selectMedFormList() {
+            let params = {}
             this.api.selectMedFormList(params)
                 .then(
-                    res=>{
-                        this.medBillList = res.list;
-                    });
+                res => {
+                    this.medBillList = res.list;
+                });
         },
-        selectMedFormTemp(){
+        selectMedFormTemp() {
             this.formDetail = true;
             this.viewInfo = false;
             let params = {
-                 formName:"麻醉记录单",
-                 id:2
+                formName: "麻醉记录单",
+                id: 2
             }
-            let arry=[];
+            let arry = [];
             this.api.selectMedFormTemp(params)
-             .then(
-                res=>{
-                    this.formItems= JSON.parse(res.formContent);
+                .then(
+                res => {
+                    this.formItems = JSON.parse(res.formContent);
                     var list = this.formItems;
                     console.log(list);
                     for (var i = 0; i < list.length; i++) {
-                       if(list[i].fieldName){
-                        arry.push({
-                            "patientId":"10966589",
-                            "visitId":"1",
-                            "operId":"1",
-                            "tableName":list[i].tableName,
-                            "coluName":list[i].fieldName,
-                        })
-                       }
+                        if (list[i].fieldName) {
+                            arry.push({
+                                "patientId": "10966589",
+                                "visitId": "1",
+                                "operId": "1",
+                                "tableName": list[i].tableName,
+                                "coluName": list[i].fieldName,
+                            })
+                        }
                     }
-                     
+
                     this.api.getFormSqlResult(arry)
                         .then(
-                                result=>{
-                                    for (var i = 0; i < list.length; i++) {
-                                       if(list[i].fieldName){
-                                            let obj = this.formItems[i];
-                                            obj.value = result[list[i].fieldName];
-                                            this.$set(this.formItems,i,obj);
-                                       }
-                                    }
+                        result => {
+                            for (var i = 0; i < list.length; i++) {
+                                if (list[i].fieldName) {
+                                    let obj = this.formItems[i];
+                                    obj.value = result[list[i].fieldName];
+                                    this.$set(this.formItems, i, obj);
                                 }
-                            )
+                            }
+                        }
+                        )
 
                 });
 
         },
         //修改病人手术状态
-        changeStatus(status){
+        changeStatus(status) {
             console.log(this.datetimeLocalToDate(this.inRoomDateTime));
-            let params= {
-                    patientId:this.lockedPatientInfo.patientId,
-                    visitId:this.lockedPatientInfo.visitId,
-                    operId:this.lockedPatientInfo.operId,
-                    inDateTime:this.datetimeLocalToDate(this.inRoomDateTime),
-                    anesStartTime:this.datetimeLocalToDate(this.anesStartTime),
-                    startDateTime:this.datetimeLocalToDate(this.startDateTime),
-                    endDateTime:this.datetimeLocalToDate(this.endDateTime),
-                    anesEndTime:this.datetimeLocalToDate(this.anesEndTime),
-                    outDateTime:this.datetimeLocalToDate(this.outDateTime),
-                    operStatus:status,
-                    operatingRoom:this.lockedPatientInfo.operatingRoom,
-                    operatingRoomNo:this.lockedPatientInfo.operatingRoomNo
-                }
+            let params = {
+                patientId: this.lockedPatientInfo.patientId,
+                visitId: this.lockedPatientInfo.visitId,
+                operId: this.lockedPatientInfo.operId,
+                inDateTime: this.datetimeLocalToDate(this.inRoomDateTime),
+                anesStartTime: this.datetimeLocalToDate(this.anesStartTime),
+                startDateTime: this.datetimeLocalToDate(this.startDateTime),
+                endDateTime: this.datetimeLocalToDate(this.endDateTime),
+                anesEndTime: this.datetimeLocalToDate(this.anesEndTime),
+                outDateTime: this.datetimeLocalToDate(this.outDateTime),
+                operStatus: status,
+                operatingRoom: this.lockedPatientInfo.operatingRoom,
+                operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+            }
 
             this.api.changeOperationStatus(params)
-            .then(
-                    res=>{
-                        this.searchPatientList();
-                    });
+                .then(
+                res => {
+                    this.searchPatientList();
+                });
         },
         //手术信息
-        getPatientOperationInfo(){
+        getPatientOperationInfo() {
             this.patientOperationInfoView = !this.patientOperationInfoView;
         },
         //术中登记
-        getOperationRegister(){
+        getOperationRegister() {
             this.operationRegisterView = !this.operationRegisterView;
         },
-
-
+        // 关于
+        getAboutUs() {
+            this.aboutUsData.dataInParent = !this.aboutUsData.dataInParent;
+            // this.getAboutUs();
+            // console.log(this.aboutUsData.dataInParent)
+        },
+        // 左部选项按下拉显示隐藏及图片切换
+        concealmentOne() {
+            this.concealmentOneData = !this.concealmentOneData;
+            this.isTransformOne = !this.isTransformOne;
+        },
+        concealmentTwe() {
+            this.concealmentTweData = !this.concealmentTweData;
+            this.isTransformTwe = !this.isTransformTwe;
+        },
+        concealmentThree() {
+            this.concealmentThreeData = !this.concealmentThreeData;
+            this.isTransformThree = !this.isTransformThree;
+        },
+        concealmentFour() {
+            this.concealmentFourData = !this.concealmentFourData;
+            this.isTransformFour = !this.isTransformFour;
+        }
 
     },
-    mounted(){
+    mounted() {
         this.searchPatientList();
         this.setIntervaled();
         this.selectMedFormList();
@@ -724,121 +790,198 @@ export default {
     components: {
         formElement,
         patientOperationInfo,
-        operationRegister
+        operationRegister,
+        aboutUs
     },
 }
 </script>
 <style scoped>
-.mask{
+.mask {
     position: absolute;
-    width:100%;
+    width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.2);
-    left:0px;
-    top:0px;
+    background: rgba(0, 0, 0, 0.2);
+    left: 0px;
+    top: 0px;
 }
-.patientList{
-    height:100%;
+
+.patientList {
+    height: 100%;
     overflow-y: auto;
-    width:350px;
+    width: 350px;
     border-right: 1px solid #7F7F7F;
 }
-.patientContent{
+
+.patientContent {
     height: 30px;
-    border-bottom: 1px solid rgb(177,207,243);
+    border-bottom: 1px solid rgb(177, 207, 243);
     line-height: 30px;
-    color: rgb(23,68,140);
+    color: rgb(23, 68, 140);
 }
-.procedure{
-    flex:1;
+
+.procedure {
+    flex: 1;
 }
-.logo{
-    width:200px;
+
+.logo {
+    width: 200px;
     /*background: #0080FF;*/
 }
-.currentPatientInfo{
-    width:200px;
+
+.currentPatientInfo {
+    width: 200px;
     background: #E6E6E6;
 }
-.head{
-    height:100px;
-    width:100%;
+
+.head {
+    height: 100px;
+    width: 100%;
     background: #CCCCCC;
     display: flex;
 }
-.down{
-    width:100%;
-    height:calc(100% - 100px);
+
+.down {
+    width: 100%;
+    height: calc(100% - 100px);
     background: #B3B3B3;
     display: flex;
 }
-.left{
-    width:200px;
-    height:100%;
-    background: rgb(142,193,238);
+
+.left {
+    width: 200px;
+    height: 100%;
+    background: rgb(142, 193, 238);
 }
-.content{
-    display: flex; 
-    width:calc(100% - 200px);
-    height:100%;
-    background: rgb(227,239,255);
+
+.content {
+    display: flex;
+    width: calc(100% - 200px);
+    height: 100%;
+    background: rgb(227, 239, 255);
 }
-.listBorder{
-    border:1px solid rgb(177,207,243);
+
+.listBorder {
+    border: 1px solid rgb(177, 207, 243);
     padding-bottom: 5px;
     padding-left: 5px;
 }
-.patientInfo{
+
+.patientInfo {
     width: calc(100% - 350px);
 }
-.pat_title{
+
+.pat_title {
     height: 35px;
     line-height: 35px;
     padding-left: 15px;
-    border: 1px solid rgb(177,207,243);
+    border: 1px solid rgb(177, 207, 243);
 }
-.container{
-    display: -webkit-box; /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */  
-    display: -moz-box; /* Firefox 17- */  
-    display: -webkit-flex; /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */  
-    display: -moz-flex; /* Firefox 18+ */  
-    display: -ms-flexbox; /* IE 10 */  
-    display: flex; /* Chrome 29+, Firefox 22+, IE 11+, Opera 12.1/17/18, Android 4.4+ */  
+
+.container {
+    display: -webkit-box;
+    /* Chrome 4+, Safari 3.1, iOS Safari 3.2+ */
+    display: -moz-box;
+    /* Firefox 17- */
+    display: -webkit-flex;
+    /* Chrome 21+, Safari 6.1+, iOS Safari 7+, Opera 15/16 */
+    display: -moz-flex;
+    /* Firefox 18+ */
+    display: -ms-flexbox;
+    /* IE 10 */
+    display: flex;
+    /* Chrome 29+, Firefox 22+, IE 11+, Opera 12.1/17/18, Android 4.4+ */
     margin-bottom: 15px;
 }
-.in_con{
+
+.in_con {
     width: 150px;
-    border:1px solid rgb(197,197,197);
+    border: 1px solid rgb(197, 197, 197);
     margin-left: 10px;
 }
-.left15{
+
+.left15 {
     margin-left: 15px;
 }
-.in_con100{
+
+.in_con100 {
     width: 100px;
-    border:1px solid rgb(197,197,197);
+    border: 1px solid rgb(197, 197, 197);
     margin-left: 10px;
 }
-.left30{
+
+.left30 {
     margin-left: 30px;
 }
-.tab_div{
+
+.tab_div {
     height: 30px;
     line-height: 30px;
     width: 100px;
-    border:1px solid rgb(177,207,243);
-    background:rgb(76,121,187);
+    border: 1px solid rgb(177, 207, 243);
+    background: rgb(76, 121, 187);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     text-align: center;
     color: white;
     margin-left: 2px;
 }
+
 .designArea {
     position: relative;
     height: 600px;
     width: 900px;
     background: white;
     border: 1px solid black;
+}
+
+
+
+
+
+/* 左部菜单按钮部分样式 */
+
+.stretch {
+    height: 30px;
+    background-color: rgb(0, 22, 116);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* line-height: 30px; */
+    box-sizing: border-box;
+    padding: 0 5px;
+}
+
+.active_back {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #001674;
+}
+
+.active_back:hover {
+    border: 1px solid #659adb;
+    background: linear-gradient(#e3ebf5, #cbe5f7, #dbecf9);
+    /* background:url("../../assets/ButtonBak.png") no-repeat;
+    background-size: cover; */
+}
+
+.active_back:active {
+    border: 1px solid #659adb;
+    background: linear-gradient(#91b4e2, #d7e2f0, #b8cde7, #ebf1f9);
+}
+
+.active_back img {
+    width: 14px;
+    display: block;
+    margin: 2px auto 0;
+}
+
+.list_button {
+    width: 90px;
+    margin: 0 0 5px 2px;
+}
+
+.transform {
+    transform: rotate(180deg);
 }
 </style>

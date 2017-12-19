@@ -51,10 +51,12 @@ export default new Router({
   },{
     path: '/statistics',
     component: statistics
-  },{
+  }
+  ,{
     path: '/operationMaster',
     component: operationMaster
-  },{
+  }
+  ,{
     path: '/formDesigner',
     component: formDesigner
   },,{
