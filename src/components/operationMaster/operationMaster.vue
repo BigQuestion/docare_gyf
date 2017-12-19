@@ -308,8 +308,8 @@
                     </div>
                 </div>
 
-                <!--单子信息-->
 
+                <!--单子信息--> 
                 <div class="designArea" v-if="formDetail">
                     <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
                         <form-element :value="item"></form-element>
@@ -317,8 +317,7 @@
                 </div>
                 <div>
                     <button>保存</button>
-                </div>
-
+                </div> 
             </div>
         </div>
         <!-- <div class="mask">
@@ -689,7 +688,8 @@ export default {
                 formName: "麻醉记录单",
                 id: 2
             }
-            let arry = [];
+            let arry=[];
+            this.formItems = [];
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {

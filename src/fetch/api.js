@@ -391,4 +391,13 @@ export default {
    allColumContext(params, config){
      return fetch('medicalsystem/rest/medAnesthesiaComm/allColumContext', params)
   },
+
+  
+  /**
+   * 获取单子下拉全部内容
+   * 
+   */
+   updateSqlBatch(params, config){
+     return fetch('medicalsystem/rest/medAnesthesiaComm/updateSqlBatch', params)
+  },
 }
