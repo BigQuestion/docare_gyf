@@ -4,7 +4,7 @@
             <input @dblclick="showView"  v-model="infoData[attrName]" :style="{width:conInfo.width+'px'}" :readonly="conInfo.isEdit">
             <div v-if="nameView" style="position: absolute;top: 0px;height: 300px;overflow: auto;border:1px solid;z-index: 1;background-color:white;" :style="{width:conInfo.width+'px',}">
                 <div>
-                    <input v-model="serchZm" name="" @keyup="serchJm" >
+                    <input v-model="serchZm" @keyup="serchJm" >
                 </div>
                 <div @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" style="background-color: white;" :style="{width:conInfo.width+'px'}">
                     {{item.SPENAME}}
@@ -83,12 +83,10 @@
                 }
                 this.medAnaesthesiaDictList = newList;
         },
-        getChangeData(){
-             
-        }
+         
     },
     computed:{
-
+        
     },
     props:['conInfo','attrName','data'],
     mounted(){
@@ -106,7 +104,7 @@
       },
     watch:{
     "infoData.value":function(){
-         
+        this.updateData.push(this.value);
             }
         }
 	}

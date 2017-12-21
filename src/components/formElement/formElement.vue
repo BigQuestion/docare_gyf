@@ -9,7 +9,6 @@
         <div v-if="value.type=='input'" >
             <common-select :conInfo="value" attrName="value" :data="updateData"></common-select>
             <!-- <div v-if="value.dictTableName">
-                
             </div> -->
             <!-- <div v-else>
                 <input :style="{width:value.width+'px',border:value.borderStyle,color:value.ForeColor,}" v-model="value.value" style="min-width: 20px;min-height: 20px;">

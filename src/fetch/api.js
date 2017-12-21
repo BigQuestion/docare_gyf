@@ -394,7 +394,7 @@ export default {
 
   
   /**
-   * 获取单子下拉全部内容
+   * 批量修改单子的数据
    * 
    */
    updateSqlBatch(params, config){
