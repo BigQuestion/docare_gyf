@@ -72,6 +72,9 @@
                 <div v-if="chooseItems[0]">
                     isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly">
                 </div>
+                <div v-if="chooseItems[0]">
+                    格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat">
+                </div>
             </div>
             
         </div>
@@ -118,6 +121,7 @@ export default {
                 ForeColor:'blue',
                 MultiSelect:false,//真为多选，假为单选
                 isReadOnly:true,
+                strFormat:true,//格式化字符串
                 
             }, {
                 text: '单选',

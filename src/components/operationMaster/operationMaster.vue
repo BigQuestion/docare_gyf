@@ -357,6 +357,7 @@
 import formElement from '@/components/formElement/formElement.vue';
 import patientOperationInfo from '@/components/patientOperationInfo/patientOperationInfo.vue';
 import operationRegister from '@/components/operationRegister/operationRegister.vue';
+import {pinYin} from '@/components/plugins/pinyin.js';
 export default {
 	data () {
   		return {
@@ -717,6 +718,7 @@ export default {
         this.searchPatientList();
         this.setIntervaled();
         this.selectMedFormList();
+        
     },
 
     components: {

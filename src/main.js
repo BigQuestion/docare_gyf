@@ -5,7 +5,6 @@ import App from './App'
 import router from './router'
 
 import './assets/css/index.css'
-import MyPlugin  from './components/plugins/plugins.js'
 
 import config from './components/configFile/config'
 
@@ -15,7 +14,7 @@ Vue.config.productionTip = false
 
 import api from '@/fetch/api.js';
 Vue.prototype.api = api;
-Vue.use(MyPlugin);
+
 Vue.prototype.config=config;
 
 //datatimelocal的格式转换为date
