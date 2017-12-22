@@ -308,8 +308,7 @@
                     </div>
                 </div>
 
-
-                <!--单子信息--> 
+                <!--单子信息-->
                 <div class="designArea" v-if="formDetail">
                     <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
                         <form-element :value="item"></form-element>
@@ -317,14 +316,14 @@
                 </div>
                 <div>
                     <button>保存</button>
-                </div> 
+                </div>
             </div>
         </div>
         <!-- <div class="mask">
-                                        <div class="">
-                                            
-                                        </div>
-                                    </div> -->
+                                                                <div class="">
+                                                                    
+                                                                </div>
+                                                            </div> -->
         <patientOperationInfo v-if="patientOperationInfoView" :info="patientInfo"></patientOperationInfo>
         <operationRegister v-if="operationRegisterView" :objectItem="lockedPatientInfo"></operationRegister>
         <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
@@ -341,49 +340,57 @@
                     <div class="tab_div" @click="getComType">
                         <span>常用术语</span>
                     </div>
-                    <div class="tab_div">
+                    <div class="tab_div" @click="getEvent">
                         <span>麻醉事件</span>
                     </div>
-                    <div class="tab_div">
+                    <div class="tab_div" @click="getMethods">
                         <span>麻醉方法</span>
                     </div>
-
-                </div>
-                <div style="display: flex;height: 65%;background:white;margin:10px;">
-                    <!-- 显示类别 -->
-                    <div style="height: 100%;width: 30%;overflow-x: auto;margin-top:5px;border-right: 2px solid rgb(177,207,243);">
-                        <ul v-for="item in comTypeList">
-                            <li style="cursor:pointer;" @click="getTypeDetail(item)">
-                                <div style="margin-left: 20px;">{{item.typeName}}</div>
-                            </li>
-                        </ul>
+                    <div class="tab_div" @click="getConstant">
+                        <span>麻醉常用量</span>
                     </div>
-                    <!-- 显示详细内容 -->
-                    <div style="width: 70%;margin-top:5px;overflow-y: auto;">
-                        <div style="display: flex;margin-left: 10px;">
-                            <div style="width: 24%;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
+                </div>
+                <!-- 字典按钮内容 -->
+                <div v-if="commoTerms" style="height:65%;">
+                    <div style="display: flex;height: 100%;background:white;margin:10px;">
+                        <!-- 显示类别 -->
+                        <div style="box-sizing:border-box;height: 100%;width: 30%;overflow-x: auto;padding-top:5px;border-right: 2px solid rgb(177,207,243);">
+                            <ul v-for="item in comTypeList">
+                                <li style="cursor:pointer;" @click="getTypeDetail(item)">
+                                    <div style="margin-left: 20px;">{{item.typeName}}</div>
+                                </li>
+                            </ul>
                         </div>
-                        <div style="overflow-y: auto;">
-                            <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
-                                <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
-                                    <div v-if="cl.status=='inable'">
-                                        <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change">
-                                        <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)">
-                                    </div>
-                                    <div v-if="cl.status!='inable'">
-                                        {{list[cl.value]}}
+                        <!-- 显示详细内容 -->
+                        <div style="width: 70%;margin-top:5px;overflow-y: auto;">
+                            <div style="display: flex;margin-left: 10px;">
+                                <div style="width: 24%;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
+                            </div>
+                            <div style="overflow-y: auto;">
+                                <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
+                                    <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
+                                        <div v-if="cl.status=='inable'">
+                                            <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change">
+                                            <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)">
+                                        </div>
+                                        <div v-if="cl.status!='inable'">
+                                            {{list[cl.value]}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div style="text-align: right;margin-right: 30px;">
+                        <button style="width: 100px;height: 30px;" @click="addMedAnesthesiaInputDict" :disabled="isAdd">新增</button>
+                        <button style="width: 100px;height: 30px;" :disabled="isSave" @click="saveValue">保存</button>
+                        <button style="width: 100px;height: 30px;" @click="cancleEdit" :disabled="isCancle">取消</button>
+                        <button style="width: 100px;height: 30px;" :disabled="isDelete" @click="deleteByMedAnesthesiaInputDict">删除</button>
+                    </div>
                 </div>
-                <div style="text-align: right;margin-right: 30px;">
-                    <button style="width: 100px;height: 30px;" @click="addMedAnesthesiaInputDict" :disabled="isAdd">新增</button>
-                    <button style="width: 100px;height: 30px;" :disabled="isSave" @click="saveValue">保存</button>
-                    <button style="width: 100px;height: 30px;" @click="cancleEdit" :disabled="isCancle">取消</button>
-                    <button style="width: 100px;height: 30px;" :disabled="isDelete" @click="deleteByMedAnesthesiaInputDict">删除</button>
-                </div>
+                <anaesthesiaEvent v-if="anaesthesiaEvent" :eventChildData="eventDataType"></anaesthesiaEvent>
+                <anestheticMethod v-if="anestheticMethod"></anestheticMethod>
+                <anestheticConstant v-if="anestheticConstant"></anestheticConstant>
             </div>
         </div>
     </div>
@@ -392,7 +399,10 @@
 import formElement from '@/components/formElement/formElement.vue';
 import patientOperationInfo from '@/components/patientOperationInfo/patientOperationInfo.vue';
 import operationRegister from '@/components/operationRegister/operationRegister.vue';
-import aboutUs from '@/components/aboutUs/aboutUs.vue'
+import aboutUs from '@/components/aboutUs/aboutUs.vue';
+import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent.vue';
+import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
+import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
 export default {
     data() {
         return {
@@ -408,6 +418,7 @@ export default {
             patientId: "",
             patientName: "",
             comTypeList: [],
+            eventDataType: [],
             itemClass: "",
             obj: "",
             tempTypeItem: "",
@@ -429,6 +440,10 @@ export default {
             patientOperationInfoView: false,
             operationRegisterView: false,
             aboutUsData: { dataInParent: false },
+            commoTerms: true,
+            anaesthesiaEvent: false,
+            anestheticMethod: false,
+            anestheticConstant: false,
             contentConfig: [
                 {
                     text: "序号",
@@ -572,6 +587,10 @@ export default {
             this.outDateTime = this.changeDateFormat(item.outDateTime);
         },
         getComType() {
+            this.commoTerms = true;
+            this.anaesthesiaEvent = false;
+            this.anestheticMethod = false;
+            this.anestheticConstant = false;
             let params = {
             }
             this.api.getMedAnesthesiaCommType(params)
@@ -579,6 +598,48 @@ export default {
                 res => {
                     this.comTypeList = res.list;
                 });
+        },
+        getEvent() {
+            this.commoTerms = false;
+            this.anaesthesiaEvent = true;
+            this.anestheticMethod = false;
+            this.anestheticConstant = false;
+            let params = {
+            }
+            this.api.allMedAnesthesiaEventType(params)
+                .then(
+                res => {
+                    console.log(res.list)
+                    this.eventDataType = res.list;
+                });
+        },
+        getMethods() {
+            this.commoTerms = false;
+            this.anaesthesiaEvent = false;
+            this.anestheticMethod = true;
+            this.anestheticConstant = false;
+            // let params = {
+            // }
+            // this.api.selectAllMedAnaesthesiaDict(params)
+            //     .then(
+            //     res => {
+            //         console.log(res.list)
+            //         this.methodDataType = res.list;
+            //     });
+        },
+        getConstant() {
+            this.commoTerms = false;
+            this.anaesthesiaEvent = false;
+            this.anestheticMethod = false;
+            this.anestheticConstant = true;
+            // let params = {
+            // }
+            // this.api.allMedAnesthesiaEventType(params)
+            //     .then(
+            //     res => {
+            //         console.log(res.list)
+            //         this.eventDataType = res.list;
+            //     });
         },
         getTypeDetail(item) {
             this.tempTypeItem = item;
@@ -590,6 +651,7 @@ export default {
                 .then(
                 res => {
                     var m = res.list.length;
+                    console.log(res.list)
                     for (var i = 0; i < m; i++) {
                         res.list[i].newItemName = res.list[i].itemName;
                         res.list[i].newItemCode = res.list[i].itemCode;
@@ -597,6 +659,7 @@ export default {
                     this.commonTypeList = res.list;
                 });
         },
+
         dictShow() {
             this.dictView = true;
         },
@@ -637,6 +700,7 @@ export default {
             var li = this.commonTypeList;
             var k = li.length;
             let params = [];
+            console.log(li)
             for (var i = 0; i < k; i++) {
                 if ((li[i].newItemName != li[i].itemName || li[i].newItemCode != li[i].itemCode) && li[i].itemName != "") {
                     params.push({
@@ -688,7 +752,7 @@ export default {
                 formName: "麻醉记录单",
                 id: 2
             }
-            let arry=[];
+            let arry = [];
             this.formItems = [];
             this.api.selectMedFormTemp(params)
                 .then(
@@ -791,7 +855,10 @@ export default {
         formElement,
         patientOperationInfo,
         operationRegister,
-        aboutUs
+        aboutUs,
+        anaesthesiaEvent,
+        anestheticMethod,
+        anestheticConstant,
     },
 }
 </script>
@@ -924,6 +991,7 @@ export default {
     text-align: center;
     color: white;
     margin-left: 2px;
+    cursor: pointer;
 }
 
 .designArea {
@@ -933,6 +1001,12 @@ export default {
     background: white;
     border: 1px solid black;
 }
+
+
+
+
+
+
 
 
 

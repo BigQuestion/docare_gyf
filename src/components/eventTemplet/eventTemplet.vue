@@ -97,7 +97,7 @@
 			<span>不套用剂量</span>
 			<button @click="closeWin">取消</button>
 			<button @click="selectTemplet">套用模板</button>
-			<button @click="deleteTemplet">删除模板</button>
+			<!-- <button @click="deleteTemplet">删除模板</button> -->
 		</div>
 	</div>
 </template>

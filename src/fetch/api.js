@@ -239,6 +239,13 @@ export default {
    medAnesthesiaEventOpenByItemClass(params, config){
      return fetch('medicalsystem/rest/medAnesthesiaComm/medAnesthesiaEventOpenByItemClass', params)
   },
+ /**
+   * 插入麻醉事件记录
+   * 
+   */
+  insertMedAnesthesiaEventOpen(params, config){
+    return fetch('medicalsystem/rest/medAnesthesiaComm/insertMedAnesthesiaEventOpen', params)
+ },
 
   /**
    * 插入病人麻醉事件记录
@@ -328,6 +335,21 @@ export default {
      return fetch('medicalsystem/rest/medSignData/deleteMedPatientMonitorDataCode', params)
   },
 
+/**
+ * 查询所有的麻醉方法字典
+ * 
+ */
+selectAllMedAnaesthesiaDict(params, config){
+  return fetch('medicalsystem/rest/medAnesthesiaComm/selectAllMedAnaesthesiaDict', params)
+},
+
+/**
+ * 新增麻醉方法
+ * 
+ */
+insertMedAnaesthesiaDict(params, config){
+  return fetch('medicalsystem/rest/medAnesthesiaComm/insertMedAnaesthesiaDict', params)
+},
   /**
    * 获取麻醉方法
    * 
