@@ -403,6 +403,8 @@ import aboutUs from '@/components/aboutUs/aboutUs.vue';
 import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent.vue';
 import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
 import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
+import {pinYin} from '@/components/plugins/pinyin.js';
+
 export default {
     data() {
         return {
@@ -849,6 +851,7 @@ export default {
         this.searchPatientList();
         this.setIntervaled();
         this.selectMedFormList();
+        
     },
 
     components: {

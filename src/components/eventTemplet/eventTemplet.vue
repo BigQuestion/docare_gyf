@@ -312,7 +312,7 @@
 	                DURATIVE_INDICATOR:0,
 	            };
 	            this.itemList.push(obj);
-	    		this.tempView.view = 'f';
+    		      this.tempView.view = 'f';
 	         	}
          	}
          	

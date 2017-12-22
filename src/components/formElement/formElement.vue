@@ -7,9 +7,8 @@
             {{value.value}}
         </div>
         <div v-if="value.type=='input'" >
-            <common-select :conInfo="value" attrName="value" :data="updateData"></common-select>
+            <common-select :conInfo="value" attrName="value" :data="updateData" v-on:toparentevent="getChlidValue"></common-select>
             <!-- <div v-if="value.dictTableName">
-                
             </div> -->
             <!-- <div v-else>
                 <input :style="{width:value.width+'px',border:value.borderStyle,color:value.ForeColor,}" v-model="value.value" style="min-width: 20px;min-height: 20px;">
@@ -44,6 +43,9 @@ export default {
     	}
     },
     methods:{
+        getChlidValue(data){
+            alert(data)
+        },
     },
     props:['value'],// 设置value为props属性-必须
     computed:{
@@ -53,7 +55,7 @@ export default {
         commonSelect
     },
     mounted(){
-
+         
     }
 }
 </script>

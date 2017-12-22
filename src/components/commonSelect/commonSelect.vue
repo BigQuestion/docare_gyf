@@ -4,7 +4,7 @@
             <input @dblclick="showView"  v-model="infoData[attrName]" :style="{width:conInfo.width+'px'}" :readonly="conInfo.isEdit">
             <div v-if="nameView" style="position: absolute;top: 0px;height: 300px;overflow: auto;border:1px solid;z-index: 1;background-color:white;" :style="{width:conInfo.width+'px',}">
                 <div>
-                    <input v-model="serchZm" name="" @keyup="serchJm" >
+                    <input v-model="serchZm" @keyup="serchJm" >
                 </div>
                 <div @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" style="background-color: white;" :style="{width:conInfo.width+'px'}">
                     {{item.SPENAME}}
@@ -12,7 +12,13 @@
             </div>
         </div>
         <div v-else>
-                <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="conInfo.isEdit">
+                <div v-if="conInfo.strFormat">
+                    <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="conInfo.isEdit">
+                </div> 
+
+                <div v-else>
+                    <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="conInfo.isEdit">
+                </div>
         </div>
 		
 	</div>
@@ -27,6 +33,7 @@
             serchZm:'',
             updateData:[],
             infoData:this.conInfo,
+            changeTimes:0,
 
     	}
     },
@@ -83,12 +90,27 @@
                 }
                 this.medAnaesthesiaDictList = newList;
         },
-        getChangeData(){
-             
-        }
+         
     },
     computed:{
-
+        strToDate(){
+                if(this.conInfo.strFormat&&this.conInfo.value){
+                    var time = new Date(this.conInfo.value);
+                    var y = time.getFullYear();
+                    if(y<10){
+                        y = '0'+y;
+                    }
+                    var m = time.getMonth()+1;
+                    if(m<10){
+                        m = '0'+m;
+                    }
+                    var d = time.getDate();
+                    if(d<10){
+                        d = '0'+d;
+                    }
+                    return y+'-'+m+'-'+d;
+                 }
+                }
     },
     props:['conInfo','attrName','data'],
     mounted(){
@@ -106,7 +128,10 @@
       },
     watch:{
     "infoData.value":function(){
-         
+        this.changeTimes = this.changeTimes+1;
+            if(this.changeTimes>1){
+                this.$emit('toparentevent', this.conInfo.value);
+            }
             }
         }
 	}
