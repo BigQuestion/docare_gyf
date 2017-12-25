@@ -311,11 +311,11 @@
                 <!--单子信息-->
                 <div class="designArea" v-if="formDetail">
                     <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-                        <form-element :value="item"></form-element>
+                        <form-element :value="item" v-on:toTopEvent="getValue"></form-element>
                     </div>
                 </div>
                 <div>
-                    <button>保存</button>
+                    <button @click="submitSaveForm">保存</button>
                 </div>
             </div>
         </div>
@@ -490,6 +490,7 @@ export default {
             isTransformTwe: false,
             isTransformThree: false,
             isTransformFour: false,
+            updateFormsData:[],
 
         }
     },
@@ -844,7 +845,30 @@ export default {
         concealmentFour() {
             this.concealmentFourData = !this.concealmentFourData;
             this.isTransformFour = !this.isTransformFour;
-        }
+        },
+        //获取单子修改的数据
+        getValue(data){
+            this.updateFormsData.push({
+                "tableName":data.tableName,
+                "coluName":data.fieldName,
+                "updateStr":data.value,
+                "patientId":this.lockedPatientInfo.patientId,
+                "visitId":this.lockedPatientInfo.visitId,
+                "operId":this.lockedPatientInfo.operId,
+
+            });
+        },
+        //提交单子修改
+        submitSaveForm(){
+            console.log(this.updateFormsData)
+            let params = []
+            params = this.updateFormsData;
+
+            this.api.updateSqlBatch(params)
+                .then(res=>{
+                    this.updateFormsData = [];
+                })
+        }   
 
     },
     mounted() {
