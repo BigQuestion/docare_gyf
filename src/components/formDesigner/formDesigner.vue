@@ -7,13 +7,13 @@
                 </div>
             </div>
             <div>
-                <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)"  >
-                    <div  @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 3px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item)" tabindex = "0" >
+                <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)">
+                    <div @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item)" tabindex="0">
                         <form-element :value="item"></form-element>
                     </div>
                     <div class="mask">
                         <div v-if="drawing" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',
-                        height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
+                                                                    height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
                     </div>
                 </div>
                 <div>
@@ -32,13 +32,35 @@
                         <input type="" name="" v-model="chooseItems[0].value">
                     </div>
                 </div>
-                <div v-if="chooseItems[0]&&chooseItems[0].type=='input'">
-                    <div v-if="chooseItems[0]">
-                        宽度：<input type="" name="" v-model="chooseItems[0].width">
-                    </div>
-                    <div v-if="chooseItems[0]">
-                        高度：<input type="" name="" v-model="chooseItems[0].height">
-                    </div>
+                <div v-if="chooseItems[0]">
+                    宽度：<input type="" name="" v-model="chooseItems[0].width">
+                </div>
+                <div v-if="chooseItems[0]">
+                    高度：<input type="" name="" v-model="chooseItems[0].height">
+                </div>
+                <div v-if="chooseItems[0]">
+                    BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
+                </div>
+                <div v-if="chooseItems[0]">
+                    <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
+                    isReadOnly:
+                    <select name="" id="" v-on:change="selectData(chooseItems[0].isReadOnly,'isData',chooseItems[0].readOnlyMode)" v-model="chooseItems[0].readOnlyMode">
+                        <option v-for="btn in chooseItems[0].isReadOnly" :value="btn.isData">{{btn.isData}}</option>
+                    </select>
+                </div>
+                <div v-if="chooseItems[0]">
+                    <!-- 是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit"> -->
+                    是否可编辑:
+                    <select name="" id="" v-on:change="selectData(chooseItems[0].isEdit,'isData',chooseItems[0].isEditMode)" v-model="chooseItems[0].isEditMode">
+                        <option v-for="btn in chooseItems[0].isEdit" :value="btn.isData">{{btn.isData}}</option>
+                    </select>
+                </div>
+                <div v-if="chooseItems[0]">
+                    字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor">
+                    <!-- 字体颜色:<colorPicker v-model="chooseItems[0].ForeColor"></colorPicker> -->
+                </div>
+
+                <div v-if="chooseItems[0]&&chooseItems[0].type=='input' ">
                     <div v-if="chooseItems[0]">
                         MultiSelect:<input type="" name="" v-model="chooseItems[0].MultiSelect">
                     </div>
@@ -61,6 +83,7 @@
                         字典字段名称：<input type="" name="" v-model="chooseItems[0].dictField">
                     </div>
                     <div v-if="chooseItems[0]">
+
                         BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
                     </div>
                     <div v-if="chooseItems[0]">
@@ -77,12 +100,13 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </template>
 <script>
 import formElement from '@/components/formElement/formElement.vue';
+// import colorPicker from '@/components/colorPicker/colorPicker.vue';
 export default {
     name: 'login',
     data() {
@@ -92,38 +116,41 @@ export default {
                 text: '自动获取',
                 type: 'autoInput',
                 value: '输入文字',
-                selectKeyfield:'id',
+                selectKeyfield: 'id',
             },
             {
                 text: '文本控件',
                 type: 'title',
                 value: '输入文字',
-                width:'80',
-            },{
+                width: '80',
+            }, {
                 text: '文本',
                 type: 'text',
                 value: '输入文字',
-                width:'80',
-                fieldName:'',
-                tableName:'',
+                width: '80',
+                fieldName: '',
+                tableName: '',
             }, {
                 text: '输入框',
                 type: 'input',
-                width:'80',
-                fieldName:'',
-                tableName:'',
-                dictTableName:'',
-                dictSelect:'',
-                dictShowFiled:'',
-                dictField:'',
-                borderStyle:'',
-                value:'',
-                isEdit:true,
-                ForeColor:'blue',
-                MultiSelect:false,//真为多选，假为单选
-                isReadOnly:true,
-                strFormat:true,//格式化字符串
-                
+                width: '80',
+                fieldName: '',
+                tableName: '',
+                dictTableName: '',
+                dictSelect: '',
+                dictShowFiled: '',
+                dictField: '',
+                borderStyle: '',
+                value: '',
+                isEdit: [{ isData: 'true' }, { isData: 'false' }],
+                ForeColor: 'blue',
+                MultiSelect: false,//真为多选，假为单选
+                isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
+                // isReadOnly:'false',
+                readOnlyMode: 'false',
+                isEditMode:'true',
+                strFormat: true,//格式化字符串
+
             }, {
                 text: '单选',
                 type: 'radio'
@@ -138,11 +165,11 @@ export default {
                 text: '竖线',
                 type: 'verticalLine',
                 height: '100'
-            },{
-                text:"文本区",
-                type:"textarea",
-                height:"100",
-                width:"300"
+            }, {
+                text: "文本区",
+                type: "textarea",
+                height: "100",
+                width: "300"
             }],
             handleItem: {},
             offsetX: '',
@@ -161,6 +188,13 @@ export default {
         }
     },
     methods: {
+        selectData(obj, paramName, value) {
+            // obj[paramName] = isData;
+            console.log(obj)//数组名字
+            console.log(paramName)//参数名字
+            console.log(value)//参数值
+
+        },
         itemClick() {
 
         },
@@ -174,6 +208,8 @@ export default {
             this.currentItem = currentItem;
             this.area.addEventListener('mousemove', this.areaMouseMove);
             this.area.addEventListener('mouseup', this.areaMouseUp);
+            console.log(e)
+            console.log(currentItem)
         },
         keyD(e) {
             if (e.key == 'Shift') {
@@ -234,12 +270,12 @@ export default {
             // this.chooseRect.endY = e.clientY;
         },
         drawEnd(e) {
-            if(this.drawStartX == e.clientX&&this.drawStartY == e.clientY){
+            if (this.drawStartX == e.clientX && this.drawStartY == e.clientY) {
                 this.clearClick(e);
             }
             for (var i = 0; i < this.formItems.length; i++) {
                 if ((this.formItems[i].x > this.chooseRect.startX) && (this.formItems[i].x < this.chooseRect.endX)
-                    &&(this.formItems[i].y > this.chooseRect.startY) && (this.formItems[i].y < this.chooseRect.endY)) {
+                    && (this.formItems[i].y > this.chooseRect.startY) && (this.formItems[i].y < this.chooseRect.endY)) {
                     this.chooseItems.push(this.formItems[i]);
                     //console.log(this.formItems[i].chosen);
                     this.formItems[i].chosen = true;
@@ -262,6 +298,9 @@ export default {
             e.preventDefault();
         },
         itemChoose(e, item) {
+            console.log('dian')
+            console.log(e)
+            console.log(item)
             if (this.chooseMode) {
                 this.chooseItems.push(item);
                 //console.log('长度:' + this.chooseItems.length);
@@ -297,48 +336,48 @@ export default {
                 this.handleItem = {};
             }
         },
-        save(){
+        save() {
             let params = {
-                 formContent:JSON.stringify(this.formItems),
-                 formName:"麻醉记录单",
-                 id:2
+                formContent: JSON.stringify(this.formItems),
+                formName: "麻醉记录单",
+                id: 2
             }
             this.api.updateMedFormContent(params)
-             .then(
-                res=>{
-                     
-                }); 
+                .then(
+                res => {
+
+                });
         },
         selectMedFormTemp(){
             if(this.dataInfo){
                 let params = {
                  formName:this.dataInfo.formName,
                  id:this.dataInfo.id
+
             }
             this.api.selectMedFormTemp(params)
-             .then(
-                res=>{
-                    this.formItems= JSON.parse(res.formContent);
+                .then(
+                res => {
+                    this.formItems = JSON.parse(res.formContent);
                 });
             }
 
             
         },
-
-         show(index,ev){
-             if(ev.keyCode==46){
-              this.formItems.splice(index,1);
+        show(index, ev) {
+            if (ev.keyCode == 46) {
+                this.formItems.splice(index, 1);
             }
         }
 
     },
     components: {
-        formElement
+        formElement,
+        // colorPicker
     },
     mounted() {
         this.area = this.$refs.area;
         this.selectMedFormTemp();
-        
     },  
     props:['dataInfo'],
     created() {
@@ -384,9 +423,8 @@ export default {
 
 .designArea {
     position: relative;
-   /* background: #CCCCCC;*/
+    /* background: #CCCCCC;*/
     height: 600px;
     width: 900px;
 }
-
 </style>

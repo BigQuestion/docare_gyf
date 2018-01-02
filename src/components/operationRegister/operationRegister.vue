@@ -1,227 +1,231 @@
 <template>
-    <div style="background-color: rgb(227, 239, 255);width: 80%;z-index: 2;position: absolute;top: 5%;height: 90%;left: 10%;border:2px solid rgb(54,157,200);">
-        <div style="height: 30px;background-color: rgb(54,157,200);line-height: 30px;">
-            <span style="color: white;font-size: 18px;">术中登记</span>
-        </div>
-        <div style="height: 40px;width: 100%;padding-left: 15px;">
-            <span style="font-size: 20px;">麻醉事件</span>
-        </div>
-        <div style="height: 400px;display:flex;border-bottom:3px solid #7774da;">
-            <div style="width:75%;">
-                <div style="overflow-y: auto;height: 300px;width: 100%;border:1px solid #222;background-color:#fff;">
-                    <div style="display: flex;">
-                        <div style="border:1px solid rgb(177,207,243);" :style="{width:cell.width+'px'}" v-for="cell in tbconfig">
-                            {{cell.title}}
-                        </div>
-                    </div>
-                    <div>
-                        <div v-for="item in eventList" style="display:flex;" @click="clickItem(item)">
-                            <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
-
-                                <div style="height:25px;" v-if="cl.timeEdit">
-                                    <input style="height:25px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                                </div>
-                                <div style="height:25px;" v-else-if="cl.isChixu">
-                                    <select style="height:29px;width:42px;" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
-                                        <option v-bind:value="0">
-                                            0
-                                        </option>
-                                        <option v-bind:value="1">
-                                            1
-                                        </option>
-                                    </select>
-                                </div>
-                                <div v-else style="height:25px;">
-                                    <input style="height:25px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                                </div>
-
-                            </div>
-                            <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
-                                <div v-if="cl.timeEdit">
-                                    <input @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                                </div>
-                                <div v-else-if="cl.isChixu">
-                                    <select disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
-                                        <option v-bind:value="0">
-                                            0
-                                        </option>
-                                        <option v-bind:value="1">
-                                            1
-                                        </option>
-                                    </select>
-                                </div>
-                                <div v-else>
-                                    <input readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="height: 90px;padding-top: 15px;padding-left:15px;display:flex;justify-content: space-between;box-sizing:border-box;">
-                    <div>
-                        <button @click="saveTempletViewFun">保存模板</button>
-                        <button @click="openTempLet">套用模板</button>
-                        <span style="padding:20px;">类型筛选</span>
-                        <select v-model="filterType" @change="selectTypeFun">
-                            <option value="">
-                                全部
-                            </option>
-                            <option v-for="option in eventTypeList" v-bind:value="option.typeId">
-                                {{ option.typeName }}
-                            </option>
-                        </select>
-                        <div style="color:#4448ff;padding-top:5px;font-sizie:18px;">要删除某时间点，必须要选中行。</div>
-                    </div>
-                    <div>
-                        <button style="margin-right: 20px;width: 80px;" @click='saveBtn'>保存</button>
-                        <button style="margin-right: 20px;width: 80px;" @click="deleteMedAnesthesiaEvent">删除</button>
-                        <button style="margin-right: 20px;width: 80px;" @click="selectMedAnesthesiaEventList">取消</button>
-                    </div>
-                </div>
-
+    <div class="dictionaries">
+        <div style="background-color: rgb(227, 239, 255);width: 80%;z-index: 11;cursor: auto;position: absolute;top: 5%;height: 90%;left: 10%;border:2px solid rgb(54,157,200);">
+            <div class="load_top" style="height: 30px;background-color: rgb(54,157,200);line-height: 30px;">
+                <div>术中登记</div>
+                <div @click="aboutNone" class="top_active">X</div>
             </div>
-            <div style="width:25%;padding: 0px 5px;">
-                <div style="border:1px solid #3a3a3a;">
-                    <div style="height: 180px;flex-wrap:wrap;display: flex;">
-                        <button v-for="item in eventTypeList" style="width: 80px;height: 30px;line-height: 30px;text-align: center;margin-right:10px;" @click="medAnesthesiaEventOpenByItemClass(item)">
-                            {{item.typeName}}
-                        </button>
+            <div style="height: 40px;width: 100%;padding-left: 15px;">
+                <span style="font-size: 20px;">麻醉事件</span>
+            </div>
+            <div style="height: 400px;display:flex;border-bottom:3px solid #7774da;">
+                <div style="width:75%;">
+                    <div style="overflow-y: auto;height: 300px;width: 100%;border:1px solid #222;background-color:#fff;">
+                        <div style="display: flex;">
+                            <div style="border:1px solid rgb(177,207,243);" :style="{width:cell.width+'px'}" v-for="cell in tbconfig">
+                                {{cell.title}}
+                            </div>
+                        </div>
+                        <div>
+                            <div v-for="item in eventList" style="display:flex;" @click="clickItem(item)">
+                                <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
+
+                                    <div style="height:25px;" v-if="cl.timeEdit">
+                                        <input style="height:25px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                                    </div>
+                                    <div style="height:25px;" v-else-if="cl.isChixu">
+                                        <select style="height:29px;width:42px;" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                                            <option v-bind:value="0">
+                                                0
+                                            </option>
+                                            <option v-bind:value="1">
+                                                1
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div v-else style="height:25px;">
+                                        <input style="height:25px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                                    </div>
+
+                                </div>
+                                <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
+                                    <div v-if="cl.timeEdit">
+                                        <input @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                                    </div>
+                                    <div v-else-if="cl.isChixu">
+                                        <select disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                                            <option v-bind:value="0">
+                                                0
+                                            </option>
+                                            <option v-bind:value="1">
+                                                1
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div v-else>
+                                        <input readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div style="background-color:#fff;">
-                        <div style="display: flex;margin-top: 5px;border:2px solid balck;width: 85%;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
-                            <div style="width: 70%;border:1px solid black;">
-                                事件名称
-                            </div>
-                            <div style="width: 30%;border:1px solid black;">
-                                规格
-                            </div>
+                    <div style="height: 90px;padding-top: 15px;padding-left:15px;display:flex;justify-content: space-between;box-sizing:border-box;">
+                        <div>
+                            <button @click="saveTempletViewFun">保存模板</button>
+                            <button @click="openTempLet">套用模板</button>
+                            <span style="padding:20px;">类型筛选</span>
+                            <select v-model="filterType" @change="selectTypeFun">
+                                <option value="">
+                                    全部
+                                </option>
+                                <option v-for="option in eventTypeList" v-bind:value="option.typeId">
+                                    {{ option.typeName }}
+                                </option>
+                            </select>
+                            <div style="color:#4448ff;padding-top:5px;font-sizie:18px;">要删除某时间点，必须要选中行。</div>
                         </div>
-                        <div v-else style="display: flex;margin-top: 5px;border:2px solid balck;width: 85%;">
-                            <div style="width: 100%;border:1px solid black;">
-                                事件名称
-                            </div>
+                        <div>
+                            <button style="margin-right: 20px;width: 80px;" @click='saveBtn'>保存</button>
+                            <button style="margin-right: 20px;width: 80px;" @click="deleteMedAnesthesiaEvent">删除</button>
+                            <button style="margin-right: 20px;width: 80px;" @click="selectMedAnesthesiaEventList">取消</button>
                         </div>
-                        <div style="height: 150px;overflow-y: auto;box-sizing:border-box;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
-                            <div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex" @dblclick="addEvent(item)">
+                    </div>
+
+                </div>
+                <div style="width:25%;padding: 0px 5px;">
+                    <div style="border:1px solid #3a3a3a;">
+                        <div style="height: 180px;flex-wrap:wrap;display: flex;">
+                            <button v-for="item in eventTypeList" style="width: 80px;height: 30px;line-height: 30px;text-align: center;margin-right:10px;" @click="medAnesthesiaEventOpenByItemClass(item)">
+                                {{item.typeName}}
+                            </button>
+                        </div>
+                        <div style="background-color:#fff;">
+                            <div style="display: flex;margin-top: 5px;border:2px solid balck;width: 85%;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
                                 <div style="width: 70%;border:1px solid black;">
-                                    {{item.itemName}}
+                                    事件名称
                                 </div>
                                 <div style="width: 30%;border:1px solid black;">
-                                    {{item.itemSpec}}
+                                    规格
+                                </div>
+                            </div>
+                            <div v-else style="display: flex;margin-top: 5px;border:2px solid balck;width: 85%;">
+                                <div style="width: 100%;border:1px solid black;">
+                                    事件名称
+                                </div>
+                            </div>
+                            <div style="height: 150px;overflow-y: auto;box-sizing:border-box;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
+                                <div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex" @dblclick="addEvent(item)">
+                                    <div style="width: 70%;border:1px solid black;">
+                                        {{item.itemName}}
+                                    </div>
+                                    <div style="width: 30%;border:1px solid black;">
+                                        {{item.itemSpec}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else style="height: 150px;overflow-y: auto;box-sizing:border-box;">
+                                <div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex">
+                                    <div style="width: 100%;border:1px solid black;" @dblclick="addEvent(item)">
+                                        {{item.itemName}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div v-else style="height: 150px;overflow-y: auto;box-sizing:border-box;">
-                            <div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex">
-                                <div style="width: 100%;border:1px solid black;" @dblclick="addEvent(item)">
-                                    {{item.itemName}}
-                                </div>
-                            </div>
+                    </div>
+                    <div style="border: 1px solid #686869;width:100%;height:22px;box-sizing:border-box;">
+                        <input style="width:100%;height:100%;border:0;display:block;line-height:20px;outline:none;" v-model="serchZm" placeholder="无字符过滤" @keyup="serchEvent">
+                    </div>
+                </div>
+            </div>
+            <div style="height: 40px;padding-left: 15px;">
+                <span style="line-height: 40px;">体征数据</span>
+            </div>
+            <div style="height: 200px;overflow:auto;background-color:#fff;">
+                <div style="display: flex;padding-left: 10px;">
+                    <div>
+                        <div style="width: 100px;">名称</div>
+                        <div style="height: 22px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
+                    </div>
+                    <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
+                        <div style="width: 60px;">
+                            {{sItem.time | discount}}
+                        </div>
+                        <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
+                            <input :value="secItem" style="width: 60px;" @change="signChange($event,index,sItem)">
                         </div>
                     </div>
-                </div>
-                <div style="border: 1px solid #686869;width:100%;height:22px;box-sizing:border-box;">
-                    <input style="width:100%;height:100%;border:0;display:block;line-height:20px;outline:none;" v-model="serchZm" placeholder="无字符过滤" @keyup="serchEvent">
+
                 </div>
             </div>
-        </div>
-        <div style="height: 40px;padding-left: 15px;">
-            <span style="line-height: 40px;">体征数据</span>
-        </div>
-        <div style="height: 200px;overflow:auto;background-color:#fff;">
-            <div style="display: flex;padding-left: 10px;">
-                <div>
-                    <div style="width: 100px;">名称</div>
-                    <div style="height: 22px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
-                </div>
-                <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
-                    <div style="width: 60px;">
-                        {{sItem.time | discount}}
-                    </div>
-                    <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
-                        <input :value="secItem" style="width: 60px;" @change="signChange($event,index,sItem)">
-                    </div>
-                </div>
+            <div v-if="signItemView">
+                <select v-model="selected" v-on:change="getSeclectItem">
+                    <option v-for="option in allSignItems" v-bind:value="option">
+                        {{ option.itemName }}
+                    </option>
+                </select>
+            </div>
+            <div style="margin-top: 20px;padding-left:15px;">
+                <button @click="saveSignChange" style="width: 80px;">保存</button>
+                <button style="width: 80px;" @click="deleteMedPatientMonitorData">删除</button>
+                <button style="width: 80px;" @click="insertView">插入数据</button>
+                <button style="width: 80px;" @click="addSignItem">添加项目</button>
+                <button style="width: 80px;" @click="deleteSignItem">删除项目</button>
 
             </div>
-        </div>
-        <div v-if="signItemView">
-            <select v-model="selected" v-on:change="getSeclectItem">
-                <option v-for="option in allSignItems" v-bind:value="option">
-                    {{ option.itemName }}
-                </option>
-            </select>
-        </div>
-        <div style="margin-top: 20px;padding-left:15px;">
-            <button @click="saveSignChange" style="width: 80px;">保存</button>
-            <button style="width: 80px;" @click="deleteMedPatientMonitorData">删除</button>
-            <button style="width: 80px;" @click="insertView">插入数据</button>
-            <button style="width: 80px;" @click="addSignItem">添加项目</button>
-            <button style="width: 80px;" @click="deleteSignItem">删除项目</button>
+            <!-- 插入数据位置 -->
+            <div v-if="addView" style="width: 700px;min-height: 400px;background-color: white;z-index: 3;position: absolute;top: 20%;left: 30%;border:2px solid rgb(61,164,206);">
+                <div style="height: 40px;background-color: rgb(61,164,206);">
+                    <span style="line-height: 40px;font-size: 20px;color:white;">插入体征数据</span>
+                </div>
+                <div style="padding: 15px;">
+                    <div style="display: flex;">
+                        <div style="width: 100px;text-align: center;">开始时间</div>
+                        <div>
+                            <input type="datetime-local" v-model="insertStartTime">
+                        </div>
+                        <div style="width: 100px;text-align: center;">结束时间</div>
+                        <div>
+                            <input type="datetime-local" v-model="insertEndTime">
+                        </div>
+                    </div>
+                    <div style="display: flex;">
+                        <div style="width: 100px;text-align: center;">时间间隔</div>
+                        <div>
+                            <input type="text" v-model="spaceTime">
+                            <span>秒</span>
+                        </div>
+                    </div>
+                    <div style="display: flex;" v-for="item in itemNameList">
+                        <div style="width: 100px;text-align: center;">{{item.itemName}}</div>
+                        <div>
+                            <input v-model="item.itemValue" type="" name="" @change="getaddItem(item)">
+                            <span>{{item.itemUnit}}</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button @click="addItem" style="width: 80px;">确定</button>
+                        <button @click="insertView" style="width: 80px;">取消</button>
+                    </div>
+                </div>
+            </div>
 
-        </div>
-        <!-- 插入数据位置 -->
-        <div v-if="addView" style="width: 700px;min-height: 400px;background-color: white;z-index: 3;position: absolute;top: 20%;left: 30%;border:2px solid rgb(61,164,206);">
-            <div style="height: 40px;background-color: rgb(61,164,206);">
-                <span style="line-height: 40px;font-size: 20px;color:white;">插入体征数据</span>
+            <!-- 保存模板输入内容 -->
+            <div v-if="saveTempletView" style="width: 500px;min-height: 200px;background-color: white;z-index: 3;position: absolute;top: 20%;left: 20%;border:2px solid rgb(61,164,206);">
+                <div style="height: 30px;background-color:rgb(47,150,196);color: white;padding-left: 15px;line-height: 30px;">
+                    <span>保存模板</span>
+                </div>
+                <div style="padding: 15px;display: flex;">
+                    <span>麻醉方法:&nbsp;</span>
+                    <!-- <input type="" name="" style="width: 200px;"> -->
+                    <inputDiv :conInfo="methodObj" methodName="medAnaesthesiaDictList" attrName="anaesthesiaName" toAttrName="anaesthesiaName"></inputDiv>
+                </div>
+                <div style="padding: 15px;">
+                    <span>模板名称:</span>
+                    <input v-model="templetName" style="width: 200px;">
+                </div>
+                <div style="padding-left: 15px;">
+                    <input type="checkbox" name="" :checked="checkState">
+                    <span>是否私有</span>
+                    <button @click="saveTemplet">保存</button>
+                    <button @click="cancleSaveTemp">取消</button>
+                </div>
             </div>
-            <div style="padding: 15px;">
-                <div style="display: flex;">
-                    <div style="width: 100px;text-align: center;">开始时间</div>
-                    <div>
-                        <input type="datetime-local" v-model="insertStartTime">
-                    </div>
-                    <div style="width: 100px;text-align: center;">结束时间</div>
-                    <div>
-                        <input type="datetime-local" v-model="insertEndTime">
-                    </div>
-                </div>
-                <div style="display: flex;">
-                    <div style="width: 100px;text-align: center;">时间间隔</div>
-                    <div>
-                        <input type="text" v-model="spaceTime">
-                        <span>秒</span>
-                    </div>
-                </div>
-                <div style="display: flex;" v-for="item in itemNameList">
-                    <div style="width: 100px;text-align: center;">{{item.itemName}}</div>
-                    <div>
-                        <input v-model="item.itemValue" type="" name="" @change="getaddItem(item)">
-                        <span>{{item.itemUnit}}</span>
-                    </div>
-                </div>
-                <div style="margin-top: 20px;">
-                    <button @click="addItem" style="width: 80px;">确定</button>
-                    <button @click="insertView" style="width: 80px;">取消</button>
-                </div>
+            <!-- 显示事件模板 -->
+            <div style="position: absolute;top: 10%;left: 7%;width: 100%;" v-if="tempLetView.view=='t'">
+                <event-templet :tempView="tempLetView" :itemList="eventList"></event-templet>
             </div>
         </div>
 
-        <!-- 保存模板输入内容 -->
-        <div v-if="saveTempletView" style="width: 500px;min-height: 200px;background-color: white;z-index: 3;position: absolute;top: 20%;left: 20%;border:2px solid rgb(61,164,206);">
-            <div style="height: 30px;background-color:rgb(47,150,196);color: white;padding-left: 15px;line-height: 30px;">
-                <span>保存模板</span>
-            </div>
-            <div style="padding: 15px;display: flex;">
-                <span>麻醉方法:&nbsp;</span>
-                <!-- <input type="" name="" style="width: 200px;"> -->
-                <inputDiv :conInfo="methodObj" methodName="medAnaesthesiaDictList" attrName="anaesthesiaName" toAttrName="anaesthesiaName"></inputDiv>
-            </div>
-            <div style="padding: 15px;">
-                <span>模板名称:</span>
-                <input v-model="templetName" style="width: 200px;">
-            </div>
-            <div style="padding-left: 15px;">
-                <input type="checkbox" name="" :checked="checkState">
-                <span>是否私有</span>
-                <button @click="saveTemplet">保存</button>
-                <button @click="cancleSaveTemp">取消</button>
-            </div>
-        </div>
-        <!-- 显示事件模板 -->
-        <div style="position: absolute;top: 10%;left: 7%;width: 100%;" v-if="tempLetView.view=='t'">
-            <event-templet :tempView="tempLetView" :itemList="eventList"></event-templet>
-        </div>
     </div>
 </template>
 <script>
@@ -231,6 +235,7 @@ import inputDiv from '@/components/patientOperationInfo/inputDiv.vue';
 export default {
     data() {
         return {
+            dataIn: this.parentToChild.dataInParent,
             tbconfig: [{
                 title: "",
                 fieldObj: "",
@@ -818,11 +823,18 @@ export default {
                     this.cancleSaveTemp();
                 })
             debugger
+        },
+        aboutNone() {
+            // console.log(this.dataIn)
+            this.parentToChild.dataInParent = !this.dataIn;
+            // console.log(this.parentToChild.dataInParent)
+            this.dataIn = !this.dataIn;
+            // console.log(this.dataIn)
         }
 
 
     },
-    props: ['objectItem'],
+    props: ['objectItem', 'parentToChild'],
     computed: {
 
     },
@@ -840,8 +852,9 @@ export default {
 
 </script>
 <style scoped>
-    button{
-        width: 80px;
-        height: 35px;;
-    }
+button {
+    width: 80px;
+    height: 35px;
+    ;
+}
 </style>
