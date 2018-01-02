@@ -31,7 +31,6 @@
                     <div>
                         <input type="" name="" v-model="chooseItems[0].value">
                     </div>
-                    
                 </div>
                 <div v-if="chooseItems[0]&&chooseItems[0].type=='input'">
                     <div v-if="chooseItems[0]">
