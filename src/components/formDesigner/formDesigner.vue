@@ -310,15 +310,19 @@ export default {
                 }); 
         },
         selectMedFormTemp(){
-            let params = {
-                 formName:"麻醉记录单",
-                 id:2
+            if(this.dataInfo){
+                let params = {
+                 formName:this.dataInfo.formName,
+                 id:this.dataInfo.id
             }
             this.api.selectMedFormTemp(params)
              .then(
                 res=>{
                     this.formItems= JSON.parse(res.formContent);
                 });
+            }
+
+            
         },
 
          show(index,ev){
@@ -333,9 +337,10 @@ export default {
     },
     mounted() {
         this.area = this.$refs.area;
-        //this.selectMedFormTemp();
+        this.selectMedFormTemp();
         
     },  
+    props:['dataInfo'],
     created() {
         let component = this;
         document.onkeydown = function(e) {

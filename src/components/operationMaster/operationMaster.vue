@@ -400,11 +400,10 @@
     </div>
     <div v-else  style="height: 100%;width: 100%;z-index: 99;position:relative;">
         <div class="load_top">
-            <div>单子设计器</div>
+            <div>表单设计器</div>
             <div @click="formSetting" class="top_active">X</div>
-
         </div>
-        <formDesigner></formDesigner>
+        <formDesigner :dataInfo="selectFormItemTemp"></formDesigner>
     </div>
 </template>
 <script>
@@ -504,6 +503,7 @@ export default {
             isTransformFour: false,
             updateFormsData:[],
             settingView:false,
+            selectFormItemTemp:'',//获取选中的单子
 
         }
     },
@@ -763,6 +763,7 @@ export default {
         selectMedFormTemp(item) {
             this.formDetail = true;
             this.viewInfo = false;
+            this.selectFormItemTemp = item;
             let params = {
                 formName: item.formName,
                 id: item.id
