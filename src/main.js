@@ -42,7 +42,7 @@ Vue.prototype.stringToDate = function(remindTime) {
 		if (remindTime) {
 			var str = remindTime.toString();
 			str = str.replace("/-/g", "/");
-			//// str =  str.replace("T"," "); 
+			//// str =  str.replace("T"," ");
 			var oDate1 = new Date(str);
 			return oDate1;
 		} else {

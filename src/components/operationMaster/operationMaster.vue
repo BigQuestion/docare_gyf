@@ -875,7 +875,7 @@ export default {
         this.searchPatientList();
         this.setIntervaled();
         this.selectMedFormList();
-        
+        this.patientId = '10966589';
     },
 
     components: {

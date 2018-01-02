@@ -31,7 +31,6 @@
                     <div>
                         <input type="" name="" v-model="chooseItems[0].value">
                     </div>
-                    
                 </div>
                 <div v-if="chooseItems[0]">
                     宽度：<input type="" name="" v-model="chooseItems[0].width">
