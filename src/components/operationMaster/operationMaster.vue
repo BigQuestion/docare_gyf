@@ -62,8 +62,8 @@
                         </div>
                     </div>
                 </div>
-                <div style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;" v-if="lockedPatientInfo.patientId">
-                    <div style="width: 150px;border-right: 1px solid black;height: 100%;text-align: center;line-height: 30px;" v-for="item in medBillList" @click="selectMedFormTemp">
+                <div style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;display:flex;" v-if="lockedPatientInfo.patientId">
+                    <div style="width: 150px;border-right: 1px solid black;height: 100%;text-align: center;line-height: 30px;" v-for="item in medBillList" @click="selectMedFormTemp(item)">
                         {{item.formName}}
                     </div>
                 </div>
@@ -314,10 +314,14 @@
                         <form-element :value="item" v-on:toTopEvent="getValue"></form-element>
                     </div>
                 </div>
-                <div>
+                <div v-if="formDetail">
                     <button @click="submitSaveForm">保存</button>
                 </div>
+                <div v-if="formDetail">
+                    <button @click="formSetting">配置</button>
+                </div>
             </div>
+            
         </div>
         <!-- <div class="mask">
                                                                 <div class="">
@@ -612,7 +616,6 @@ export default {
             this.api.allMedAnesthesiaEventType(params)
                 .then(
                 res => {
-                    console.log(res.list)
                     this.eventDataType = res.list;
                 });
         },
@@ -748,27 +751,30 @@ export default {
                     this.medBillList = res.list;
                 });
         },
-        selectMedFormTemp() {
+        selectMedFormTemp(item) {
             this.formDetail = true;
             this.viewInfo = false;
             let params = {
-                formName: "麻醉记录单",
-                id: 2
+                formName: item.formName,
+                id: item.id
             }
             let arry = [];
             this.formItems = [];
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
+                    if(res.formContent==null){
+                        return;
+                    }
                     this.formItems = JSON.parse(res.formContent);
                     var list = this.formItems;
                     console.log(list);
                     for (var i = 0; i < list.length; i++) {
                         if (list[i].fieldName) {
                             arry.push({
-                                "patientId": "10966589",
-                                "visitId": "1",
-                                "operId": "1",
+                                "patientId": this.lockedPatientInfo.patientId,
+                                "visitId": this.lockedPatientInfo.visitId,
+                                "operId": this.lockedPatientInfo.operId,
                                 "tableName": list[i].tableName,
                                 "coluName": list[i].fieldName,
                             })
@@ -868,7 +874,11 @@ export default {
                 .then(res=>{
                     this.updateFormsData = [];
                 })
-        }   
+        },
+        //配置跳转
+        formSetting(){
+
+        }
 
     },
     mounted() {

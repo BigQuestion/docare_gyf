@@ -337,7 +337,7 @@ export default {
     },
     mounted() {
         this.area = this.$refs.area;
-        this.selectMedFormTemp();
+        //this.selectMedFormTemp();
         
     },  
     created() {
