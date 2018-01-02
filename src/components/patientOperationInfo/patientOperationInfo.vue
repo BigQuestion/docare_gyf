@@ -1,9 +1,9 @@
 <template>
-	<!-- <div class="dictionaries"> -->
+	<div class="dictionaries">
 		<div class="window_load">
 			<div class="load_top">
 				<div>手术信息</div>
-				<div class="top_active">X</div>
+				<div @click="aboutNone" class="top_active">X</div>
 			</div>
 			<div style="width: 100%;padding: 20px;">
 				<div style="flex-wrap:wrap;display: flex;">
@@ -99,13 +99,14 @@
 			</div>
 		</div>
 
-	<!-- </div> -->
+	</div>
 </template>
 <script>
 import inputDiv from '@/components/patientOperationInfo/inputDiv.vue';
 export default {
 	data() {
 		return {
+			dataIn: this.parentToChild.dataInParent,
 			contentConfig: [{
 				infoName: "病人ID",
 				fieldName: "PATIENT_ID",
@@ -227,6 +228,13 @@ export default {
 			let params = {}
 
 		},
+		aboutNone() {
+			// console.log(this.dataIn)
+			this.parentToChild.dataInParent = !this.dataIn;
+			// console.log(this.parentToChild.dataInParent)
+			this.dataIn = !this.dataIn;
+			// console.log(this.dataIn)
+		}
 	},
 
 	computed: {
@@ -235,7 +243,7 @@ export default {
 	components: {
 		inputDiv
 	},
-	props: ['info'],
+	props: ['info','parentToChild'],
 	mounted() {
 	},
 }

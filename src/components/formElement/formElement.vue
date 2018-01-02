@@ -44,7 +44,7 @@ export default {
     },
     methods:{
         getChlidValue(data){
-            alert(data)
+            // alert(data)
         },
     },
     props:['value'],// 设置value为props属性-必须

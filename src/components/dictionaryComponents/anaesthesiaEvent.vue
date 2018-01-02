@@ -18,7 +18,7 @@
                 <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
                     <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177,207,243);">
                         <div style="height:100%;width:160px;" v-if="cl.status=='inable'">
-                            <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change" style="display:block;width:100%;border:0;height:100%;outline:none;">
+                            <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @keyup="chan(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
                             <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" @click="valueWriteAble(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
                         </div>
                         <div style="width:160px;" v-if="cl.status!='inable'">
@@ -33,7 +33,7 @@
             <button style="width: 100px;height: 30px;" @click="addMedAnesthesiaInputDict" :disabled="isAdd">新增</button>
             <button style="width: 100px;height: 30px;" :disabled="isSave" @click="saveValue">保存</button>
             <button style="width: 100px;height: 30px;" @click="cancleEdit" :disabled="isCancle">取消</button>
-            <button style="width: 100px;height: 30px;" :disabled="isDelete" @click="deleteByMedAnesthesiaInputDict">删除</button>
+            <button style="width: 100px;height: 30px;" :disabled="isDelete" @click="deleteMedAnesthesiaEventOpen">删除</button>
         </div>
     </div>
 </template>
@@ -115,22 +115,36 @@ export default {
                 },
             ],
             commonTypeList: [],
+            changeData: [],
         }
     },
     props: [
         'eventChildData'
     ],
     methods: {
+        chan(list) {
+            this.isSave = false;
+            this.isCancle = false;
+            console.log(this.isSave + 'isSave')
+            console.log('敲了键盘');
+        },
         inputBlur(list) {
             console.log('失去焦点')
-            console.log(list)
+            console.log(list.writeAble + 'write');
             list.writeAble = false;
+            if (list.arrayStats == 0) {
+                console.log('123')
+            } else {
+                this.changeData.push(list)
+                console.log(this.changeData)
+            }
         },
         valueWriteAble(list) {
             console.log('点击')
-            console.log(list)
             this.obj = list;
+            this.isSave = true;
             list.writeAble = true;
+            console.log(list.writeAble + 'write');
         },
         getTypeDetail(item) {
             this.tempTypeItem = item;
@@ -141,18 +155,14 @@ export default {
             this.api.medAnesthesiaEventOpenByItemClass(params)
                 .then(
                 res => {
-                    // var m = res.list.length;
                     console.log(res.list)
-                    // for (var i = 0; i < m; i++) {
-                    // res.list[i].newItemName = res.list[i].itemName;
-                    // res.list[i].newItemCode = res.list[i].itemCode;
-                    // }
                     this.commonTypeList = res.list;
                 });
         },
         addMedAnesthesiaInputDict() {
             console.log(this.tempTypeItem)
             this.commonTypeList.push({
+                arrayStats: 0,//0为新增
                 itemNo: this.commonTypeList.length + 1,
                 itemClass: this.tempTypeItem.typeId,
                 itemName: '',
@@ -164,90 +174,71 @@ export default {
                 concentration: "",
                 concentrationUnit: ""
             });
-            this.isAdd = this.isCancle;
-            this.isCancle = !this.isAdd;
+            this.isAdd = true;
+            this.isCancle = false;
             console.log(this.commonTypeList);
-            console.log(this.isSave)
         },
         cancleEdit() {
+            this.changeData = [];
             this.getTypeDetail(this.tempTypeItem);
-            this.isCancle = this.isAdd;
-            this.isAdd = !this.isCancle;
+            this.isCancle = false;
+            this.isAdd = false;
             this.isSave = true;
-        },
-        change() {
-            this.isSave = false;
-
-            console.log(this.isSave)
+            this.isDelete = true;
         },
         saveValue() {
             var li = this.commonTypeList;
             var k = li.length - 1;
             let params = {};
             console.log(li)
-            params = {
-                itemNo: li[k].itemNo,
-                itemClass: li[k].itemClass,
-                itemName: li[k].itemName,
-                itemSpec: li[k].itemSpec,
-                relBill: li[k].relBill,
-                dosage: li[k].dosage,
-                dosageUnits: li[k].dosageUnits,
-                concentration: li[k].concentration,
-                concentrationUnit: li[k].concentrationUnit,
-            };
-            console.log(params)
-            this.api.insertMedAnesthesiaEventOpen(params)
-                .then(
-                res => {
-                    this.getTypeDetail(this.tempTypeItem);
-
-                });
-            // for (var i = 0; i < k; i++) {
-            // if ((li[i].newItemName != li[i].itemName || li[i].newItemCode != li[i].itemCode) && li[i].itemName != "") {
-            // params.push({
-            //     itemClass: li[i].itemClass,
-            //     oldItemName: li[i].itemName,
-            //     itemName: li[i].newItemName,
-            //     itemCode: li[i].newItemCode,
-            // });
-            // }
-            // if (li[i].itemName == "" && li[i].itemCode == "") {
-            //     let params1 = {
-            //         itemClass: li[i].itemClass,
-            //         oldItemName: li[i].itemName,
-            //         itemName: li[i].newItemName,
-            //         itemCode: li[i].newItemCode,
-            //         serialNo: this.commonTypeList.length - 1
-            //     }
-            //     this.api.insertMedAnesthesiaInputDict(params1)
-            //         .then(
-            //         res => {
-            //             this.getTypeDetail(this.tempTypeItem);
-            //         });
-            // }
-            // debugger
-            // if (params.length > 0) {
-
-            // }
-            // }
-
-
+            
+            if (li[k].arrayStats == 0) {
+                console.log('这是新增操作')
+                params = {
+                    itemNo: li[k].itemNo,
+                    itemClass: li[k].itemClass,
+                    itemName: li[k].itemName,
+                    itemSpec: li[k].itemSpec,
+                    relBill: li[k].relBill,
+                    dosage: li[k].dosage,
+                    dosageUnits: li[k].dosageUnits,
+                    concentration: li[k].concentration,
+                    concentrationUnit: li[k].concentrationUnit,
+                };
+                console.log(params)
+                this.api.insertMedAnesthesiaEventOpen(params)
+                    .then(
+                    res => {
+                        this.getTypeDetail(this.tempTypeItem);
+                    });
+            } else {
+                console.log('这是修改操作')
+                console.log(this.changeData)
+                this.api.updateMedAnesthesiaEventOpenBatch(this.changeData)
+                    .then(
+                    res => {
+                        this.changeData = [];
+                        this.getTypeDetail(this.tempTypeItem);
+                    });
+            }
             this.isCancle = true;
             this.isAdd = false;
             this.isSave = true;
+            this.isDelete = true;
         },
-        deleteByMedAnesthesiaInputDict() {
+        deleteMedAnesthesiaEventOpen() {
 
             console.log(this.obj.itemNo);
             let params = {
                 itemNo: this.obj.itemNo,
                 itemClass: this.obj.itemClass,
             }
-            this.api.deleteByMedAnesthesiaInputDict(params)
+            this.api.deleteMedAnesthesiaEventOpen(params)
                 .then(
                 res => {
+                    this.changeData = [];
                     this.getTypeDetail(this.tempTypeItem);
+                    this.isDelete = true;
                 });
         },
         getItem(item) {

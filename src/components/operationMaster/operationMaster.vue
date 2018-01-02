@@ -320,12 +320,12 @@
             </div>
         </div>
         <!-- <div class="mask">
-                                                                <div class="">
-                                                                    
-                                                                </div>
-                                                            </div> -->
-        <patientOperationInfo v-if="patientOperationInfoView" :info="patientInfo"></patientOperationInfo>
-        <operationRegister v-if="operationRegisterView" :objectItem="lockedPatientInfo"></operationRegister>
+                                                                            <div class="">
+                                                                                
+                                                                            </div>
+                                                                        </div> -->
+        <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView"></patientOperationInfo>
+        <operationRegister v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
         <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
         <div v-if="dictView" class="dictionaries">
             <div class="window_load">
@@ -337,16 +337,16 @@
                     <span style="margin-left: 30px;">字典维护</span>
                 </div>
                 <div style="display: flex;padding-left:10px;padding-top: 5px;">
-                    <div class="tab_div" @click="getComType">
+                    <div class="tab_div" :class="{backWight:isBackOne}" @click="getComType">
                         <span>常用术语</span>
                     </div>
-                    <div class="tab_div" @click="getEvent">
+                    <div class="tab_div" :class="{backWight:isBackTwo}" @click="getEvent">
                         <span>麻醉事件</span>
                     </div>
-                    <div class="tab_div" @click="getMethods">
+                    <div class="tab_div" :class="{backWight:isBackThree}" @click="getMethods">
                         <span>麻醉方法</span>
                     </div>
-                    <div class="tab_div" @click="getConstant">
+                    <div class="tab_div" :class="{backWight:isBackFour}" @click="getConstant">
                         <span>麻醉常用量</span>
                     </div>
                 </div>
@@ -403,7 +403,7 @@ import aboutUs from '@/components/aboutUs/aboutUs.vue';
 import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent.vue';
 import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
 import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
-import {pinYin} from '@/components/plugins/pinyin.js';
+import { pinYin } from '@/components/plugins/pinyin.js';
 
 export default {
     data() {
@@ -439,8 +439,9 @@ export default {
             endDateTime: "",
             anesEndTime: "",
             outDateTime: "",
-            patientOperationInfoView: false,
-            operationRegisterView: false,
+            patientOperationInfoView: { dataInParent: false },
+            operationRegisterView: { dataInParent: false },
+            // aboutUsData: { dataInParent: false },
             aboutUsData: { dataInParent: false },
             commoTerms: true,
             anaesthesiaEvent: false,
@@ -490,7 +491,10 @@ export default {
             isTransformTwe: false,
             isTransformThree: false,
             isTransformFour: false,
-
+            isBackOne: false,
+            isBackTwo: false,
+            isBackThree: false,
+            isBackFour: false,
         }
     },
     methods: {
@@ -589,6 +593,10 @@ export default {
             this.outDateTime = this.changeDateFormat(item.outDateTime);
         },
         getComType() {
+            this.isBackOne = true;
+            this.isBackTwo = false;
+            this.isBackThree = false;
+            this.isBackFour = false;
             this.commoTerms = true;
             this.anaesthesiaEvent = false;
             this.anestheticMethod = false;
@@ -602,6 +610,10 @@ export default {
                 });
         },
         getEvent() {
+            this.isBackOne = false;
+            this.isBackTwo = true;
+            this.isBackThree = false;
+            this.isBackFour = false;
             this.commoTerms = false;
             this.anaesthesiaEvent = true;
             this.anestheticMethod = false;
@@ -616,20 +628,20 @@ export default {
                 });
         },
         getMethods() {
+            this.isBackOne = false;
+            this.isBackTwo = false;
+            this.isBackThree = true;
+            this.isBackFour = false;
             this.commoTerms = false;
             this.anaesthesiaEvent = false;
             this.anestheticMethod = true;
             this.anestheticConstant = false;
-            // let params = {
-            // }
-            // this.api.selectAllMedAnaesthesiaDict(params)
-            //     .then(
-            //     res => {
-            //         console.log(res.list)
-            //         this.methodDataType = res.list;
-            //     });
         },
         getConstant() {
+            this.isBackOne = false;
+            this.isBackTwo = false;
+            this.isBackThree = false;
+            this.isBackFour = true;
             this.commoTerms = false;
             this.anaesthesiaEvent = false;
             this.anestheticMethod = false;
@@ -816,11 +828,11 @@ export default {
         },
         //手术信息
         getPatientOperationInfo() {
-            this.patientOperationInfoView = !this.patientOperationInfoView;
+            this.patientOperationInfoView.dataInParent = !this.patientOperationInfoView.dataInParent;
         },
         //术中登记
         getOperationRegister() {
-            this.operationRegisterView = !this.operationRegisterView;
+            this.operationRegisterView.dataInParent = !this.operationRegisterView.dataInParent;
         },
         // 关于
         getAboutUs() {
@@ -851,7 +863,7 @@ export default {
         this.searchPatientList();
         this.setIntervaled();
         this.selectMedFormList();
-        
+
     },
 
     components: {
@@ -993,8 +1005,18 @@ export default {
     border-top-right-radius: 5px;
     text-align: center;
     color: white;
-    margin-left: 2px;
+    margin-left: 1px;
     cursor: pointer;
+}
+
+.tab_div:hover span {
+    text-shadow: 18px 15px 20px #E3EFFF,
+    -15px 15px 20px #E3EFFF;
+}
+
+.backWight {
+    background-color: #E1EEFD;
+    color: rgb(76, 121, 187);
 }
 
 .designArea {
@@ -1004,12 +1026,6 @@ export default {
     background: white;
     border: 1px solid black;
 }
-
-
-
-
-
-
 
 
 
