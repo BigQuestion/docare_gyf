@@ -77,9 +77,6 @@
                         格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat">
                     </div>
                 </div>
-
-
-                
             </div>
             
         </div>
