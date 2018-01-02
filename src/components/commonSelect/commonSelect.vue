@@ -127,12 +127,12 @@ export default {
                 this.serchZm = '';
             }
         })
-    },
-    watch: {
-        "infoData.value": function() {
-            this.changeTimes = this.changeTimes + 1;
-            if (this.changeTimes > 1) {
-                this.$emit('toparentevent', this.conInfo.value);
+      },
+    watch:{
+    "infoData.value":function(){
+        this.changeTimes = this.changeTimes+1;
+            if(this.changeTimes>1){
+                this.$emit('toparentevent', this.conInfo);
             }
         }
     }

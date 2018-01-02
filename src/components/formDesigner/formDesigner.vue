@@ -83,10 +83,22 @@
                         字典字段名称：<input type="" name="" v-model="chooseItems[0].dictField">
                     </div>
                     <div v-if="chooseItems[0]">
+
+                        BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly">
+                    </div>
+                    <div v-if="chooseItems[0]">
                         格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat">
                     </div>
                 </div>
-
             </div>
 
         </div>
@@ -362,9 +374,15 @@ export default {
     },
     mounted() {
         this.area = this.$refs.area;
+<<<<<<< HEAD
         this.selectMedFormTemp();
 
     },
+=======
+        //this.selectMedFormTemp();
+        
+    },  
+>>>>>>> ef86672db34b62a1bef72058fd8e587bae145d47
     created() {
         let component = this;
         document.onkeydown = function(e) {

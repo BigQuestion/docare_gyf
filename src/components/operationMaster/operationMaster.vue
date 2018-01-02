@@ -62,8 +62,8 @@
                         </div>
                     </div>
                 </div>
-                <div style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;" v-if="lockedPatientInfo.patientId">
-                    <div style="width: 150px;border-right: 1px solid black;height: 100%;text-align: center;line-height: 30px;" v-for="item in medBillList" @click="selectMedFormTemp">
+                <div style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;display:flex;" v-if="lockedPatientInfo.patientId">
+                    <div style="width: 150px;border-right: 1px solid black;height: 100%;text-align: center;line-height: 30px;" v-for="item in medBillList" @click="selectMedFormTemp(item)">
                         {{item.formName}}
                     </div>
                 </div>
@@ -311,13 +311,17 @@
                 <!--单子信息-->
                 <div class="designArea" v-if="formDetail">
                     <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-                        <form-element :value="item"></form-element>
+                        <form-element :value="item" v-on:toTopEvent="getValue"></form-element>
                     </div>
                 </div>
-                <div>
-                    <button>保存</button>
+                <div v-if="formDetail">
+                    <button @click="submitSaveForm">保存</button>
+                </div>
+                <div v-if="formDetail">
+                    <button @click="formSetting">配置</button>
                 </div>
             </div>
+            
         </div>
         <!-- <div class="mask">
                                                                             <div class="">
@@ -495,6 +499,8 @@ export default {
             isBackTwo: false,
             isBackThree: false,
             isBackFour: false,
+            updateFormsData:[],
+
         }
     },
     methods: {
@@ -623,7 +629,6 @@ export default {
             this.api.allMedAnesthesiaEventType(params)
                 .then(
                 res => {
-                    console.log(res.list)
                     this.eventDataType = res.list;
                 });
         },
@@ -759,27 +764,30 @@ export default {
                     this.medBillList = res.list;
                 });
         },
-        selectMedFormTemp() {
+        selectMedFormTemp(item) {
             this.formDetail = true;
             this.viewInfo = false;
             let params = {
-                formName: "麻醉记录单",
-                id: 2
+                formName: item.formName,
+                id: item.id
             }
             let arry = [];
             this.formItems = [];
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
+                    if(res.formContent==null){
+                        return;
+                    }
                     this.formItems = JSON.parse(res.formContent);
                     var list = this.formItems;
                     console.log(list);
                     for (var i = 0; i < list.length; i++) {
                         if (list[i].fieldName) {
                             arry.push({
-                                "patientId": "10966589",
-                                "visitId": "1",
-                                "operId": "1",
+                                "patientId": this.lockedPatientInfo.patientId,
+                                "visitId": this.lockedPatientInfo.visitId,
+                                "operId": this.lockedPatientInfo.operId,
                                 "tableName": list[i].tableName,
                                 "coluName": list[i].fieldName,
                             })
@@ -856,6 +864,33 @@ export default {
         concealmentFour() {
             this.concealmentFourData = !this.concealmentFourData;
             this.isTransformFour = !this.isTransformFour;
+        },
+        //获取单子修改的数据
+        getValue(data){
+            this.updateFormsData.push({
+                "tableName":data.tableName,
+                "coluName":data.fieldName,
+                "updateStr":data.value,
+                "patientId":this.lockedPatientInfo.patientId,
+                "visitId":this.lockedPatientInfo.visitId,
+                "operId":this.lockedPatientInfo.operId,
+
+            });
+        },
+        //提交单子修改
+        submitSaveForm(){
+            console.log(this.updateFormsData)
+            let params = []
+            params = this.updateFormsData;
+
+            this.api.updateSqlBatch(params)
+                .then(res=>{
+                    this.updateFormsData = [];
+                })
+        },
+        //配置跳转
+        formSetting(){
+
         }
 
     },
@@ -863,7 +898,11 @@ export default {
         this.searchPatientList();
         this.setIntervaled();
         this.selectMedFormList();
+<<<<<<< HEAD
 
+=======
+        this.patientId = '10966589';
+>>>>>>> ef86672db34b62a1bef72058fd8e587bae145d47
     },
 
     components: {
