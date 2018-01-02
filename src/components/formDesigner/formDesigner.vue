@@ -32,48 +32,53 @@
                         <input type="" name="" v-model="chooseItems[0].value">
                     </div>
                 </div>
-                <div v-if="chooseItems[0]">
-                    宽度：<input type="" name="" v-model="chooseItems[0].width">
+                <div v-if="chooseItems[0]&&chooseItems[0].type=='input'">
+                    <div v-if="chooseItems[0]">
+                        宽度：<input type="" name="" v-model="chooseItems[0].width">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        高度：<input type="" name="" v-model="chooseItems[0].height">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        MultiSelect:<input type="" name="" v-model="chooseItems[0].MultiSelect">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        字段名称：<input type="" name="" v-model="chooseItems[0].fieldName">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        数据源表名称：<input type="" name="" v-model="chooseItems[0].tableName">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        字典表名称：<input type="" name="" v-model="chooseItems[0].dictTableName">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        字典录入筛选条件：<input type="" name="" v-model="chooseItems[0].dictSelect">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        字典显示字段名称：<input type="" name="" v-model="chooseItems[0].dictShowFiled">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        字典字段名称：<input type="" name="" v-model="chooseItems[0].dictField">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat">
+                    </div>
                 </div>
-                <div v-if="chooseItems[0]">
-                    高度：<input type="" name="" v-model="chooseItems[0].height">
-                </div>
-                <div v-if="chooseItems[0]">
-                    MultiSelect:<input type="" name="" v-model="chooseItems[0].MultiSelect">
-                </div>
-                <div v-if="chooseItems[0]">
-                    字段名称：<input type="" name="" v-model="chooseItems[0].fieldName">
-                </div>
-                <div v-if="chooseItems[0]">
-                    数据源表名称：<input type="" name="" v-model="chooseItems[0].tableName">
-                </div>
-                <div v-if="chooseItems[0]">
-                    字典表名称：<input type="" name="" v-model="chooseItems[0].dictTableName">
-                </div>
-                <div v-if="chooseItems[0]">
-                    字典录入筛选条件：<input type="" name="" v-model="chooseItems[0].dictSelect">
-                </div>
-                <div v-if="chooseItems[0]">
-                    字典显示字段名称：<input type="" name="" v-model="chooseItems[0].dictShowFiled">
-                </div>
-                <div v-if="chooseItems[0]">
-                    字典字段名称：<input type="" name="" v-model="chooseItems[0].dictField">
-                </div>
-                <div v-if="chooseItems[0]">
-                    BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
-                </div>
-                <div v-if="chooseItems[0]">
-                    是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit">
-                </div>
-                <div v-if="chooseItems[0]">
-                    字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor">
-                </div>
-                <div v-if="chooseItems[0]">
-                    isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly">
-                </div>
-                <div v-if="chooseItems[0]">
-                    格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat">
-                </div>
+
+
+                
             </div>
             
         </div>
@@ -331,7 +336,7 @@ export default {
     },
     mounted() {
         this.area = this.$refs.area;
-        this.selectMedFormTemp();
+        //this.selectMedFormTemp();
         
     },  
     created() {
