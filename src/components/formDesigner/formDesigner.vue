@@ -13,7 +13,7 @@
                     </div>
                     <div class="mask">
                         <div v-if="drawing" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',
-                                                                    height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
+                                                                            height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
                     </div>
                 </div>
                 <div>
@@ -42,25 +42,26 @@
                     BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
                 </div>
                 <div v-if="chooseItems[0]">
-                    <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
-                    isReadOnly:
-                    <select name="" id="" v-on:change="selectData(chooseItems[0].isReadOnly,'isData',chooseItems[0].readOnlyMode)" v-model="chooseItems[0].readOnlyMode">
-                        <option v-for="btn in chooseItems[0].isReadOnly" :value="btn.isData">{{btn.isData}}</option>
-                    </select>
-                </div>
-                <div v-if="chooseItems[0]">
-                    <!-- 是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit"> -->
-                    是否可编辑:
-                    <select name="" id="" v-on:change="selectData(chooseItems[0].isEdit,'isData',chooseItems[0].isEditMode)" v-model="chooseItems[0].isEditMode">
-                        <option v-for="btn in chooseItems[0].isEdit" :value="btn.isData">{{btn.isData}}</option>
-                    </select>
-                </div>
-                <div v-if="chooseItems[0]">
-                    字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor">
-                    <!-- 字体颜色:<colorPicker v-model="chooseItems[0].ForeColor"></colorPicker> -->
+                    <!-- 字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor"> -->
+                    字体颜色:
+                    <colorPicker v-model="chooseItems[0].ForeColor"></colorPicker>{{chooseItems[0].ForeColor}}
                 </div>
 
                 <div v-if="chooseItems[0]&&chooseItems[0].type=='input' ">
+                    <div v-if="chooseItems[0]">
+                        <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
+                        isReadOnly:
+                        <select name="" id="" v-on:change="selectData(chooseItems[0].isReadOnly,'isData',chooseItems[0].readOnlyMode)" v-model="chooseItems[0].readOnlyMode">
+                            <option v-for="btn in chooseItems[0].isReadOnly" :value="btn.isData">{{btn.isData}}</option>
+                        </select>
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        <!-- 是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit"> -->
+                        是否可编辑:
+                        <select name="" id="" v-on:change="selectData(chooseItems[0].isEdit,'isData',chooseItems[0].isEditMode)" v-model="chooseItems[0].isEditMode">
+                            <option v-for="btn in chooseItems[0].isEdit" :value="btn.isData">{{btn.isData}}</option>
+                        </select>
+                    </div>
                     <div v-if="chooseItems[0]">
                         MultiSelect:<input type="" name="" v-model="chooseItems[0].MultiSelect">
                     </div>
@@ -83,9 +84,6 @@
                         字典字段名称：<input type="" name="" v-model="chooseItems[0].dictField">
                     </div>
                     <div v-if="chooseItems[0]">
-                        字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor">
-                    </div>
-                    <div v-if="chooseItems[0]">
                         格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat">
                     </div>
                 </div>
@@ -96,7 +94,7 @@
 </template>
 <script>
 import formElement from '@/components/formElement/formElement.vue';
-// import colorPicker from '@/components/colorPicker/colorPicker.vue';
+import colorPicker from '@/components/colorPicker/colorPicker.vue';
 export default {
     name: 'login',
     data() {
@@ -107,12 +105,14 @@ export default {
                 type: 'autoInput',
                 value: '输入文字',
                 selectKeyfield: 'id',
+                ForeColor: '#0000FF',
             },
             {
                 text: '文本控件',
                 type: 'title',
                 value: '输入文字',
                 width: '80',
+                ForeColor: '#0000FF',
             }, {
                 text: '文本',
                 type: 'text',
@@ -120,6 +120,7 @@ export default {
                 width: '80',
                 fieldName: '',
                 tableName: '',
+                ForeColor: '#0000FF',
             }, {
                 text: '输入框',
                 type: 'input',
@@ -133,12 +134,12 @@ export default {
                 borderStyle: '',
                 value: '',
                 isEdit: [{ isData: 'true' }, { isData: 'false' }],
-                ForeColor: 'blue',
+                ForeColor: '#0000FF',
                 MultiSelect: false,//真为多选，假为单选
                 isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
                 // isReadOnly:'false',
                 readOnlyMode: 'false',
-                isEditMode:'true',
+                isEditMode: 'true',
                 strFormat: true,//格式化字符串
 
             }, {
@@ -159,7 +160,8 @@ export default {
                 text: "文本区",
                 type: "textarea",
                 height: "100",
-                width: "300"
+                width: "300",
+                ForeColor: '#0000FF',
             }],
             handleItem: {},
             offsetX: '',
@@ -375,7 +377,7 @@ export default {
     },
     components: {
         formElement,
-        // colorPicker
+        colorPicker
     },
     mounted() {
         this.area = this.$refs.area;

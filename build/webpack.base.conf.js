@@ -3,7 +3,7 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
@@ -36,6 +36,20 @@ module.exports = {
       //     formatter: require('eslint-friendly-formatter')
       //   }
       // },
+      // {
+      //   test: /\.scss$/,
+      //   use: [{
+      //     loader: "style-loader" // 将 JS 字符串生成为 style 节点
+      //   }, {
+      //     loader: "css-loader" // 将 CSS 转化成 CommonJS 模块
+      //   }, {
+      //     loader: "sass-loader" // 将 Sass 编译成 CSS
+      //   },
+      {
+        test: /\.scss$/,
+        loader: "sass-loader" // 将 Sass 编译成 CSS
+        // scss: ['vue-style-loader','css', 'sass'].join('!')
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
