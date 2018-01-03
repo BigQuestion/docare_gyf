@@ -341,11 +341,7 @@ export default {
                 }
             else
             {
-                let params = {
-                formContent: JSON.stringify(this.formItems),
-                formName: this.dataInfo.formName,
-                id: this.dataInfo.id
-                }
+                
             }
             
         },
@@ -359,7 +355,7 @@ export default {
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
-                    if(res.formContent=="null"){
+                    if(res.formContent=="null"||res.formContent==null){
                         this.formItems = [];
                     }
                     else
@@ -432,5 +428,6 @@ export default {
     /* background: #CCCCCC;*/
     height: 600px;
     width: 900px;
+    border: 1px solid;
 }
 </style>

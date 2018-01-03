@@ -309,16 +309,16 @@
                 </div>
 
                 <!--单子信息-->
-                <div class="designArea" v-if="formDetail">
-                    <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-                        <form-element :value="item" v-on:toTopEvent="getValue"></form-element>
+                <div style="position: relative;width: 100%;height: 100%;">
+                    <div class="designArea" v-if="formDetail">
+                        <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
+                            <form-element :value="item" v-on:toTopEvent="getValue"></form-element>
+                        </div>
                     </div>
-                </div>
-                <div v-if="formDetail">
-                    <button @click="submitSaveForm">保存</button>
-                </div>
-                <div v-if="formDetail">
-                    <button @click="formSetting">配置</button>
+                    <div v-if="formDetail" style="position: absolute;">
+                        <button @click="submitSaveForm">保存</button>
+                        <button @click="formSetting">配置</button>
+                    </div>
                 </div>
             </div>
             
@@ -786,7 +786,7 @@ export default {
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
-                    if(res.formContent=="null"){
+                    if(res.formContent=="null"||res.formContent==null){
                         return;
                     }
                     this.formItems = JSON.parse(res.formContent);
