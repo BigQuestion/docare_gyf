@@ -13,7 +13,7 @@
                     </div>
                     <div class="mask">
                         <div v-if="drawing" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',
-                                                                            height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
+                                                                                        height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
                     </div>
                 </div>
                 <div>
@@ -41,13 +41,13 @@
                 <div v-if="chooseItems[0]">
                     BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
                 </div>
-                <div v-if="chooseItems[0]">
-                    <!-- 字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor"> -->
-                    字体颜色:
-                    <colorPicker v-model="chooseItems[0].ForeColor"></colorPicker>{{chooseItems[0].ForeColor}}
-                </div>
 
                 <div v-if="chooseItems[0]&&chooseItems[0].type=='input' ">
+                    <div v-if="chooseItems[0]">
+                        <!-- 字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor"> -->
+                        字体颜色:
+                        <colorPicker v-model="chooseItems[0].ForeColor"></colorPicker>{{chooseItems[0].ForeColor}}
+                    </div>
                     <div v-if="chooseItems[0]">
                         <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
                         isReadOnly:
@@ -63,7 +63,11 @@
                         </select>
                     </div>
                     <div v-if="chooseItems[0]">
-                        MultiSelect:<input type="" name="" v-model="chooseItems[0].MultiSelect">
+                        <!-- MultiSelect:<input type="" name="" v-model="chooseItems[0].MultiSelect"> -->
+                        MultiSelect:
+                        <select name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
+                            <option v-for="btn in chooseItems[0].MultiSelect" :value="btn.isData">{{btn.isData}}</option>
+                        </select>
                     </div>
                     <div v-if="chooseItems[0]">
                         字段名称：<input type="" name="" v-model="chooseItems[0].fieldName">
@@ -84,7 +88,11 @@
                         字典字段名称：<input type="" name="" v-model="chooseItems[0].dictField">
                     </div>
                     <div v-if="chooseItems[0]">
-                        格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat">
+                        <!-- 格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat"> -->
+                        格式化字符串:
+                        <select name="" id="" v-on:change="selectData(chooseItems[0].strFormat,'isData',chooseItems[0].strFormatMode)" v-model="chooseItems[0].strFormatMode">
+                            <option v-for="btn in chooseItems[0].strFormat" :value="btn.isData">{{btn.isData}}</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -105,14 +113,14 @@ export default {
                 type: 'autoInput',
                 value: '输入文字',
                 selectKeyfield: 'id',
-                ForeColor: '#0000FF',
+                ForeColor: '#000',
             },
             {
                 text: '文本控件',
                 type: 'title',
                 value: '输入文字',
                 width: '80',
-                ForeColor: '#0000FF',
+                ForeColor: '#000',
             }, {
                 text: '文本',
                 type: 'text',
@@ -133,14 +141,15 @@ export default {
                 dictField: '',
                 borderStyle: '',
                 value: '',
-                isEdit: [{ isData: 'true' }, { isData: 'false' }],
                 ForeColor: '#0000FF',
-                MultiSelect: false,//真为多选，假为单选
+                MultiSelect: [{ isData: 'true' }, { isData: 'false' }],//真为多选，假为单选
+                MultiSelectMode: 'false',//真为多选，假为单选
                 isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
-                // isReadOnly:'false',
                 readOnlyMode: 'false',
+                isEdit: [{ isData: 'true' }, { isData: 'false' }],
                 isEditMode: 'true',
-                strFormat: true,//格式化字符串
+                strFormat: [{ isData: 'true' }, { isData: 'false' }],//格式化字符串
+                strFormatMode:'false',//格式化字符串
 
             }, {
                 text: '单选',
@@ -329,47 +338,45 @@ export default {
             }
         },
         save() {
-            if(this.dataInfo){
+            if (this.dataInfo) {
                 let params = {
-                formContent: JSON.stringify(this.formItems),
-                formName: this.dataInfo.formName,
-                id: this.dataInfo.id
+                    formContent: JSON.stringify(this.formItems),
+                    formName: this.dataInfo.formName,
+                    id: this.dataInfo.id
                 }
                 this.api.updateMedFormContent(params)
                     .then(
                     res => {
 
                     });
-                }
-            else
-            {
+            }
+            else {
                 let params = {
-                formContent: JSON.stringify(this.formItems),
-                formName: this.dataInfo.formName,
-                id: this.dataInfo.id
+                    formContent: JSON.stringify(this.formItems),
+                    formName: this.dataInfo.formName,
+                    id: this.dataInfo.id
                 }
             }
-            
-        },
-        selectMedFormTemp(){
-            if(this.dataInfo){
-                let params = {
-                 formName:this.dataInfo.formName,
-                 id:this.dataInfo.id
 
-            }
-            this.api.selectMedFormTemp(params)
-                .then(
-                res => {
-                    if(res.formContent=="null"){
-                        this.formItems = [];
-                    }
-                    else
-                    {
-                        this.formItems = JSON.parse(res.formContent);
-                    }
-                    
-                });
+        },
+        selectMedFormTemp() {
+            if (this.dataInfo) {
+                let params = {
+                    formName: this.dataInfo.formName,
+                    id: this.dataInfo.id
+
+                }
+                this.api.selectMedFormTemp(params)
+                    .then(
+                    res => {
+                        if (res.formContent == "null") {
+                            this.formItems = [];
+                        }
+                        else {
+                            this.formItems = JSON.parse(res.formContent);
+                        }
+
+                    });
             }
         },
         show(index, ev) {
@@ -386,8 +393,8 @@ export default {
     mounted() {
         this.area = this.$refs.area;
         this.selectMedFormTemp();
-    },  
-    props:['dataInfo'],
+    },
+    props: ['dataInfo'],
     created() {
         let component = this;
         document.onkeydown = function(e) {

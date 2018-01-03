@@ -3,7 +3,7 @@
         <div v-if="conInfo.dictTableName">
             <div v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" @dblclick="showView" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" style="display:inline-block;border:1px solid #A9A9A9;min-height:19px;font-size:13.3333px;font-family:Arial;">{{infoData[attrName]}}</div>
             <!-- <input @dblclick="showView" v-model="infoData[attrName]" :style="{width:conInfo.width+'px'}" > -->
-            <input v-if="conInfo.isEditMode=='true'&&conInfo.readOnlyMode=='false'" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}">
+            <input v-if="conInfo.isEditMode=='true'&&conInfo.readOnlyMode=='false'" @dblclick="showView" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}">
             <input v-if="conInfo.readOnlyMode=='true'" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" :readonly="true">
             <div v-if="nameView" style="position: absolute;top: 0px;height: 300px;overflow: auto;border:1px solid;z-index: 1;background-color:white;" :style="{width:conInfo.width+'px',}">
                 <div>
@@ -15,12 +15,12 @@
             </div>
         </div>
         <div v-else>
-            <div v-if="conInfo.strFormat">
-                <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="conInfo.isEditMode">
+            <div v-if="conInfo.strFormatMode == 'true'">
+                <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
             </div>
 
             <div v-else>
-                <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="conInfo.isEditMode">
+                <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="true">
             </div>
         </div>
 
@@ -61,7 +61,7 @@ export default {
 
         },
         getSelected(item) {
-            if (this.infoData.MultiSelect) {
+            if (this.infoData.MultiSelectMode == 'true') {
                 if (this.conInfo.value == null) {
                     this.conInfo.value = item.SPENAME;
                 }
@@ -96,7 +96,7 @@ export default {
     },
     computed: {
         strToDate() {
-            if (this.conInfo.strFormat && this.conInfo.value) {
+            if (this.conInfo.strFormatMode == 'true' && this.infoData.value) {
                 var time = new Date(this.conInfo.value);
                 var y = time.getFullYear();
                 if (y < 10) {
@@ -127,11 +127,11 @@ export default {
                 this.serchZm = '';
             }
         })
-      },
-    watch:{
-    "infoData.value":function(){
-        this.changeTimes = this.changeTimes+1;
-            if(this.changeTimes>1){
+    },
+    watch: {
+        "infoData.value": function() {
+            this.changeTimes = this.changeTimes + 1;
+            if (this.changeTimes > 1) {
                 this.$emit('toparentevent', this.conInfo);
             }
         }
