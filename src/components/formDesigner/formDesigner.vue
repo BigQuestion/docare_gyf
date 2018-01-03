@@ -83,17 +83,7 @@
                         字典字段名称：<input type="" name="" v-model="chooseItems[0].dictField">
                     </div>
                     <div v-if="chooseItems[0]">
-
-                        BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
-                    </div>
-                    <div v-if="chooseItems[0]">
-                        是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit">
-                    </div>
-                    <div v-if="chooseItems[0]">
                         字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor">
-                    </div>
-                    <div v-if="chooseItems[0]">
-                        isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly">
                     </div>
                     <div v-if="chooseItems[0]">
                         格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat">
@@ -337,16 +327,27 @@ export default {
             }
         },
         save() {
-            let params = {
+            if(this.dataInfo){
+                let params = {
                 formContent: JSON.stringify(this.formItems),
-                formName: "麻醉记录单",
-                id: 2
-            }
-            this.api.updateMedFormContent(params)
-                .then(
-                res => {
+                formName: this.dataInfo.formName,
+                id: this.dataInfo.id
+                }
+                this.api.updateMedFormContent(params)
+                    .then(
+                    res => {
 
-                });
+                    });
+                }
+            else
+            {
+                let params = {
+                formContent: JSON.stringify(this.formItems),
+                formName: this.dataInfo.formName,
+                id: this.dataInfo.id
+                }
+            }
+            
         },
         selectMedFormTemp(){
             if(this.dataInfo){
@@ -358,11 +359,16 @@ export default {
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
-                    this.formItems = JSON.parse(res.formContent);
+                    if(res.formContent=="null"){
+                        this.formItems = [];
+                    }
+                    else
+                    {
+                        this.formItems = JSON.parse(res.formContent);
+                    }
+                    
                 });
             }
-
-            
         },
         show(index, ev) {
             if (ev.keyCode == 46) {

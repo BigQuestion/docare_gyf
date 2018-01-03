@@ -786,12 +786,11 @@ export default {
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
-                    if(res.formContent==null){
+                    if(res.formContent=="null"){
                         return;
                     }
                     this.formItems = JSON.parse(res.formContent);
                     var list = this.formItems;
-                    console.log(list);
                     for (var i = 0; i < list.length; i++) {
                         if (list[i].fieldName) {
                             arry.push({
@@ -803,7 +802,6 @@ export default {
                             })
                         }
                     }
-
                     this.api.getFormSqlResult(arry)
                         .then(
                         result => {
