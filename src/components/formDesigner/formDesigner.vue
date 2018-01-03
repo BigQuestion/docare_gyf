@@ -162,6 +162,9 @@ export default {
                 height: "100",
                 width: "300",
                 ForeColor: '#0000FF',
+            },{
+                text:"表格组件",
+                type:"formDiv",
             }],
             handleItem: {},
             offsetX: '',
