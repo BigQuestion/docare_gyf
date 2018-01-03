@@ -329,30 +329,49 @@ export default {
             }
         },
         save() {
-            let params = {
+            if(this.dataInfo){
+                let params = {
                 formContent: JSON.stringify(this.formItems),
-                formName: "麻醉记录单",
-                id: 2
-            }
-            this.api.updateMedFormContent(params)
-                .then(
-                res => {
+                formName: this.dataInfo.formName,
+                id: this.dataInfo.id
+                }
+                this.api.updateMedFormContent(params)
+                    .then(
+                    res => {
 
-                });
+                    });
+                }
+            else
+            {
+                let params = {
+                formContent: JSON.stringify(this.formItems),
+                formName: this.dataInfo.formName,
+                id: this.dataInfo.id
+                }
+            }
+            
         },
-        selectMedFormTemp() {
-            console.log(this.btns)
-            let params = {
-                formName: "麻醉记录单",
-                id: 2
+        selectMedFormTemp(){
+            if(this.dataInfo){
+                let params = {
+                 formName:this.dataInfo.formName,
+                 id:this.dataInfo.id
+
             }
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
-                    this.formItems = JSON.parse(res.formContent);
+                    if(res.formContent=="null"){
+                        this.formItems = [];
+                    }
+                    else
+                    {
+                        this.formItems = JSON.parse(res.formContent);
+                    }
+                    
                 });
+            }
         },
-
         show(index, ev) {
             if (ev.keyCode == 46) {
                 this.formItems.splice(index, 1);
@@ -366,9 +385,9 @@ export default {
     },
     mounted() {
         this.area = this.$refs.area;
-        //this.selectMedFormTemp();
-
-    },
+        this.selectMedFormTemp();
+    },  
+    props:['dataInfo'],
     created() {
         let component = this;
         document.onkeydown = function(e) {

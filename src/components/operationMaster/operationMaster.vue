@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;position:relative;">
+    <div v-if="!settingView" style="height:100%;position:relative;">
         <div class="head">
             <div class="logo">
                 <div :style="logo">
@@ -335,7 +335,7 @@
             <div class="window_load">
                 <div class="load_top">
                     <div>字典</div>
-                    <div @click="dictNone" class="top_active">X</div>
+                    <div @click="sett" class="top_active">X</div>
                 </div>
                 <div style="height: 50px;line-height: 50px;font-weight: bold;border-bottom: 2px solid rgb(177,207,243);">
                     <span style="margin-left: 30px;">字典维护</span>
@@ -398,8 +398,16 @@
             </div>
         </div>
     </div>
+    <div v-else  style="height: 100%;width: 100%;z-index: 99;position:relative;">
+        <div class="load_top">
+            <div>表单设计器</div>
+            <div @click="formSetting" class="top_active">X</div>
+        </div>
+        <formDesigner :dataInfo="selectFormItemTemp"></formDesigner>
+    </div>
 </template>
 <script>
+import formDesigner from '@/components/formDesigner/formDesigner.vue';
 import formElement from '@/components/formElement/formElement.vue';
 import patientOperationInfo from '@/components/patientOperationInfo/patientOperationInfo.vue';
 import operationRegister from '@/components/operationRegister/operationRegister.vue';
@@ -407,7 +415,6 @@ import aboutUs from '@/components/aboutUs/aboutUs.vue';
 import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent.vue';
 import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
 import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
-import { pinYin } from '@/components/plugins/pinyin.js';
 
 export default {
     data() {
@@ -500,6 +507,8 @@ export default {
             isBackThree: false,
             isBackFour: false,
             updateFormsData:[],
+            settingView:false,
+            selectFormItemTemp:'',//获取选中的单子
 
         }
     },
@@ -767,6 +776,7 @@ export default {
         selectMedFormTemp(item) {
             this.formDetail = true;
             this.viewInfo = false;
+            this.selectFormItemTemp = item;
             let params = {
                 formName: item.formName,
                 id: item.id
@@ -776,12 +786,11 @@ export default {
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
-                    if(res.formContent==null){
+                    if(res.formContent=="null"){
                         return;
                     }
                     this.formItems = JSON.parse(res.formContent);
                     var list = this.formItems;
-                    console.log(list);
                     for (var i = 0; i < list.length; i++) {
                         if (list[i].fieldName) {
                             arry.push({
@@ -793,7 +802,6 @@ export default {
                             })
                         }
                     }
-
                     this.api.getFormSqlResult(arry)
                         .then(
                         result => {
@@ -890,7 +898,7 @@ export default {
         },
         //配置跳转
         formSetting(){
-
+            this.settingView = !this.settingView;
         }
 
     },
@@ -903,6 +911,7 @@ export default {
 
     components: {
         formElement,
+        formDesigner,
         patientOperationInfo,
         operationRegister,
         aboutUs,
