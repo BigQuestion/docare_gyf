@@ -332,7 +332,7 @@
             <div class="window_load">
                 <div class="load_top">
                     <div>字典</div>
-                    <div @click="sett" class="top_active">X</div>
+                    <div @click="dictNone" class="top_active">X</div>
                 </div>
                 <div style="height: 50px;line-height: 50px;font-weight: bold;border-bottom: 2px solid rgb(177,207,243);">
                     <span style="margin-left: 30px;">字典维护</span>
