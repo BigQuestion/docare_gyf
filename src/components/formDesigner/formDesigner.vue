@@ -9,11 +9,11 @@
             <div>
                 <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)">
                     <div @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item)" tabindex="0">
-                        <form-element :value="item"></form-element>
+                        <form-element :value="item" :isPage="dataInfo"></form-element>
                     </div>
                     <div class="mask">
                         <div v-if="drawing" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',
-                                                                                        height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
+                                                                                                        height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
                     </div>
                 </div>
                 <div>
@@ -41,7 +41,9 @@
                 <div v-if="chooseItems[0]">
                     BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
                 </div>
-
+                <div v-if="chooseItems[0]">
+                    Font: <input type="text"><button @click="fontDataChange" style="width:20px;border-radius:0;display:inline;">...</button>
+                </div>
                 <div v-if="chooseItems[0]&&chooseItems[0].type=='input' ">
                     <div v-if="chooseItems[0]">
                         <!-- 字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor"> -->
@@ -70,10 +72,17 @@
                         </select>
                     </div>
                     <div v-if="chooseItems[0]">
-                        字段名称：<input type="" name="" v-model="chooseItems[0].fieldName">
+                        <!-- 是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit"> -->
+                        是否可为空:
+                        <select name="" id="" v-on:change="selectData(chooseItems[0].nullString,'isData',chooseItems[0].nullStringMode)" v-model="chooseItems[0].nullStringMode">
+                            <option v-for="btn in chooseItems[0].nullString" :value="btn.isData">{{btn.isData}}</option>
+                        </select>
                     </div>
                     <div v-if="chooseItems[0]">
                         数据源表名称：<input type="" name="" v-model="chooseItems[0].tableName">
+                    </div>
+                    <div v-if="chooseItems[0]">
+                        字段名称：<input type="" name="" v-model="chooseItems[0].fieldName">
                     </div>
                     <div v-if="chooseItems[0]">
                         字典表名称：<input type="" name="" v-model="chooseItems[0].dictTableName">
@@ -102,7 +111,7 @@
             </div>
 
         </div>
-
+        <fontPlug :fatherToChild="fontNoneData" v-if="fontNoneData.noneData"></fontPlug>
         <div v-if="defaultItemView" style="width: 400px;min-height: 300px;border:1px solid;position: absolute;top:200px;left: calc(50% - 200px);background:gray;">
             <div style="height: 20px;background:blue;">
                 <span>集合编辑器</span>
@@ -127,6 +136,7 @@
 <script>
 import formElement from '@/components/formElement/formElement.vue';
 import colorPicker from '@/components/colorPicker/colorPicker.vue';
+import fontPlug from '@/components/fontPlug/fontPlug.vue';
 export default {
     name: 'login',
     data() {
@@ -163,7 +173,7 @@ export default {
                 dictSelect: '',
                 dictShowFiled: '',
                 dictField: '',
-                borderStyle: '',
+                borderStyle: '1px solid #222',
                 value: '',
                 ForeColor: '#0000FF',
                 MultiSelect: [{ isData: 'true' }, { isData: 'false' }],//真为多选，假为单选
@@ -173,7 +183,9 @@ export default {
                 isEdit: [{ isData: 'true' }, { isData: 'false' }],
                 isEditMode: 'true',
                 strFormat: [{ isData: 'true' }, { isData: 'false' }],//格式化字符串
-                strFormatMode:'false',//格式化字符串
+                strFormatMode: 'false',//格式化字符串
+                nullString: [{ isData: 'true' }, { isData: 'false' }],//真可以为空，假不能为空
+                nullStringMode: 'true',
 
             }, {
                 text: '单选',
@@ -219,6 +231,7 @@ export default {
             dragX: '',
             dragY: '',
             drawing: false,
+            fontNoneData:{noneData:false},
             defaultItemView:false,
         }
     },
@@ -415,6 +428,10 @@ export default {
                 this.formItems.splice(index, 1);
             }
         },
+
+        fontDataChange(){
+            this.fontNoneData.noneData = !this.fontNoneData.noneData;
+        },
         changeDefaultValue(){
              this.chooseItems[0].defaultItems="集合";
         },
@@ -424,10 +441,12 @@ export default {
     },
     components: {
         formElement,
-        colorPicker
+        colorPicker,
+        fontPlug
     },
     mounted() {
         this.area = this.$refs.area;
+        console.log(this.dataInfo.isPage + '------')
         this.selectMedFormTemp();
     },
     props: ['dataInfo'],

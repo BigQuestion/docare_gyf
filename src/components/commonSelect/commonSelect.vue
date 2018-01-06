@@ -3,7 +3,7 @@
         <div v-if="conInfo.dictTableName">
             <div v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" @dblclick="showView" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" style="display:inline-block;border:1px solid #A9A9A9;min-height:19px;font-size:13.3333px;font-family:Arial;">{{infoData[attrName]}}</div>
             <!-- <input @dblclick="showView" v-model="infoData[attrName]" :style="{width:conInfo.width+'px'}" > -->
-            <input v-if="conInfo.isEditMode=='true'&&conInfo.readOnlyMode=='false'" @dblclick="showView" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}">
+            <input v-if="conInfo.isEditMode=='true'&&conInfo.readOnlyMode=='false'" @dblclick="showView" v-focus="focusState" @blur="focusState =  false,disapear(infoData[attrName])" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}">
             <input v-if="conInfo.readOnlyMode=='true'" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" :readonly="true">
             <div v-if="nameView" style="position: absolute;top: 0px;height: 300px;overflow: auto;border:1px solid;z-index: 1;background-color:white;" :style="{width:conInfo.width+'px',}">
                 <div>
@@ -37,6 +37,7 @@ export default {
             updateData: [],
             infoData: this.conInfo,
             changeTimes: 0,
+            focusState: false,
 
         }
     },
@@ -75,6 +76,18 @@ export default {
 
             this.nameView = !this.nameView;
         },
+        disapear(dataInput) {
+            console.log(dataInput)
+            if (this.conInfo.nullStringMode == 'false'){
+                if (dataInput == '') {
+                    this.focusState = true;
+                } else {
+
+                }
+            }else{
+
+            }
+        },
         //失去焦点的时候消失
         disShowView() {
             this.nameView = false;
@@ -93,6 +106,15 @@ export default {
             this.medAnaesthesiaDictList = newList;
         },
 
+    },
+    directives: {
+        focus: {
+            update: function(el, { value }) {
+                if (value) {
+                    el.focus()
+                }
+            }
+        }
     },
     computed: {
         strToDate() {

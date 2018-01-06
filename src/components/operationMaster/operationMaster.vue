@@ -506,6 +506,7 @@ export default {
             updateFormsData:[],
             settingView:false,
             selectFormItemTemp:'',//获取选中的单子
+            atherInput:{isPage:false},
 
         }
     },
@@ -773,6 +774,7 @@ export default {
         selectMedFormTemp(item) {
             this.formDetail = true;
             this.viewInfo = false;
+            item.isPage = false;
             this.selectFormItemTemp = item;
             let params = {
                 formName: item.formName,
@@ -896,6 +898,8 @@ export default {
         //配置跳转
         formSetting(){
             this.settingView = !this.settingView;
+            this.selectFormItemTemp.isPage = !this.selectFormItemTemp.isPage;
+            console.log(this.selectFormItemTemp)
         }
 
     },
