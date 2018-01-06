@@ -95,8 +95,32 @@
                         </select>
                     </div>
                 </div>
+
+                <div v-if="chooseItems[0]&&chooseItems[0].type=='checkBoxAll' ">
+                     DefaultItems：<input onpaste="return false" ondragenter="return false"  style="ime-mode:disabled" onkeypress="javascript:return false" v-model="chooseItems[0].defaultItems" v-on:input="changeDefaultValue" @dblclick="addDefaultItem">
+                </div>
             </div>
 
+        </div>
+
+        <div v-if="defaultItemView" style="width: 400px;min-height: 300px;border:1px solid;position: absolute;top:200px;left: calc(50% - 200px);background:gray;">
+            <div style="height: 20px;background:blue;">
+                <span>集合编辑器</span>
+            </div>
+            <div style="display: flex;margin-top: 40px;">
+                <div style="width: 100%;">
+                    <div style="height: 150px;width: 40%;background:white;">
+                        <div v-for="item in chooseItems[0].listData">
+                            {{item}}
+                        </div>
+                    </div>
+                    <div>
+                        <button>增加</button>
+                        <button>移除</button>
+                    </div>
+                </div>
+                
+            </div>
         </div>
     </div>
 </template>
@@ -174,6 +198,12 @@ export default {
             },{
                 text:"表格组件",
                 type:"formDiv",
+            },{
+                text:"自定义控件",
+                type:"checkBoxAll",
+                defaultItems:"集合",
+                listData:[1,2,3],
+                
             }],
             handleItem: {},
             offsetX: '',
@@ -189,6 +219,7 @@ export default {
             dragX: '',
             dragY: '',
             drawing: false,
+            defaultItemView:false,
         }
     },
     methods: {
@@ -383,8 +414,13 @@ export default {
             if (ev.keyCode == 46) {
                 this.formItems.splice(index, 1);
             }
+        },
+        changeDefaultValue(){
+             this.chooseItems[0].defaultItems="集合";
+        },
+        addDefaultItem(){
+            this.defaultItemView = true;
         }
-
     },
     components: {
         formElement,

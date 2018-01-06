@@ -8,6 +8,7 @@
         </div>
         <div v-if="value.type=='input'" >
             <common-select :conInfo="value" attrName="value" :data="updateData" v-on:toparentevent="getChlidValue"></common-select>
+
             <!-- <div v-if="value.dictTableName">
             </div> -->
             <!-- <div v-else>
@@ -35,6 +36,12 @@
         <div v-if="value.type=='formDiv'" >
             <div style="width: 800px;height: 300px;border:1px solid red;z-index: 5;"></div>
         </div>
+        
+        <div v-if="value.type=='checkBoxAll'" >
+            <div style="min-width: 100px;height: 40px;border:1px solid;z-index: 5;">
+                <input type="checkbox" name="" v-for="item in list">
+            </div>
+        </div>
 	</div>
 </template>
 <script>
@@ -43,6 +50,7 @@ export default {
 	data () {
   		return {
             updateData:[],
+            list:[1,2,3]
     	}
     },
     methods:{
