@@ -309,25 +309,22 @@
                 </div>
 
                 <!--单子信息-->
-                <div class="designArea" v-if="formDetail">
-                    <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-                        <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+                <div style="position: relative;width: calc(100% - 350px);height: 100%;" v-if="formDetail">
+                    <div class="designArea" >
+                        <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
+                            <form-element :value="item" v-on:toTopEvent="getValue"></form-element>
+                        </div>
                     </div>
-                </div>
-                <div v-if="formDetail">
-                    <button @click="submitSaveForm">保存</button>
-                </div>
-                <div v-if="formDetail">
-                    <button @click="formSetting">配置</button>
+                    <div v-if="formDetail" style="position: absolute;bottom:30px;right: 20px;">
+                        <button @click="submitSaveForm">保存</button>
+                        <button @click="">打印</button>
+                        <button @click="formSetting">配置</button>
+                        <button @click="">刷新</button>
+                    </div>
                 </div>
             </div>
             
         </div>
-        <!-- <div class="mask">
-                                                                            <div class="">
-                                                                                
-                                                                            </div>
-                                                                        </div> -->
         <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView"></patientOperationInfo>
         <operationRegister v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
         <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
@@ -788,7 +785,7 @@ export default {
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
-                    if(res.formContent=="null"){
+                    if(res.formContent=="null"||res.formContent==null){
                         return;
                     }
                     this.formItems = JSON.parse(res.formContent);

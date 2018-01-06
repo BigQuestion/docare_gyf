@@ -104,10 +104,33 @@
                         </select>
                     </div>
                 </div>
+
+                <div v-if="chooseItems[0]&&chooseItems[0].type=='checkBoxAll' ">
+                     DefaultItems：<input onpaste="return false" ondragenter="return false"  style="ime-mode:disabled" onkeypress="javascript:return false" v-model="chooseItems[0].defaultItems" v-on:input="changeDefaultValue" @dblclick="addDefaultItem">
+                </div>
             </div>
 
         </div>
         <fontPlug :fatherToChild="fontNoneData" v-if="fontNoneData.noneData"></fontPlug>
+        <div v-if="defaultItemView" style="width: 400px;min-height: 300px;border:1px solid;position: absolute;top:200px;left: calc(50% - 200px);background:gray;">
+            <div style="height: 20px;background:blue;">
+                <span>集合编辑器</span>
+            </div>
+            <div style="display: flex;margin-top: 40px;">
+                <div style="width: 100%;">
+                    <div style="height: 150px;width: 40%;background:white;">
+                        <div v-for="item in chooseItems[0].listData">
+                            {{item}}
+                        </div>
+                    </div>
+                    <div>
+                        <button>增加</button>
+                        <button>移除</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -184,6 +207,15 @@ export default {
                 height: "100",
                 width: "300",
                 ForeColor: '#0000FF',
+            },{
+                text:"表格组件",
+                type:"formDiv",
+            },{
+                text:"自定义控件",
+                type:"checkBoxAll",
+                defaultItems:"集合",
+                listData:[1,2,3],
+                
             }],
             handleItem: {},
             offsetX: '',
@@ -200,6 +232,7 @@ export default {
             dragY: '',
             drawing: false,
             fontNoneData:{noneData:false},
+            defaultItemView:false,
         }
     },
     methods: {
@@ -363,13 +396,10 @@ export default {
                     res => {
 
                     });
-            }
-            else {
-                let params = {
-                    formContent: JSON.stringify(this.formItems),
-                    formName: this.dataInfo.formName,
-                    id: this.dataInfo.id
                 }
+            else
+            {
+                
             }
 
         },
@@ -378,19 +408,19 @@ export default {
                 let params = {
                     formName: this.dataInfo.formName,
                     id: this.dataInfo.id
-
-                }
-                this.api.selectMedFormTemp(params)
-                    .then(
-                    res => {
-                        if (res.formContent == "null") {
-                            this.formItems = [];
-                        }
-                        else {
-                            this.formItems = JSON.parse(res.formContent);
-                        }
-
-                    });
+            }
+            this.api.selectMedFormTemp(params)
+                .then(
+                res => {
+                    if(res.formContent=="null"||res.formContent==null){
+                        this.formItems = [];
+                    }
+                    else
+                    {
+                        this.formItems = JSON.parse(res.formContent);
+                    }
+                    
+                });
             }
         },
         show(index, ev) {
@@ -401,8 +431,13 @@ export default {
 
         fontDataChange(){
             this.fontNoneData.noneData = !this.fontNoneData.noneData;
+        },
+        changeDefaultValue(){
+             this.chooseItems[0].defaultItems="集合";
+        },
+        addDefaultItem(){
+            this.defaultItemView = true;
         }
-
     },
     components: {
         formElement,
@@ -461,5 +496,6 @@ export default {
     /* background: #CCCCCC;*/
     height: 600px;
     width: 900px;
+    border: 1px solid;
 }
 </style>
