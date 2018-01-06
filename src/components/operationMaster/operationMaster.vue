@@ -311,7 +311,7 @@
                 <!--单子信息-->
                 <div class="designArea" v-if="formDetail">
                     <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-                        <form-element :value="item" v-on:toTopEvent="getValue"></form-element>
+                        <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
                     </div>
                 </div>
                 <div v-if="formDetail">
@@ -509,6 +509,7 @@ export default {
             updateFormsData:[],
             settingView:false,
             selectFormItemTemp:'',//获取选中的单子
+            atherInput:{isPage:false},
 
         }
     },
@@ -776,6 +777,7 @@ export default {
         selectMedFormTemp(item) {
             this.formDetail = true;
             this.viewInfo = false;
+            item.isPage = false;
             this.selectFormItemTemp = item;
             let params = {
                 formName: item.formName,
@@ -899,6 +901,8 @@ export default {
         //配置跳转
         formSetting(){
             this.settingView = !this.settingView;
+            this.selectFormItemTemp.isPage = !this.selectFormItemTemp.isPage;
+            console.log(this.selectFormItemTemp)
         }
 
     },

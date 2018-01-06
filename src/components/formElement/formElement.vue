@@ -7,7 +7,8 @@
             {{value.value}}
         </div>
         <div v-if="value.type=='input'" >
-            <common-select :conInfo="value" attrName="value" :data="updateData" v-on:toparentevent="getChlidValue"></common-select>
+            <common-select v-if="!isPage.isPage" :conInfo="value" attrName="value" :data="updateData" v-on:toparentevent="getChlidValue"></common-select>
+            <input v-else type="text" :style="{width:value.width+'px'}" readonly="true">
             <!-- <div v-if="value.dictTableName">
             </div> -->
             <!-- <div v-else>
@@ -47,7 +48,7 @@ export default {
            this.$emit('toTopEvent',data);
         },
     },
-    props:['value'],// 设置value为props属性-必须
+    props:['value','isPage'],// 设置value为props属性-必须
     computed:{
         
     },
@@ -55,7 +56,7 @@ export default {
         commonSelect
     },
     mounted(){  
-
+        console.log(this.isPage.isPage)
     }
 }
 </script>
