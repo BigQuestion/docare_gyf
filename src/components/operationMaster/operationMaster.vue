@@ -312,7 +312,7 @@
                 <div style="position: relative;width: calc(100% - 350px);height: 100%;" v-if="formDetail">
                     <div class="designArea" >
                         <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-                            <form-element :value="item" v-on:toTopEvent="getValue"></form-element>
+                            <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
                         </div>
                     </div>
                     <div v-if="formDetail" style="position: absolute;bottom:30px;right: 20px;">
