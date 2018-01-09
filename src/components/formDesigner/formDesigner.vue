@@ -106,27 +106,46 @@
                 </div>
 
                 <div v-if="chooseItems[0]&&chooseItems[0].type=='checkBoxAll' ">
-                     DefaultItems：<input onpaste="return false" ondragenter="return false"  style="ime-mode:disabled" onkeypress="javascript:return false" v-model="chooseItems[0].defaultItems" v-on:input="changeDefaultValue" @dblclick="addDefaultItem">
+                    <div>
+                        SourceFieldName:<input v-model="chooseItems[0].SourceFieldName">
+                    </div>
+                    <div>
+                        SourceTableName:<input v-model="chooseItems[0].SourceTableName">
+                    </div>
+                    <div>
+                        DefaultItems：<input onpaste="return false" ondragenter="return false" onkeypress="javascript:return false" v-model="chooseItems[0].defaultItems" v-on:input="changeDefaultValue" @dblclick="addDefaultItem">
+                    </div>
+                    
+                     
                 </div>
             </div>
 
         </div>
         <fontPlug :fatherToChild="fontNoneData" v-if="fontNoneData.noneData"></fontPlug>
-        <div v-if="defaultItemView" style="width: 400px;min-height: 300px;border:1px solid;position: absolute;top:200px;left: calc(50% - 200px);background:gray;">
-            <div style="height: 20px;background:blue;">
+        <div v-if="defaultItemView" style="width: 500px;min-height: 300px;border:1px solid;position: absolute;top:200px;left: calc(50% - 200px);background:gray;">
+            <div style="height: 20px;background:blue;color: white;">
                 <span>集合编辑器</span>
             </div>
             <div style="display: flex;margin-top: 40px;">
                 <div style="width: 100%;">
-                    <div style="height: 150px;width: 40%;background:white;">
-                        <div v-for="item in chooseItems[0].listData">
-                            {{item}}
+                    <div style="height: 150px;width: 200px;background:white;">
+                        <div v-for="(item,index) in chooseItemsTemp.listData" @click="getClickItem(item,index)" style="display: flex;width: 190px;">
+                            {{item.ItemName}}({{item.ItemValue}})
                         </div>
                     </div>
                     <div>
-                        <button>增加</button>
-                        <button>移除</button>
+                        <button @click="addDefaultItemCon">增加</button>
+                        <button @click="deleteItem">移除</button>
                     </div>
+                    <div>
+                        <button @click="addDefaultItemCon">确定</button>
+                        <button @click="cancleAddDefaultItem">取消</button>
+                    </div>
+                </div>
+                <div v-if="selectItemCon"> 
+                        ItemName:<input v-model="selectItemCon.ItemName" style="width: 100px;" @change="setChangeItem">
+                        ItemValue:<input v-model="selectItemCon.ItemValue" style="width: 100px;" @change="setChangeItem">
+                     
                 </div>
                 
             </div>
@@ -214,7 +233,10 @@ export default {
                 text:"自定义控件",
                 type:"checkBoxAll",
                 defaultItems:"集合",
-                listData:[1,2,3],
+                SourceFieldName:"",
+                SourceTableName:"",
+                listData:[
+               ],
                 
             }],
             handleItem: {},
@@ -233,6 +255,8 @@ export default {
             drawing: false,
             fontNoneData:{noneData:false},
             defaultItemView:false,
+            selectItemCon:'',
+            chooseItemsTemp:'',
         }
     },
     methods: {
@@ -435,9 +459,42 @@ export default {
         changeDefaultValue(){
              this.chooseItems[0].defaultItems="集合";
         },
+        //显示集合里面配置项
         addDefaultItem(){
+            this.chooseItemsTemp = this.chooseItems[0];
             this.defaultItemView = true;
-        }
+        },
+        cancleAddDefaultItem(){
+            this.defaultItemView = false;
+            console.log(this.chooseItems[0])
+            console.log(this.formItems)
+        },
+        //增加集合里面配置内容
+        addDefaultItemCon(){
+            debugger
+            this.chooseItemsTemp.listData.push({"ItemName":"","ItemValue":"","addFlag":true});
+            this.selectItemCon = {"ItemName":"","ItemValue":"","addFlag":true};
+            this.selectItemCon.indexFlag = this.chooseItemsTemp.listData.length-1;
+
+        },
+        //获取当前选中配置项内容
+        getClickItem(item,index){
+            debugger
+            this.selectItemCon = item;
+            this.selectItemCon.indexFlag = index;
+        },
+        //改变值
+        setChangeItem(){
+            // debugger
+            if(this.selectItemCon.addFlag){
+                this.$set(this.chooseItemsTemp.listData,this.selectItemCon.indexFlag,this.selectItemCon);
+            }
+            // this.$set(this.chooseItems[0].listData,this.selectItemCon.indexFlag,this.selectItemCon);
+        },
+        //移除defaultItem
+        deleteItem(){
+            this.chooseItemsTemp.listData.splice(this.selectItemCon.indexFlag,1);
+        },
     },
     components: {
         formElement,
@@ -446,7 +503,6 @@ export default {
     },
     mounted() {
         this.area = this.$refs.area;
-        console.log(this.dataInfo.isPage + '------')
         this.selectMedFormTemp();
     },
     props: ['dataInfo'],
