@@ -21,7 +21,7 @@
                             <input type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5')">
                         </div>
                     </div>
-                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime">
                         <div>
                             麻醉开始
                         </div>
@@ -29,7 +29,7 @@
                             <input type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10')">
                         </div>
                     </div>
-                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime">
                         <div>
                             手术开始
                         </div>
@@ -37,7 +37,7 @@
                             <input type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15')">
                         </div>
                     </div>
-                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime">
                         <div>
                             手术结束
                         </div>
@@ -45,7 +45,7 @@
                             <input type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25')">
                         </div>
                     </div>
-                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime">
                         <div>
                             麻醉结束
                         </div>
@@ -53,7 +53,7 @@
                             <input type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30')">
                         </div>
                     </div>
-                    <div style="margin:0px 5px;" v-if="inRoomDateTime!=''">
+                    <div style="margin:0px 5px;" v-if="inRoomDateTime">
                         <div>
                             出手术室
                         </div>
@@ -562,6 +562,7 @@ export default {
         },
         setIntervaled() {
             var _this = this;
+            var t='';
             setInterval(function() {
                 var dateObj = new Date(); //表示当前系统时间的Date对象
                 var year = dateObj.getFullYear(); //当前系统时间的完整年份值
@@ -590,7 +591,7 @@ export default {
                 var time = new Date();
                 // 程序计时的月从0开始取值后+1
                 var m = time.getMonth() + 1;
-                var t = year + "-" + month + "-" +
+                 t = year + "-" + month + "-" +
                     date + " " + time.getHours() + ":" +
                     minute + ":" + second;
                 _this.nowTime = t;
@@ -598,6 +599,8 @@ export default {
         },
         lockedPatient(item) {
             this.lockedPatientInfo = item;
+            //当前病人信息存储起来
+            this.config.userInfo = item;
             this.inRoomDateTime = this.changeDateFormat(item.inDateTime);
             this.anesStartTime = this.changeDateFormat(item.anesStartTime);
             this.startDateTime = this.changeDateFormat(item.startDateTime);

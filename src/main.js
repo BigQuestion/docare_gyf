@@ -31,6 +31,7 @@ Vue.prototype.datetimeLocalToDate = function(time) {
 	}
 	else
 	{
+		 
 		return null;
 	}
 
@@ -55,6 +56,10 @@ Vue.prototype.changeDateFormat = function(dateObj) {
 		var str = dateObj.split(" ");
 		var str1 = str[0] + "T" + str[1];
 		return str1;
+	}
+	else
+	{
+		return "";
 	}
 
 }

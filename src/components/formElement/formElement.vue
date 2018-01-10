@@ -38,19 +38,26 @@
         </div>
         
         <div v-if="value.type=='checkBoxAll'" >
-            <div style="min-width: 100px;height: 40px;border:1px solid;z-index: 5;">
-                <input type="checkbox" name="" v-for="item in list">
+            <div v-if="isPage.isPage" style="min-width: 100px;height: 40px;z-index: 5;display: flex;">
+                <!-- <div  v-for="item in value.listData" >
+                    <input type="checkbox" name="">
+                    <label>{{item.ItemName}}</label>
+                </div> -->
+                <check-box :boxValue="value"></check-box>
+            </div>
+            <div v-else>
+                <check-box :boxValue="value"></check-box>
             </div>
         </div>
 	</div>
 </template>
 <script>
 import commonSelect from '@/components/commonSelect/commonSelect.vue';
+import checkBox from '@/components/checkBox/checkBox.vue';
 export default {
 	data () {
   		return {
             updateData:[],
-            list:[1,2,3]
     	}
     },
     methods:{
@@ -63,7 +70,8 @@ export default {
         
     },
     components: {
-        commonSelect
+        commonSelect,
+        checkBox
     },
     mounted(){  
         console.log(this.isPage.isPage)
