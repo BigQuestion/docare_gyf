@@ -5,6 +5,11 @@
                 <div>字体</div>
                 <div @click="functionNone" class="font_active">X</div>
             </div>
+            <div class="bottomFontChoose">
+                <div class="chooseBox">
+
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -12,24 +17,37 @@
 export default {
     data() {
         return {
-            clickAtherPlace:false,
-
+            clickAtherPlace: false,
+            fontFamily: [
+                { fontFamilyData: '宋体' },
+                { fontFamilyData: '楷体' },
+                { fontFamilyData: '微软雅黑' },
+                { fontFamilyData: '微软雅黑' },
+                { fontFamilyData: '微软雅黑' },
+            ],
+            fontWeight: [
+                { fontWeightData: '正常' },
+                { fontWeightData: '斜体' },
+                { fontWeightData: '加粗' },
+                { fontWeightData: '' },
+                { fontWeightData: '微软雅黑' },
+            ]
         }
     },
     methods: {
         atherPlacFuntion() {
             this.clickAtherPlace = !this.clickAtherPlace;
-            setTimeout(() => {  
-                 this.clickAtherPlace = !this.clickAtherPlace;
-            }, 1000); 
+            setTimeout(() => {
+                this.clickAtherPlace = !this.clickAtherPlace;
+            }, 1000);
         },
-        functionNone(){
+        functionNone() {
             this.fatherToChild.noneData = !this.fatherToChild.noneData;
         },
-        noFunction(){
+        noFunction() {
 
         },
-        ah(){
+        ah() {
             alert('111')
         }
     },
@@ -127,5 +145,16 @@ export default {
         box-shadow: 1px 1px 10px #AAA;
         border: 1px solid rgb(24, 131, 215);
     }
+}
+
+.bottomFontChoose {
+    width: 100%;
+    height: calc(100% - 30px);
+    box-sizing: border-box;
+    padding: 20px 15px 30px;
+}
+
+.chooseBox {
+    width: 100%;
 }
 </style>
