@@ -38,15 +38,8 @@
         </div>
         
         <div v-if="value.type=='checkBoxAll'" >
-            <div v-if="isPage.isPage" style="min-width: 100px;height: 40px;z-index: 5;display: flex;">
-                <!-- <div  v-for="item in value.listData" >
-                    <input type="checkbox" name="">
-                    <label>{{item.ItemName}}</label>
-                </div> -->
-                <check-box :boxValue="value"></check-box>
-            </div>
-            <div v-else>
-                <check-box :boxValue="value"></check-box>
+            <div style="min-width: 100px;height: 40px;z-index: 5;display: flex;">
+                <check-box :boxValue="value" :isEdit="isPage.isPage"></check-box>
             </div>
         </div>
 	</div>
