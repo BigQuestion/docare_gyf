@@ -60,6 +60,10 @@ export default {
             handleItem: {},
             tableConfig: [
                 {
+                    text: '状态维护',
+                    type: 'select',
+                },
+                {
                     text: '手术间号',
                     value: 'operatingRoomNo'
                 }, {
@@ -339,13 +343,13 @@ export default {
 }
 
 
-.tableOut{
+.tableOut {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
 
-.timechose{
+.timechose {
     width: 20%;
     border: 1px solid #999;
     box-sizing: border-box;

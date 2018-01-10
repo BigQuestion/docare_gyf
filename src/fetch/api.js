@@ -128,6 +128,15 @@ export default {
 
   },
   /**
+   * 取消手术安排
+   * 
+   */
+  cancleMedOperationSchedule(params, config) {
+    return fetch('medicalsystem/rest/medOperationSchedule/cancleMedOperationSchedule', params)
+
+  },
+
+  /**
    * 获取患者信息详情
    * 
    */
