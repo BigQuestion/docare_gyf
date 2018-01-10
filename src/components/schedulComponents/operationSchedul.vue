@@ -14,15 +14,23 @@
                 </div>
                 <div v-for="item in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
                     <div v-for="cell in tableConfig" class="cell">
-                        <div v-if="cell.type!='select'">
-                            {{item[cell.value]}}
-                        </div>
+                       
                         <div v-if="cell.type=='select'">
                             <select v-model="item[cell.value]">
                                 <option v-for="option in options" v-bind:value="option.userId">
                                     {{ option.userName }}
                                 </option>
                             </select>
+                        </div>
+                        <div v-else-if="cell.type=='inSelect'" >
+                            <select  @change="test11(item)" v-model="item[cell.value]">
+                                <option v-for="option in testinfo" v-bind:value="option.opt">
+                                    {{ option.opt }}
+                                </option>
+                            </select>
+                        </div>
+                         <div v-else>
+                            {{item[cell.value]}}
                         </div>
                     </div>
                 </div>
@@ -58,10 +66,15 @@ export default {
         return {
             options: [],
             handleItem: {},
+            testinfo:[{ opt:'开展'
+                        },{
+                            opt:'取消'
+                        }],
             tableConfig: [
                 {
-                    text: '状态维护',
-                    type: 'select',
+                    text:"操作",
+                    type:"inSelect",
+                    value:"selectInfo",
                 },
                 {
                     text: '手术间号',
@@ -146,6 +159,10 @@ export default {
         }
     },
     methods: {
+        test11(item){
+            debugger
+             this.getList(this.dateValue);
+        },
         submit() {
             let params = [];
             for (var i = this.scheduleList.length - 1; i >= 0; i--) {
@@ -200,8 +217,6 @@ export default {
             this.getList(this.dateValue)
         },
         getList(date) {
-            debugger
-
             let params = {
                 "dateTime": date, //"2014/07/08"查询日期
                 // "page":1,   //第几页
@@ -209,7 +224,9 @@ export default {
             }
             this.api.getScheduleList(params)
                 .then(res => {
-                    debugger
+                    for (var i = 0; i < res.list.length; i++) {
+                        res.list[i].selectInfo = "开展";
+                    }
                     this.scheduleList = res.list;
                     console.log(res);
                 });
