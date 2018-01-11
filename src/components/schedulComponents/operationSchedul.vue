@@ -160,7 +160,32 @@ export default {
     },
     methods: {
         test11(item){
-            debugger
+            // debugger
+            let cancleData;
+            console.log(item)
+            if (item.selectInfo == '取消' && item.state == 2) {
+                if (confirm("你确定要取消手术吗？")) {
+                    cancleData = {
+                        patientId: item.patientId,
+                        scheduleId: item.scheduleId,
+                        visitId: item.visitId,
+                    }
+                    console.log(cancleData)
+                    this.api.cancleMedOperationSchedule(cancleData)
+                        .then(
+                        res => {
+                            this.getList(this.dateValue);
+                        })
+                    // alert("手术已取消");
+                }
+                else {
+                    // alert("点击了取消");
+                     this.getList(this.dateValue);
+                }
+            } else {
+                alert("此手术不能被取消！")
+                 this.getList(this.dateValue);
+            }
              this.getList(this.dateValue);
         },
         submit() {
