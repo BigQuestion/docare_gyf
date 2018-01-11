@@ -160,6 +160,7 @@ export default {
     },
     methods: {
         test11(item){
+            debugger
              this.getList(this.dateValue);
         },
         submit() {
