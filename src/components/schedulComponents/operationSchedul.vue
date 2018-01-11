@@ -12,7 +12,7 @@
                 <div class="flex head">
                     <div v-for="item in tableConfig" class="cell resizeAble">{{item.text}}</div>
                 </div>
-                <div v-for="item in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
+                <div v-for="(item,index) in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
                     <div v-for="cell in tableConfig" class="cell">
                        
                         <div v-if="cell.type=='select'">
@@ -23,7 +23,7 @@
                             </select>
                         </div>
                         <div v-else-if="cell.type=='inSelect'" >
-                            <select  @change="test11(item)" v-model="item[cell.value]">
+                            <select  @change="test11(item,index)" v-model="item[cell.value]">
                                 <option v-for="option in testinfo" v-bind:value="option.opt">
                                     {{ option.opt }}
                                 </option>
@@ -159,18 +159,19 @@ export default {
         }
     },
     methods: {
-        test11(item){
+        test11(item,index){
             // debugger
             let cancleData;
             console.log(item)
             if (item.selectInfo == '取消' && item.state == 2) {
                 if (confirm("你确定要取消手术吗？")) {
+                    item.selectInfo = "开展";
+                    this.$set(this.scheduleList,index,item);
                     cancleData = {
                         patientId: item.patientId,
                         scheduleId: item.scheduleId,
                         visitId: item.visitId,
                     }
-                    console.log(cancleData)
                     this.api.cancleMedOperationSchedule(cancleData)
                         .then(
                         res => {
@@ -179,14 +180,15 @@ export default {
                     // alert("手术已取消");
                 }
                 else {
-                    // alert("点击了取消");
-                     this.getList(this.dateValue);
+                     item.selectInfo = "开展";
+                     this.$set(this.scheduleList,index,item);
                 }
             } else {
-                alert("此手术不能被取消！")
-                 this.getList(this.dateValue);
+                alert("此手术不能被取消！");
+                item.selectInfo = "开展";
+                this.$set(this.scheduleList,index,item);
             }
-            
+             
         },
         submit() {
             let params = [];
