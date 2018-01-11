@@ -186,7 +186,7 @@ export default {
                 alert("此手术不能被取消！")
                  this.getList(this.dateValue);
             }
-             this.getList(this.dateValue);
+            
         },
         submit() {
             let params = [];
