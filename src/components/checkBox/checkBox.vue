@@ -1,27 +1,25 @@
 <template>
 	<div>
 		<div v-if="!isEdit" style="display: flex;" >
-			<div v-for="item in boxValue.listData" style="margin:0px 2px;">
-				<div v-if="item.ItemValue==resultValue">
+			<div v-if="boxValue.MultiSelectMode=='false'" v-for="(item,index) in boxValue.listData" style="margin:0px 2px;">
+				<!-- <div v-if="item.ItemValue==resultValue">
 					<label><input type="checkbox" @change="test" v-model="content.state" v-bind:value="item.ItemValue"/>{{item.ItemName}}</label>
 				</div>
 				<div v-else>
 					<label><input type="checkbox"   v-bind:value="item.ItemValue"/>{{item.ItemName}}</label>
-				</div>
+				</div> -->
+				<label><input type="checkbox" @change="getSingleSelect(item,index)" v-model="isSelected[index]" v-bind:value="item.ItemValue"/>{{item.ItemName}}</label>
 			</div>
-			 
+			 <div v-else>
+			 	<label><input type="checkbox" @change="getMultSelectValue" v-model="multSelctValue"   v-bind:value="item.ItemValue"/>{{item.ItemName}}</label>
+			 </div>
 		</div>
 		<div v-else style="display: flex;">
 			<div v-for="item in boxValue.listData" style="margin:0px 2px;">
 				<label><input type="checkbox" disabled="disabled" v-on:value="item.ItemValue"/>{{item.ItemName}}</label>
 			</div>
 		</div>
-		<div style="width: 14px;height: 14px;position: relative;background: white;display: flex;align-items: center;justify-content: center;box-shadow: 1px 1px 1px #b3b3b3 inset;border-bottom: 1px solid #b3b3b3;border-right: 1px solid #b3b3b3;">
-			<div style="
-				    font-size: 14px;
-				    font-weight: bold;
-				">√</div>
-		</div>
+
 	</div>
 	
 </template>
@@ -29,11 +27,10 @@
 export default {
 	data () {
   		return { 
-  			content:{
-  				state:true,
-  				data:[]
-  			},
   			resultValue:'',
+  			isSelected:[],
+  			defaultSelectValue:'',
+  			multSelctValue:[],
     	}
     },
     methods:{ 
@@ -50,11 +47,45 @@ export default {
     		this.api.getFormSqlResult(params)
 	    		.then(res => {
 	    				this.resultValue = res[this.boxValue.SourceFieldName];
+	    				for (var i = 0; i < this.boxValue.listData.length; i++) {
+	    					if(this.boxValue.listData[i].ItemValue==res[this.boxValue.SourceFieldName]){
+	    						this.isSelected.push(true);
+	    					}
+	    					else
+	    					{
+	    						this.isSelected.push(false);
+	    					} 
+    					}
                     })
 
     	},
-    	test(){
-    		console.log(this.content)
+    	//单选的时候
+    	getSingleSelect(item,index){ 
+    			for (var i = 0; i < this.isSelected.length; i++) {
+    				if(i==index){
+    					if(this.isSelected[i]){
+    						this.defaultSelectValue = item.ItemValue;
+    					}
+    					else
+    					{
+    						this.defaultSelectValue = '';
+    					}
+    				}
+    				else
+    				{
+    					this.$set(this.isSelected,i,false);
+    				}
+    			}
+    			this.$emit('toparentevent', {
+    				"tableName":this.boxValue.SourceTableName,
+    				"fieldName":this.boxValue.SourceFieldName,
+    				"value":this.defaultSelectValue,
+    			});
+    	},
+    	//获取复选值
+    	getMultSelectValue(){
+    		debugger
+    		console.log(this.multSelctValue);
     	},
     }, 
     props:['boxValue','isEdit'],
@@ -64,8 +95,7 @@ export default {
     components: {
         
     },
-    mounted(){  
-         console.log(this.config.userInfo);
+    mounted(){
          this.getItemValue();
     }
 }

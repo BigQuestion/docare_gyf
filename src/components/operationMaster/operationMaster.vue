@@ -319,7 +319,7 @@
                         <button @click="submitSaveForm">保存</button>
                         <button @click="">打印</button>
                         <button @click="formSetting">配置</button>
-                        <button @click="">刷新</button>
+                        <button @click="refreshForm">刷新</button>
                     </div>
                 </div>
             </div>
@@ -876,26 +876,60 @@ export default {
             this.isTransformFour = !this.isTransformFour;
         },
         //获取单子修改的数据
-        getValue(data){
-            this.updateFormsData.push({
-                "tableName":data.tableName,
-                "coluName":data.fieldName,
-                "updateStr":data.value,
-                "patientId":this.lockedPatientInfo.patientId,
-                "visitId":this.lockedPatientInfo.visitId,
-                "operId":this.lockedPatientInfo.operId,
+        getValue(dataValue){
+            debugger
+            var tempData = this.updateFormsData;
+            if(tempData.length>0){
+                var count = 0;
+                for (var i = 0; i < this.updateFormsData.length; i++) {
+                    //如果之前传入有相同的表名与字段名则更新值
 
-            });
+                    if(this.updateFormsData[i].tableName===dataValue.tableName&&this.updateFormsData[i].coluName===dataValue.fieldName){
+                        
+                        this.updateFormsData[i].updateStr = dataValue.value;
+                    }
+                    else
+                    {
+                       
+                        count++;
+                    }
+
+                }
+                if(count==this.updateFormsData.length)
+                { 
+                        this.updateFormsData.push({
+                        "tableName":dataValue.tableName,
+                        "coluName":dataValue.fieldName,
+                        "updateStr":dataValue.value,
+                        "patientId":this.lockedPatientInfo.patientId,
+                        "visitId":this.lockedPatientInfo.visitId,
+                        "operId":this.lockedPatientInfo.operId,
+                        });
+                }
+                 
+            }
+            else
+            {
+                this.updateFormsData.push({
+                        "tableName":dataValue.tableName,
+                        "coluName":dataValue.fieldName,
+                        "updateStr":dataValue.value,
+                        "patientId":this.lockedPatientInfo.patientId,
+                        "visitId":this.lockedPatientInfo.visitId,
+                        "operId":this.lockedPatientInfo.operId,
+                        });
+            }
+                
         },
         //提交单子修改
         submitSaveForm(){
             console.log(this.updateFormsData)
             let params = []
             params = this.updateFormsData;
-
             this.api.updateSqlBatch(params)
                 .then(res=>{
                     this.updateFormsData = [];
+                    this.selectMedFormTemp(this.selectFormItemTemp);
                 })
         },
         //配置跳转
@@ -903,6 +937,11 @@ export default {
             this.settingView = !this.settingView;
             this.selectFormItemTemp.isPage = !this.selectFormItemTemp.isPage;
             console.log(this.selectFormItemTemp)
+        },
+        //单子刷新按钮
+        refreshForm(){
+            this.updateFormsData = [];
+            this.selectMedFormTemp(this.selectFormItemTemp);
         }
 
     },
