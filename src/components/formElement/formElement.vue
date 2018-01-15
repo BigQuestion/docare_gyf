@@ -38,9 +38,17 @@
         </div>
         
         <div v-if="value.type=='checkBoxAll'" >
-            <div style="min-width: 100px;height: 40px;z-index: 5;display: flex;">
-                <check-box :boxValue="value" :isEdit="isPage.isPage"></check-box>
+            <div v-if="isPage.isPage">
+                <div style="min-width: 100px;height: 40px;z-index: 5;display: flex;border:1px dashed;">
+                    <check-box :boxValue="value" :isEdit="isPage.isPage" v-on:toparentevent="getChlidValue"></check-box>
+                </div>
             </div>
+            <div v-else>
+                <div style="min-width: 100px;height: 40px;z-index: 5;display: flex;">
+                    <check-box :boxValue="value" :isEdit="isPage.isPage" v-on:toparentevent="getChlidValue"></check-box>
+                </div>
+            </div>
+            
         </div>
 	</div>
 </template>
@@ -54,6 +62,7 @@ export default {
     	}
     },
     methods:{
+        //传入值到上级
         getChlidValue(data){
            this.$emit('toTopEvent',data);
         },
@@ -67,7 +76,7 @@ export default {
         checkBox
     },
     mounted(){  
-        console.log(this.isPage.isPage)
+        
     }
 }
 </script>

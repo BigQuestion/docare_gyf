@@ -115,7 +115,12 @@
                     <div>
                         DefaultItems：<input onpaste="return false" ondragenter="return false" onkeypress="javascript:return false" v-model="chooseItems[0].defaultItems" v-on:input="changeDefaultValue" @dblclick="addDefaultItem">
                     </div>
-                    
+                    <div>
+                        MultiSelect:
+                        <select name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
+                            <option v-for="btn in chooseItems[0].MultiSelect" :value="btn.isData">{{btn.isData}}</option>
+                        </select>
+                    </div>
                      
                 </div>
             </div>
@@ -127,24 +132,27 @@
                 <span>集合编辑器</span>
             </div>
             <div style="display: flex;margin-top: 40px;">
-                <div style="width: 100%;">
+                <div style="margin-right: 30px;margin-left: 10px;">
                     <div style="height: 150px;width: 200px;background:white;">
                         <div v-for="(item,index) in chooseItemsTemp.listData" @click="getClickItem(item,index)" style="display: flex;width: 190px;">
                             {{item.ItemName}}({{item.ItemValue}})
                         </div>
                     </div>
-                    <div>
+                    <div style="width: 200px;">
                         <button @click="addDefaultItemCon">增加</button>
                         <button @click="deleteItem">移除</button>
                     </div>
-                    <div>
+                    <div style="width: 200px;">
                         <button @click="addDefaultItemCon">确定</button>
                         <button @click="cancleAddDefaultItem">取消</button>
                     </div>
                 </div>
-                <div v-if="selectItemCon"> 
+                <div  style="width: 250px;background:white;"> 
+                    <div v-if="selectItemCon">
                         ItemName:<input v-model="selectItemCon.ItemName" style="width: 100px;" @change="setChangeItem">
                         ItemValue:<input v-model="selectItemCon.ItemValue" style="width: 100px;" @change="setChangeItem">
+                    </div>
+                        
                      
                 </div>
                 
@@ -235,8 +243,9 @@ export default {
                 defaultItems:"集合",
                 SourceFieldName:"",
                 SourceTableName:"",
-                listData:[
-               ],
+                listData:[],
+               MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
+               MultiSelectMode: 'false',
                 
             }],
             handleItem: {},
@@ -466,8 +475,6 @@ export default {
         },
         cancleAddDefaultItem(){
             this.defaultItemView = false;
-            console.log(this.chooseItems[0])
-            console.log(this.formItems)
         },
         //增加集合里面配置内容
         addDefaultItemCon(){
