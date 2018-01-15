@@ -14,22 +14,34 @@
                 </div>
                 <div v-for="(item,index) in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
                     <div v-for="cell in tableConfig" class="cell">
-                       
-                        <div v-if="cell.type=='select'">
-                            <select v-model="item[cell.value]">
-                                <option v-for="option in options" v-bind:value="option.userId">
+
+                        <div v-if="cell.type=='select'" class="selectInThere">
+                            <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
+                                <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
+                                                    {{ MzkUser.userName }}
+                                                 </option> -->
+                                <!-- 副麻，洗手列表 -->
+                                <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
+                                    {{ MzkUser.userName }}
+                                </option>
+                                <option v-if="cell.value == 'firstOperationNurseName'||cell.value == 'secondOperationNurseName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
+                                    {{ MzkUser.userName }}
+                                </option>
+                                <!-- 巡回列表 -->
+                                <option v-if="cell.value == 'firstSupplyNurseName'||cell.value == 'secondtSupplyNurseName'" v-for="option in options" v-bind:value="option.userName">
                                     {{ option.userName }}
                                 </option>
+
                             </select>
                         </div>
-                        <div v-else-if="cell.type=='inSelect'" >
-                            <select  @change="test11(item,index)" v-model="item[cell.value]">
+                        <div class="selectInThere" v-else-if="cell.type=='inSelect'">
+                            <select class="selectBox" @change="test11(item,index)" v-model="item[cell.value]">
                                 <option v-for="option in testinfo" v-bind:value="option.opt">
                                     {{ option.opt }}
                                 </option>
                             </select>
                         </div>
-                         <div v-else>
+                        <div class="selectInThere" v-else>
                             {{item[cell.value]}}
                         </div>
                     </div>
@@ -65,16 +77,20 @@ export default {
     data() {
         return {
             options: [],
+            MzkUsers: [],
             handleItem: {},
-            testinfo:[{ opt:'开展'
-                        },{
-                            opt:'取消'
-                        }],
+            testinfo: [{
+                opt: '开展'
+            }, {
+                opt: '取消'
+            }, {
+                opt: '恢复'
+            }],
             tableConfig: [
                 {
-                    text:"操作",
-                    type:"inSelect",
-                    value:"selectInfo",
+                    text: "操作",
+                    type: "inSelect",
+                    value: "selectInfo",
                 },
                 {
                     text: '手术间号',
@@ -126,16 +142,20 @@ export default {
                     value: 'anesthesiaDoctorName'
                 }, {
                     text: '副麻1',
-                    value: 'anesthesiaAssistant'
+                    value: 'firstAnesthesiaAssistantName',
+                    type: 'select'
                 }, {
                     text: '副麻2',
-                    value: 'secondAnesthesiaAssistant'
+                    value: 'secondAnesthesiaAssistantName',
+                    type: 'select'
                 }, {
                     text: '洗手1',
-                    value: 'firstOperationNurseName'
+                    value: 'firstOperationNurseName',
+                    type: 'select'
                 }, {
                     text: '洗手2',
-                    value: 'secondOperationNurseName'
+                    value: 'secondOperationNurseName',
+                    type: 'select'
                 }, {
                     text: '巡回1',
                     value: 'firstSupplyNurseName',
@@ -159,14 +179,14 @@ export default {
         }
     },
     methods: {
-        test11(item,index){
+        test11(item, index) {
             // debugger
             let cancleData;
             console.log(item)
             if (item.selectInfo == '取消' && item.state == 2) {
                 if (confirm("你确定要取消手术吗？")) {
                     item.selectInfo = "开展";
-                    this.$set(this.scheduleList,index,item);
+                    this.$set(this.scheduleList, index, item);
                     cancleData = {
                         patientId: item.patientId,
                         scheduleId: item.scheduleId,
@@ -180,34 +200,85 @@ export default {
                     // alert("手术已取消");
                 }
                 else {
-                     item.selectInfo = "开展";
-                     this.$set(this.scheduleList,index,item);
+                    item.selectInfo = "开展";
+                    this.$set(this.scheduleList, index, item);
+                }
+            } else if (item.selectInfo == '恢复' && item.state == 500) {
+                if (confirm("你确定要恢复手术吗？")) {
+                    item.selectInfo = "开展";
+                    this.$set(this.scheduleList, index, item);
+                    cancleData = {
+                        patientId: item.patientId,
+                        scheduleId: item.scheduleId,
+                        visitId: item.visitId,
+                    }
+                    this.api.addCancleMedOperationSchedule(cancleData)
+                        .then(
+                        res => {
+                            this.getList(this.dateValue);
+                        })
+                    // alert("手术已取消");
+                } else {
+                    item.selectInfo = "开展";
+                    this.$set(this.scheduleList, index, item);
                 }
             } else {
-                alert("此手术不能被取消！");
+                alert("你不能这样操作此手术！");
                 item.selectInfo = "开展";
-                this.$set(this.scheduleList,index,item);
+                this.$set(this.scheduleList, index, item);
             }
-             
+
+        },
+        nameDataType(item) {
+            console.log(item)
         },
         submit() {
             let params = [];
-            for (var i = this.scheduleList.length - 1; i >= 0; i--) {
+            let nameDoc = [];
+            let dataInName;
+            for (var i = 0; i <this.scheduleList.length ; i++) {
                 console.log(this.scheduleList[i].state);
                 if (this.scheduleList[i].state == 1 || this.scheduleList[i].state == 0) {
-                    params.push({
-                        patientId: this.scheduleList[i].patientId,
-                        scheduleId: this.scheduleList[i].scheduleId,
-                        visitId: this.scheduleList[i].visitId
+                    nameDoc.push({
+                        firstAnesthesiaAssistantName: this.scheduleList[i].firstAnesthesiaAssistantName,
+                        secondAnesthesiaAssistantName: this.scheduleList[i].secondAnesthesiaAssistantName,
+                        firstOperationNurseName: this.scheduleList[i].firstOperationNurseName,
+                        secondOperationNurseName: this.scheduleList[i].secondOperationNurseName,
+                        firstSupplyNurseName: this.scheduleList[i].firstSupplyNurseName,
+                        secondtSupplyNurseName: this.scheduleList[i].secondtSupplyNurseName,
                     })
                 }
             }
-            this.api.submitMedOperationScheduleList(params)
-                .then(
-                res => {
-                    debugger
-                    this.getList(this.dateValue);
-                })
+            
+            console.log(nameDoc)
+            console.log(nameDoc.length)
+            // debugger
+            for (var j = 0; j < nameDoc.length; j++) {
+                if (nameDoc[j].firstAnesthesiaAssistantName != null && nameDoc[j].firstOperationNurseName != null && nameDoc[j].firstSupplyNurseName != null) {
+                    dataInName = true;
+                    params.push({
+                        patientId: this.scheduleList[j].patientId,
+                        scheduleId: this.scheduleList[j].scheduleId,
+                        visitId: this.scheduleList[j].visitId
+                    })
+                }else{
+
+                }
+            }
+            console.log(params)
+            if (dataInName) {
+                this.api.submitMedOperationScheduleList(params)
+                    .then(
+                    res => {
+                        // debugger
+                        dataInName = false;
+                        this.getList(this.dateValue);
+                    })
+                alert('提交成功!')
+            }else{
+                alert('必要的选项不能为空！')
+            }
+
         },
         modalSure() {
             let params = this.handleItem
@@ -261,9 +332,18 @@ export default {
         getSupplyNurseList() {
             this.api.getSupplyNurseList()
                 .then(res => {
-                    debugger
+                    // debugger
                     console.log(res);
                     this.options = res.list;
+                    this.getList(this.dateValue);
+                })
+        },
+        getMzkUsersList() {
+            this.api.getMzkUsers()
+                .then(res => {
+                    // debugger
+                    console.log(res);
+                    this.MzkUsers = res.list;
                     this.getList(this.dateValue);
                 })
         }
@@ -272,6 +352,7 @@ export default {
         // this.getList();
 
         this.getSupplyNurseList();
+        this.getMzkUsersList();
     },
     components: {
         Datepicker: Datepicker,
@@ -281,6 +362,11 @@ export default {
 }
 </script>
 <style scoped>
+.flex {
+    height: 25px;
+    line-height: 25px;
+}
+
 .state2 {
     background: #0080FF;
 }
@@ -355,7 +441,7 @@ export default {
     border: 1px solid #666666;
 }
 
-.rows .cell {
+.cell {
     border: 1px solid #B3B3B3;
 }
 
@@ -399,5 +485,22 @@ export default {
     box-sizing: border-box;
     margin-right: 5px;
     padding-left: 5px;
+}
+
+.selectInThere {
+    width: 100%;
+    height: 100%;
+}
+
+.selectBox {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: none;
+    display: block;
+}
+
+.noneTriangle {
+    appearance: none;
 }
 </style>
