@@ -35,7 +35,7 @@
                             </select>
                         </div>
                         <div class="selectInThere" v-else-if="cell.type=='inSelect'">
-                            <select class="selectBox" @change="test11(item,index)" v-model="item[cell.value]">
+                            <select class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
                                 <option v-for="option in testinfo" v-bind:value="option.opt">
                                     {{ option.opt }}
                                 </option>
@@ -179,7 +179,7 @@ export default {
         }
     },
     methods: {
-        test11(item, index) {
+        operateFun(item, index) {
             // debugger
             let cancleData;
             console.log(item)
