@@ -15,11 +15,11 @@
                 <div v-for="(item,index) in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
                     <div v-for="cell in tableConfig" class="cell">
 
-                        <div v-if="cell.type=='select'" class="selectInThere">
+                        <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
                             <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
                                 <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
-                                                    {{ MzkUser.userName }}
-                                                 </option> -->
+                                                                        {{ MzkUser.userName }}
+                                                                     </option> -->
                                 <!-- 副麻，洗手列表 -->
                                 <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
                                     {{ MzkUser.userName }}
@@ -31,12 +31,28 @@
                                 <option v-if="cell.value == 'firstSupplyNurseName'||cell.value == 'secondtSupplyNurseName'" v-for="option in options" v-bind:value="option.userName">
                                     {{ option.userName }}
                                 </option>
-
                             </select>
                         </div>
                         <div class="selectInThere" v-else-if="cell.type=='inSelect'">
+                            <!-- <select v-if="item.state==0||item.state==1" class="selectBox" @change="operateFun(item,index,item[cell.value])" v-model="item[cell.value]">
+                                    <option v-for="option in OptInfo" v-if="option.opt=='开展'" selected="selected" v-bind:value="item[cell.value]">
+                                        {{ option.opt }}
+                                    </option>
+                                    <option v-if="option.opt!='开展'" v-for="option in OptInfo" v-bind:value="item[cell.value]">
+                                        {{ option.opt }}
+                                    </option>
+                                </select>
+                                <select v-else class="selectBox" @change="operateFun(item,index,item[cell.value])" v-model="item[cell.value]">
+                                    <option v-if="option.opt=='取消'" v-for="option in OptInfo" selected="selected" v-bind:value="item[cell.value]">
+                                        {{ option.opt }}
+                                    </option>
+                                    <option v-if="option.opt!='取消'" v-for="option in OptInfo" v-bind:value="item[cell.value]">
+                                        {{ option.opt }}
+                                    </option>
+                                </select> -->
+
                             <select class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
-                                <option v-for="option in testinfo" v-bind:value="option.opt">
+                                <option v-for="option in OptInfo" v-bind:value="item[cell.value]">
                                     {{ option.opt }}
                                 </option>
                             </select>
@@ -79,12 +95,14 @@ export default {
             options: [],
             MzkUsers: [],
             handleItem: {},
-            testinfo: [{
+            OptInfo: [{
                 opt: '开展'
             }, {
                 opt: '取消'
             }, {
                 opt: '恢复'
+            }, {
+                opt: '作废'
             }],
             tableConfig: [
                 {
@@ -180,9 +198,9 @@ export default {
     },
     methods: {
         operateFun(item, index) {
-            // debugger
+            debugger
             let cancleData;
-            console.log(item)
+            console.log(item.selectInfo)
             if (item.selectInfo == '取消' && item.state == 2) {
                 if (confirm("你确定要取消手术吗？")) {
                     item.selectInfo = "开展";
@@ -222,6 +240,26 @@ export default {
                     item.selectInfo = "开展";
                     this.$set(this.scheduleList, index, item);
                 }
+            } else if (item.selectInfo == '作废' && (item.state == 0 || item.state == 1)) {
+                if (confirm("你确定要作废该手术吗？")) {
+                    item.selectInfo = "开展";
+                    this.$set(this.scheduleList, index, item);
+                    cancleData = {
+                        patientId: item.patientId,
+                        scheduleId: item.scheduleId,
+                        visitId: item.visitId,
+                        state: item.state,
+                    }
+                    this.api.editSchedule(cancleData)
+                        .then(
+                        res => {
+                            this.getList(this.dateValue);
+                        })
+                    // alert("手术已取消");
+                } else {
+                    item.selectInfo = "开展";
+                    this.$set(this.scheduleList, index, item);
+                }
             } else {
                 alert("你不能这样操作此手术！");
                 item.selectInfo = "开展";
@@ -236,7 +274,7 @@ export default {
             let params = [];
             let nameDoc = [];
             let dataInName;
-            for (var i = 0; i <this.scheduleList.length ; i++) {
+            for (var i = 0; i < this.scheduleList.length; i++) {
                 console.log(this.scheduleList[i].state);
                 if (this.scheduleList[i].state == 1 || this.scheduleList[i].state == 0) {
                     nameDoc.push({
@@ -249,7 +287,7 @@ export default {
                     })
                 }
             }
-            
+
             console.log(nameDoc)
             console.log(nameDoc.length)
             // debugger
@@ -261,7 +299,7 @@ export default {
                         scheduleId: this.scheduleList[j].scheduleId,
                         visitId: this.scheduleList[j].visitId
                     })
-                }else{
+                } else {
 
                 }
             }
@@ -275,7 +313,7 @@ export default {
                         this.getList(this.dateValue);
                     })
                 alert('提交成功!')
-            }else{
+            } else {
                 alert('必要的选项不能为空！')
             }
 
