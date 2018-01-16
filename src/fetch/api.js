@@ -135,7 +135,14 @@ export default {
     return fetch('medicalsystem/rest/medOperationSchedule/cancleMedOperationSchedule', params)
 
   },
+  /**
+   * 恢复取消手术安排
+   * 
+   */
+  addCancleMedOperationSchedule(params, config) {
+    return fetch('medicalsystem/rest/medOperationSchedule/addCancleMedOperationSchedule', params)
 
+  },
   /**
    * 获取患者信息详情
    * 
