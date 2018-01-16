@@ -83,9 +83,12 @@ export default {
     			});
     	},
     	//获取复选值
-    	getMultSelectValue(){
-    		debugger
-    		console.log(this.multSelctValue);
+    	getMultSelectValue(){ 
+    		this.$emit('toparentevent', {
+    				"tableName":this.boxValue.SourceTableName,
+    				"fieldName":this.boxValue.SourceFieldName,
+    				"value":this.multSelctValue.toString(),
+    			});
     	},
     }, 
     props:['boxValue','isEdit'],
