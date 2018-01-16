@@ -71,13 +71,16 @@ margin:0px;
   left:20%;
   top:10%;
   background:rgb(227,239,255);
-  border:2px solid rgb(60,163,203);
+  border:2px solid rgb(22,124,172);
+  border-top: 1px;
   cursor: auto;
 }
 .load_top{
   height: 30px;
   line-height: 30px;
-  background:rgb(60,163,203);
+  /* background:rgb(60,163,203); */
+  background: url('../windowTop.jpg') no-repeat;
+  background-size: cover;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -93,7 +96,7 @@ margin:0px;
   line-height: 25px;
   text-align: center;
   cursor: pointer;
-  border: 1px solid rgb(60,163,203);
+  border: 1px solid rgba(60,163,203,0);
 }
 
 .top_active:hover {
