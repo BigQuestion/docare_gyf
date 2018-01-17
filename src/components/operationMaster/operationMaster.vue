@@ -156,10 +156,10 @@
                 </div>
 
                 <div class="patientInfo" v-if="viewInfo">
-                    <div class="pat_title">患者详情</div>
+                    <div class="pat_title title_back">患者详情</div>
                     <div style="margin-top: 5px;">
-                        <div style="border:1px solid rgb(177,207,243);padding-left: 30px;">基本信息</div>
-                        <div style="padding:15px 5px 10px 40px;border-bottom:1px solid rgb(177,207,243);">
+                        <div class="title_back" style="border:1px solid rgb(177,207,243);padding-left: 30px;">基本信息</div>
+                        <div class="patientContentBox">
                             <div class="container">
                                 <div>患者ID</div>
                                 <div class="in_con">
@@ -220,9 +220,9 @@
                             </div>
                         </div>
                     </div>
-                    <div style="margin-top: 5px;">
-                        <div style="border:1px solid rgb(177,207,243);padding-left: 30px;">手术信息</div>
-                        <div style="padding:15px 5px 10px 40px;border-bottom:1px solid rgb(177,207,243);">
+                    <div>
+                        <div class="title_back" style="border:1px solid rgb(177,207,243);padding-left: 30px;">手术信息</div>
+                        <div class="patientContentBox">
                             <div class="container">
                                 <div>主要诊断</div>
                                 <div class="in_con" style="width: 600px;">{{patientInfo.DIAG_BEFORE_OPERATION}}</div>
@@ -273,9 +273,9 @@
                             </div>
                         </div>
                     </div>
-                    <div style="margin-top: 5px;">
-                        <div style="border:1px solid rgb(177,207,243);padding-left: 30px;">手术人员</div>
-                        <div style="padding:15px 5px 10px 40px;border-bottom:1px solid rgb(177,207,243);">
+                    <div>
+                        <div class="title_back" style="border:1px solid rgb(177,207,243);padding-left: 30px;">手术人员</div>
+                        <div class="patientContentBox">
                             <div class="container">
                                 <div>麻醉医师</div>
                                 <div class="in_con100">{{patientInfo.ANESTHESIA_DOCTOR_NAME}}</div>
@@ -310,7 +310,7 @@
 
                 <!--单子信息-->
                 <div style="position: relative;width: calc(100% - 350px);height: 100%;" v-if="formDetail">
-                    <div class="designArea" >
+                    <div class="designArea">
                         <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
                             <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
                         </div>
@@ -323,7 +323,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
         <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView"></patientOperationInfo>
         <operationRegister v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
@@ -395,7 +395,7 @@
             </div>
         </div>
     </div>
-    <div v-else  style="height: 100%;width: 100%;z-index: 99;position:relative;">
+    <div v-else style="height: 100%;width: 100%;z-index: 99;position:relative;">
         <div class="load_top">
             <div>表单设计器</div>
             <div @click="formSetting" class="top_active">X</div>
@@ -503,10 +503,10 @@ export default {
             isBackTwo: false,
             isBackThree: false,
             isBackFour: false,
-            updateFormsData:[],
-            settingView:false,
-            selectFormItemTemp:'',//获取选中的单子
-            atherInput:{isPage:false},
+            updateFormsData: [],
+            settingView: false,
+            selectFormItemTemp: '',//获取选中的单子
+            atherInput: { isPage: false },
 
         }
     },
@@ -562,7 +562,7 @@ export default {
         },
         setIntervaled() {
             var _this = this;
-            var t='';
+            var t = '';
             setInterval(function() {
                 var dateObj = new Date(); //表示当前系统时间的Date对象
                 var year = dateObj.getFullYear(); //当前系统时间的完整年份值
@@ -591,7 +591,7 @@ export default {
                 var time = new Date();
                 // 程序计时的月从0开始取值后+1
                 var m = time.getMonth() + 1;
-                 t = year + "-" + month + "-" +
+                t = year + "-" + month + "-" +
                     date + " " + time.getHours() + ":" +
                     minute + ":" + second;
                 _this.nowTime = t;
@@ -785,11 +785,11 @@ export default {
             }
             let arry = [];
             this.formItems = [];
-            
+
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {
-                    if(res.formContent=="null"||res.formContent==null){
+                    if (res.formContent == "null" || res.formContent == null) {
                         return;
                     }
                     this.formItems = JSON.parse(res.formContent);
@@ -877,70 +877,67 @@ export default {
             this.isTransformFour = !this.isTransformFour;
         },
         //获取单子修改的数据
-        getValue(dataValue){
+        getValue(dataValue) {
             debugger
             var tempData = this.updateFormsData;
-            if(tempData.length>0){
+            if (tempData.length > 0) {
                 var count = 0;
                 for (var i = 0; i < this.updateFormsData.length; i++) {
                     //如果之前传入有相同的表名与字段名则更新值
 
-                    if(this.updateFormsData[i].tableName===dataValue.tableName&&this.updateFormsData[i].coluName===dataValue.fieldName){
-                        
+                    if (this.updateFormsData[i].tableName === dataValue.tableName && this.updateFormsData[i].coluName === dataValue.fieldName) {
+
                         this.updateFormsData[i].updateStr = dataValue.value;
                     }
-                    else
-                    {
-                       
+                    else {
+
                         count++;
                     }
 
                 }
-                if(count==this.updateFormsData.length)
-                { 
-                        this.updateFormsData.push({
-                        "tableName":dataValue.tableName,
-                        "coluName":dataValue.fieldName,
-                        "updateStr":dataValue.value,
-                        "patientId":this.lockedPatientInfo.patientId,
-                        "visitId":this.lockedPatientInfo.visitId,
-                        "operId":this.lockedPatientInfo.operId,
-                        });
+                if (count == this.updateFormsData.length) {
+                    this.updateFormsData.push({
+                        "tableName": dataValue.tableName,
+                        "coluName": dataValue.fieldName,
+                        "updateStr": dataValue.value,
+                        "patientId": this.lockedPatientInfo.patientId,
+                        "visitId": this.lockedPatientInfo.visitId,
+                        "operId": this.lockedPatientInfo.operId,
+                    });
                 }
-                 
+
             }
-            else
-            {
+            else {
                 this.updateFormsData.push({
-                        "tableName":dataValue.tableName,
-                        "coluName":dataValue.fieldName,
-                        "updateStr":dataValue.value,
-                        "patientId":this.lockedPatientInfo.patientId,
-                        "visitId":this.lockedPatientInfo.visitId,
-                        "operId":this.lockedPatientInfo.operId,
-                        });
+                    "tableName": dataValue.tableName,
+                    "coluName": dataValue.fieldName,
+                    "updateStr": dataValue.value,
+                    "patientId": this.lockedPatientInfo.patientId,
+                    "visitId": this.lockedPatientInfo.visitId,
+                    "operId": this.lockedPatientInfo.operId,
+                });
             }
-                
+
         },
         //提交单子修改
-        submitSaveForm(){
+        submitSaveForm() {
             console.log(this.updateFormsData)
             let params = []
             params = this.updateFormsData;
             this.api.updateSqlBatch(params)
-                .then(res=>{
+                .then(res => {
                     this.updateFormsData = [];
                     this.selectMedFormTemp(this.selectFormItemTemp);
                 })
         },
         //配置跳转
-        formSetting(){
+        formSetting() {
             this.settingView = !this.settingView;
             this.selectFormItemTemp.isPage = !this.selectFormItemTemp.isPage;
             console.log(this.selectFormItemTemp)
         },
         //单子刷新按钮
-        refreshForm(){
+        refreshForm() {
             this.updateFormsData = [];
             this.selectMedFormTemp(this.selectFormItemTemp);
         }
@@ -1038,13 +1035,29 @@ export default {
 
 .patientInfo {
     width: calc(100% - 350px);
+    box-sizing: border-box;
+    padding-left: 5px;
+    border-left: 1px solid #7F7F7F;
 }
+
+.patientContentBox {
+    padding: 15px 5px 10px 40px;
+    border: 1px solid rgb(177, 207, 243);
+    box-sizing: border-box;
+}
+
 
 .pat_title {
     height: 35px;
     line-height: 35px;
     padding-left: 15px;
     border: 1px solid rgb(177, 207, 243);
+}
+
+.title_back {
+    color: #15428B;
+    background: url('../../assets/contentTitleBack.jpg')no-repeat;
+    background-size: cover;
 }
 
 .container {
@@ -1119,11 +1132,15 @@ export default {
 
 
 
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
     height: 30px;
-    background-color: rgb(0, 22, 116);
+    /* background-color: rgb(0, 22, 116); */
+    background: url('../../assets/linkButton.jpg') no-repeat;
+    background-size: cover;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -1136,7 +1153,8 @@ export default {
 .active_back {
     width: 18px;
     height: 18px;
-    border: 1px solid #001674;
+    border: 1px solid rgba(0, 0, 0, 0);
+    transform: rotate(180deg);
 }
 
 .active_back:hover {

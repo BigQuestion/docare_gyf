@@ -8,44 +8,47 @@
                     <button @click="dateChange">查询</button>
                 </div>
             </div>
-            <div class="tableBox">
-                <div class="flex head">
-                    <div v-for="item in tableConfig" class="cell resizeAble">{{item.text}}</div>
-                </div>
-                <div v-for="(item,index) in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
-                    <div v-for="cell in tableConfig" class="cell">
+            <div style="width:80%;overflow:auto;">
+                <div class="tableBox">
+                    <div class="flex head">
+                        <div v-for="item in tableConfig" class="cell resizeAble">{{item.text}}</div>
+                    </div>
+                    <div v-for="(item,index) in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
+                        <div v-for="cell in tableConfig" class="cell">
 
-                        <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
-                            <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
-                                <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
-                                                                                    {{ MzkUser.userName }}
-                                                                                 </option> -->
-                                <!-- 副麻，洗手列表 -->
-                                <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
-                                    {{ MzkUser.userName }}
-                                </option>
-                                <option v-if="cell.value == 'firstOperationNurseName'||cell.value == 'secondOperationNurseName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
-                                    {{ MzkUser.userName }}
-                                </option>
-                                <!-- 巡回列表 -->
-                                <option v-if="cell.value == 'firstSupplyNurseName'||cell.value == 'secondtSupplyNurseName'" v-for="option in options" v-bind:value="option.userName">
-                                    {{ option.userName }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="selectInThere" v-else-if="cell.type=='inSelect'">
-                            <select class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
-                                <option v-for="option in OptInfo" v-bind:value="option.opt">
-                                    {{ option.opt }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="selectInThere" v-else>
-                            {{item[cell.value]}}
+                            <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
+                                <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
+                                    <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
+                                                                                                    {{ MzkUser.userName }}
+                                                                                                 </option> -->
+                                    <!-- 副麻，洗手列表 -->
+                                    <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
+                                        {{ MzkUser.userName }}
+                                    </option>
+                                    <option v-if="cell.value == 'firstOperationNurseName'||cell.value == 'secondOperationNurseName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
+                                        {{ MzkUser.userName }}
+                                    </option>
+                                    <!-- 巡回列表 -->
+                                    <option v-if="cell.value == 'firstSupplyNurseName'||cell.value == 'secondtSupplyNurseName'" v-for="option in options" v-bind:value="option.userName">
+                                        {{ option.userName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="selectInThere" v-else-if="cell.type=='inSelect'">
+                                <select class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
+                                    <option v-for="option in OptInfo" v-bind:value="option.opt">
+                                        {{ option.opt }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="selectInThere" v-else>
+                                {{item[cell.value]}}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div>
@@ -82,7 +85,7 @@ export default {
                 opt: '开展'
             }, {
                 opt: '取消'
-            },{
+            }, {
                 opt: '作废'
             }],
             tableConfig: [
@@ -202,7 +205,7 @@ export default {
                     item.selectInfo = "开展";
                     this.$set(this.scheduleList, index, item);
                 }
-            } else if (item.selectInfo == '开展' &&(item.state == 500 || item.state == -1) ) {
+            } else if (item.selectInfo == '开展' && (item.state == 500 || item.state == -1)) {
                 if (confirm("你确定要恢复手术吗？")) {
                     item.selectInfo = "取消";
                     this.$set(this.scheduleList, index, item);
@@ -242,9 +245,19 @@ export default {
                     this.$set(this.scheduleList, index, item);
                 }
             } else {
+                debugger
                 alert("你不能这样操作此手术！");
-                item.selectInfo = "开展";
-                this.$set(this.scheduleList, index, item);
+                if (item.selectInfo == '开展' && (item.state == 0 || item.state == 1)) {
+                    item.selectInfo = "取消";
+                    this.$set(this.scheduleList, index, item);
+                } else if (item.selectInfo == '作废' && (item.state == 500 || item.state == -1)) {
+                    item.selectInfo = "取消";
+                    this.$set(this.scheduleList, index, item);
+                } else {
+                    item.selectInfo = "开展";
+                    this.$set(this.scheduleList, index, item);
+                }
+
             }
 
         },
@@ -402,8 +415,8 @@ export default {
 }
 
 .tableBox {
-    width: 80%;
-    overflow-x: auto;
+    width: 1200px;
+    /* overflow-x: auto; */
     height: 400px;
     border: 1px solid #999999;
 }
