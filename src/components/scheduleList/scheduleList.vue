@@ -24,7 +24,6 @@
         <surgicalNotice v-if="surgicalNotice"></surgicalNotice>
         <systemConfiguration v-if="systemConfiguration"></systemConfiguration>
         <HISsynchronization v-if="HISsynchronization"></HISsynchronization>
-        <wdTable></wdTable>
     </div>
 </template>
 <script>
@@ -34,7 +33,6 @@ import surgicalRevocation from '@/components/schedulComponents/surgicalRevocatio
 import surgicalNotice from '@/components/schedulComponents/surgicalNotice.vue'//手术通知单
 import systemConfiguration from '@/components/schedulComponents/systemConfiguration.vue'//系统配置
 import HISsynchronization from '@/components/schedulComponents/HISsynchronization.vue'//HIS同步
-import wdTable from '@/components/scheduleList/wdTable.vue'
 export default {
     name: 'login',
     data() {
@@ -161,7 +159,6 @@ export default {
         surgicalNotice: surgicalNotice,
         systemConfiguration: systemConfiguration,
         HISsynchronization: HISsynchronization,
-        wdTable
 
     }
 }

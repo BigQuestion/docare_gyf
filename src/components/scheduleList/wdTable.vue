@@ -4,14 +4,14 @@
         <div style="width:800px;">
             <div>
                 <div style="box-sizing: border-box;background: #4C4C4C;text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;" v-for="(col,index) in tableConfig.cols" :style="{width:col.width+'px'}">
-                    <div style="width:100%;overflow-x: hidden;">{{col.fieldText}}</div>
+                    <div style="width:100%;overflow-x: hidden;white-space: nowrap">{{col.fieldText}}</div>
                     <div class="resizeIcon" :style="{left:col.width-2}" @mousedown="resizeStart($event,index,col)"></div>
                 </div>
             </div>
             <div v-for="item in data">
                 <div style="background: #B3B3B3;box-sizing: border-box;text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;" v-for="(col,index) in tableConfig.cols" :style="{width:col.width+'px'}">
-                    <div v-if="col.type==='input'" style="width:100%;overflow-x: hidden;">{{item[col.fieldText]}}</div>
-                    <div v-if="col.type==='text'" style="width:100%;overflow-x: hidden;">{{item[col.fieldText]}}</div>
+                    <div v-if="col.type==='input'" style="width:100%;overflow-x: hidden;white-space: nowrap">{{item[col.fieldText]}}</div>
+                    <div v-if="col.type==='text'" style="width:100%;overflow-x: hidden;white-space: nowrap">{{item[col.fieldText]}}</div>
                     <select-do v-if="col.type==='select'" :loadFun="col.loadListFun" :node="item" :fieldName="col.fieldText"></select-do>
                     <div class="resizeIcon" :style="{left:col.width-2}" ></div>
                 </div>
@@ -29,7 +29,7 @@ export default {
             startX: '',
             handleCol: '',
             nextCol: '',
-            minWidth: 10,
+            minWidth: 20,
             maxWidth: '',
             tableConfig:{},
             data:[{
@@ -49,17 +49,17 @@ export default {
                 {
                     type:"input",
                     fieldText:"name",
-                    width:60
+                    width:100
                 },
                 {
                     type:"text",
                     fieldText:"name",
-                    width:60
+                    width:100
                 },
                 {
                     type:"text",
                     fieldText:"name",
-                    width:60
+                    width:100
                 },]
             }
         },
