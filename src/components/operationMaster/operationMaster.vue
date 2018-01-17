@@ -785,6 +785,7 @@ export default {
             }
             let arry = [];
             this.formItems = [];
+            
             this.api.selectMedFormTemp(params)
                 .then(
                 res => {

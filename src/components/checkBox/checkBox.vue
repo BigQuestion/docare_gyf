@@ -34,6 +34,17 @@ export default {
     	}
     },
     methods:{ 
+    	//判断是单选还是多选
+    	isMultiSelect(){
+    		if(this.boxValue.MultiSelectMode=='false'){
+    			this.getItemValue();
+    		}
+    		else
+    		{
+
+    		}
+    	},
+
     	getItemValue(){
     		let params = [];
     		params.push({
@@ -47,16 +58,26 @@ export default {
     		this.api.getFormSqlResult(params)
 	    		.then(res => {
 	    				this.resultValue = res[this.boxValue.SourceFieldName];
-	    				for (var i = 0; i < this.boxValue.listData.length; i++) {
-	    					if(this.boxValue.listData[i].ItemValue==res[this.boxValue.SourceFieldName]){
-	    						this.isSelected.push(true);
+	    				if(this.boxValue.MultiSelectMode=='false'){
+			    			for (var i = 0; i < this.boxValue.listData.length; i++) {
+		    					if(this.boxValue.listData[i].ItemValue==res[this.boxValue.SourceFieldName]){
+		    						this.isSelected.push(true);
+		    					}
+		    					else
+		    					{
+		    						this.isSelected.push(false);
+		    					} 
 	    					}
-	    					else
-	    					{
-	    						this.isSelected.push(false);
-	    					} 
-    					}
-                    })
+			    		}
+	    				else
+	    				{
+	    					if(res[this.boxValue.SourceFieldName]!='null'&&res[this.boxValue.SourceFieldName]!=""
+	    						&&res[this.boxValue.SourceFieldName]!=null){
+	    						this.multSelctValue = res[this.boxValue.SourceFieldName].split(','); 
+	    					}
+	    					
+	    				}
+                    }) 
 
     	},
     	//单选的时候
@@ -83,9 +104,12 @@ export default {
     			});
     	},
     	//获取复选值
-    	getMultSelectValue(){
-    		debugger
-    		console.log(this.multSelctValue);
+    	getMultSelectValue(){ 
+    		this.$emit('toparentevent', {
+    				"tableName":this.boxValue.SourceTableName,
+    				"fieldName":this.boxValue.SourceFieldName,
+    				"value":this.multSelctValue.toString(),
+    			});
     	},
     }, 
     props:['boxValue','isEdit'],

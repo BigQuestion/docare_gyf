@@ -479,7 +479,7 @@ export default {
                 this.api.updateMedFormContent(params)
                     .then(
                     res => {
-
+                        this.selectMedFormTemp();
                     });
             }
             else {
