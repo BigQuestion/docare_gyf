@@ -19,7 +19,7 @@
                     
                     <div style="height: 390px;">
                         <div v-for="(item,index) in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}" >
-                        <div v-for="cell in tableConfig" class="cell" :style="{minWidth:cell.width+'px'}" style="overflow-x: hidden;white-space: nowrap;box-sizing: border-box;" >
+                        <div v-for="cell in tableConfig" class="cell" :style="{minWidth:cell.width+'px'}" style="box-sizing: border-box; " >
 
                             <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
                                 <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
@@ -47,7 +47,7 @@
                                 </select>
                             </div>
                             <div class="selectInThere" v-else >
-                                <div>
+                                <div style="overflow: hidden;white-space: nowrap;box-sizing: border-box;text-overflow:ellipsis; ">
                                      {{item[cell.value]}}
                                 </div>
                             </div>
