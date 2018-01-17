@@ -34,19 +34,8 @@
                             </select>
                         </div>
                         <div class="selectInThere" v-else-if="cell.type=='inSelect'">
-                            <select v-if="item.state==0||item.state==1" class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
-                                <option v-if="option.opt=='开展'" v-for="option in OptInfo" selected v-bind:value="option.opt">
-                                    {{ option.opt }}
-                                </option>
-                                <option v-if="option.opt!='开展'" v-for="option in OptInfo" v-bind:value="option.opt">
-                                    {{ option.opt }}
-                                </option>
-                            </select>
-                            <select v-if="item.state!=0||item.state!=1" class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
-                                <option v-if="option.opt=='取消'" v-for="option in OptInfo" selected v-bind:value="option.opt">
-                                    {{ option.opt }}
-                                </option>
-                                <option v-if="option.opt!='取消'" v-for="option in OptInfo" v-bind:value="option.opt">
+                            <select class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
+                                <option v-for="option in OptInfo" v-bind:value="option.opt">
                                     {{ option.opt }}
                                 </option>
                             </select>
@@ -213,9 +202,9 @@ export default {
                     item.selectInfo = "开展";
                     this.$set(this.scheduleList, index, item);
                 }
-            } else if (item.selectInfo == '开展' && item.state == 500) {
+            } else if (item.selectInfo == '开展' &&(item.state == 500 || item.state == -1) ) {
                 if (confirm("你确定要恢复手术吗？")) {
-                    item.selectInfo = "开展";
+                    item.selectInfo = "取消";
                     this.$set(this.scheduleList, index, item);
                     cancleData = {
                         patientId: item.patientId,
@@ -227,9 +216,9 @@ export default {
                         res => {
                             this.getList(this.dateValue);
                         })
-                    // alert("手术已取消");
+                    // alert("手术已恢复");
                 } else {
-                    item.selectInfo = "开展";
+                    item.selectInfo = "取消";
                     this.$set(this.scheduleList, index, item);
                 }
             } else if (item.selectInfo == '作废' && (item.state == 0 || item.state == 1)) {
