@@ -1,19 +1,19 @@
 <template>
-    <div>
+    <div style="height: calc(100% - 30px);background-color: #F0F0F0;">
         <div class="flex">
             <div class="leftButtons">
                 <div v-for="btn in btns" class="btn" draggable="true" @dragstart="drag($event,btn)">
                     {{btn.text}}
                 </div>
             </div>
-            <div>
+            <div class="autoBox">
                 <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)">
                     <div @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item)" tabindex="0">
                         <form-element :value="item" :isPage="dataInfo"></form-element>
                     </div>
                     <div class="mask">
                         <div v-if="drawing" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',
-                                                                                                        height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
+                                                                                                                                            height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
                     </div>
                 </div>
                 <div>
@@ -21,84 +21,126 @@
                 </div>
             </div>
             <div class="editBox">
-                <div>
+                <div style="box-sizing:border-box;padding-left:5px;">
                     属性
                 </div>
-                <div v-if="chooseItems[0]" style="display: flex;">
-                    <div style="min-width: 100px;">
+                <div v-if="chooseItems[0]" class="ediclass">
+                    <div class="ediChild">
                         TEXT：
                     </div>
-                    <div>
-                        <input type="" name="" v-model="chooseItems[0].value">
+                    <input type="" name="" v-model="chooseItems[0].value">
+                </div>
+                <div v-if="chooseItems[0]" class="ediclass">
+                    <div class="ediChild">
+                        宽度：
                     </div>
+                    <input type="" name="" v-model="chooseItems[0].width">
                 </div>
-                <div v-if="chooseItems[0]">
-                    宽度：<input type="" name="" v-model="chooseItems[0].width">
+                <div v-if="chooseItems[0]" class="ediclass">
+                    <div class="ediChild">
+                        高度：
+                    </div>
+                    <input type="" name="" v-model="chooseItems[0].height">
                 </div>
-                <div v-if="chooseItems[0]">
-                    高度：<input type="" name="" v-model="chooseItems[0].height">
+                <div v-if="chooseItems[0]" class="ediclass">
+                    <div class="ediChild">
+                        BorderStyle:
+                    </div>
+                    <input type="" name="" v-model="chooseItems[0].borderStyle">
                 </div>
-                <div v-if="chooseItems[0]">
-                    BorderStyle:<input type="" name="" v-model="chooseItems[0].borderStyle">
+                <div v-if="chooseItems[0]" class="ediclass">
+                    <div class="ediChild">
+                        Font:
+                    </div>
+                    <input type="text">
+                    <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
                 </div>
-                <div v-if="chooseItems[0]">
-                    Font: <input type="text"><button @click="fontDataChange" style="width:20px;border-radius:0;display:inline;">...</button>
-                </div>
-                <div v-if="chooseItems[0]&&chooseItems[0].type=='input' ">
-                    <div v-if="chooseItems[0]">
+                <div v-if="chooseItems[0]&&chooseItems[0].type=='input'">
+                    <div v-if="chooseItems[0]" class="ediclass">
                         <!-- 字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor"> -->
-                        字体颜色:
+                        <div class="ediChild">
+                            字体颜色:
+                        </div>
                         <colorPicker v-model="chooseItems[0].ForeColor"></colorPicker>{{chooseItems[0].ForeColor}}
                     </div>
-                    <div v-if="chooseItems[0]">
+                    <div v-if="chooseItems[0]" class="ediclass">
                         <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
-                        isReadOnly:
+                        <div class="ediChild">
+                            isReadOnly:
+                        </div>
                         <select name="" id="" v-on:change="selectData(chooseItems[0].isReadOnly,'isData',chooseItems[0].readOnlyMode)" v-model="chooseItems[0].readOnlyMode">
                             <option v-for="btn in chooseItems[0].isReadOnly" :value="btn.isData">{{btn.isData}}</option>
                         </select>
                     </div>
-                    <div v-if="chooseItems[0]">
+                    <div v-if="chooseItems[0]" class="ediclass">
                         <!-- 是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit"> -->
-                        是否可编辑:
+                        <div class="ediChild">
+                            是否可编辑:
+                        </div>
                         <select name="" id="" v-on:change="selectData(chooseItems[0].isEdit,'isData',chooseItems[0].isEditMode)" v-model="chooseItems[0].isEditMode">
                             <option v-for="btn in chooseItems[0].isEdit" :value="btn.isData">{{btn.isData}}</option>
                         </select>
                     </div>
-                    <div v-if="chooseItems[0]">
+                    <div v-if="chooseItems[0]" class="ediclass">
                         <!-- MultiSelect:<input type="" name="" v-model="chooseItems[0].MultiSelect"> -->
-                        MultiSelect:
+                        <div class="ediChild">
+                            MultiSelect:
+                        </div>
                         <select name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
                             <option v-for="btn in chooseItems[0].MultiSelect" :value="btn.isData">{{btn.isData}}</option>
                         </select>
                     </div>
-                    <div v-if="chooseItems[0]">
+                    <div v-if="chooseItems[0]" class="ediclass">
                         <!-- 是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit"> -->
-                        是否可为空:
+                        <div class="ediChild">
+                            是否可为空:
+                        </div>
                         <select name="" id="" v-on:change="selectData(chooseItems[0].nullString,'isData',chooseItems[0].nullStringMode)" v-model="chooseItems[0].nullStringMode">
                             <option v-for="btn in chooseItems[0].nullString" :value="btn.isData">{{btn.isData}}</option>
                         </select>
                     </div>
-                    <div v-if="chooseItems[0]">
-                        数据源表名称：<input type="" name="" v-model="chooseItems[0].tableName">
+                    <div v-if="chooseItems[0]" class="ediclass">
+                        <div class="ediChild">
+                            数据源表名称：
+                        </div>
+                        <input type="" name="" v-model="chooseItems[0].tableName">
                     </div>
-                    <div v-if="chooseItems[0]">
-                        字段名称：<input type="" name="" v-model="chooseItems[0].fieldName">
+                    <div v-if="chooseItems[0]" class="ediclass">
+                        <div class="ediChild">
+                            字段名称：
+                        </div>
+                        <input type="" name="" v-model="chooseItems[0].fieldName">
                     </div>
-                    <div v-if="chooseItems[0]">
-                        字典表名称：<input type="" name="" v-model="chooseItems[0].dictTableName">
+                    <div v-if="chooseItems[0]" class="ediclass">
+                        <div class="ediChild">
+                            字典表名称：
+                        </div>
+                        <input type="" name="" v-model="chooseItems[0].dictTableName">
                     </div>
-                    <div v-if="chooseItems[0]">
-                        字典录入筛选条件：<input type="" name="" v-model="chooseItems[0].dictSelect">
+                    <div v-if="chooseItems[0]" class="ediclass">
+                        <div class="ediChild">
+                            字典录入筛选条件：
+                        </div>
+                        <input type="" name="" v-model="chooseItems[0].dictSelect">
                     </div>
-                    <div v-if="chooseItems[0]">
-                        字典显示字段名称：<input type="" name="" v-model="chooseItems[0].dictShowFiled">
+                    <div v-if="chooseItems[0]" class="ediclass">
+                        <div class="ediChild">
+                            字典显示字段名称：
+                        </div>
+                        <input type="" name="" v-model="chooseItems[0].dictShowFiled">
                     </div>
-                    <div v-if="chooseItems[0]">
-                        字典字段名称：<input type="" name="" v-model="chooseItems[0].dictField">
+                    <div v-if="chooseItems[0]" class="ediclass">
+                        <div class="ediChild">
+                            字典字段名称：
+                        </div>
+                        <input type="" name="" v-model="chooseItems[0].dictField">
                     </div>
-                    <div v-if="chooseItems[0]">
+                    <div v-if="chooseItems[0]" class="ediclass">
                         <!-- 格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat"> -->
-                        格式化字符串:
+
+                        <div class="ediChild">
+                            格式化字符串:
+                        </div>
                         <select name="" id="" v-on:change="selectData(chooseItems[0].strFormat,'isData',chooseItems[0].strFormatMode)" v-model="chooseItems[0].strFormatMode">
                             <option v-for="btn in chooseItems[0].strFormat" :value="btn.isData">{{btn.isData}}</option>
                         </select>
@@ -106,22 +148,33 @@
                 </div>
 
                 <div v-if="chooseItems[0]&&chooseItems[0].type=='checkBoxAll' ">
-                    <div>
-                        SourceFieldName:<input v-model="chooseItems[0].SourceFieldName">
+                    <div class="ediclass">
+                        <div class="ediChild">
+                            SourceFieldName:
+                        </div>
+                        <input v-model="chooseItems[0].SourceFieldName">
                     </div>
-                    <div>
-                        SourceTableName:<input v-model="chooseItems[0].SourceTableName">
+                    <div class="ediclass">
+                        <div class="ediChild">
+                            SourceTableName:
+                        </div>
+                        <input v-model="chooseItems[0].SourceTableName">
                     </div>
-                    <div>
-                        DefaultItems：<input onpaste="return false" ondragenter="return false" onkeypress="javascript:return false" v-model="chooseItems[0].defaultItems" v-on:input="changeDefaultValue" @dblclick="addDefaultItem">
+                    <div class="ediclass">
+                        <div class="ediChild">
+                            DefaultItems：
+                        </div>
+                        <input onpaste="return false" ondragenter="return false" onkeypress="javascript:return false" v-model="chooseItems[0].defaultItems" v-on:input="changeDefaultValue" @dblclick="addDefaultItem">
                     </div>
-                    <div>
-                        MultiSelect:
+                    <div class="ediclass">
+                        <div class="ediChild">
+                            MultiSelect:
+                        </div>
                         <select name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
                             <option v-for="btn in chooseItems[0].MultiSelect" :value="btn.isData">{{btn.isData}}</option>
                         </select>
                     </div>
-                     
+
                 </div>
             </div>
 
@@ -147,15 +200,14 @@
                         <button @click="cancleAddDefaultItem">取消</button>
                     </div>
                 </div>
-                <div  style="width: 250px;background:white;"> 
+                <div style="width: 250px;background:white;">
                     <div v-if="selectItemCon">
-                        ItemName:<input v-model="selectItemCon.ItemName" style="width: 100px;" @change="setChangeItem">
-                        ItemValue:<input v-model="selectItemCon.ItemValue" style="width: 100px;" @change="setChangeItem">
+                        ItemName:<input v-model="selectItemCon.ItemName" style="width: 100px;" @change="setChangeItem"> ItemValue:
+                        <input v-model="selectItemCon.ItemValue" style="width: 100px;" @change="setChangeItem">
                     </div>
-                        
-                     
+
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -234,19 +286,19 @@ export default {
                 height: "100",
                 width: "300",
                 ForeColor: '#0000FF',
-            },{
-                text:"表格组件",
-                type:"formDiv",
-            },{
-                text:"自定义控件",
-                type:"checkBoxAll",
-                defaultItems:"集合",
-                SourceFieldName:"",
-                SourceTableName:"",
-                listData:[],
-               MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
-               MultiSelectMode: 'false',
-                
+            }, {
+                text: "表格组件",
+                type: "formDiv",
+            }, {
+                text: "自定义控件",
+                type: "checkBoxAll",
+                defaultItems: "集合",
+                SourceFieldName: "",
+                SourceTableName: "",
+                listData: [],
+                MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
+                MultiSelectMode: 'false',
+
             }],
             handleItem: {},
             offsetX: '',
@@ -262,10 +314,10 @@ export default {
             dragX: '',
             dragY: '',
             drawing: false,
-            fontNoneData:{noneData:false},
-            defaultItemView:false,
-            selectItemCon:'',
-            chooseItemsTemp:'',
+            fontNoneData: { noneData: false },
+            defaultItemView: false,
+            selectItemCon: '',
+            chooseItemsTemp: '',
         }
     },
     methods: {
@@ -429,10 +481,9 @@ export default {
                     res => {
                         this.selectMedFormTemp();
                     });
-                }
-            else
-            {
-                
+            }
+            else {
+
             }
 
         },
@@ -441,19 +492,18 @@ export default {
                 let params = {
                     formName: this.dataInfo.formName,
                     id: this.dataInfo.id
-            }
-            this.api.selectMedFormTemp(params)
-                .then(
-                res => {
-                    if(res.formContent=="null"||res.formContent==null){
-                        this.formItems = [];
-                    }
-                    else
-                    {
-                        this.formItems = JSON.parse(res.formContent);
-                    }
-                    
-                });
+                }
+                this.api.selectMedFormTemp(params)
+                    .then(
+                    res => {
+                        if (res.formContent == "null" || res.formContent == null) {
+                            this.formItems = [];
+                        }
+                        else {
+                            this.formItems = JSON.parse(res.formContent);
+                        }
+
+                    });
             }
         },
         show(index, ev) {
@@ -462,45 +512,45 @@ export default {
             }
         },
 
-        fontDataChange(){
+        fontDataChange() {
             this.fontNoneData.noneData = !this.fontNoneData.noneData;
         },
-        changeDefaultValue(){
-             this.chooseItems[0].defaultItems="集合";
+        changeDefaultValue() {
+            this.chooseItems[0].defaultItems = "集合";
         },
         //显示集合里面配置项
-        addDefaultItem(){
+        addDefaultItem() {
             this.chooseItemsTemp = this.chooseItems[0];
             this.defaultItemView = true;
         },
-        cancleAddDefaultItem(){
+        cancleAddDefaultItem() {
             this.defaultItemView = false;
         },
         //增加集合里面配置内容
-        addDefaultItemCon(){
+        addDefaultItemCon() {
             debugger
-            this.chooseItemsTemp.listData.push({"ItemName":"","ItemValue":"","addFlag":true});
-            this.selectItemCon = {"ItemName":"","ItemValue":"","addFlag":true};
-            this.selectItemCon.indexFlag = this.chooseItemsTemp.listData.length-1;
+            this.chooseItemsTemp.listData.push({ "ItemName": "", "ItemValue": "", "addFlag": true });
+            this.selectItemCon = { "ItemName": "", "ItemValue": "", "addFlag": true };
+            this.selectItemCon.indexFlag = this.chooseItemsTemp.listData.length - 1;
 
         },
         //获取当前选中配置项内容
-        getClickItem(item,index){
+        getClickItem(item, index) {
             debugger
             this.selectItemCon = item;
             this.selectItemCon.indexFlag = index;
         },
         //改变值
-        setChangeItem(){
+        setChangeItem() {
             // debugger
-            if(this.selectItemCon.addFlag){
-                this.$set(this.chooseItemsTemp.listData,this.selectItemCon.indexFlag,this.selectItemCon);
+            if (this.selectItemCon.addFlag) {
+                this.$set(this.chooseItemsTemp.listData, this.selectItemCon.indexFlag, this.selectItemCon);
             }
             // this.$set(this.chooseItems[0].listData,this.selectItemCon.indexFlag,this.selectItemCon);
         },
         //移除defaultItem
-        deleteItem(){
-            this.chooseItemsTemp.listData.splice(this.selectItemCon.indexFlag,1);
+        deleteItem() {
+            this.chooseItemsTemp.listData.splice(this.selectItemCon.indexFlag, 1);
         },
     },
     components: {
@@ -526,6 +576,10 @@ export default {
 
 </script>
 <style type="text/css" scoped>
+.flex {
+    padding-top: 5px;
+}
+
 .mask {
     position: absolute;
     height: 100%;
@@ -544,7 +598,12 @@ export default {
 }
 
 .leftButtons {
-    width: 200px;
+    width: 180px;
+    background-color: #fff;
+    box-sizing: border-box;
+    margin: 0 10px 10px;
+    padding: 5px;
+    border: 1px solid #8F9399;
 }
 
 .btn {
@@ -552,6 +611,23 @@ export default {
     margin-top: 10px;
     /*width: 50px;*/
     text-align: center;
+    width: 100%;
+}
+
+.btn:hover {
+    background: #778899;
+    color: #fff;
+}
+
+.autoBox {
+    width: auto;
+    height: auto;
+    box-sizing: border-box;
+    border: 1px solid #8F9399;
+    margin: 0 10px 10px;
+    padding: 5px;
+    background-color: #fff;
+    overflow: auto;
 }
 
 .designArea {
@@ -560,5 +636,33 @@ export default {
     height: 600px;
     width: 900px;
     border: 1px solid;
+}
+
+.editBox {
+    width: 360px;
+    background-color: #fff;
+    margin: 0 10px 10px;
+    padding: 5px 10px 10px;
+    border: 1px solid #8F9399;
+    overflow: auto;
+}
+
+.ediclass {
+    display: flex;
+    /* padding: 3px 0; */
+    border-right: 1px solid #b4cee7;
+    border-left: 1px solid #b4cee7;
+    border-top: 1px solid #b4cee7;
+    align-items: center;
+}
+
+.ediclass:last-child {
+    border-bottom: 1px solid #b4cee7;
+}
+
+.ediChild {
+    min-width: 150px;
+    display: inline-block;
+    padding-left: 5px;
 }
 </style>

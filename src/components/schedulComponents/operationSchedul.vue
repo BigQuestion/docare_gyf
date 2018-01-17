@@ -18,8 +18,8 @@
                         <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
                             <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
                                 <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
-                                                                        {{ MzkUser.userName }}
-                                                                     </option> -->
+                                                                                    {{ MzkUser.userName }}
+                                                                                 </option> -->
                                 <!-- 副麻，洗手列表 -->
                                 <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
                                     {{ MzkUser.userName }}
@@ -34,25 +34,8 @@
                             </select>
                         </div>
                         <div class="selectInThere" v-else-if="cell.type=='inSelect'">
-                            <!-- <select v-if="item.state==0||item.state==1" class="selectBox" @change="operateFun(item,index,item[cell.value])" v-model="item[cell.value]">
-                                    <option v-for="option in OptInfo" v-if="option.opt=='开展'" selected="selected" v-bind:value="item[cell.value]">
-                                        {{ option.opt }}
-                                    </option>
-                                    <option v-if="option.opt!='开展'" v-for="option in OptInfo" v-bind:value="item[cell.value]">
-                                        {{ option.opt }}
-                                    </option>
-                                </select>
-                                <select v-else class="selectBox" @change="operateFun(item,index,item[cell.value])" v-model="item[cell.value]">
-                                    <option v-if="option.opt=='取消'" v-for="option in OptInfo" selected="selected" v-bind:value="item[cell.value]">
-                                        {{ option.opt }}
-                                    </option>
-                                    <option v-if="option.opt!='取消'" v-for="option in OptInfo" v-bind:value="item[cell.value]">
-                                        {{ option.opt }}
-                                    </option>
-                                </select> -->
-
                             <select class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
-                                <option v-for="option in OptInfo" v-bind:value="item[cell.value]">
+                                <option v-for="option in OptInfo" v-bind:value="option.opt">
                                     {{ option.opt }}
                                 </option>
                             </select>
@@ -99,9 +82,7 @@ export default {
                 opt: '开展'
             }, {
                 opt: '取消'
-            }, {
-                opt: '恢复'
-            }, {
+            },{
                 opt: '作废'
             }],
             tableConfig: [
@@ -221,9 +202,9 @@ export default {
                     item.selectInfo = "开展";
                     this.$set(this.scheduleList, index, item);
                 }
-            } else if (item.selectInfo == '恢复' && item.state == 500) {
+            } else if (item.selectInfo == '开展' &&(item.state == 500 || item.state == -1) ) {
                 if (confirm("你确定要恢复手术吗？")) {
-                    item.selectInfo = "开展";
+                    item.selectInfo = "取消";
                     this.$set(this.scheduleList, index, item);
                     cancleData = {
                         patientId: item.patientId,
@@ -235,9 +216,9 @@ export default {
                         res => {
                             this.getList(this.dateValue);
                         })
-                    // alert("手术已取消");
+                    // alert("手术已恢复");
                 } else {
-                    item.selectInfo = "开展";
+                    item.selectInfo = "取消";
                     this.$set(this.scheduleList, index, item);
                 }
             } else if (item.selectInfo == '作废' && (item.state == 0 || item.state == 1)) {
@@ -248,7 +229,7 @@ export default {
                         patientId: item.patientId,
                         scheduleId: item.scheduleId,
                         visitId: item.visitId,
-                        state: item.state,
+                        state: -1,
                     }
                     this.api.editSchedule(cancleData)
                         .then(
@@ -361,7 +342,14 @@ export default {
             this.api.getScheduleList(params)
                 .then(res => {
                     for (var i = 0; i < res.list.length; i++) {
-                        res.list[i].selectInfo = "开展";
+                        if (res.list[i].state == -1) {
+                            res.list[i].selectInfo = "取消";
+                        } else if (res.list[i].state == 500) {
+                            res.list[i].selectInfo = "取消";
+                        } else {
+                            res.list[i].selectInfo = "开展";
+                        }
+
                     }
                     this.scheduleList = res.list;
                     console.log(res);
