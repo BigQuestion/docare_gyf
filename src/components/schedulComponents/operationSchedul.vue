@@ -10,16 +10,16 @@
             </div>
             <div style="width: 80%;overflow:auto;">
                 <div class="tableBox">
-                    <div class="flex head">
-                        <div v-for="(item,index) in tableConfig" class="cell resizeAble" :style="{minWidth:item.width+'px'}" style="text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;box-sizing: border-box;">
+                    <div class="flex head" :style="{width:totalWidth+'px'}">
+                        <div v-for="(item,index) in tableConfig" class="cell resizeAble" :style="{width:item.width+'px'}" style="text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;box-sizing: border-box;">
                             <div style="width:100%;overflow-x: hidden;white-space: nowrap">{{item.text}}</div>
                             <div class="resizeIcon" :style="{left:item.width-2}" @mousedown="resizeStart($event,index,item)"></div>
                         </div>
                     </div>
                     
-                    <div style="height: 390px;">
-                        <div v-for="(item,index) in scheduleList" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}" >
-                        <div v-for="cell in tableConfig" class="cell" :style="{minWidth:cell.width+'px'}" style="box-sizing: border-box; " >
+                    <div style="height: 390px;" >
+                        <div v-for="(item,index) in scheduleList" :style="{width:totalWidth+'px'}" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}" >
+                        <div v-for="cell in tableConfig" class="cell" :style="{width:cell.width+'px'}" style="box-sizing: border-box; " >
 
                             <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
                                 <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
@@ -218,6 +218,7 @@ export default {
             nextCol: '',
             minWidth: 20,
             maxWidth: '',
+            totalWidth:10,
         }
     },
     methods: {
@@ -445,6 +446,7 @@ export default {
             if (this.maxWidth >= this.handleCol.width + dX && this.minWidth <= this.handleCol.width + dX) {
                 this.startX = e.clientX;
                 this.handleCol.width += dX;
+                this.totalWidth +=dX;
                 //this.nextCol.width -= dX;
             }
         },
@@ -452,11 +454,21 @@ export default {
             this.area.removeEventListener('mousemove', this.resizeMove);
             this.area.removeEventListener('mouseup', this.stopDrag);
         },
+        plusAll(){
+            let totalWidth = 0;
+            for(let i =0 ;i<this.tableConfig.length;i++){
+                totalWidth+=this.tableConfig[i].width;
+            }
+            return totalWidth;
+        }
     },
     mounted() {
         this.getSupplyNurseList();
         this.getMzkUsersList();
         this.area = window;
+        let totalWidth = this.plusAll();
+        console.log(totalWidth);
+        this.$set(this.$data,'totalWidth',totalWidth)
     },
     components: {
         Datepicker: Datepicker,
