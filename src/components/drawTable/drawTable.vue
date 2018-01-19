@@ -1,7 +1,7 @@
 <template>
 	<div ref="area" style="position: relative;margin:10px;">
 		<div style="width:500px;">
-			<div v-for="item in rows" style="border-bottom: 1px solid #000;width:100%;box-sizing: border-box;height:10px;">
+			<div v-for="item in rows" style="border-bottom: 1px solid #000;width:100%;box-sizing: border-box;height:20px;">
 			</div>
 		</div>
 		<div style="position:absolute;top:0px;left:0px;height:500px;display: flex;">
@@ -11,7 +11,7 @@
 		<div style="position:absolute;top:0px;left:0px;">
 			<svg width="500" height="500">
 				<g style="">
-					<path style="stroke:blue;" :d="line" />
+					<path style="stroke:blue;" :d="line" /> 
 				</g>
 			</svg>
 		</div>
@@ -43,7 +43,7 @@ export default {
 				{ "x": 140, "y": 10 }
 			],
 			line: '',
-			rows: 50,
+			rows: 25,
 			columns: 50,
 			handleItem:{},
 		}
@@ -80,7 +80,8 @@ export default {
 
 		},
 		calculatePath() {
-			const path = d3.line()
+			//构造器会将数据集中的每一个数据传入访问器函数，并使用其返回值作为 x坐标或y坐标：
+			const dataone = d3.line()
 				.x(
 					(data) => {
 						return data.x
@@ -91,7 +92,7 @@ export default {
 						return data.y
 					}
 				);
-			this.line = path(this.data);
+			this.line = dataone(this.data);
 		},
 	},
 	mounted() {

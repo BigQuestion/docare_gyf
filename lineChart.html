@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="container" style="width: 500px;height: 300px;background-color: gray;"></div>
+</body>
+</html>
+<script type="text/javascript" src="http://d3js.org/d3.v3.js"></script>
+<script type="text/javascript">
+var width = 500,
+	height = 300,
+	margin = {left:30,top:50,right:30,bottom:30},
+	g_width = width - margin.left - margin.right,
+	g_height = height - margin.top - margin.bottom
+var svg = d3.select("#container")
+	.append("svg")
+	.attr("width",width)
+	.attr("height",height)
+
+	var g = d3.select("svg")
+	.append("g")
+	.attr("transform","translate("+margin.left+","+margin.top+")")
+
+	var data = [1,2,2,3,4,7];
+	//创建线性的比例尺
+	var scale_x = d3.scale.linear()
+	//输入域
+	.domain([0,data.length-1])
+	.range([0,g_width])
+
+	var scale_y = d3.scale.linear()
+	//输入域
+	.domain([0,d3.max(data)])
+	.range([0,g_height])
+	
+
+	var line_generator = d3.svg.line()
+	.x(function(d,i){return scale_x(i);})
+	.y(function(d){return scale_y(d);})
+
+	g
+	.append("path")
+	.attr("d",line_generator(data))//生成相应数据形式
+
+	//创建一个轴
+	var x_axis = d3.svg.axis().scale(scale_x),
+		y_axis = d3.svg.axis().scale(scale_y).orient("left")
+
+	g.append("g")
+	.call(x_axis)
+
+	g.append("g")
+	.attr()
+	.call(y_axis)
+
+
+</script>
+<style type="text/css">
+	path{
+		fill: none;
+		stroke: red;
+		stroke-width:2;
+	}
+</style>

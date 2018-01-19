@@ -450,7 +450,7 @@ export default {
                 //this.nextCol.width -= dX;
             }
         },
-        stopDrag(e) {
+        stopDrag(e) { 
             this.area.removeEventListener('mousemove', this.resizeMove);
             this.area.removeEventListener('mouseup', this.stopDrag);
         },
@@ -516,7 +516,7 @@ export default {
 }
 
 .resizeAble {
-    resize: horizontal;
+    /*resize: horizontal;*/
     overflow: auto;
     font-weight: 200;
     text-overflow: ellipsis;
