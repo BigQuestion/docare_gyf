@@ -9,7 +9,7 @@
                 <div>
                     <input v-model="serchZm" @keyup="serchJm">
                 </div>
-                <div @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" style="background-color: white;" :style="{width:conInfo.width+'px'}">
+                <div class="listIngt" @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" :style="{width:conInfo.width+'px'}">
                     {{item.SPENAME}}
                 </div>
             </div>
@@ -161,5 +161,12 @@ export default {
 }
 </script>
 <style scoped>
-
+    .listIngt{
+        background-color: #fff;
+        cursor: pointer;
+    }
+    .listIngt:hover{
+        background-color: #1E90FF;
+        color: #fff;
+    }
 </style>

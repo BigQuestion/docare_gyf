@@ -10,60 +10,73 @@
                 </div>
 
             </div>
-            <div class="currentPatientInfo">{{lockedPatientInfo.patientId}}</div>
+            <div class="currentPatientInfo">
+                <span style="color:#CD5C5C;font-size:2em;font-weight: bold;">{{lockedPatientInfo.operatingRoomNo}}</span>
+                <img style="margin:0 10px;" src="../../assets/people.png" alt="">
+                <div style="width:118px;">
+                    <div style="padding-bottom:5px;border-bottom:1px solid #8B8B8B;font-size:18px;">{{lockedPatientInfo.patientId}}</div>
+                    <div style="color:#001AFA;font-size:20px;">{{lockedPatientInfo.anesthesiaDoctorName}}</div>
+                </div>
+            </div>
             <div class="procedure" style="position: relative;">
-                <div style="display: flex;" v-if="lockedPatientInfo.patientId">
+                <div style="display: flex;height:70px;" v-if="lockedPatientInfo.patientId">
                     <div style="margin:0px 5px;">
-                        <div>
-                            入手术室
+                        <div class="lightBox">
+                            <img style="display:block" src="../../assets/light.png" alt="">
+                            <span style="font-size:18px;">入手术室</span>
                         </div>
                         <div>
                             <input type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
-                        <div>
-                            麻醉开始
+                        <div class="lightBox">
+                            <img style="display:block" src="../../assets/light.png" alt="">
+                            <span style="font-size:18px;">麻醉开始</span>
                         </div>
                         <div>
                             <input type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
-                        <div>
-                            手术开始
+                        <div class="lightBox">
+                            <img style="display:block" src="../../assets/light.png" alt="">
+                            <span style="font-size:18px;">手术开始</span>
                         </div>
                         <div>
                             <input type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
-                        <div>
-                            手术结束
+                        <div class="lightBox">
+                            <img style="display:block" src="../../assets/light.png" alt="">
+                            <span style="font-size:18px;">手术结束</span>
                         </div>
                         <div>
                             <input type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
-                        <div>
-                            麻醉结束
+                        <div class="lightBox">
+                            <img style="display:block" src="../../assets/light.png" alt="">
+                            <span style="font-size:18px;">麻醉结束</span>
                         </div>
                         <div>
                             <input type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
-                        <div>
-                            出手术室
+                        <div class="lightBox">
+                            <img style="display:block" src="../../assets/light.png" alt="">
+                            <span style="font-size:18px;">出手术室</span>
                         </div>
                         <div>
                             <input type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35')">
                         </div>
                     </div>
                 </div>
-                <div style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;display:flex;" v-if="lockedPatientInfo.patientId">
-                    <div style="width: 150px;border-right: 1px solid black;height: 100%;text-align: center;line-height: 30px;" v-for="item in medBillList" @click="selectMedFormTemp(item)">
+                <div v-if="lockedPatientInfo.patientId" style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;display:flex;box-sizing:border-box;">
+                    <div v-for="item in medBillList" @click="selectMedFormTemp(item)" :class="{bindClass:item.bindClassData}" class="listButton">
                         {{item.formName}}
                     </div>
                 </div>
@@ -142,7 +155,7 @@
                         </div>
                     </div>
                     <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
-                        <div class="patientContent">
+                        <div class="patientContent title_back">
                             <span>手术间 {{item.operatingRoomNo}}</span>
                         </div>
                         <ul>
@@ -418,6 +431,8 @@ export default {
         return {
             patientList: [],
             formItems: [],
+            bindClassData: '',
+            newDataIndex: '',
             viewInfo: false,
             patientInfo: {},
             nowTime: "",
@@ -598,6 +613,7 @@ export default {
             }, 1000);
         },
         lockedPatient(item) {
+            console.log(item)
             this.lockedPatientInfo = item;
             //当前病人信息存储起来
             this.config.userInfo = item;
@@ -772,9 +788,21 @@ export default {
                 .then(
                 res => {
                     this.medBillList = res.list;
+                    this.bindClassData = false;
+                    for (var i = 0; i <= res.list.length - 1; i++) {
+                        this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
+                    }
+                    console.log(this.medBillList)
                 });
+
         },
         selectMedFormTemp(item) {
+            console.log(item)
+            for (var i = 0; i <= this.medBillList.length - 1; i++) {
+                this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
+            }
+            this.newDataIndex = !item.bindClassData;
+            this.$set(item, 'bindClassData', this.newDataIndex);
             this.formDetail = true;
             this.viewInfo = false;
             item.isPage = false;
@@ -963,6 +991,14 @@ export default {
 }
 </script>
 <style scoped>
+.lightBox {
+    padding-top: 5px;
+    display: flex;
+    align-items: center;
+    /* padding-left: 5px; */
+    /* box-sizing: border-box; */
+}
+
 .mask {
     position: absolute;
     width: 100%;
@@ -996,8 +1032,12 @@ export default {
 }
 
 .currentPatientInfo {
-    width: 200px;
+    box-sizing: border-box;
+    padding-left: 10px;
+    width: 220px;
     background: #E6E6E6;
+    display: flex;
+    align-items: center;
 }
 
 .head {
@@ -1134,6 +1174,15 @@ export default {
 
 
 
+
+
+
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1182,5 +1231,34 @@ export default {
 
 .transform {
     transform: rotate(180deg);
+}
+
+.listButton {
+    cursor: pointer;
+    width: 150px;
+    border-left: 1px solid black;
+    border-right: 1px solid rgba(0, 0, 0, 0);
+    height: 100%;
+    text-align: center;
+    line-height: 30px;
+    /* border-top-left-radius: 3px;
+    border-top-right-radius: 3px; */
+}
+
+.listButton:last-child {
+    border-right: 1px solid black;
+}
+
+.bindClass {
+    background: linear-gradient(#e3ebf5, #b9d5ee, #9fc9ee);
+    color: rgb(35, 78, 147);
+    /* border-top-left-radius: 3px;
+    border-top-right-radius: 3px; */
+    border-right: 1px solid rgb(121, 169, 228);
+    border-left: 1px solid black;
+}
+
+.bindClass:hover {
+    background: linear-gradient(#e3ebf5, #cbe5f7, #dbecf9);
 }
 </style>

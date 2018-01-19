@@ -4,7 +4,7 @@
             <div class="timechose">
                 <div>
                     <!-- <datepicker :value="dateValue" language="zh" @change="dateChange"></datepicker> -->
-                    <input type="text" name="" v-model="dateValue">
+                    <input type="date" name="" v-model="dateValue" @change="test($event)">
                     <button @click="dateChange">查询</button>
                 </div>
             </div>
@@ -16,51 +16,51 @@
                             <div class="resizeIcon" :style="{left:item.width-2}" @mousedown="resizeStart($event,index,item)"></div>
                         </div>
                     </div>
-                    
-                    <div style="height: 390px;">
-                        <div v-for="(item,index) in scheduleList" :style="{width:totalWidth+'px'}" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}" >
-                        <div v-for="cell in tableConfig" class="cell" :style="{width:cell.width+'px'}" style="box-sizing: border-box; " >
 
-                            <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
-                                <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
-                                    <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
-                                                                                        {{ MzkUser.userName }}
-                                                                                     </option> -->
-                                    <!-- 副麻，洗手列表 -->
-                                    <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
-                                        {{ MzkUser.userName }}
-                                    </option>
-                                    <option v-if="cell.value == 'firstOperationNurseName'||cell.value == 'secondOperationNurseName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
-                                        {{ MzkUser.userName }}
-                                    </option>
-                                    <!-- 巡回列表 -->
-                                    <option v-if="cell.value == 'firstSupplyNurseName'||cell.value == 'secondtSupplyNurseName'" v-for="option in options" v-bind:value="option.userName">
-                                        {{ option.userName }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="selectInThere" v-else-if="cell.type=='inSelect'">
-                                <select class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
-                                    <option v-for="option in OptInfo" v-bind:value="option.opt">
-                                        {{ option.opt }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="selectInThere" v-else >
-                                <div style="overflow: hidden;white-space: nowrap;box-sizing: border-box;text-overflow:ellipsis; ">
-                                     {{item[cell.value]}}
+                    <div>
+                        <div v-for="(item,index) in scheduleList" :style="{width:totalWidth+'px'}" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
+                            <div v-for="cell in tableConfig" class="cell" :style="{width:cell.width+'px'}" style="box-sizing: border-box; ">
+
+                                <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
+                                    <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
+                                        <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
+                                                                                                {{ MzkUser.userName }}
+                                                                                             </option> -->
+                                        <!-- 副麻，洗手列表 -->
+                                        <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
+                                            {{ MzkUser.userName }}
+                                        </option>
+                                        <option v-if="cell.value == 'firstOperationNurseName'||cell.value == 'secondOperationNurseName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
+                                            {{ MzkUser.userName }}
+                                        </option>
+                                        <!-- 巡回列表 -->
+                                        <option v-if="cell.value == 'firstSupplyNurseName'||cell.value == 'secondtSupplyNurseName'" v-for="option in options" v-bind:value="option.userName">
+                                            {{ option.userName }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="selectInThere" v-else-if="cell.type=='inSelect'">
+                                    <select class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
+                                        <option v-for="option in OptInfo" v-bind:value="option.opt">
+                                            {{ option.opt }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="selectInThere" v-else>
+                                    <div style="overflow: hidden;white-space: nowrap;box-sizing: border-box;text-overflow:ellipsis; ">
+                                        {{item[cell.value]}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </div>
 
                 </div>
             </div>
-            
+
         </div>
 
-        <div>
+        <div style="display:flex;flex-direction:row-reverse;padding-top:10px;">
             <button @click="submit">提交</button>
         </div>
         <div class="mask pCenter" v-if="mask">
@@ -102,114 +102,115 @@ export default {
                     text: "操作",
                     type: "inSelect",
                     value: "selectInfo",
-                    width:100
+                    width: 100
                 },
                 {
                     text: '手术间号',
                     value: 'operatingRoomNo',
-                    width:60,
+                    width: 60,
                 }, {
                     text: '台次',
                     value: 'sequence',
-                    width:60,
+                    width: 60,
                 }, {
                     text: '时间',
                     value: 'scheduledDateTime',
-                    width:150,
+                    width: 150,
                 }, {
                     text: '病人ID',
                     value: 'patientId',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '病人姓名',
                     value: 'patientName',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '年龄',
                     value: 'patienAge',
-                    width:60,
+                    width: 60,
                 }, {
                     text: '住院号',
                     value: 'inpNo',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '床号',
                     value: 'bedNo',
-                    width:60,
+                    width: 60,
                 }, {
                     text: '性别',
                     value: 'patientSex',
-                    width:60,
+                    width: 60,
                 }, {
                     text: '诊断',
                     value: 'diagBeforeOperation',
-                    width:200,
+                    width: 200,
                 }, {
                     text: '手术名称',
                     value: 'operationSchName',
-                    width:250,
+                    width: 250,
                 }, {
                     text: '手术医师',
                     value: 'surgeonName',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '助手1',
                     value: 'firstAssistantName',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '助手2',
                     value: 'secondAssistantName',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '麻醉方法',
                     value: 'anesthesiaMethod',
-                    width:200,
+                    width: 200,
                 }, {
                     text: '主麻',
                     value: 'anesthesiaDoctorName',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '副麻1',
                     value: 'firstAnesthesiaAssistantName',
                     type: 'select',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '副麻2',
                     value: 'secondAnesthesiaAssistantName',
                     type: 'select',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '洗手1',
                     value: 'firstOperationNurseName',
                     type: 'select',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '洗手2',
                     value: 'secondOperationNurseName',
                     type: 'select',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '巡回1',
                     value: 'firstSupplyNurseName',
                     type: 'select',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '巡回2',
                     value: 'secondtSupplyNurseName',
                     type: 'select',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '隔离',
                     value: 'isolationIndicator',
-                    width:100,
+                    width: 100,
                 }, {
                     text: '备注',
                     value: 'notesOnOperation',
-                    width:100,
+                    width: 100,
                 }
             ],
             msg: '欢迎登陆！',
-            dateValue: '2014/07/08',
+            dateValue: '2014-07-08',
+            dataInData:'',
             scheduleList: [],
             mask: false,
             area: '',
@@ -218,7 +219,7 @@ export default {
             nextCol: '',
             minWidth: 20,
             maxWidth: '',
-            totalWidth:10,
+            totalWidth: 10,
         }
     },
     methods: {
@@ -371,6 +372,12 @@ export default {
             this.handleItem = item;
             this.mask = true;
         },
+        test(event) {
+            console.log(event.srcElement.value)
+            // var change = this.dateValue.replace(/-/g, '/')
+            // console.log(change)
+            this.dateValue = event.srcElement.value;
+        },
         dateChange() {
             // console.log(this.dateValue);
             // debugger
@@ -388,8 +395,9 @@ export default {
             this.getList(this.dateValue)
         },
         getList(date) {
+            var changeData = date.replace(/-/g, '/')
             let params = {
-                "dateTime": date, //"2014/07/08"查询日期
+                "dateTime": changeData, //"2014/07/08"查询日期
                 // "page":1,   //第几页
                 // "count":2   //每页显示条数
             }
@@ -431,7 +439,7 @@ export default {
             if (index == this.tableConfig.length - 1) {
                 return;
             }
-            console.log('start'); 
+            console.log('start');
             this.startX = e.clientX;
             //this.handleCol = col;
             this.handleCol = this.tableConfig[index - 1];
@@ -446,7 +454,7 @@ export default {
             if (this.maxWidth >= this.handleCol.width + dX && this.minWidth <= this.handleCol.width + dX) {
                 this.startX = e.clientX;
                 this.handleCol.width += dX;
-                this.totalWidth +=dX;
+                this.totalWidth += dX;
                 //this.nextCol.width -= dX;
             }
         },
@@ -454,10 +462,10 @@ export default {
             this.area.removeEventListener('mousemove', this.resizeMove);
             this.area.removeEventListener('mouseup', this.stopDrag);
         },
-        plusAll(){
+        plusAll() {
             let totalWidth = 0;
-            for(let i =0 ;i<this.tableConfig.length;i++){
-                totalWidth+=this.tableConfig[i].width;
+            for (let i = 0; i < this.tableConfig.length; i++) {
+                totalWidth += this.tableConfig[i].width;
             }
             return totalWidth;
         }
@@ -468,7 +476,7 @@ export default {
         this.area = window;
         let totalWidth = this.plusAll();
         console.log(totalWidth);
-        this.$set(this.$data,'totalWidth',totalWidth)
+        this.$set(this.$data, 'totalWidth', totalWidth)
     },
     components: {
         Datepicker: Datepicker,
@@ -494,7 +502,7 @@ export default {
 .tableBox {
     width: 100%;
     /*overflow-x: auto;*/
-    height: 400px;
+    height: 550px;
     /*border: 1px solid #999999;*/
 }
 
@@ -626,7 +634,7 @@ export default {
     top: 0px;
     height: 100%;
     width: 5px;
-    background:rgba(0,0,0,0);
+    background: rgba(0, 0, 0, 0);
     z-index: 2;
 }
 
