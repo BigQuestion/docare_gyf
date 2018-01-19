@@ -458,7 +458,7 @@ export default {
                 //this.nextCol.width -= dX;
             }
         },
-        stopDrag(e) {
+        stopDrag(e) { 
             this.area.removeEventListener('mousemove', this.resizeMove);
             this.area.removeEventListener('mouseup', this.stopDrag);
         },
