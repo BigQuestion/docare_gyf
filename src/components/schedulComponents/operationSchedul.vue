@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div style="width: 80%;overflow:auto;">
-                <div class="tableBox">
+                <div class="tableBox" :style="{width:totalWidth+'px'}">
                     <div class="flex head" :style="{width:totalWidth+'px'}">
                         <div v-for="(item,index) in tableConfig" class="cell resizeAble" :style="{width:item.width+'px'}" style="text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;box-sizing: border-box;">
                             <div style="width:100%;overflow-x: hidden;white-space: nowrap">{{item.text}}</div>
@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     
-                    <div style="height: 390px;" >
+                    <div style="height: 390px;">
                         <div v-for="(item,index) in scheduleList" :style="{width:totalWidth+'px'}" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}" >
                         <div v-for="cell in tableConfig" class="cell" :style="{width:cell.width+'px'}" style="box-sizing: border-box; " >
 
@@ -516,12 +516,13 @@ export default {
 }
 
 .resizeAble {
-    /*resize: horizontal;*/
+    /* resize: horizontal; */
     overflow: auto;
     font-weight: 200;
     text-overflow: ellipsis;
     white-space: nowrap;
     background-color: #39578A;
+    color: #fff;
 }
 
 .modalFoot {
