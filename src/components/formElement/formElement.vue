@@ -34,7 +34,7 @@
             <textarea :style="{height:value.height+'px',width:value.width+'px'}" v-model="value.text"></textarea>
         </div>
         <div v-if="value.type=='formDiv'" >
-            <div style="width: 800px;height: 300px;border:1px solid red;z-index: 5;"></div>
+            <tableGrid></tableGrid>
         </div>
         
         <div v-if="value.type=='checkBoxAll'" >
@@ -55,6 +55,7 @@
 <script>
 import commonSelect from '@/components/commonSelect/commonSelect.vue';
 import checkBox from '@/components/checkBox/checkBox.vue';
+import tableGrid from '@/components/drawTable/tableGrid.vue';
 export default {
 	data () {
   		return {
@@ -73,7 +74,8 @@ export default {
     },
     components: {
         commonSelect,
-        checkBox
+        checkBox,
+        tableGrid
     },
     mounted(){  
         

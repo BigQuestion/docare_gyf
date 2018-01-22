@@ -1,13 +1,14 @@
 <template>
 	<div ref="area" style="position: relative;margin:10px;">
-		<div style="width:500px;">
+		<!-- <div style="width:500px;">
 			<div v-for="item in rows" style="border-bottom: 1px solid #000;width:100%;box-sizing: border-box;height:20px;">
 			</div>
 		</div>
 		<div style="position:absolute;top:0px;left:0px;height:500px;display: flex;">
 			<div v-for="item in columns" style="border-right: 1px solid #000;height:100%;box-sizing: border-box;width:10px;">
 			</div>
-		</div>
+		</div> -->
+		<div id="tableGrid"></div>
 		<div style="position:absolute;top:0px;left:0px;">
 			<svg width="500" height="500">
 				<g style="">
@@ -22,9 +23,6 @@
 					<line x1="6.7" y1="0" x2="0" y2="6.7" style="stroke:red;" />
 				</g>
 			</svg>
-		</div>
-		<div>
-			
 		</div>
 	</div>
 </template>
@@ -93,10 +91,46 @@ export default {
 					}
 				);
 			this.line = dataone(this.data);
+			
 		},
+		init(){
+		// (1) 生成一个10元素的数组
+		var w = 800,  
+		    h= 150,  
+		    p= 0,//内边距  
+		    x= d3.scaleLinear().domain([0, 1]).range([p, w - p]), //(2) 定义x和y比例尺  
+		    y= d3.scaleLinear().domain([0, 1]).range([h - p, p]);  
+		   
+		//(3) 绘制SVG  
+		var svg = d3.select("#tableGrid").append("svg")  
+		   .attr("width", w)  
+		   .attr("height", h);  
+		   
+		//(4) 给SVG添加分组，并设置样式类，样式见<style>标签中的设置  
+		var grid = svg.selectAll(".grid")  
+		   .data(x.ticks(50))  
+		 .enter().append("g")  
+		   .attr("class", "grid");  
+		//(5) 添加线条，设置起始坐标(x1,y1)和结束坐标(x2,y2)的值即可  
+		//竖线  
+		grid.append("line")  
+		   .attr("x1", x)  
+		   .attr("x2", x)  
+		   .attr("y1", p)  
+		   .attr("y2", h - p - 1);  
+		   
+		//横线  
+		grid.data(x.ticks(10))
+			.append("line")  
+		   .attr("y1", y)  
+		   .attr("y2", y)  
+		   .attr("x1", p)  
+		   .attr("x2", w - p + 1);
+	}
 	},
 	mounted() {
 		this.calculatePath();
+		this.init();
 		this.area = this.$refs.area;
 	},
 	components: {
