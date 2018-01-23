@@ -251,14 +251,17 @@ export default {
                 value: '输入文字',
                 width: '80',
                 ForeColor: '#000',
+                height:'',
             }, {
                 text: '文本',
                 type: 'text',
                 value: '输入文字',
                 width: '80',
+                height:'',
                 fieldName: '',
                 tableName: '',
                 ForeColor: '#0000FF',
+                borderStyle: '1px solid #222',
             }, {
                 text: '输入框',
                 type: 'input',
@@ -301,11 +304,12 @@ export default {
             }, {
                 text: '横线',
                 type: 'line',
-                width: '100'
+                width: '100',
+                ForeColor: '#0000FF',
             }, {
                 text: '竖线',
                 type: 'verticalLine',
-                height: '100'
+                height: '100',
             }, {
                 text: "文本区",
                 type: "textarea",

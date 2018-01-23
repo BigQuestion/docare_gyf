@@ -1,18 +1,18 @@
 <template>
 	<div ref="area" style="position: relative;margin:10px;">
-		<!-- <div style="width:500px;">
+		<div style="width:500px;">
 			<div v-for="item in rows" style="border-bottom: 1px solid #000;width:100%;box-sizing: border-box;height:20px;">
 			</div>
 		</div>
 		<div style="position:absolute;top:0px;left:0px;height:500px;display: flex;">
 			<div v-for="item in columns" style="border-right: 1px solid #000;height:100%;box-sizing: border-box;width:10px;">
 			</div>
-		</div> -->
+		</div>
 		<div id="tableGrid"></div>
 		<div style="position:absolute;top:0px;left:0px;">
 			<svg width="500" height="500">
 				<g style="">
-					<path style="stroke:blue;" :d="line" /> 
+					<path style="stroke:blue;" :d="line" />
 				</g>
 			</svg>
 		</div>
