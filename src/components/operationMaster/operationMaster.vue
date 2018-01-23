@@ -122,6 +122,7 @@
                     <div v-if="concealmentFourData" style="padding:5px;">
                         <button class="list_button">系统配置</button>
                         <button @click="getAboutUs" class="list_button">关于</button>
+                        <button @click="exitSystem" class="list_button">退出系统</button>
                     </div>
                 </div>
             </div>
@@ -562,6 +563,9 @@ export default {
 
         },
         patientDeatilInfo(item) {
+            for (var i = 0; i <= this.medBillList.length - 1; i++) {
+                this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
+            }
             this.formDetail = false;
             let params = {
                 patientId: item.patientId,
@@ -887,6 +891,16 @@ export default {
             // this.getAboutUs();
             // console.log(this.aboutUsData.dataInParent)
         },
+        // 退出系统
+        exitSystem() {
+            if (confirm("是否要退出系统？")) {
+                this.$router.push({
+                    path: 'login'
+                })
+            } else {
+
+            }
+        },
         // 左部选项按下拉显示隐藏及图片切换
         concealmentOne() {
             this.concealmentOneData = !this.concealmentOneData;
@@ -1167,6 +1181,8 @@ export default {
     background: white;
     border: 1px solid black;
 }
+
+
 
 
 

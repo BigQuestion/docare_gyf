@@ -13,7 +13,7 @@
                     </div>
                     <div class="mask">
                         <div v-if="drawing" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',
-                                                                                                                                                    height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
+                                                                                                                                                                                        height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
                     </div>
                 </div>
                 <div style="display:flex;flex-direction:row-reverse;padding-top:10px;">
@@ -55,6 +55,15 @@
                         </div>
                         <input type="text">
                         <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
+                    </div>
+                    <div v-if="chooseItems[0]" class="ediclass">
+                        <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
+                        <div class="ediChild">
+                            Cursor:
+                        </div>
+                        <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].cursor,'isData',chooseItems[0].cursorMode)" v-model="chooseItems[0].cursorMode">
+                            <option v-for="btn in chooseItems[0].cursor" :value="btn.isData">{{btn.isData}}</option>
+                        </select>
                     </div>
                     <div v-if="chooseItems[0]&&chooseItems[0].type=='input'">
                         <div v-if="chooseItems[0]" class="ediclass">
@@ -181,34 +190,41 @@
             </div>
         </div>
         <fontPlug :fatherToChild="fontNoneData" v-if="fontNoneData.noneData"></fontPlug>
-        <div v-if="defaultItemView" style="width: 500px;min-height: 300px;border:1px solid;position: absolute;top:200px;left: calc(50% - 200px);background:gray;">
-            <div style="height: 20px;background:blue;color: white;">
-                <span>集合编辑器</span>
-            </div>
-            <div style="display: flex;margin-top: 40px;">
-                <div style="margin-right: 30px;margin-left: 10px;">
-                    <div style="height: 150px;width: 200px;background:white;">
-                        <div v-for="(item,index) in chooseItemsTemp.listData" @click="getClickItem(item,index)" style="display: flex;width: 190px;">
-                            {{item.ItemName}}({{item.ItemValue}})
+        <div v-if="defaultItemView" @click="atherPlacFuntion" class="imposi">
+            <div class="fontBox" @click.stop="noFunction" :class="{animation:clickAtherPlace}">
+                <div class="fontTop">
+                    <span>集合编辑器</span>
+                    <div @click="functionNone" class="font_active">X</div>
+                </div>
+                <div style="display: flex;margin-top: 40px;">
+                    <div style="margin-right: 30px;margin-left: 10px;">
+                        <div style="height: 150px;width: 200px;background:white;">
+                            <div class="itemChooseInClick" v-for="(item,index) in chooseItemsTemp.listData" @click="getClickItem(item,index)">
+                                {{item.ItemName}}({{item.ItemValue}})
+                            </div>
+                        </div>
+                        <div style="width: 200px;">
+                            <button @click="addDefaultItemCon">增加</button>
+                            <button @click="deleteItem">移除</button>
+                        </div>
+                        <div style="width: 200px;">
+                            <button @click="addDefaultItemCon">确定</button>
+                            <button @click="cancleAddDefaultItem">取消</button>
                         </div>
                     </div>
-                    <div style="width: 200px;">
-                        <button @click="addDefaultItemCon">增加</button>
-                        <button @click="deleteItem">移除</button>
-                    </div>
-                    <div style="width: 200px;">
-                        <button @click="addDefaultItemCon">确定</button>
-                        <button @click="cancleAddDefaultItem">取消</button>
-                    </div>
-                </div>
-                <div style="width: 250px;background:white;">
-                    <div v-if="selectItemCon">
-                        ItemName:<input v-model="selectItemCon.ItemName" style="width: 100px;" @change="setChangeItem"> ItemValue:
-                        <input v-model="selectItemCon.ItemValue" style="width: 100px;" @change="setChangeItem">
+                    <div style="width: 250px;background:white;">
+                        <div v-if="selectItemCon">
+                            <div>
+                                ItemName:<input v-model="selectItemCon.ItemName" style="width: 100px;" @change="setChangeItem">
+                            </div>
+                            <div>
+                                ItemValue:<input v-model="selectItemCon.ItemValue" style="width: 100px;" @change="setChangeItem">
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
-
             </div>
         </div>
     </div>
@@ -266,6 +282,15 @@ export default {
                 strFormatMode: 'false',//格式化字符串
                 nullString: [{ isData: 'true' }, { isData: 'false' }],//真可以为空，假不能为空
                 nullStringMode: 'true',
+                cursor: [
+                    { isData: 'auto' },
+                    { isData: 'ibeam' },
+                    { isData: 'pointer' },
+                    { isData: 'wait' },
+                    { isData: 'not-allowed' },
+                    { isData: 'text' },
+                    ],
+                cursorMode: 'auto',
 
             }, {
                 text: '单选',
@@ -319,6 +344,7 @@ export default {
             defaultItemView: false,
             selectItemCon: '',
             chooseItemsTemp: '',
+            clickAtherPlace: false,
         }
     },
     methods: {
@@ -527,6 +553,18 @@ export default {
         cancleAddDefaultItem() {
             this.defaultItemView = false;
         },
+        functionNone() {
+            this.defaultItemView = false;
+        },
+        atherPlacFuntion() {
+            this.clickAtherPlace = !this.clickAtherPlace;
+            setTimeout(() => {
+                this.clickAtherPlace = !this.clickAtherPlace;
+            }, 1000);
+        },
+        noFunction() {
+
+        },
         //增加集合里面配置内容
         addDefaultItemCon() {
             debugger
@@ -553,6 +591,7 @@ export default {
         deleteItem() {
             this.chooseItemsTemp.listData.splice(this.selectItemCon.indexFlag, 1);
         },
+
     },
     components: {
         formElement,
@@ -679,5 +718,112 @@ export default {
     min-width: 150px;
     display: inline-block;
     padding-left: 5px;
+}
+
+.imposi {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 19;
+    width: 100%;
+    min-width: 1024px;
+    height: 100%;
+    min-height: 768px;
+}
+
+.fontBox {
+    position: absolute;
+    z-index: 20;
+    /* left: calc(50% - 20%); */
+    /* margin-left: -20%; */
+    /* top: 50%; */
+    /* margin-top: -30%; */
+    background: rgb(240, 240, 240);
+    border: 1px solid rgb(24, 131, 215);
+    cursor: auto;
+    box-shadow: 1px 1px 20px #AAA;
+    width: 500px;
+    min-height: 300px;
+    top: 200px;
+    left: calc(50% - 250px);
+}
+
+.fontTop {
+    width: 100%;
+    height: 30px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding-left: 5px;
+}
+
+.font_active {
+    width: 35px;
+    height: 100%;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    color: rgb(153, 153, 153);
+    font-family: microsoft YaHei;
+}
+
+.font_active:hover {
+    animation: colorChange 0.5s infinite;
+    animation-iteration-count: 1;
+    color: #fff;
+    background-color: rgb(232, 17, 35);
+}
+
+.font_active:active {
+    background-color: rgb(241, 112, 112);
+    color: #fff;
+}
+
+@keyframes colorChange {
+    from {
+        background-color: rgb(225, 225, 225);
+    }
+    to {
+        background-color: rgb(232, 17, 35);
+    }
+}
+
+.animation {
+    animation: backShadow 0.2s linear;
+    animation-iteration-count: 5;
+}
+
+@keyframes backShadow {
+    25% {
+        box-shadow: 1px 1px 20px #AAA;
+        border: 1px solid #AAA;
+    }
+    50% {
+        box-shadow: 1px 1px 10px #AAA;
+        border: 1px solid rgb(24, 131, 215);
+    }
+    75% {
+        box-shadow: 1px 1px 20px #AAA;
+        border: 1px solid #AAA;
+    }
+    100% {
+        box-shadow: 1px 1px 10px #AAA;
+        border: 1px solid rgb(24, 131, 215);
+    }
+}
+
+.itemChooseInClick {
+    box-sizing: border-box;
+    padding-left: 5px;
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+}
+
+.itemChooseInClick:hover {
+    background-color: #0078D7;
+    color: #fff;
 }
 </style>

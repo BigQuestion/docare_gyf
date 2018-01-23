@@ -1,10 +1,10 @@
 <template>
     <div style="position: relative;">
         <div v-if="conInfo.dictTableName">
-            <div v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" @dblclick="showView" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" style="display:inline-block;border:1px solid #A9A9A9;min-height:19px;font-size:13.3333px;font-family:Arial;">{{infoData[attrName]}}</div>
+            <div v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" @dblclick="showView" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode}" style="display:inline-block;border:1px solid #A9A9A9;min-height:19px;font-size:13.3333px;font-family:Arial;">{{infoData[attrName]}}</div>
             <!-- <input @dblclick="showView" v-model="infoData[attrName]" :style="{width:conInfo.width+'px'}" > -->
-            <input v-if="conInfo.isEditMode=='true'&&conInfo.readOnlyMode=='false'" @dblclick="showView" v-focus="focusState" @blur="focusState =  false,disapear(infoData[attrName])" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}">
-            <input v-if="conInfo.readOnlyMode=='true'" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,}" :readonly="true">
+            <input v-if="conInfo.isEditMode=='true'&&conInfo.readOnlyMode=='false'" @dblclick="showView" v-focus="focusState" @blur="focusState =  false,disapear(infoData[attrName])" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode}">
+            <input v-if="conInfo.readOnlyMode=='true'" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode}" :readonly="true">
             <div v-if="nameView" style="position: absolute;top: 0px;height: 300px;overflow: auto;border:1px solid;z-index: 1;background-color:white;" :style="{width:conInfo.width+'px',}">
                 <div>
                     <input v-model="serchZm" @keyup="serchJm">
@@ -16,11 +16,11 @@
         </div>
         <div v-else>
             <div v-if="conInfo.strFormatMode == 'true'">
-                <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
+                <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
             </div>
 
             <div v-else>
-                <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="true">
+                <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="true">
             </div>
         </div>
 
