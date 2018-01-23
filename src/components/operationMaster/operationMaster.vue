@@ -15,7 +15,7 @@
                 <img style="margin:0 10px;" src="../../assets/people.png" alt="">
                 <div style="width:118px;">
                     <div style="padding-bottom:5px;border-bottom:1px solid #8B8B8B;font-size:18px;">{{lockedPatientInfo.patientId}}</div>
-                    <div style="color:#001AFA;font-size:20px;">{{lockedPatientInfo.anesthesiaDoctorName}}</div>
+                    <div style="color:#001AFA;font-size:20px;">{{lockedPatientInfo.patientName}}</div>
                 </div>
             </div>
             <div class="procedure" style="position: relative;">
@@ -128,44 +128,75 @@
             </div>
             <div class="content">
                 <div class="patientList">
-                    <div style="padding-left: 5px;">
-                        日期 <input v-model="getTime" type="date" name="" @keyup.enter='searchPatientList'>
-                    </div>
-                    <div style="padding-left: 5px;">
-                        <button @click='searchPatientList'>搜索</button>
-                    </div>
-                    <div>
-                        <div class="container" style="padding-left: 5px;">
-                            <div>
-                                <input type="radio" id="all" @click="searchPatientList" v-model="operStatus" value="">
-                                <label for="all">全部</label>
-                                <input type="radio" id="one" @click="searchPatientList" value="0" v-model="operStatus">
-                                <label for="one">术前</label>
-                                <input type="radio" id="two" @click="searchPatientList" value="15" v-model="operStatus">
-                                <label for="two">术中</label>
-                                <input type="radio" id="three" @click="searchPatientList" value="25" v-model="operStatus">
-                                <label for="three">术后</label>
-                                <br>
+                    <div style="height:110px;">
+                        <div style="padding-left: 5px;">
+                            日期 <input v-model="getTime" type="date" name="" @keyup.enter='searchPatientList'>
+                        </div>
+                        <div style="padding-left: 5px;">
+                            <button @click='searchPatientList'>搜索</button>
+                        </div>
+                        <div>
+                            <div class="container" style="padding-left: 5px;">
+                                <div>
+                                    <input type="radio" id="all" @click="searchPatientList" v-model="operStatus" value="">
+                                    <label for="all">全部</label>
+                                    <input type="radio" id="one" @click="searchPatientList" value="0" v-model="operStatus">
+                                    <label for="one">术前</label>
+                                    <input type="radio" id="two" @click="searchPatientList" value="15" v-model="operStatus">
+                                    <label for="two">术中</label>
+                                    <input type="radio" id="three" @click="searchPatientList" value="25" v-model="operStatus">
+                                    <label for="three">术后</label>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="container" style="padding-left: 5px;">
+                                <div>ID</div>
+                                <div class="left15"><input @keyup.enter='searchPatientList' style="width: 100px;" type="text" v-model="patientId"></div>
+                                <div class="left15">姓名</div>
+                                <div class="left15"><input @keyup.enter='searchPatientList' style="width: 100px;" type="text" v-model="patientName"></div>
                             </div>
                         </div>
-                        <div class="container" style="padding-left: 5px;">
-                            <div>ID</div>
-                            <div class="left15"><input @keyup.enter='searchPatientList' style="width: 100px;" type="text" v-model="patientId"></div>
-                            <div class="left15">姓名</div>
-                            <div class="left15"><input @keyup.enter='searchPatientList' style="width: 100px;" type="text" v-model="patientName"></div>
+                    </div>
+                    <div style="overflow-y: auto;height:calc(100% - 110px - 100px)">
+                        <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
+                            <div class="patientContent title_back">
+                                <span>手术间 {{item.operatingRoomNo}}</span>
+                            </div>
+                            <ul>
+                                <li>患者 {{item.patientName}} {{item.patientId}} 住院号 {{item.inpNo}}</li>
+                                <li>手术 {{item.operationName}}</li>
+                                <li v-if="item.inDateTime==null">时间 {{item.scheduledDateTime}}</li>
+                                <li v-if="item.inDateTime!=null">时间 {{item.inDateTime}}</li>
+                                <li>术者 {{item.surgeonName}} 麻醉 {{item.anesthesiaDoctorName}} {{item.anesthesiaAssistantName}}</li>
+                            </ul>
                         </div>
                     </div>
-                    <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
-                        <div class="patientContent title_back">
-                            <span>手术间 {{item.operatingRoomNo}}</span>
+                    <div v-if="pageShowData" class="pageClass">
+                        <div>
+                            <div style="display:flex;items-align:center;">
+                                <span>患者数量:</span>
+                                <span style="color:rgb(0, 26, 250);padding:0 5px;">{{pageLength.length}}</span>
+                                <span style="padding-right:5px;">共{{pages}}页</span>
+                                <span>每页显示</span>
+                                <input style="width:50px;" type="number" min="5" max="100" @change="dataInSize($event)" v-model="size">
+                            </div>
+                            <div style="display:flex;items-align:center;padding-top:5px;">
+                                <button @click="firstPage" style="width:60px;">首页</button>
+                                <button @click="pageRe" style="width:60px;">上一页</button>
+                                <div @click="showSelect" class="pageInDiv">
+                                    <span>{{pageNum}}</span>
+
+                                    <div @click.stop="noClick" v-if="dataInSelect" class="pageInSelect">
+                                        <div @click="pageChoose(item.number)" v-for="item in dataTypeInAllSelect">{{item.number}}</div>
+                                    </div>
+                                </div>
+                                <button @click="pageAd" style="width:60px;">下一页</button>
+                                <button @click="lastPage" style="width:60px;">末页</button>
+                            </div>
                         </div>
-                        <ul>
-                            <li>患者 {{item.patientName}} {{item.patientId}} 住院号 {{item.inpNo}}</li>
-                            <li>手术 {{item.operationName}}</li>
-                            <li v-if="item.inDateTime==null">时间 {{item.scheduledDateTime}}</li>
-                            <li v-if="item.inDateTime!=null">时间 {{item.inDateTime}}</li>
-                            <li>术者 {{item.surgeonName}} 麻醉 {{item.anesthesiaDoctorName}} {{item.anesthesiaAssistantName}}</li>
-                        </ul>
+                        <div>
+                            <span>排序方式</span>
+                        </div>
                     </div>
                 </div>
 
@@ -323,7 +354,7 @@
                 </div>
 
                 <!--单子信息-->
-                <div style="position: relative;width: calc(100% - 350px);height: 100%;" v-if="formDetail">
+                <div style="position: relative;width: calc(100% - 400px);height: 100%;" v-if="formDetail">
                     <div class="designArea">
                         <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
                             <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
@@ -431,6 +462,13 @@ export default {
     data() {
         return {
             patientList: [],
+            pageShowData: false,
+            pages: '',
+            size: 5,
+            pageNum: 1,
+            dataInSelect: false,
+            pageLength: [],
+            dataTypeInAllSelect: [],
             formItems: [],
             bindClassData: '',
             newDataIndex: '',
@@ -549,7 +587,8 @@ export default {
             }
 
             let params = {
-                count: 10,
+                // count: this.size,
+                // page: this.pageNum,
                 dateTime: this.getTime,
                 operStatus: this.operStatus,
                 patientName: this.patientName,
@@ -559,8 +598,109 @@ export default {
                 .then(
                 res => {
                     this.patientList = res.list;
+                    console.log(this.patientList)
+                    this.pageLength = res.list;
+                    if (this.pageLength.length > 5) {
+                        this.pageShowData = true;
+                        this.pages = Math.ceil(this.pageLength.length / this.size)
+                        this.dataTypeInAllSelect = [];
+                        for (var i = 1; i <= this.pages; i++) {
+                            this.dataTypeInAllSelect.push({
+                                number: i
+                            })
+                        }
+                        console.log(this.dataTypeInAllSelect)
+                    } else {
+                        this.pageShowData = false;
+                    }
+
                 });
 
+        },
+        searchPatientListScreen() {
+            if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
+                var now = new Date();
+                var year = now.getFullYear();
+                var month = (now.getMonth() + 1).toString();
+                var day = (now.getDate()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                this.getTime = year + "-" + month + "-" + day;
+            }
+
+            let params = {
+                count: this.size,
+                page: this.pageNum,
+                dateTime: this.getTime,
+                operStatus: this.operStatus,
+                patientName: this.patientName,
+                patientId: this.patientId
+            }
+            this.api.getMedOperationMasterList(params)
+                .then(
+                res => {
+                    this.patientList = res.list;
+                    console.log(this.patientList)
+                });
+
+        },
+        showSelect() {
+            this.dataInSelect = !this.dataInSelect;
+        },
+        noClick() {
+
+        },
+        // 选择麻醉列表显示数量
+        dataInSize(value) {
+            console.log(value.srcElement._value)
+            this.size = value.srcElement._value;
+            this.pages = Math.ceil(this.pageLength.length / this.size)
+            this.dataTypeInAllSelect = [];
+            for (var i = 1; i <= this.pages; i++) {
+                this.dataTypeInAllSelect.push({
+                    number: i
+                })
+            }
+            this.searchPatientListScreen();
+        },
+        // 第一页
+        firstPage() {
+            this.pageNum = 1;
+            this.searchPatientListScreen();
+        },
+        // 当前页减一
+        pageRe() {
+            if (this.pageNum == 1) {
+
+            } else {
+                this.pageNum = this.pageNum - 1;
+                console.log(this.pageNum)
+                this.searchPatientListScreen();
+            }
+        },
+        // 当前页加一
+        pageAd() {
+            if (this.pages == this.pageNum) {
+
+            } else {
+                this.pageNum = this.pageNum + 1;
+                console.log(this.pageNum)
+                this.searchPatientListScreen();
+            }
+        },
+        // 最后一页
+        lastPage() {
+            this.pageNum = this.pages;
+            this.searchPatientListScreen();
+        },
+        // 选择下拉框其中一页
+        pageChoose(pageC){
+            this.pageNum = pageC;
+            this.searchPatientListScreen();
         },
         patientDeatilInfo(item) {
             for (var i = 0; i <= this.medBillList.length - 1; i++) {
@@ -1024,8 +1164,8 @@ export default {
 
 .patientList {
     height: 100%;
-    overflow-y: auto;
-    width: 350px;
+    width: 400px;
+    min-width: 380px;
     border-right: 1px solid #7F7F7F;
 }
 
@@ -1195,10 +1335,6 @@ export default {
 
 
 
-
-
-
-
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1276,5 +1412,54 @@ export default {
 
 .bindClass:hover {
     background: linear-gradient(#e3ebf5, #cbe5f7, #dbecf9);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 分页样式 */
+
+.pageClass {
+    height: 100px;
+    background-color: lightblue;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+.pageInDiv {
+    width: 60px;
+    height: 24px;
+    position: relative;
+    background-color: #fff;
+    box-sizing: border-box;
+    border: 1px solid #B4C7FF;
+}
+
+.pageInSelect {
+    position: absolute;
+    top: -120px;
+    height: 120px;
+    width: 60px;
+    overflow-y: auto;
+    border: 1px solid #446EA3;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.pageInSelect div:hover {
+    cursor: pointer;
+    background-color: #316AC5;
+    color: #fff;
 }
 </style>
