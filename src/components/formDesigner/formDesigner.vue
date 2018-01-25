@@ -1,5 +1,25 @@
 <template>
     <div style="height: calc(100% - 30px);background-color: #F0F0F0;">
+        <div style="height:50px;width:100%;background-color:rgb(85,126,180);">
+            <div style="height:20px;width:100%;"></div>
+            <div class="outBox">
+                <div @click="save" class="buttonOfTop">
+                    <img src="../../assets/save.png" alt="">
+                </div>
+                <div class="buttonOfTop">
+                    <img src="../../assets/leftMove.png" alt="">
+                </div>
+                <div class="buttonOfTop">
+                    <img src="../../assets/rightMove.png" alt="">
+                </div>
+                <div class="buttonOfTop">
+                    <img src="../../assets/topMove.png" alt="">
+                </div>
+                <div class="buttonOfTop">
+                    <img src="../../assets/bottomMove.png" alt="">
+                </div>
+            </div>
+        </div>
         <div class="flex">
             <div class="leftButtons">
                 <div v-for="btn in btns" class="btn" draggable="true" @dragstart="drag($event,btn)">
@@ -12,8 +32,7 @@
                         <form-element :value="item" :isPage="dataInfo"></form-element>
                     </div>
                     <div class="mask">
-                        <div v-if="drawing" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',
-                                                                                                                                                                                        height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
+                        <div v-if="drawing" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
                     </div>
                 </div>
                 <div style="display:flex;flex-direction:row-reverse;padding-top:10px;">
@@ -51,11 +70,26 @@
                     </div>
                     <div v-if="chooseItems[0]" class="ediclass">
                         <div class="ediChild">
-                            Font:
+                            Opacity：
                         </div>
-                        <input type="text">
-                        <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
+                        <input type="" name="" v-model="chooseItems[0].opacity">
                     </div>
+
+                    <!-- <div v-if="chooseItems[0]" class="ediclass">
+                                            <div class="ediChild">
+                                                TopMost：
+                                            </div>
+                                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
+                                                <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
+                                            </select>
+                                        </div> -->
+                    <!-- <div v-if="chooseItems[0]" class="ediclass">
+                                                            <div class="ediChild">
+                                                                Font:
+                                                            </div>
+                                                            <input type="text">
+                                                            <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
+                                                        </div> -->
                     <div v-if="chooseItems[0]" class="ediclass">
                         <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
                         <div class="ediChild">
@@ -189,6 +223,9 @@
                 </div>
             </div>
         </div>
+        <div style="width:100%;height:100px;background-color:rgb(85,126,180);">
+
+        </div>
         <fontPlug :fatherToChild="fontNoneData" v-if="fontNoneData.noneData"></fontPlug>
         <div v-if="defaultItemView" @click="atherPlacFuntion" class="imposi">
             <div class="fontBox" @click.stop="noFunction" :class="{animation:clickAtherPlace}">
@@ -272,6 +309,7 @@ export default {
                 borderStyle: '1px solid #222',
                 value: '',
                 ForeColor: '#0000FF',
+                opacity: 1,
                 MultiSelect: [{ isData: 'true' }, { isData: 'false' }],//真为多选，假为单选
                 MultiSelectMode: 'false',//真为多选，假为单选
                 isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
@@ -281,6 +319,8 @@ export default {
                 strFormat: [{ isData: 'true' }, { isData: 'false' }],//格式化字符串
                 strFormatMode: 'false',//格式化字符串
                 nullString: [{ isData: 'true' }, { isData: 'false' }],//真可以为空，假不能为空
+                topMostMode: 'false',
+                topMost: [{ isData: 'true' }, { isData: 'false' }],
                 nullStringMode: 'true',
                 cursor: [
                     { isData: 'auto' },
@@ -289,7 +329,7 @@ export default {
                     { isData: 'wait' },
                     { isData: 'not-allowed' },
                     { isData: 'text' },
-                    ],
+                ],
                 cursorMode: 'auto',
 
             }, {
@@ -640,6 +680,7 @@ export default {
 
 .leftButtons {
     width: 180px;
+    min-width: 150px;
     background-color: #fff;
     box-sizing: border-box;
     margin: 0 10px 10px;
@@ -825,5 +866,56 @@ export default {
 .itemChooseInClick:hover {
     background-color: #0078D7;
     color: #fff;
+}
+
+
+
+
+
+/* 顶部功能按钮样式 */
+
+.buttonOfTop {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid rgba(000, 000, 000, 0);
+    box-sizing: border-box;
+}
+
+.buttonOfTop:hover {
+    animation: borderAndBack 0.2s linear;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes borderAndBack {
+    from {
+        border: 0px;
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+        border: 1px solid #C89F3A;
+        background: linear-gradient(#FCF7E3, #F6E9A6, #F3DA55, #E3C760);
+    }
+}
+
+.outBox {
+    width: 500px;
+    height: 30px;
+    border-radius: 5px;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: row;
+    background: url('../../assets/bopbar.jpg')no-repeat;
+    background-size: cover;
+}
+
+.buttonOfTop img {
+    width: 20px;
+    height: 20px;
+    display: block;
+    margin: 3px auto 0;
+    position: relative;
 }
 </style>

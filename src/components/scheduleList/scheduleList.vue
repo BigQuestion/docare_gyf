@@ -15,7 +15,7 @@
                 <span :class="{clickClass:clickDataFive}">5</span>系统配置</div>
             <div class="flex1 topButton" :class="{clickClass:clickDataSix}" @click="HISVue()">
                 <span :class="{clickClass:clickDataSix}">6</span>HIS同步</div>
-            <div class="flex1 topButton" :class="{clickClass:clickDataSeven}" @click="exit()">
+            <div class="flex1 topButton" @click="exit()">
                 <span>7</span>退出系统</div>
         </div>
         <operationSchedul v-if="operationSchedul"></operationSchedul>
@@ -43,14 +43,12 @@ export default {
             surgicalNotice: false,
             systemConfiguration: false,
             HISsynchronization: false,
-            exitSystem: false,
             clickDataOne: true,
             clickDataTwo: false,
             clickDataThree: false,
             clickDataFour: false,
             clickDataFive: false,
             clickDataSix: false,
-            clickDataSeven: false,
         }
     },
     methods: {
@@ -67,7 +65,6 @@ export default {
             this.surgicalNotice = false;
             this.systemConfiguration = false;
             this.HISsynchronization = false;
-            this.exitSystem = false;
 
             this.clickDataOne = true;
             this.clickDataTwo = false;
@@ -75,7 +72,6 @@ export default {
             this.clickDataFour = false;
             this.clickDataFive = false;
             this.clickDataSix = false;
-            this.clickDataSeven = false;
         },
         applicationVue() {
             this.operationSchedul = false;
@@ -84,7 +80,6 @@ export default {
             this.surgicalNotice = false;
             this.systemConfiguration = false;
             this.HISsynchronization = false;
-            this.exitSystem = false;
 
             this.clickDataOne = false;
             this.clickDataTwo = true;
@@ -92,7 +87,6 @@ export default {
             this.clickDataFour = false;
             this.clickDataFive = false;
             this.clickDataSix = false;
-            this.clickDataSeven = false;
         },
         revocationVue() {
             this.operationSchedul = false;
@@ -101,7 +95,6 @@ export default {
             this.surgicalNotice = false;
             this.systemConfiguration = false;
             this.HISsynchronization = false;
-            this.exitSystem = false;
 
             this.clickDataOne = false;
             this.clickDataTwo = false;
@@ -109,7 +102,6 @@ export default {
             this.clickDataFour = false;
             this.clickDataFive = false;
             this.clickDataSix = false;
-            this.clickDataSeven = false;
         },
         noticeVue() {
             this.operationSchedul = false;
@@ -118,7 +110,6 @@ export default {
             this.surgicalNotice = true;
             this.systemConfiguration = false;
             this.HISsynchronization = false;
-            this.exitSystem = false;
 
             this.clickDataOne = false;
             this.clickDataTwo = false;
@@ -126,7 +117,6 @@ export default {
             this.clickDataFour = true;
             this.clickDataFive = false;
             this.clickDataSix = false;
-            this.clickDataSeven = false;
         },
         systemVue() {
             this.operationSchedul = false;
@@ -135,7 +125,6 @@ export default {
             this.surgicalNotice = false;
             this.systemConfiguration = true;
             this.HISsynchronization = false;
-            this.exitSystem = false;
 
             this.clickDataOne = false;
             this.clickDataTwo = false;
@@ -143,7 +132,6 @@ export default {
             this.clickDataFour = false;
             this.clickDataFive = true;
             this.clickDataSix = false;
-            this.clickDataSeven = false;
         },
         HISVue() {
             this.operationSchedul = false;
@@ -152,7 +140,6 @@ export default {
             this.surgicalNotice = false;
             this.systemConfiguration = false;
             this.HISsynchronization = true;
-            this.exitSystem = false;
 
             this.clickDataOne = false;
             this.clickDataTwo = false;
@@ -160,17 +147,8 @@ export default {
             this.clickDataFour = false;
             this.clickDataFive = false;
             this.clickDataSix = true;
-            this.clickDataSeven = false;
         },
         exit() {
-            this.clickDataOne = false;
-            this.clickDataTwo = false;
-            this.clickDataThree = false;
-            this.clickDataFour = false;
-            this.clickDataFive = false;
-            this.clickDataSix = false;
-            this.clickDataSeven = true;
-
             if (confirm("是否要退出系统？")) {
                 this.$router.push({
                     path: 'login'

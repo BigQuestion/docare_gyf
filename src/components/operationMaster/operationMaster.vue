@@ -196,6 +196,12 @@
                         </div>
                         <div>
                             <span>排序方式</span>
+                            <div>
+                                <input type="radio" name="sort">术间
+                            </div>
+                            <div>
+                                <input type="radio" name="sort">时间
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -656,6 +662,7 @@ export default {
         },
         // 选择麻醉列表显示数量
         dataInSize(value) {
+            this.pageNum = 1;
             console.log(value.srcElement._value)
             this.size = value.srcElement._value;
             this.pages = Math.ceil(this.pageLength.length / this.size)
@@ -701,6 +708,7 @@ export default {
         pageChoose(pageC){
             this.pageNum = pageC;
             this.searchPatientListScreen();
+            this.dataInSelect = false;
         },
         patientDeatilInfo(item) {
             for (var i = 0; i <= this.medBillList.length - 1; i++) {
