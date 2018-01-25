@@ -110,3 +110,9 @@ margin:0px;
   border: 1px solid #659adb;
   background: linear-gradient(#91b4e2, #d7e2f0, #b8cde7, #ebf1f9);
 }
+
+.grid {  
+     stroke: #9fc9ee;
+    fill: none;
+    stroke-width: 0.5px;
+   }

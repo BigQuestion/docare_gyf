@@ -15,7 +15,7 @@
                 <span :class="{clickClass:clickDataFive}">5</span>系统配置</div>
             <div class="flex1 topButton" :class="{clickClass:clickDataSix}" @click="HISVue()">
                 <span :class="{clickClass:clickDataSix}">6</span>HIS同步</div>
-            <div class="flex1 topButton" @click="operationSchedulVue()">
+            <div class="flex1 topButton" @click="exit()">
                 <span>7</span>退出系统</div>
         </div>
         <operationSchedul v-if="operationSchedul"></operationSchedul>
@@ -148,6 +148,15 @@ export default {
             this.clickDataFive = false;
             this.clickDataSix = true;
         },
+        exit() {
+            if (confirm("是否要退出系统？")) {
+                this.$router.push({
+                    path: 'login'
+                })
+            } else {
+
+            }
+        },
     },
     mounted() {
 
@@ -171,8 +180,6 @@ export default {
     background: url('../../assets/scheduling.jpg') no-repeat;
     background-size: cover;
     margin: 5px;
-    
-    
 }
 
 .topButton {

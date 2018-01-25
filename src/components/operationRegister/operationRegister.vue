@@ -294,7 +294,7 @@ export default {
             },
             {
                 title: "",
-                fieldObj: "DURATIVE_INDICATOR",
+                fieldObj: "DURATIVE_INDICATOR",//1持续 0不持续
                 width: 40,
                 isChixu: true,
             },
