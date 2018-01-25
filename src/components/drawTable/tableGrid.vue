@@ -1,13 +1,17 @@
 <template>
 	<div style="position: relative;margin:2px;">
 		<!-- <div style="height: 2px;width: 700px;background-color: red;margin-bottom: 20px;"></div> -->
-		<div style="">
-			<div v-for="(item,index) in columns" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;">16:00</div>
-			<div v-else style="width: 12px;display: inline-block;"></div>
+		<div>
+			<div style="">
+				<div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;">{{item}}</div>
+				<div v-else style="width: 12px;display: inline-block;"></div>
+			</div>
+			
+			<div id="tableGrid"></div>
 		</div>
-		
-		<div id="tableGrid"></div>
-		 
+		<!-- <div>
+			<div v-for="(intem,index) in rows" :style="{top:20*index+'px'}" style="height: 2px;width: 80px;background-color: red;position: absolute;top:40px;left: -80px;"></div>
+		</div> -->
 	</div>
 </template>
 <script type="text/javascript">
@@ -16,9 +20,9 @@ export default {
 	data() {
 		return {
 			data: [
-				{ "x": 10, "y": 25 },
-				{ "x": 50, "y": 25 },
-				{ "x": 90, "y": 25 },
+				// { "x": 10, "y": 25 },
+				// { "x": 50, "y": 25 },
+				// { "x": 90, "y": 25 },
 			],
 			line: '',
 			rows: 5,
@@ -26,6 +30,7 @@ export default {
 			handleItem:{},
 			wd:0,
 			ht:0,
+			xTimeArray:[],
 		}
 	},
 	methods: {
@@ -67,75 +72,107 @@ export default {
 		   .attr("x2", w - p);
 
 		    const line = d3.line() 
-           .x(
-				(d) => {
-					return d.x
-				}
-			)
-			.y(
-				(d) => {
-					return d.y
-				}
-			);
-        
-        svg.append("path")
-		  .attr('stroke-width', 1)
-		  .attr("fill","none")
-		  .attr("stroke","red")
-		  .attr('d', line(this.data))
+		           .x(
+						(d) => {
+							return d.x
+						}
+					)
+					.y(
+						(d) => {
+							return d.y
+						}
+					);
+		        
+		        svg.append("path")
+				  .attr('stroke-width', 1)
+				  .attr("fill","none")
+				  .attr("stroke","red")
+				  .attr('d', line(this.data))
 
 		  svg.append("div")
 		  	.attr("width",20)
 		},
-		test(){
-			var width = 800,height = 500;
-				//简体中文本地化
-				var zh = d3.formatLocale({
-				    decimal: ".",
-				    thousands: ",",
-				    grouping: [3],
-				    currency: ["¥", ""],
-				    dateTime: "%a %b %e %X %Y",
-				    date: "%Y/%-m/%-d",
-				    time: "%H:%M:%S",
-				    periods: ["上午", "下午"],
-				    days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
-				    shortDays: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
-				    months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
-				    shortMonths: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
-				});
+			//对时间进行计算操作
+		timeControl(startTime){
+				var m = 5;//加几分钟
+				var timeDate = new Date(startTime);
+				var toMin = timeDate.getTime()+1000 * 60 * m;
+				var timeArray = [];
+				for (var i = 0; i < this.columns; i++) {
+					timeArray.push(new Date(timeDate.getTime()+1000 * 60 *  m * i).Format("hh:mm"))
+				}
+				this.xTimeArray = timeArray;
+			},
+			//时间初始化显示
+		xTimeInit(){
+				if(this.config.userInfo.inDateTime&&this.config.userInfo.inDateTime!=""&&this.config.userInfo.inDateTime!=null){
+					this.timeControl(this.config.userInfo.inDateTime);
+				}
+				else
+				{
+					this.timeControl(new Date().Format("yyyy-MM-dd")+" 08:00");
+				}
+				this.init();
+				this.selectMedAnesthesiaEventList();
+				
+			},
+		selectMedAnesthesiaEventList() {
+            let params = {
+                patientId: this.config.userInfo.patientId,
+                operId: this.config.userInfo.operId,
+                visitId: this.config.userInfo.visitId,
+                itemClass:2
+            }
+            
+            this.api.selectMedAnesthesiaEventList(params)
+                .then(
+                res => {
+                     var list = res.list;
+                     for (var i = 0; i < list.length; i++) {
+                     	if(list[i].START_TIME){
+                     		if(i==5)
+                     			break;
+                     		console.log(this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME))
+                     		//开始时间间隔
+                     		var s = this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME)
+                     		 	this.createPath(Math.round(s/5*10),100,10+i*20,10+i*20);
+                     		}
+                     		}
+					
+                     }); 
+        },
+        //计算时间差分钟
+        getMinuteDif(startTime,endTime){
+        	console.log(startTime,endTime)
+        	let sTime = new Date(startTime).getTime()
+        	let enTime = new Date(endTime).getTime()
 
-				//时间比例尺
-				var timeScale = d3.scaleTime()
-				    .domain([new Date(2015, 0, 1), new Date(2016, 1, 1)])
-				    .range([0, width-40]); 
-			    //时间轴
-				var axis = d3.axisTop()
-				.scale(timeScale)
-				.tickFormat(zh.timeFormat("%Y年%b"))//指定为本地格式化函数
-				 
+        	var min = '';
+        	min = (enTime - sTime)/1000/60;
+        	return Math.round(min) 
 
-				//添加时间轴    
-				var svg = d3.select("#tableGrid").append("svg")
-				    .attr("width", width+200)
-				    .attr("height", height)
-				  	.append("g")
-				    .attr("class", "axis")
-				    .attr("transform", "translate(" + 20 + "," + height/2 + ")")
-				    .call(axis);
-
-
-
-			}
-			
+        },
+         createPath(x1,x2,y1,y2){ 
+           		var svg = d3.select("svg");
+           		svg.append("line")
+           			.attr("stroke","blue")
+           			.attr("stroke-width",1)
+           			.attr("y1",y1)  
+				   .attr("y2", y2)  
+				   .attr("x1", x1)  
+				   .attr("x2", x2);
+           	}
 	},
 	mounted() { 
-		this.init();
 		this.area = this.$refs.area;
+
+		this.xTimeInit();
+
 	},
 	components: {
 
 	},
+	props:[''],
 	computed: {
 
 	}
