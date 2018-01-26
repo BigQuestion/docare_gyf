@@ -3,32 +3,39 @@
         <div style="height:50px;width:100%;background-color:rgb(85,126,180);">
             <div style="height:20px;width:100%;"></div>
             <div class="outBox">
-                <div @click="save" class="buttonOfTop">
+                <div @click="save" title="保存" class="buttonOfTop">
                     <img src="../../assets/save.png" alt="">
                 </div>
-                <div class="buttonOfTop">
+                <div @click="leftMove(dataIncurrentIten)" title="左移" class="buttonOfTop">
                     <img src="../../assets/leftMove.png" alt="">
                 </div>
-                <div class="buttonOfTop">
+                <div @click="rightMove(dataIncurrentIten)" title="右移" class="buttonOfTop">
                     <img src="../../assets/rightMove.png" alt="">
                 </div>
-                <div class="buttonOfTop">
+                <div @click="topMove(dataIncurrentIten)" title="上移" class="buttonOfTop">
                     <img src="../../assets/topMove.png" alt="">
                 </div>
-                <div class="buttonOfTop">
+                <div @click="bottomMove(dataIncurrentIten)" title="下移" class="buttonOfTop">
                     <img src="../../assets/bottomMove.png" alt="">
+                </div>
+                <div v-if="dataInCanDelete" @click="deleteFun(deleteDataDom)" title="删除" class="buttonOfTop">
+                    <img src="../../assets/canDelete.png" alt="">
+                </div>
+                <div v-else title="删除" class="buttonOfTop">
+                    <img src="../../assets/cantDelete.png" alt="">
                 </div>
             </div>
         </div>
         <div class="flex">
             <div class="leftButtons">
                 <div v-for="btn in btns" class="btn" draggable="true" @dragstart="drag($event,btn)">
-                    {{btn.text}}
+                   <img src="../../assets/gear.png" alt="">
+                   <span>{{btn.text}}</span>
                 </div>
             </div>
             <div class="autoBox">
                 <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)">
-                    <div @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item)" tabindex="0">
+                    <div @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item,index)" tabindex="0">
                         <form-element :value="item" :isPage="dataInfo"></form-element>
                     </div>
                     <div class="mask">
@@ -76,26 +83,26 @@
                     </div>
 
                     <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                            <div class="ediChild">
-                                                TopMost：
-                                            </div>
-                                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
-                                                <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
-                                            </select>
-                                        </div> -->
+                                                                    <div class="ediChild">
+                                                                        TopMost：
+                                                                    </div>
+                                                                    <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
+                                                                        <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
+                                                                    </select>
+                                                                </div> -->
                     <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                            <div class="ediChild">
-                                                                Font:
-                                                            </div>
-                                                            <input type="text">
-                                                            <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
-                                                        </div> -->
+                                                                                    <div class="ediChild">
+                                                                                        Font:
+                                                                                    </div>
+                                                                                    <input type="text">
+                                                                                    <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
+                                                                                </div> -->
                     <div v-if="chooseItems[0]" class="ediclass">
                         <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
                         <div class="ediChild">
                             Cursor:
                         </div>
-                        <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].cursor,'isData',chooseItems[0].cursorMode)" v-model="chooseItems[0].cursorMode">
+                        <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].cursor,'isData',chooseItems[0].cursorMode)" v-model="chooseItems[0].cursorMode">
                             <option v-for="btn in chooseItems[0].cursor" :value="btn.isData">{{btn.isData}}</option>
                         </select>
                     </div>
@@ -112,7 +119,7 @@
                             <div class="ediChild">
                                 isReadOnly:
                             </div>
-                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].isReadOnly,'isData',chooseItems[0].readOnlyMode)" v-model="chooseItems[0].readOnlyMode">
+                            <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].isReadOnly,'isData',chooseItems[0].readOnlyMode)" v-model="chooseItems[0].readOnlyMode">
                                 <option v-for="btn in chooseItems[0].isReadOnly" :value="btn.isData">{{btn.isData}}</option>
                             </select>
                         </div>
@@ -121,7 +128,7 @@
                             <div class="ediChild">
                                 是否可编辑:
                             </div>
-                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].isEdit,'isData',chooseItems[0].isEditMode)" v-model="chooseItems[0].isEditMode">
+                            <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].isEdit,'isData',chooseItems[0].isEditMode)" v-model="chooseItems[0].isEditMode">
                                 <option v-for="btn in chooseItems[0].isEdit" :value="btn.isData">{{btn.isData}}</option>
                             </select>
                         </div>
@@ -130,7 +137,7 @@
                             <div class="ediChild">
                                 MultiSelect:
                             </div>
-                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
+                            <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
                                 <option v-for="btn in chooseItems[0].MultiSelect" :value="btn.isData">{{btn.isData}}</option>
                             </select>
                         </div>
@@ -139,7 +146,7 @@
                             <div class="ediChild">
                                 是否可为空:
                             </div>
-                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].nullString,'isData',chooseItems[0].nullStringMode)" v-model="chooseItems[0].nullStringMode">
+                            <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].nullString,'isData',chooseItems[0].nullStringMode)" v-model="chooseItems[0].nullStringMode">
                                 <option v-for="btn in chooseItems[0].nullString" :value="btn.isData">{{btn.isData}}</option>
                             </select>
                         </div>
@@ -185,7 +192,7 @@
                             <div class="ediChild">
                                 格式化字符串:
                             </div>
-                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].strFormat,'isData',chooseItems[0].strFormatMode)" v-model="chooseItems[0].strFormatMode">
+                            <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].strFormat,'isData',chooseItems[0].strFormatMode)" v-model="chooseItems[0].strFormatMode">
                                 <option v-for="btn in chooseItems[0].strFormat" :value="btn.isData">{{btn.isData}}</option>
                             </select>
                         </div>
@@ -214,7 +221,7 @@
                             <div class="ediChild">
                                 MultiSelect:
                             </div>
-                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
+                            <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
                                 <option v-for="btn in chooseItems[0].MultiSelect" :value="btn.isData">{{btn.isData}}</option>
                             </select>
                         </div>
@@ -288,13 +295,13 @@ export default {
                 value: '输入文字',
                 width: '80',
                 ForeColor: '#000',
-                height:'',
+                height: '',
             }, {
                 text: '文本',
                 type: 'text',
                 value: '输入文字',
                 width: '80',
-                height:'',
+                height: '',
                 fieldName: '',
                 tableName: '',
                 ForeColor: '#0000FF',
@@ -389,6 +396,9 @@ export default {
             selectItemCon: '',
             chooseItemsTemp: '',
             clickAtherPlace: false,
+            dataIncurrentIten: '',
+            dataInCanDelete: false,
+            deleteDataDom: '',
         }
     },
     methods: {
@@ -402,7 +412,7 @@ export default {
         itemClick() {
 
         },
-        itemMouseDown(e, currentItem) {
+        itemMouseDown(e, currentItem, index) {
             this.dragX = e.clientX;
             this.dragY = e.clientY;
             this.offsetX = e.offsetX;
@@ -414,6 +424,8 @@ export default {
             this.area.addEventListener('mouseup', this.areaMouseUp);
             console.log(e)
             console.log(currentItem)
+            this.dataIncurrentIten = currentItem;
+            this.deleteDataDom = index;
         },
         keyD(e) {
             if (e.key == 'Shift') {
@@ -455,6 +467,8 @@ export default {
 
         },
         areaMouseDown(e) {
+            this.dataInCanDelete = false;
+            console.log('dian了其他地方')
             this.chooseItems = [];
             this.drawing = true;
             this.drawStartX = e.clientX;
@@ -502,6 +516,7 @@ export default {
             e.preventDefault();
         },
         itemChoose(e, item) {
+            this.dataInCanDelete = true;
             console.log('dian')
             console.log(e)
             console.log(item)
@@ -582,6 +597,11 @@ export default {
                 this.formItems.splice(index, 1);
             }
         },
+        // 顶部按钮删除
+        deleteFun(indata) {
+            this.formItems.splice(indata, 1);
+            this.dataInCanDelete = false;
+        },
 
         fontDataChange() {
             this.fontNoneData.noneData = !this.fontNoneData.noneData;
@@ -634,8 +654,44 @@ export default {
         //移除defaultItem
         deleteItem() {
             this.chooseItemsTemp.listData.splice(this.selectItemCon.indexFlag, 1);
+            this.dataInCanDelete = false;
         },
+        // 左位移
+        leftMove(dataIn) {
+            console.log(dataIn)
+            if (dataIn == '') {
 
+            } else {
+                this.$set(dataIn, 'x', dataIn.x - 1);
+            }
+        },
+        // 右位移
+        rightMove(dataIn) {
+            console.log(dataIn)
+            if (dataIn == '') {
+
+            } else {
+                this.$set(dataIn, 'x', dataIn.x + 1);
+            }
+        },
+        // 上位移
+        topMove(dataIn) {
+            console.log(dataIn)
+            if (dataIn == '') {
+
+            } else {
+                this.$set(dataIn, 'y', dataIn.y + 1);
+            }
+        },
+        // 右位移
+        bottomMove(dataIn) {
+            console.log(dataIn)
+            if (dataIn == '') {
+
+            } else {
+                this.$set(dataIn, 'y', dataIn.y + 1);
+            }
+        },
     },
     components: {
         formElement,
@@ -686,23 +742,34 @@ export default {
     width: 180px;
     min-width: 150px;
     background-color: #fff;
-    box-sizing: border-box;
     margin: 0 10px 10px;
-    padding: 5px;
     border: 1px solid #8F9399;
 }
 
 .btn {
-    background: #00FFFF;
-    margin-top: 10px;
+    margin-top: 5px;
     /*width: 50px;*/
-    text-align: center;
+    /* text-align: center; */
+    background-color: #fff;
+    color: #222;
     width: 100%;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding-left: 5px;
 }
 
 .btn:hover {
     background: #778899;
     color: #fff;
+}
+
+.btn img{
+    width: 15px;
+}
+
+.btn span{
+    padding-left: 5px;
 }
 
 .autoBox {
@@ -871,6 +938,12 @@ export default {
     background-color: #0078D7;
     color: #fff;
 }
+
+
+
+
+
+
 
 
 
