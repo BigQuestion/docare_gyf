@@ -12,7 +12,7 @@
             <!-- 显示详细内容 -->
 
             <div style="width: 70%;height:100%;margin-top:5px;overflow-y: auto;">
-                <div style="display: flex;margin-left: 10px;width:3000px;">
+                <div style="display: flex;margin-left: 10px;width:2109px;">
                     <div style="width: 160px;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
                 </div>
                 <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
