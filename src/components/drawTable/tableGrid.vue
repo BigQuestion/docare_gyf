@@ -1,16 +1,27 @@
 <template>
 	<div style="position: relative;margin:2px;">
 		<!-- <div style="height: 2px;width: 700px;background-color: red;margin-bottom: 20px;"></div> -->
-		<div>
+		<div v-if="!page">
 			<div style="max-height: 20px;">
 				<div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;">{{item}}</div>
 				<div v-else style="width: 12px;display: inline-block;"></div>
 			</div>
 			<div>
-				<div v-for="(item,index) in dataArray" v-if="index==0" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-top: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
+				<div v-for="(item,index) in dataArray"  :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
 				</div>
-				<div v-for="(item,index) in dataArray" v-if="index!=0" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
-				</div>
+				<!-- <div v-for="(item,index) in dataArray" v-if="index!=0" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
+				</div> -->
+			</div>
+			<div id="tableGrid"></div>
+		</div>
+		<div v-else>
+		<div style="max-height: 20px;">
+				<div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;">{{item}}</div>
+				<div v-else style="width: 12px;display: inline-block;"></div>
+			</div>
+			<div>
+				<div v-for="(item,index) in dataArray"  :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee; border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">
+				</div> 
 			</div>
 			<div id="tableGrid"></div>
 		</div>
@@ -107,7 +118,8 @@ export default {
 			},
 			//时间初始化显示
 		xTimeInit(){
-				if(this.config.userInfo.inDateTime&&this.config.userInfo.inDateTime!=""&&this.config.userInfo.inDateTime!=null){
+				if(this.config.userInfo.inDateTime&&this.config.userInfo.inDateTime!=""&&this.config.userInfo.inDateTime!=null
+					&&!this.page){
 					this.timeControl(this.config.userInfo.inDateTime);
 				}
 				else
@@ -142,6 +154,9 @@ export default {
                      		// console.log(this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME))
                      		//开始时间间隔
                      		var s = this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME)
+                     			if(this.page){
+                     				return;
+                     			}
                      		 	this.createLine(Math.round(s/lMin*(w/this.columns)),500,Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2,Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2);
                      		 	this.$set(this.dataArray,i,list[i]);
                      		 	// this.dataArray.push(list[i]);
@@ -182,7 +197,7 @@ export default {
 	components: {
 
 	},
-	props:[''],
+	props:['page'],
 	computed: {
 
 	}

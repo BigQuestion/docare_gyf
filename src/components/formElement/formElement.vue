@@ -34,7 +34,7 @@
             <textarea :style="{height:value.height+'px',width:value.width+'px'}" v-model="value.text"></textarea>
         </div>
         <div v-if="value.type=='formDiv'" >
-            <tableGrid></tableGrid>
+            <tableGrid :page="isPage.isPage"></tableGrid>
         </div>
         
         <div v-if="value.type=='checkBoxAll'" >
