@@ -1328,6 +1328,7 @@ export default {
     width: 900px;
     background: white;
     border: 1px solid black;
+    overflow: auto;
 }
 
 

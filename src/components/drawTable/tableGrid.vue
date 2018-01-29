@@ -132,6 +132,7 @@ export default {
 			},
 			//加载病人麻醉事件里面麻醉用药数据
 		selectMedAnesthesiaEventList() {
+
 			var w = this.svgWidth,
 				lMin = this.tbMin,
 		    	h= this.svgHeight;
@@ -144,6 +145,9 @@ export default {
             for (var i = 0; i < this.rows; i++) {
             	this.dataArray.push(i);
             }
+            if(this.page){
+ 				return;
+ 			}
             this.api.selectMedAnesthesiaEventList(params)
                 .then(res => {
                      var list = res.list;
@@ -151,15 +155,25 @@ export default {
                      	if(list[i].START_TIME){
                      		if(i==this.rows)
                      			break;
+                     		else{
                      		// console.log(this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME))
+                     		 
                      		//开始时间间隔
-                     		var s = this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME)
-                     			if(this.page){
-                     				return;
-                     			}
-                     		 	this.createLine(Math.round(s/lMin*(w/this.columns)),500,Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2,Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2);
+                     		var sMin = '';
+                     		//结束时间间隔
+                     		var eMin = '';
+                     		 sMin = this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME);
+                     		if(list[i].ENDDATE==null || list[i].ENDDATE==""){
+                     			eMin = this.getMinuteDif(list[i].START_TIME,this.config.userInfo.outDateTime);
+                     		}
+                     		else
+                     		{
+                     			eMin = this.getMinuteDif(list[i].START_TIME,this.config.userInfo.outDateTime);
+                     		}
+                     		 	this.createLine(Math.round(sMin/lMin*(w/this.columns)),Math.round(eMin/lMin*(w/this.columns)),Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2,Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2,list[i]);
                      		 	this.$set(this.dataArray,i,list[i]);
                      		 	// this.dataArray.push(list[i]);
+                     		 }
 
 
                      		}
@@ -171,22 +185,89 @@ export default {
         getMinuteDif(startTime,endTime){
         	let sTime = new Date(startTime).getTime()
         	let enTime = new Date(endTime).getTime()
-
         	var min = '';
-        	min = (enTime - sTime)/1000/60;
+        	min = (enTime - sTime)/1000/60; 
         	return Math.round(min) 
 
         },
-         createLine(x1,x2,y1,y2){ 
+         createLine(x1,x2,y1,y2,obj){ 
+         	console.log(x1+"-"+x2)
            		var svg = d3.select("svg");
-           		svg.append("line")
-           		   .attr("stroke","blue")
-           		   .attr("stroke-width",1)
-           		   .attr("y1",y1)
-				   .attr("y2", y2)
+       //     		svg.append("line")
+       //     		   .attr("stroke","blue")
+       //     		   .attr("stroke-width",1)
+       //     		   .attr("y1",y1)
+				   // .attr("y2", y2)
+				   // .attr("x1", x1)
+				   // .attr("x2", x2)
+				   // .on("mouseenter",function(){
+				   // 	console.log(obj)
+				   // })
+		        
+		        svg.append("line")
+				   .attr('stroke-width', 1)
+				   .attr("fill","none")
+				   .attr("stroke","blue")
+				   .attr("y1",y1-4)
+				   .attr("y2", y2+4)
 				   .attr("x1", x1)
-				   .attr("x2", x2);
-           	}
+				   .attr("x2", x1)
+				if(obj.DURATIVE_INDICATOR==1){
+					svg.append("path")
+					.attr('d', this.drawLineArrow(x1,y1,x2,y2))
+					.attr('stroke-width', 1)
+				    .attr("fill","none")
+				    .attr("stroke","blue")
+				    .on("mouseenter",function(){
+				   		console.log(obj)
+				   })
+				}
+				else
+				{
+	           		svg.append("line")
+	           		   .attr("stroke","blue")
+	           		   .attr("stroke-width",1)
+	           		   .attr("y1",y1)
+					   .attr("y2", y2)
+					   .attr("x1", x1)
+					   .attr("x2", x2)
+					   .on("mouseenter",function(){
+					   	console.log(obj)
+					   })
+					svg.append("line")
+					   .attr('stroke-width', 1)
+					   .attr("fill","none")
+					   .attr("stroke","blue")
+					   .attr("y1",y1-4)
+					   .attr("y2", y2+4)
+					   .attr("x1", x2)
+					   .attr("x2", x2)
+				}
+
+           	},
+        drawLineArrow(x1,y1,x2,y2){  
+		      var path;  
+		      var slopy,cosy,siny;  
+		      var Par=6.0;  
+		      var x3,y3;  
+		      slopy=Math.atan2((y1-y2),(x1-x2));     
+		      cosy=Math.cos(slopy);     
+		      siny=Math.sin(slopy);   
+		       
+		      path="M"+x1+","+y1+" L"+x2+","+y2;  
+		           
+		      x3=(Number(x1)+Number(x2))/2;  
+		      y3=(Number(y1)+Number(y2))/2;  
+		  
+		      path +=" M"+x2+","+y2;  
+		        
+		      path +=" L"+(Number(x2)+Number(Par*cosy-(Par/2.0*siny)))+","+(Number(y2)+Number(Par*siny+(Par/2.0*cosy)));  
+		  
+		      path +=" M"+(Number(x2)+Number(Par*cosy+Par/2.0*siny)+","+ (Number(y2)-Number(Par/2.0*cosy-Par*siny)));  
+		      path +=" L"+x2+","+y2;  
+		  
+		      return path;  
+		},
 	},
 	mounted() { 
 		this.area = this.$refs.area;
