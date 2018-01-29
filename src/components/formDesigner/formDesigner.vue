@@ -789,6 +789,7 @@ export default {
     height: 600px;
     width: 900px;
     border: 1px solid;
+    overflow: auto;
 }
 
 .editBox {

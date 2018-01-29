@@ -1,17 +1,31 @@
 <template>
 	<div style="position: relative;margin:2px;">
 		<!-- <div style="height: 2px;width: 700px;background-color: red;margin-bottom: 20px;"></div> -->
-		<div>
-			<div style="">
+		<div v-if="!page">
+			<div style="max-height: 20px;">
 				<div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;">{{item}}</div>
 				<div v-else style="width: 12px;display: inline-block;"></div>
 			</div>
-			
+			<div>
+				<div v-for="(item,index) in dataArray"  :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
+				</div>
+				<!-- <div v-for="(item,index) in dataArray" v-if="index!=0" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
+				</div> -->
+			</div>
 			<div id="tableGrid"></div>
 		</div>
-		<!-- <div>
-			<div v-for="(intem,index) in rows" :style="{top:20*index+'px'}" style="height: 2px;width: 80px;background-color: red;position: absolute;top:40px;left: -80px;"></div>
-		</div> -->
+		<div v-else>
+		<div style="max-height: 20px;">
+				<div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;">{{item}}</div>
+				<div v-else style="width: 12px;display: inline-block;"></div>
+			</div>
+			<div>
+				<div v-for="(item,index) in dataArray"  :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee; border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">
+				</div> 
+			</div>
+			<div id="tableGrid"></div>
+		</div>
+		
 	</div>
 </template>
 <script type="text/javascript">
@@ -19,26 +33,28 @@ import * as d3 from 'd3';
 export default {
 	data() {
 		return {
-			data: [
-				// { "x": 10, "y": 25 },
-				// { "x": 50, "y": 25 },
-				// { "x": 90, "y": 25 },
-			],
+			data: [],
 			line: '',
-			rows: 5,
+			rows: 10,
 			columns: 50,
 			handleItem:{},
 			wd:0,
 			ht:0,
 			xTimeArray:[],
+			svgWidth:700,
+			svgHeight:140,
+			svgPadding:0,
+			tbMin:5,//每个格子代表时间(分钟)
+			dataArray:[],
+
 		}
 	},
 	methods: {
 		 
 		init(){
-		var w = 720,  
-		    h= 120,  
-		    p= 20,//内边距  
+		var w = this.svgWidth,  
+		    h= this.svgHeight,  
+		    p= this.svgPadding,//内边距  
 		    x= d3.scaleLinear().domain([0, 1]).range([0, w - p]), //(2) 定义x和y比例尺  
 		    y= d3.scaleLinear().domain([0, 1]).range([0, h-p]);
 		this.wd = w;
@@ -49,7 +65,7 @@ export default {
 		   .attr("width", w)  
 		   .attr("height", h);
 		//(4) 给SVG添加分组，并设置样式类，样式见<style>标签中的设置  
-		console.log(x(0.51))
+		// console.log(x(0.51))
 		var grid = svg.selectAll(".grid")  
 		   .data(x.ticks(this.columns))  
 		   .enter()
@@ -83,18 +99,15 @@ export default {
 						}
 					);
 		        
-		        svg.append("path")
-				  .attr('stroke-width', 1)
-				  .attr("fill","none")
-				  .attr("stroke","red")
-				  .attr('d', line(this.data))
-
-		  svg.append("div")
-		  	.attr("width",20)
+		    //     svg.append("path")
+				  // .attr('stroke-width', 1)
+				  // .attr("fill","none")
+				  // .attr("stroke","red")
+				  // .attr('d', line(this.data))
 		},
 			//对时间进行计算操作
 		timeControl(startTime){
-				var m = 5;//加几分钟
+				var m = this.tbMin;//加几分钟
 				var timeDate = new Date(startTime);
 				var toMin = timeDate.getTime()+1000 * 60 * m;
 				var timeArray = [];
@@ -105,7 +118,8 @@ export default {
 			},
 			//时间初始化显示
 		xTimeInit(){
-				if(this.config.userInfo.inDateTime&&this.config.userInfo.inDateTime!=""&&this.config.userInfo.inDateTime!=null){
+				if(this.config.userInfo.inDateTime&&this.config.userInfo.inDateTime!=""&&this.config.userInfo.inDateTime!=null
+					&&!this.page){
 					this.timeControl(this.config.userInfo.inDateTime);
 				}
 				else
@@ -116,52 +130,144 @@ export default {
 				this.selectMedAnesthesiaEventList();
 				
 			},
+			//加载病人麻醉事件里面麻醉用药数据
 		selectMedAnesthesiaEventList() {
+
+			var w = this.svgWidth,
+				lMin = this.tbMin,
+		    	h= this.svgHeight;
             let params = {
                 patientId: this.config.userInfo.patientId,
                 operId: this.config.userInfo.operId,
                 visitId: this.config.userInfo.visitId,
                 itemClass:2
             }
-            
+            for (var i = 0; i < this.rows; i++) {
+            	this.dataArray.push(i);
+            }
+            if(this.page){
+ 				return;
+ 			}
             this.api.selectMedAnesthesiaEventList(params)
-                .then(
-                res => {
+                .then(res => {
                      var list = res.list;
                      for (var i = 0; i < list.length; i++) {
                      	if(list[i].START_TIME){
-                     		if(i==5)
+                     		if(i==this.rows)
                      			break;
-                     		console.log(this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME))
+                     		else{
+                     		// console.log(this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME))
+                     		 
                      		//开始时间间隔
-                     		var s = this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME)
-                     		 	this.createPath(Math.round(s/5*10),100,10+i*20,10+i*20);
+                     		var sMin = '';
+                     		//结束时间间隔
+                     		var eMin = '';
+                     		 sMin = this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME);
+                     		if(list[i].ENDDATE==null || list[i].ENDDATE==""){
+                     			eMin = this.getMinuteDif(list[i].START_TIME,this.config.userInfo.outDateTime);
                      		}
+                     		else
+                     		{
+                     			eMin = this.getMinuteDif(list[i].START_TIME,this.config.userInfo.outDateTime);
                      		}
+                     		 	this.createLine(Math.round(sMin/lMin*(w/this.columns)),Math.round(eMin/lMin*(w/this.columns)),Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2,Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2,list[i]);
+                     		 	this.$set(this.dataArray,i,list[i]);
+                     		 	// this.dataArray.push(list[i]);
+                     		 }
+
+
+                     		}
+                     	}
 					
                      }); 
         },
         //计算时间差分钟
         getMinuteDif(startTime,endTime){
-        	console.log(startTime,endTime)
         	let sTime = new Date(startTime).getTime()
         	let enTime = new Date(endTime).getTime()
-
         	var min = '';
-        	min = (enTime - sTime)/1000/60;
+        	min = (enTime - sTime)/1000/60; 
         	return Math.round(min) 
 
         },
-         createPath(x1,x2,y1,y2){ 
+         createLine(x1,x2,y1,y2,obj){ 
+         	console.log(x1+"-"+x2)
            		var svg = d3.select("svg");
-           		svg.append("line")
-           			.attr("stroke","blue")
-           			.attr("stroke-width",1)
-           			.attr("y1",y1)  
-				   .attr("y2", y2)  
-				   .attr("x1", x1)  
-				   .attr("x2", x2);
-           	}
+       //     		svg.append("line")
+       //     		   .attr("stroke","blue")
+       //     		   .attr("stroke-width",1)
+       //     		   .attr("y1",y1)
+				   // .attr("y2", y2)
+				   // .attr("x1", x1)
+				   // .attr("x2", x2)
+				   // .on("mouseenter",function(){
+				   // 	console.log(obj)
+				   // })
+		        
+		        svg.append("line")
+				   .attr('stroke-width', 1)
+				   .attr("fill","none")
+				   .attr("stroke","blue")
+				   .attr("y1",y1-4)
+				   .attr("y2", y2+4)
+				   .attr("x1", x1)
+				   .attr("x2", x1)
+				if(obj.DURATIVE_INDICATOR==1){
+					svg.append("path")
+					.attr('d', this.drawLineArrow(x1,y1,x2,y2))
+					.attr('stroke-width', 1)
+				    .attr("fill","none")
+				    .attr("stroke","blue")
+				    .on("mouseenter",function(){
+				   		console.log(obj)
+				   })
+				}
+				else
+				{
+	           		svg.append("line")
+	           		   .attr("stroke","blue")
+	           		   .attr("stroke-width",1)
+	           		   .attr("y1",y1)
+					   .attr("y2", y2)
+					   .attr("x1", x1)
+					   .attr("x2", x2)
+					   .on("mouseenter",function(){
+					   	console.log(obj)
+					   })
+					svg.append("line")
+					   .attr('stroke-width', 1)
+					   .attr("fill","none")
+					   .attr("stroke","blue")
+					   .attr("y1",y1-4)
+					   .attr("y2", y2+4)
+					   .attr("x1", x2)
+					   .attr("x2", x2)
+				}
+
+           	},
+        drawLineArrow(x1,y1,x2,y2){  
+		      var path;  
+		      var slopy,cosy,siny;  
+		      var Par=6.0;  
+		      var x3,y3;  
+		      slopy=Math.atan2((y1-y2),(x1-x2));     
+		      cosy=Math.cos(slopy);     
+		      siny=Math.sin(slopy);   
+		       
+		      path="M"+x1+","+y1+" L"+x2+","+y2;  
+		           
+		      x3=(Number(x1)+Number(x2))/2;  
+		      y3=(Number(y1)+Number(y2))/2;  
+		  
+		      path +=" M"+x2+","+y2;  
+		        
+		      path +=" L"+(Number(x2)+Number(Par*cosy-(Par/2.0*siny)))+","+(Number(y2)+Number(Par*siny+(Par/2.0*cosy)));  
+		  
+		      path +=" M"+(Number(x2)+Number(Par*cosy+Par/2.0*siny)+","+ (Number(y2)-Number(Par/2.0*cosy-Par*siny)));  
+		      path +=" L"+x2+","+y2;  
+		  
+		      return path;  
+		},
 	},
 	mounted() { 
 		this.area = this.$refs.area;
@@ -172,7 +278,7 @@ export default {
 	components: {
 
 	},
-	props:[''],
+	props:['page'],
 	computed: {
 
 	}

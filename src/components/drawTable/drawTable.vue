@@ -19,7 +19,7 @@
 		<div style="position:absolute;" v-for="(item,index) in data" :style="{left:item.x+'px',top:item.y+'px'}" @mousedown.stop="itemMouseDown($event,item,index)" @mouseover.stop="itemMouseOver($event,item)">
 			<svg style="margin-left:-3px;margin-top:-3px;">
 				<g style="">
-					<line x1="0" y1="0" x2="6.7" y2="6.7" style="stroke:red;" />
+					<line x1="0" y1="0" x2="6.7" y2="6.7" style="stroke:red;" @mouseenter="test" />
 					<line x1="6.7" y1="0" x2="0" y2="6.7" style="stroke:red;" />
 				</g>
 			</svg>
@@ -126,7 +126,10 @@ export default {
 		   .attr("y2", y)  
 		   .attr("x1", p)  
 		   .attr("x2", w - p + 1);
-	}
+		},
+		test(){
+			 
+		}
 	},
 	mounted() {
 		this.calculatePath();
