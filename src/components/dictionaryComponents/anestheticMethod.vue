@@ -11,7 +11,7 @@
                                                         </div> -->
             <!-- 显示详细内容 -->
             <div style="display: flex;width:100%;padding-right:20px;box-sizing:border-box;">
-                <div style="width: 25%;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
+                <div class="topList" v-for="cell in contentConfig">{{cell.text}}</div>
             </div>
             <div style="width: 100%;height:90%;margin-top:5px;overflow-y: auto;">
                 <div v-for="list in commonTypeList" style="display: flex;">
@@ -221,5 +221,13 @@ export default {
 }
 </script>
 <style scoped>
-
+.topList {
+    width: 215px;
+    border: 1px solid rgb(177, 207, 243);
+    color: #4C79BB;
+    background: url('../../assets/contentTitleBack.jpg')no-repeat;
+    background-size: cover;
+    /* box-sizing: border-box; */
+    padding-left: 5px;
+}
 </style>

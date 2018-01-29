@@ -101,8 +101,10 @@
                         <div class="active_back" @click="concealmentTwe"><img :class="{transform:isTransformTwe}" src="../../assets/bottom.png"></div>
                     </div>
                     <div v-if="concealmentTweData" style="padding:5px;">
+                        <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
                         <button v-if="formDetail" class="list_button" @click="getOperationRegister">术中登记</button>
                         <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button>
+                        <button class="list_button">取消手术</button>
                     </div>
                 </div>
                 <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
@@ -197,10 +199,12 @@
                         <div>
                             <span>排序方式</span>
                             <div>
-                                <input type="radio" name="sort">术间
+                                <input type="radio" id="house" name="sort">
+                                <label for="house">术间</label>
                             </div>
                             <div>
-                                <input type="radio" name="sort">时间
+                                <input type="radio" id="timeHo" name="sort">
+                                <label for="timeHo">时间</label>
                             </div>
                         </div>
                     </div>
@@ -376,6 +380,7 @@
             </div>
 
         </div>
+        <monitor v-if="monitorDataShow.noneData" :parentToChild="monitorDataShow"></monitor>
         <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView"></patientOperationInfo>
         <operationRegister v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
         <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
@@ -463,6 +468,7 @@ import aboutUs from '@/components/aboutUs/aboutUs.vue';
 import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent.vue';
 import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
 import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
+import monitor from '@/components/monitor/monitor.vue';
 
 export default {
     data() {
@@ -567,7 +573,7 @@ export default {
             settingView: false,
             selectFormItemTemp: '',//获取选中的单子
             atherInput: { isPage: false },
-
+            monitorDataShow:{noneData:false},
         }
     },
     methods: {
@@ -705,7 +711,7 @@ export default {
             this.searchPatientListScreen();
         },
         // 选择下拉框其中一页
-        pageChoose(pageC){
+        pageChoose(pageC) {
             this.pageNum = pageC;
             this.searchPatientListScreen();
             this.dataInSelect = false;
@@ -1033,6 +1039,10 @@ export default {
         getOperationRegister() {
             this.operationRegisterView.dataInParent = !this.operationRegisterView.dataInParent;
         },
+        // 监护仪
+        monitor(){
+            this.monitorDataShow.noneData = !this.monitorDataShow.noneData;
+        },
         // 关于
         getAboutUs() {
             this.aboutUsData.dataInParent = !this.aboutUsData.dataInParent;
@@ -1149,6 +1159,7 @@ export default {
         anaesthesiaEvent,
         anestheticMethod,
         anestheticConstant,
+        monitor,
     },
 }
 </script>
@@ -1343,6 +1354,8 @@ export default {
 
 
 
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1421,6 +1434,8 @@ export default {
 .bindClass:hover {
     background: linear-gradient(#e3ebf5, #cbe5f7, #dbecf9);
 }
+
+
 
 
 

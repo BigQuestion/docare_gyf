@@ -12,8 +12,8 @@
             <!-- 显示详细内容 -->
 
             <div style="width: 70%;height:100%;margin-top:5px;overflow-y: auto;">
-                <div style="display: flex;margin-left: 10px;width:2109px;">
-                    <div style="width: 160px;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
+                <div style="display: flex;margin-left: 10px;width:2592px;">
+                    <div class="topList" v-for="cell in contentConfig">{{cell.text}}</div>
                 </div>
                 <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
                     <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177,207,243);">
@@ -113,6 +113,21 @@ export default {
                     value: "durativeIndicator",
                     status: "inable"
                 },
+                {
+                    text: "属性",
+                    value: "eventAttr",
+                    status: "inable"
+                },
+                {
+                    text: "药品属性",
+                    value: "eventAttr2",
+                    status: "inable"
+                },
+                {
+                    text: "医嘱分类",
+                    value: "operClass",
+                    status: "inable"
+                },
             ],
             commonTypeList: [],
             changeData: [],
@@ -191,7 +206,7 @@ export default {
             var k = li.length - 1;
             let params = {};
             console.log(li)
-            
+
             if (li[k].arrayStats == 0) {
                 console.log('这是新增操作')
                 params = {
@@ -249,5 +264,12 @@ export default {
 }
 </script>
 <style scoped>
-
+.topList {
+    width: 160px;
+    border: 1px solid rgb(177, 207, 243);
+    color: #4C79BB;
+    background: url('../../assets/contentTitleBack.jpg')no-repeat;
+    background-size: cover;
+    padding-left: 5px;
+}
 </style>
