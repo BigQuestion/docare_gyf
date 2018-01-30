@@ -12,18 +12,46 @@
 				<!-- <div v-for="(item,index) in dataArray" v-if="index!=0" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
 				</div> -->
 			</div>
-			<div id="tableGrid"></div>
+			<div id="tableGrid" style="position: relative;">
+			<div v-if="tipView">
+				<div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10" :style="{width: tipWidth+'px',height:tipHeight+'px',top:tipTop+'px',left:tipLeft+'px'}">
+					<div>
+						{{lineObj.ITEM_NAME}}({{lineObj.DOSAGE_UNITS}})
+					</div>
+					<div>
+						=========
+					</div>
+					<div>
+						开始时间：{{lineObj.START_TIME}}
+					</div>
+					<div>
+						结束时间：{{lineObj.ENDDATE}}
+					</div>
+					<div>
+						流速：{{lineObj.PERFORM_SPEED}}
+					</div>
+					<div>
+						总量：{{lineObj.DOSAGE}}
+					</div>
+					<div>
+						鼠标当前时间：{{lineObj.nowTime}}
+					</div>
+				</div>
+			</div>
+			
+			</div>
 		</div>
 		<div v-else>
-		<div style="max-height: 20px;">
-				<div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;">{{item}}</div>
-				<div v-else style="width: 12px;display: inline-block;"></div>
+			<div style="max-height: 20px;">
+					<div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;">{{item}}</div>
+					<div v-else style="width: 12px;display: inline-block;"></div>
 			</div>
 			<div>
 				<div v-for="(item,index) in dataArray"  :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee; border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">
-				</div> 
+				</div>
 			</div>
-			<div id="tableGrid"></div>
+			<div id="tableGrid" style="position: relative;">
+			</div>
 		</div>
 		
 	</div>
@@ -46,6 +74,12 @@ export default {
 			svgPadding:0,
 			tbMin:5,//每个格子代表时间(分钟)
 			dataArray:[],
+			tipWidth:200,//数据提示窗口宽度
+			tipHeight:150,
+			tipTop:0,
+			tipLeft:0,
+			tipView:false,
+			lineObj:{},
 
 		}
 	},
@@ -191,7 +225,7 @@ export default {
 
         },
          createLine(x1,x2,y1,y2,obj){ 
-         	console.log(x1+"-"+x2)
+         	 
            		var svg = d3.select("svg");
        //     		svg.append("line")
        //     		   .attr("stroke","blue")
@@ -203,7 +237,10 @@ export default {
 				   // .on("mouseenter",function(){
 				   // 	console.log(obj)
 				   // })
-		        
+		        var _this = this;
+		        var t;
+				obj.nowTime = _this.getTime();
+				
 		        svg.append("line")
 				   .attr('stroke-width', 1)
 				   .attr("fill","none")
@@ -219,8 +256,27 @@ export default {
 				    .attr("fill","none")
 				    .attr("stroke","blue")
 				    .on("mouseenter",function(){
-				   		console.log(obj)
-				   })
+				    	 clearTimeout(t)
+				    		_this.tipView = true;
+					   		_this.tipLeft = x1;
+					   		_this.tipTop = y2+10;
+					   		
+					   		_this.lineObj = obj;
+					   		
+					   })
+				    .on("mouseleave",function(){
+				    	t = setTimeout(function (){
+					    _this.tipView = false;
+						}, 1000);
+				   		
+				    })
+				    .on("mousemove",function(ev){
+				    	 //_this.lineObj.nowTime = new Date();
+				    	 _this.$set(_this.lineObj,"nowTime",_this.getTime());
+				    	 var ev = ev || event;
+				    	 //console.log(ev)
+				    	 console.log(_this.lineObj)
+				    })
 				}
 				else
 				{
@@ -232,8 +288,16 @@ export default {
 					   .attr("x1", x1)
 					   .attr("x2", x2)
 					   .on("mouseenter",function(){
-					   	console.log(obj)
+				    	 
+				    		_this.tipView = true;
+					   		_this.tipLeft = x1;
+					   		_this.tipTop = y2+10;
+					   		_this.lineObj = obj;
+
 					   })
+				    .on("mouseleave",function(){
+				   		_this.tipView = false;
+				    })
 					svg.append("line")
 					   .attr('stroke-width', 1)
 					   .attr("fill","none")
@@ -268,6 +332,9 @@ export default {
 		  
 		      return path;  
 		},
+		getTime(){
+			return new Date().Format("yyyy-MM-dd hh:mm:ss")
+		}
 	},
 	mounted() { 
 		this.area = this.$refs.area;
