@@ -104,7 +104,7 @@
                         <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
                         <button v-if="formDetail" class="list_button" @click="getOperationRegister">术中登记</button>
                         <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button>
-                        <button class="list_button">取消手术</button>
+                        <button @click="cancel" class="list_button">取消手术</button>
                     </div>
                 </div>
                 <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
@@ -573,7 +573,7 @@ export default {
             settingView: false,
             selectFormItemTemp: '',//获取选中的单子
             atherInput: { isPage: false },
-            monitorDataShow:{noneData:false},
+            monitorDataShow: { noneData: false },
         }
     },
     methods: {
@@ -1040,8 +1040,17 @@ export default {
             this.operationRegisterView.dataInParent = !this.operationRegisterView.dataInParent;
         },
         // 监护仪
-        monitor(){
+        monitor() {
             this.monitorDataShow.noneData = !this.monitorDataShow.noneData;
+        },
+        // 取消手术
+        cancel() {
+            if (confirm("是否要取消该手术?")) {
+                console.log('还未调用接口')
+                alert("手术已取消");
+            } else {
+
+            }
         },
         // 关于
         getAboutUs() {
@@ -1357,6 +1366,7 @@ export default {
 
 
 
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1435,6 +1445,7 @@ export default {
 .bindClass:hover {
     background: linear-gradient(#e3ebf5, #cbe5f7, #dbecf9);
 }
+
 
 
 

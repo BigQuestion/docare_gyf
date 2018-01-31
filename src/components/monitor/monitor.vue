@@ -5,14 +5,17 @@
                 <div>监护仪</div>
                 <div @click="aboutNone" class="top_active">X</div>
             </div>
+
             <div style="display:flex;position:absolute;top:34px;left:4px;">
                 <div class="titleBox" v-for="item in machineList" :style="{width:item.width+'px',textAlign:item.textalign}">{{item.text}}</div>
             </div>
             <div class="monitorBox">
-                <div v-for="list in commonTypeList" style="display: flex;">
+                <div v-for="(list,index) in commonTypeList" style="display: flex;">
                     <div v-for="cl in machineList" :style="{width:cl.width+'px',textAlign:cl.textalign}" style="border:1px solid rgb(177,207,243);box-sizing:border-box;">
                         <div v-if="cl.type=='raido'">
-                            <input type="radio">
+                            <label :for="list.id">
+                                <input type="checkbox" :checked="list.checkedData" name="data" :id="list.id" @change="getSingleSelect(list,index)">
+                            </label>
                         </div>
                         <div v-if="cl.type!=='raido'">{{list[cl.value]}}</div>
                     </div>
@@ -25,22 +28,24 @@
                 <div v-for="list in commonTypeListTwo" style="display: flex;">
                     <div v-for="cl in anesthesiaList" :style="{width:cl.width+'px',textAlign:cl.textalign}" style="border:1px solid rgb(177,207,243);box-sizing:border-box;">
                         <div v-if="cl.type=='raido'">
-                            <input type="radio">
+                            <label :for="list.id">
+                                <input type="checkbox" name="data" :id="list.id">
+                            </label>
                         </div>
                         <div v-if="cl.type!=='raido'">{{list[cl.value]}}</div>
                     </div>
                 </div>
             </div>
             <div class="bottomBox">
-                <div>
-                    <span>开始时间</span><input type="datetime-local">
-                    <span>默认记录间隔</span><input type="text">
-                    <span>实际记录间隔</span><input type="text">
-                    <span>采集次数/秒</span><input type="text">
+                <div class="inputBox">
+                    <span>开始时间</span><input style="width:173px;" type="datetime-local">
+                    <span>默认记录间隔</span><input style="width:45px;" type="text">
+                    <span>实际记录间隔</span><input style="width:45px;" type="text">
+                    <span>采集次数/秒</span><input style="width:100px;" type="text">
                 </div>
-                <div>
-                    <button>确定</button>
+                <div class="sureBox">
                     <button @click="aboutNone">关闭</button>
+                    <button>确定</button>
                 </div>
             </div>
         </div>
@@ -165,6 +170,8 @@ export default {
                     five: '0',
                     six: '03',
                     seven: '0',
+                    id: 1 + i,
+                    checkedData:false,
                 })
             }
             if (iLength <= 14) {
@@ -185,6 +192,7 @@ export default {
                     five: '0',
                     six: '03',
                     seven: '0',
+                    id:1+i,
                 })
             }
             if (iLength <= 7) {
@@ -192,7 +200,28 @@ export default {
             } else {
                 this.anesthesiaList[0].width = 191;
             }
-        }
+        },
+        getSingleSelect(item, index) {
+            console.log(item)
+            console.log(index)
+            console.log(this.commonTypeList)
+            for(var i = 0;i<=this.commonTypeList.length;i++){
+                if(index == i){
+                    console.log(this.commonTypeList[index])
+                    item.checkedData = true;
+                    // this.$set(this.commonTypeList[index],'checkedData',trueData)
+                    this.$set(this.commonTypeList,index,item)
+                }else if(index !== i){
+                    // this.commonTypeList[i].checkedData = false;
+                    // console.log(this.commonTypeList[i].checkedData)
+                    // this.$set(this.commonTypeList,index,item)
+                    this.$set(this.commonTypeList[i],'checkedData' ,false)
+                }
+                
+            }
+            
+
+        },
     },
     mounted() {
         this.dataInMonitorBox();
@@ -203,9 +232,9 @@ export default {
 <style scoped>
 .window_load {
     width: 800px;
-    height: 800px;
+    height: 780px;
     left: calc(50% - 400px);
-    top: calc(50% - 400px);
+    top: calc(50% - 390px);
 }
 
 .monitorBox {
@@ -246,7 +275,32 @@ export default {
 .bottomBox {
     padding-top: 20px;
     width: 100%;
-    height: 130px;
+    height: 110px;
     background-color: lightblue;
+}
+
+.inputBox {
+    display: flex;
+}
+
+.inputBox span {
+    padding-left: 15px;
+}
+
+.inputBox input {
+    height: 20px;
+}
+
+.sureBox {
+    width: 100%;
+    padding-top: 30px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.sureBox button {
+    width: 110px;
+    height: 30px;
+    margin-right: 30px;
 }
 </style>

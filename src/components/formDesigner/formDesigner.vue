@@ -680,7 +680,7 @@ export default {
             if (dataIn == '') {
 
             } else {
-                this.$set(dataIn, 'y', dataIn.y + 1);
+                this.$set(dataIn, 'y', dataIn.y - 1);
             }
         },
         // 右位移
