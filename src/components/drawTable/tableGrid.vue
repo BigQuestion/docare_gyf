@@ -70,7 +70,7 @@ export default {
 			ht:0,
 			xTimeArray:[],
 			svgWidth:700,
-			svgHeight:140,
+			svgHeight:150,
 			svgPadding:0,
 			tbMin:5,//每个格子代表时间(分钟)
 			dataArray:[],
@@ -240,9 +240,9 @@ export default {
 		        var _this = this;
 		        var t;
 				obj.nowTime = _this.getTime();
-				
+				var gWidth = this.svgWidth/this.columns;
 		        svg.append("line")
-				   .attr('stroke-width', 1)
+				   .attr('stroke-width', 2)
 				   .attr("fill","none")
 				   .attr("stroke","blue")
 				   .attr("y1",y1-4)
@@ -252,7 +252,7 @@ export default {
 				if(obj.DURATIVE_INDICATOR==1){
 					svg.append("path")
 					.attr('d', this.drawLineArrow(x1,y1,x2,y2))
-					.attr('stroke-width', 1)
+					.attr('stroke-width', 2)
 				    .attr("fill","none")
 				    .attr("stroke","blue")
 				    .on("mouseenter",function(){
@@ -274,15 +274,21 @@ export default {
 				    	 //_this.lineObj.nowTime = new Date();
 				    	 _this.$set(_this.lineObj,"nowTime",_this.getTime());
 				    	 var ev = ev || event;
-				    	 //console.log(ev)
-				    	 console.log(_this.lineObj)
+				    	 var offX = ev.offsetX;//横坐标值
+				    	 var m = Math.round(offX/gWidth*5);
+				    	 var time = new Date(_this.config.userInfo.inDateTime);
+				    	 var time1 = time.getTime()+m*60*1000;
+				    	 var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
+				    	 console.log(time2)
+				    	 obj.nowTime = time2;
+				    	 _this.lineObj = obj;
 				    })
 				}
 				else
 				{
 	           		svg.append("line")
 	           		   .attr("stroke","blue")
-	           		   .attr("stroke-width",1)
+	           		   .attr("stroke-width",2)
 	           		   .attr("y1",y1)
 					   .attr("y2", y2)
 					   .attr("x1", x1)
@@ -298,14 +304,28 @@ export default {
 				    .on("mouseleave",function(){
 				   		_this.tipView = false;
 				    })
+				    .on("mousemove",function(ev){
+				    	 //_this.lineObj.nowTime = new Date();
+				    	 _this.$set(_this.lineObj,"nowTime",_this.getTime());
+				    	 var ev = ev || event;
+				    	 var offX = ev.offsetX;//横坐标值
+				    	 var m = Math.round(offX/gWidth*5);
+				    	 var time = new Date(_this.config.userInfo.inDateTime);
+				    	 var time1 = time.getTime()+m*60*1000;
+				    	 var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
+				    	 console.log(time2)
+				    	 obj.nowTime = time2;
+				    	 _this.lineObj = obj;
+				    })
 					svg.append("line")
-					   .attr('stroke-width', 1)
+					   .attr('stroke-width', 2)
 					   .attr("fill","none")
 					   .attr("stroke","blue")
 					   .attr("y1",y1-4)
 					   .attr("y2", y2+4)
 					   .attr("x1", x2)
 					   .attr("x2", x2)
+					   
 				}
 
            	},

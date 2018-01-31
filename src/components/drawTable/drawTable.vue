@@ -8,7 +8,7 @@
 			<div v-for="item in columns" style="border-right: 1px solid #000;height:100%;box-sizing: border-box;width:10px;">
 			</div>
 		</div>
-		<div id="tableGrid"></div>
+		<!-- <div id="tableGrid"></div> -->
 		<div style="position:absolute;top:0px;left:0px;">
 			<svg width="500" height="500">
 				<g style="">
@@ -19,7 +19,7 @@
 		<div style="position:absolute;" v-for="(item,index) in data" :style="{left:item.x+'px',top:item.y+'px'}" @mousedown.stop="itemMouseDown($event,item,index)" @mouseover.stop="itemMouseOver($event,item)">
 			<svg style="margin-left:-3px;margin-top:-3px;">
 				<g style="">
-					<line x1="0" y1="0" x2="6.7" y2="6.7" style="stroke:red;" @mouseenter="test" />
+					<line x1="0" y1="0" x2="6.7" y2="6.7" style="stroke:red;"  />
 					<line x1="6.7" y1="0" x2="0" y2="6.7" style="stroke:red;" />
 				</g>
 			</svg>

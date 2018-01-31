@@ -364,9 +364,12 @@ export default {
                 width: "300",
                 ForeColor: '#0000FF',
             }, {
-                text: "表格组件",
+                text: "麻醉量表格组件",
                 type: "formDiv",
             }, {
+                text: "入量表格组件",
+                type: "formInGrid",
+            },{
                 text: "自定义控件",
                 type: "checkBoxAll",
                 defaultItems: "集合",
