@@ -50,12 +50,16 @@
             </div>
             
         </div>
+        <div v-if="value.type=='formInGrid'">
+            <dosageGrid :page="isPage.isPage"></dosageGrid>
+        </div>
 	</div>
 </template>
 <script>
 import commonSelect from '@/components/commonSelect/commonSelect.vue';
 import checkBox from '@/components/checkBox/checkBox.vue';
 import tableGrid from '@/components/drawTable/tableGrid.vue';
+import dosageGrid from '@/components/drawTable/dosageGrid.vue';
 export default {
 	data () {
   		return {
@@ -75,7 +79,8 @@ export default {
     components: {
         commonSelect,
         checkBox,
-        tableGrid
+        tableGrid,
+        dosageGrid
     },
     mounted(){  
         
