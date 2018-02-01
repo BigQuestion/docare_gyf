@@ -7,14 +7,14 @@
 				<div v-else style="width: 12px;display: inline-block;"></div>
 			</div>
 			<div>
-				<div v-for="(item,index) in dataArray"  :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
+				<div v-for="(item,index) in dataArray"  :style="{top:svgHeight/rows*index+20+'px'}" style="height: 14px;line-height: 12px;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;">  {{item.ITEM_NAME}}
 				</div>
 				<!-- <div v-for="(item,index) in dataArray" v-if="index!=0" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
 				</div> -->
 			</div>
 			<div id="tableGrid" style="position: relative;">
 			<div v-if="tipView">
-				<div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10" :style="{width: tipWidth+'px',height:tipHeight+'px',top:tipTop+'px',left:tipLeft+'px'}">
+				<div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
 					<div>
 						{{lineObj.ITEM_NAME}}({{lineObj.DOSAGE_UNITS}})
 					</div>
@@ -47,7 +47,7 @@
 					<div v-else style="width: 12px;display: inline-block;"></div>
 			</div>
 			<div>
-				<div v-for="(item,index) in dataArray"  :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee; border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">
+				<div v-for="(item,index) in dataArray"  :style="{top:svgHeight/rows*index+20+'px'}" style="height: 14px;line-height: 12px;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;">
 				</div>
 			</div>
 			<div id="tableGrid" style="position: relative;">
@@ -204,12 +204,9 @@ export default {
                      		{
                      			eMin = this.getMinuteDif(list[i].START_TIME,this.config.userInfo.outDateTime);
                      		}
-                     		 	this.createLine(Math.round(sMin/lMin*(w/this.columns)),Math.round(eMin/lMin*(w/this.columns)),Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2,Math.round(h/this.rows/2*(i+1))+h/this.rows*i/2,list[i]);
+                     		 	this.createLine(Math.round(sMin/lMin*(w/this.columns)),Math.round(eMin/lMin*(w/this.columns)),Math.round(h/this.rows/2*(i+1)+h/this.rows*i/2),Math.round(h/this.rows/2*(i+1)+h/this.rows*i/2),list[i]);
                      		 	this.$set(this.dataArray,i,list[i]);
-                     		 	// this.dataArray.push(list[i]);
                      		 }
-
-
                      		}
                      	}
 					
@@ -227,22 +224,12 @@ export default {
          createLine(x1,x2,y1,y2,obj){ 
          	 
            		var svg = d3.select("svg");
-       //     		svg.append("line")
-       //     		   .attr("stroke","blue")
-       //     		   .attr("stroke-width",1)
-       //     		   .attr("y1",y1)
-				   // .attr("y2", y2)
-				   // .attr("x1", x1)
-				   // .attr("x2", x2)
-				   // .on("mouseenter",function(){
-				   // 	console.log(obj)
-				   // })
 		        var _this = this;
 		        var t;
 				obj.nowTime = _this.getTime();
 				var gWidth = this.svgWidth/this.columns;
 		        svg.append("line")
-				   .attr('stroke-width', 2)
+				   .attr('stroke-width', 1)
 				   .attr("fill","none")
 				   .attr("stroke","blue")
 				   .attr("y1",y1-4)
@@ -252,7 +239,7 @@ export default {
 				if(obj.DURATIVE_INDICATOR==1){
 					svg.append("path")
 					.attr('d', this.drawLineArrow(x1,y1,x2,y2))
-					.attr('stroke-width', 2)
+					.attr('stroke-width', 1)
 				    .attr("fill","none")
 				    .attr("stroke","blue")
 				    .on("mouseenter",function(){
@@ -260,9 +247,7 @@ export default {
 				    		_this.tipView = true;
 					   		_this.tipLeft = x1;
 					   		_this.tipTop = y2+10;
-					   		
 					   		_this.lineObj = obj;
-					   		
 					   })
 				    .on("mouseleave",function(){
 				    	t = setTimeout(function (){
@@ -288,7 +273,8 @@ export default {
 				{
 	           		svg.append("line")
 	           		   .attr("stroke","blue")
-	           		   .attr("stroke-width",2)
+	           		   .attr("fill","none")
+	           		   .attr("stroke-width",1)
 	           		   .attr("y1",y1)
 					   .attr("y2", y2)
 					   .attr("x1", x1)
@@ -318,7 +304,7 @@ export default {
 				    	 _this.lineObj = obj;
 				    })
 					svg.append("line")
-					   .attr('stroke-width', 2)
+					   .attr('stroke-width', 1)
 					   .attr("fill","none")
 					   .attr("stroke","blue")
 					   .attr("y1",y1-4)
@@ -345,9 +331,9 @@ export default {
 		  
 		      path +=" M"+x2+","+y2;  
 		        
-		      path +=" L"+(Number(x2)+Number(Par*cosy-(Par/2.0*siny)))+","+(Number(y2)+Number(Par*siny+(Par/2.0*cosy)));  
+		      path +=" L"+(Math.round(x2)+Math.round(Par*cosy-(Par/2.0*siny)))+","+(Math.round(y2)+Math.round(Par*siny+(Par/2.0*cosy)));  
 		  
-		      path +=" M"+(Number(x2)+Number(Par*cosy+Par/2.0*siny)+","+ (Number(y2)-Number(Par/2.0*cosy-Par*siny)));  
+		      path +=" M"+(Math.round(x2)+Math.round(Par*cosy+Par/2.0*siny)+","+ (Math.round(y2)-Math.round(Par/2.0*cosy-Par*siny)));  
 		      path +=" L"+x2+","+y2;  
 		  
 		      return path;  
