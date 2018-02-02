@@ -41,6 +41,15 @@ export default {
 }
 </script>
 <style scoped>
+.window_load {
+    position: absolute;
+    z-index: 11;
+    width: 790px;
+    height: 440px;
+    left: calc(50% - 395px);
+    top: calc(50% - 220px);
+}
+
 .nameInComplay {
     font-size: 40px;
     color: #222;
@@ -66,7 +75,8 @@ export default {
 .copyRight img {
     height: 60px;
 }
-.copyRight span{
+
+.copyRight span {
     padding-left: 5%;
 }
 </style>

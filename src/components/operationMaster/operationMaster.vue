@@ -86,7 +86,9 @@
             <div class="left" style="overflow-y: auto;">
                 <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
                     <div class="stretch">
-                        <div>电子病历</div>
+                        <div style="display:flex;">
+                            <img style="height:21px;padding-right:3px;" src="../../assets/icon_1.png" alt=""> 电子病历
+                        </div>
                         <div class="active_back" @click="concealmentOne"><img :class="{transform:isTransformOne}" src="../../assets/bottom.png"></div>
                     </div>
                     <div v-if="concealmentOneData" style="padding:5px;">
@@ -97,7 +99,9 @@
                 </div>
                 <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;" v-if="lockedPatientInfo.patientId">
                     <div class="stretch">
-                        <div>患者操作</div>
+                        <div style="display:flex;">
+                            <img style="height:21px;padding-right:3px;" src="../../assets/icon_2.jpg" alt=""> 患者操作
+                        </div>
                         <div class="active_back" @click="concealmentTwe"><img :class="{transform:isTransformTwe}" src="../../assets/bottom.png"></div>
                     </div>
                     <div v-if="concealmentTweData" style="padding:5px;">
@@ -109,7 +113,9 @@
                 </div>
                 <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
                     <div class="stretch">
-                        <div>常用功能</div>
+                        <div style="display:flex;">
+                            <img style="height:21px;padding-right:3px;" src="../../assets/icon_3.png" alt=""> 常用功能
+                        </div>
                         <div class="active_back" @click="concealmentThree"><img :class="{transform:isTransformThree}" src="../../assets/bottom.png"></div>
                     </div>
                     <div v-if="concealmentThreeData" style="padding:5px;">
@@ -118,7 +124,9 @@
                 </div>
                 <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
                     <div class="stretch">
-                        <div>其他</div>
+                        <div style="display:flex;">
+                            <img style="height:21px;padding-right:3px;" src="../../assets/icon_4.png" alt=""> 其他
+                        </div>
                         <div class="active_back" @click="concealmentFour"><img :class="{transform:isTransformFour}" src="../../assets/bottom.png"></div>
                     </div>
                     <div v-if="concealmentFourData" style="padding:5px;">
@@ -1367,6 +1375,11 @@ export default {
 
 
 
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1445,6 +1458,11 @@ export default {
 .bindClass:hover {
     background: linear-gradient(#e3ebf5, #cbe5f7, #dbecf9);
 }
+
+
+
+
+
 
 
 
