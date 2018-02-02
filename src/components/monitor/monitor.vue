@@ -13,9 +13,7 @@
                 <div v-for="(list,index) in commonTypeList" style="display: flex;">
                     <div v-for="cl in machineList" :style="{width:cl.width+'px',textAlign:cl.textalign}" style="border:1px solid rgb(177,207,243);box-sizing:border-box;">
                         <div v-if="cl.type=='raido'">
-                            <label :for="list.id">
-                                <input type="checkbox" :checked="list.checkedData" name="data" :id="list.id" @change="getSingleSelect(list,index)">
-                            </label>
+                            <input type="checkbox" :checked="list.checkedData" @change="getSingleSelect(list,index)">
                         </div>
                         <div v-if="cl.type!=='raido'">{{list[cl.value]}}</div>
                     </div>
@@ -25,12 +23,10 @@
                 <div class="titleBox" v-for="item in anesthesiaList" :style="{width:item.width+'px',textAlign:item.textalign}">{{item.text}}</div>
             </div>
             <div class="anesthesia">
-                <div v-for="list in commonTypeListTwo" style="display: flex;">
+                <div v-for="(list,index) in commonTypeListTwo" style="display: flex;">
                     <div v-for="cl in anesthesiaList" :style="{width:cl.width+'px',textAlign:cl.textalign}" style="border:1px solid rgb(177,207,243);box-sizing:border-box;">
                         <div v-if="cl.type=='raido'">
-                            <label :for="list.id">
-                                <input type="checkbox" name="data" :id="list.id">
-                            </label>
+                            <input type="checkbox" :checked="list.checkedData" @change="getSingleSelectTwo(list,index)">
                         </div>
                         <div v-if="cl.type!=='raido'">{{list[cl.value]}}</div>
                     </div>
@@ -170,8 +166,7 @@ export default {
                     five: '0',
                     six: '03',
                     seven: '0',
-                    id: 1 + i,
-                    checkedData:false,
+                    checkedData: false,
                 })
             }
             if (iLength <= 14) {
@@ -192,7 +187,7 @@ export default {
                     five: '0',
                     six: '03',
                     seven: '0',
-                    id:1+i,
+                    checkedData: false,
                 })
             }
             if (iLength <= 7) {
@@ -202,26 +197,37 @@ export default {
             }
         },
         getSingleSelect(item, index) {
-            console.log(item)
-            console.log(index)
-            console.log(this.commonTypeList)
-            for(var i = 0;i<=this.commonTypeList.length;i++){
-                if(index == i){
-                    console.log(this.commonTypeList[index])
-                    item.checkedData = true;
-                    // this.$set(this.commonTypeList[index],'checkedData',trueData)
-                    this.$set(this.commonTypeList,index,item)
-                }else if(index !== i){
-                    // this.commonTypeList[i].checkedData = false;
-                    // console.log(this.commonTypeList[i].checkedData)
+            // console.log(item)
+            // console.log(index)
+            // console.log(this.commonTypeList)
+            for (var i = 0; i <= this.commonTypeList.length - 1; i++) {
+                if (index == i) {
+                    // console.log(this.commonTypeList[index])
+                    this.$set(this.commonTypeList[index], 'checkedData', true)
+                    // item.checkedData = true;
                     // this.$set(this.commonTypeList,index,item)
-                    this.$set(this.commonTypeList[i],'checkedData' ,false)
+                } else if (index !== i) {
+                    this.$set(this.commonTypeList[i], 'checkedData', false)
                 }
-                
-            }
-            
 
+            }
         },
+        getSingleSelectTwo(item, index) {
+            // console.log(item)
+            // console.log(index)
+            // console.log(this.commonTypeListTwo)
+            for (var i = 0; i <= this.commonTypeListTwo.length - 1; i++) {
+                if (index == i) {
+                    // console.log(this.commonTypeListTwo[index])
+                    this.$set(this.commonTypeListTwo[index], 'checkedData', true)
+                    // item.checkedData = true;
+                    // this.$set(this.commonTypeListTwo,index,item)
+                } else if (index !== i) {
+                    this.$set(this.commonTypeListTwo[i], 'checkedData', false)
+                }
+
+            }
+        }
     },
     mounted() {
         this.dataInMonitorBox();
