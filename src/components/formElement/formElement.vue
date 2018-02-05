@@ -53,6 +53,9 @@
         <div v-if="value.type=='formInGrid'">
             <dosageGrid :page="isPage.isPage"></dosageGrid>
         </div>
+        <div v-if="value.type=='operControlGrid'">
+            <operControlGrid :page="isPage.isPage"></operControlGrid>
+        </div>
 	</div>
 </template>
 <script>
@@ -60,6 +63,7 @@ import commonSelect from '@/components/commonSelect/commonSelect.vue';
 import checkBox from '@/components/checkBox/checkBox.vue';
 import tableGrid from '@/components/drawTable/tableGrid.vue';
 import dosageGrid from '@/components/drawTable/dosageGrid.vue';
+import operControlGrid from '@/components/drawTable/operControlGrid.vue';
 export default {
 	data () {
   		return {
@@ -80,7 +84,8 @@ export default {
         commonSelect,
         checkBox,
         tableGrid,
-        dosageGrid
+        dosageGrid,
+        operControlGrid
     },
     mounted(){  
         

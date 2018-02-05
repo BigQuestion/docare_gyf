@@ -370,6 +370,9 @@ export default {
                 text: "入量表格组件",
                 type: "formInGrid",
             },{
+                text: "监控组件",
+                type: "operControlGrid",
+            },{
                 text: "自定义控件",
                 type: "checkBoxAll",
                 defaultItems: "集合",
@@ -552,8 +555,8 @@ export default {
                 this.handleItem = {};
             } else {
                 let data = JSON.parse(e.dataTransfer.getData('data'));
-                data.x = e.clientX - 200 - this.offsetX;
-                data.y = e.clientY - this.offsetY;
+                data.x = e.offsetX;
+                data.y = e.offsetY;
                 this.formItems.push(data);
                 this.handleItem = {};
             }
