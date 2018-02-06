@@ -48,10 +48,12 @@
                     <check-box :boxValue="value" :isEdit="isPage.isPage" v-on:toparentevent="getChlidValue"></check-box>
                 </div>
             </div>
-            
         </div>
         <div v-if="value.type=='formInGrid'">
             <dosageGrid :page="isPage.isPage"></dosageGrid>
+        </div>
+        <div v-if="value.type=='div'">
+            <div style="box-sizing:border-box;" :style="{width:value.width+'px',height:value.height+'px',border:value.borderStyle}"></div>
         </div>
 	</div>
 </template>

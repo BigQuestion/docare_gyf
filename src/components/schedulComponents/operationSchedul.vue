@@ -8,7 +8,7 @@
                     <button @click="dateChange">查询</button>
                 </div>
             </div>
-            <div style="width: 80%;overflow:auto;">
+            <div style="width: 80%;overflow:auto;border:1px solid #999;">
                 <div class="tableBox" :style="{width:totalWidth+'px'}">
                     <div class="flex head" :style="{width:totalWidth+'px'}">
                         <div v-for="(item,index) in tableConfig" class="cell resizeAble" :style="{width:item.width+'px'}" style="text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;box-sizing: border-box;">
@@ -24,8 +24,8 @@
                                 <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
                                     <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
                                         <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
-                                                                                                {{ MzkUser.userName }}
-                                                                                             </option> -->
+                                                                                                            {{ MzkUser.userName }}
+                                                                                                         </option> -->
                                         <!-- 副麻，洗手列表 -->
                                         <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
                                             {{ MzkUser.userName }}
@@ -65,11 +65,15 @@
         </div>
         <div class="mask pCenter" v-if="mask">
             <div class="infoModal">
-                <div class="modalHead"></div>
+                <div class="modalHead">
+                    <span>集合编辑器</span>
+                    <div @click="modalCancel" class="font_active">X</div>
+                </div>
                 <div class="modalBody">
                     <div v-for="item in tableConfig" class="flex">
-                        <div class="label">{{item.text}}</div>
-                        <input type="" name="" v-model="handleItem[item.value]">
+                        <div class="label">{{item.text}}：</div>
+                        <textarea v-if="item.text == '备注'" name="" id="" v-model="handleItem[item.value]"></textarea>
+                        <input v-else style="width:130px;" type="" name="" v-model="handleItem[item.value]">
                     </div>
                 </div>
                 <div class="modalFoot">
@@ -210,7 +214,7 @@ export default {
             ],
             msg: '欢迎登陆！',
             dateValue: '2014-07-08',
-            dataInData:'',
+            dataInData: '',
             scheduleList: [],
             mask: false,
             area: '',
@@ -458,7 +462,7 @@ export default {
                 //this.nextCol.width -= dX;
             }
         },
-        stopDrag(e) { 
+        stopDrag(e) {
             this.area.removeEventListener('mousemove', this.resizeMove);
             this.area.removeEventListener('mouseup', this.stopDrag);
         },
@@ -489,14 +493,27 @@ export default {
 .flex {
     height: 25px;
     line-height: 25px;
+    margin: 5px 10px;
+}
+
+.flex:last-child {
+    height: auto !important;
+}
+
+.flex textarea {
+    resize: none;
+    width: 280px;
+    height: 40px;
 }
 
 .state2 {
-    background: #0080FF;
+    /* background: #0080FF; */
+    color: #0080FF;
 }
 
 .state3 {
-    background: #FF6666;
+    /* background: #FF6666; */
+    color: #FF6666;
 }
 
 .tableBox {
@@ -534,24 +551,55 @@ export default {
 }
 
 .modalFoot {
-    height: 20px;
+    /* height: 20px; */
     width: 100%;
     text-align: right;
+    padding: 10px 10px 15px 0;
+    box-sizing: border-box;
 }
 
 .modalHead {
-    height: 10px;
-    background: #999999;
     width: 100%;
+    height: 30px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding-left: 5px;
+}
+
+.font_active {
+    width: 35px;
+    height: 100%;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    color: rgb(153, 153, 153);
+    font-family: microsoft YaHei;
+}
+
+.font_active:hover {
+    animation: colorChange 0.5s infinite;
+    animation-iteration-count: 1;
+    color: #fff;
+    background-color: rgb(232, 17, 35);
+}
+
+.font_active:active {
+    background-color: rgb(241, 112, 112);
+    color: #fff;
 }
 
 .modalBody {
-    height: calc(100% - 10px - 20px);
-    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    height: auto;
 }
 
 .label {
-    width: 100px;
+    width: 80px;
+    text-align: right;
 }
 
 .cell {
@@ -571,7 +619,7 @@ export default {
 }
 
 .rows:hover {
-    background-color: yellow;
+    background-color: #D8EAF9;
     cursor: pointer;
 }
 
@@ -592,9 +640,13 @@ export default {
 }
 
 .infoModal {
-    width: 400px;
-    height: 300px;
+    width: 500px;
+    height: auto;
     background: #fff;
+    background: rgb(240, 240, 240);
+    border: 1px solid rgb(24, 131, 215);
+    cursor: auto;
+    box-shadow: 1px 1px 20px #AAA;
 }
 
 
@@ -623,6 +675,7 @@ export default {
     border: 0;
     outline: none;
     display: block;
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .noneTriangle {

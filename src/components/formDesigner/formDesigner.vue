@@ -29,13 +29,19 @@
         <div class="flex">
             <div class="leftButtons">
                 <div v-for="btn in btns" class="btn" draggable="true" @dragstart="drag($event,btn)">
-                   <img src="../../assets/gear.png" alt="">
-                   <span>{{btn.text}}</span>
+                    <img src="../../assets/gear.png" alt="">
+                    <span>{{btn.text}}</span>
                 </div>
             </div>
             <div class="autoBox">
                 <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)">
-                    <div @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item,index)" tabindex="0">
+                    <div v-if="item.type == 'div'&&(item.width/2) <= 450" @keyup="show(index,$event)" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" :style="{left:('450' - (item.width/2))+'px'}" v-for="(item,index) in formItems" @click.stop="" @mousedown.stop="itemMouseDown($event,item,index)" tabindex="0">
+                        <form-element :value="item" :isPage="dataInfo"></form-element>
+                    </div>
+                    <div v-if="item.type == 'div'&&(item.width/2) >= 451" @keyup="show(index,$event)" style="position:absolute;min-height: 19px;min-width:10px;left:0;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" @click.stop="" @mousedown.stop="itemMouseDown($event,item,index)" tabindex="0">
+                        <form-element :value="item" :isPage="dataInfo"></form-element>
+                    </div>
+                    <div v-if="item.type !== 'div'" @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item,index)" tabindex="0">
                         <form-element :value="item" :isPage="dataInfo"></form-element>
                     </div>
                     <div class="mask">
@@ -83,20 +89,20 @@
                     </div>
 
                     <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                    <div class="ediChild">
-                                                                        TopMost：
-                                                                    </div>
-                                                                    <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
-                                                                        <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
-                                                                    </select>
-                                                                </div> -->
+                                                                                        <div class="ediChild">
+                                                                                            TopMost：
+                                                                                        </div>
+                                                                                        <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
+                                                                                            <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
+                                                                                        </select>
+                                                                                    </div> -->
                     <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                                    <div class="ediChild">
-                                                                                        Font:
-                                                                                    </div>
-                                                                                    <input type="text">
-                                                                                    <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
-                                                                                </div> -->
+                                                                                                        <div class="ediChild">
+                                                                                                            Font:
+                                                                                                        </div>
+                                                                                                        <input type="text">
+                                                                                                        <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
+                                                                                                    </div> -->
                     <div v-if="chooseItems[0]" class="ediclass">
                         <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
                         <div class="ediChild">
@@ -369,7 +375,7 @@ export default {
             }, {
                 text: "入量表格组件",
                 type: "formInGrid",
-            },{
+            }, {
                 text: "自定义控件",
                 type: "checkBoxAll",
                 defaultItems: "集合",
@@ -379,6 +385,22 @@ export default {
                 MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
                 MultiSelectMode: 'false',
 
+            }, {
+                text: "MedLegengGraph",
+                type: "div",
+                width: "300",
+                height: "300",
+                borderStyle: '1px solid #222',
+                cursor: [
+                    { isData: 'auto' },
+                    { isData: 'ibeam' },
+                    { isData: 'pointer' },
+                    { isData: 'wait' },
+                    { isData: 'not-allowed' },
+                    { isData: 'text' },
+                ],
+                cursorMode: 'auto',
+                opacity: 1,
             }],
             handleItem: {},
             offsetX: '',
@@ -470,8 +492,9 @@ export default {
 
         },
         areaMouseDown(e) {
+            // console.log(e)
             this.dataInCanDelete = false;
-            console.log('dian了其他地方')
+            // console.log('dian了其他地方')
             this.chooseItems = [];
             this.drawing = true;
             this.drawStartX = e.clientX;
@@ -491,6 +514,7 @@ export default {
             // this.chooseRect.endY = e.clientY;
         },
         drawEnd(e) {
+            console.log(this.formItems)
             if (this.drawStartX == e.clientX && this.drawStartY == e.clientY) {
                 this.clearClick(e);
             }
@@ -520,9 +544,9 @@ export default {
         },
         itemChoose(e, item) {
             this.dataInCanDelete = true;
-            console.log('dian')
-            console.log(e)
-            console.log(item)
+            // console.log('dian')
+            // console.log(e)
+            // console.log(item)
             if (this.chooseMode) {
                 this.chooseItems.push(item);
                 //console.log('长度:' + this.chooseItems.length);
@@ -546,15 +570,19 @@ export default {
             e.dataTransfer.setData('data', obj);
         },
         drop: function(e) {
+            // console.log(e)
+            // console.log(this.area.offsetTop)
+            // console.log(this.area.offsetLeft)
             if (this.handleItem.type) {
                 this.handleItem.x = e.clientX - 200 - this.offsetX;
                 this.handleItem.y = e.clientY - this.offsetY;
                 this.handleItem = {};
             } else {
                 let data = JSON.parse(e.dataTransfer.getData('data'));
-                data.x = e.clientX - 200 - this.offsetX;
-                data.y = e.clientY - this.offsetY;
+                data.x = e.clientX - this.area.offsetLeft;
+                data.y = e.clientY - this.area.offsetTop;
                 this.formItems.push(data);
+                console.log(this.formItems)
                 this.handleItem = {};
             }
         },
@@ -743,7 +771,7 @@ export default {
 
 .leftButtons {
     width: 180px;
-    min-width: 150px;
+    min-width: 165px;
     background-color: #fff;
     margin: 0 10px 10px;
     border: 1px solid #8F9399;
@@ -767,17 +795,19 @@ export default {
     color: #fff;
 }
 
-.btn img{
+.btn img {
     width: 15px;
 }
 
-.btn span{
+.btn span {
     padding-left: 5px;
 }
 
 .autoBox {
     width: auto;
     height: auto;
+    /* height: 600px;  */
+    /* width: 900px; */
     box-sizing: border-box;
     border: 1px solid #8F9399;
     margin: 0 10px 10px;
@@ -788,11 +818,11 @@ export default {
 
 .designArea {
     position: relative;
-    /* background: #CCCCCC;*/
     height: 600px;
     width: 900px;
     border: 1px solid;
     overflow: auto;
+    box-sizing: border-box;
 }
 
 .editBox {
@@ -942,6 +972,11 @@ export default {
     background-color: #0078D7;
     color: #fff;
 }
+
+
+
+
+
 
 
 
