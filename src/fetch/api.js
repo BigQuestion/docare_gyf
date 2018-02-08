@@ -19,19 +19,19 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-      method: 'post',
-      url: url,
-      data: JSON.stringify(params),
-      timeout: config.timeout,
-      headers: {
-        'Content-type': 'application/json',
-        "Accept": "*/*",
-      },
-      datatype: "json",
-    })
-      .then(function (response) {
+        method: 'post',
+        url: url,
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype: "json",
+      })
+      .then(function(response) {
         resolve(response.data);
-      }).catch(function (error) {
+      }).catch(function(error) {
         reject(error);
       });
   })
@@ -255,25 +255,25 @@ export default {
     return fetch('medicalsystem/rest/medAnesthesiaComm/medAnesthesiaEventOpenByItemClass', params)
   },
   /**
-    * 插入麻醉事件记录
-    * 
-    */
+   * 插入麻醉事件记录
+   * 
+   */
   insertMedAnesthesiaEventOpen(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/insertMedAnesthesiaEventOpen', params)
   },
 
   /**
-    * 修改麻醉事件记录
-    * 
-    */
+   * 修改麻醉事件记录
+   * 
+   */
   updateMedAnesthesiaEventOpenBatch(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/updateMedAnesthesiaEventOpenBatch', params)
   },
 
   /**
-  * 删除麻醉事件记录
-  * 
-  */
+   * 删除麻醉事件记录
+   * 
+   */
   deleteMedAnesthesiaEventOpen(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnesthesiaEventOpen', params)
   },
@@ -388,10 +388,10 @@ export default {
     return fetch('medicalsystem/rest/medAnesthesiaComm/updateMedAnaesthesiaDict', params)
   },
   /**
- * 删除麻醉方法
- * 
- */
-deleteMedAnaesthesiaDict(params, config) {
+   * 删除麻醉方法
+   * 
+   */
+  deleteMedAnaesthesiaDict(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnaesthesiaDict', params)
   },
   /**

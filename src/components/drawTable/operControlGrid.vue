@@ -16,9 +16,25 @@
 				</g> -->
         <g v-for="(item,index1) in dataPathArray" style="z-index: 22">
           <path :d="item.path" stroke-width="1" fill="none" stroke="blue"></path>
-          <circle v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)"></circle>
+          <circle v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir)" @mouseleave="showData(cir)"></circle>
         </g>
       </svg>
+      <div v-if="tipView">
+        <div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10;padding: 0 2px;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
+          <div>
+            {{mouseItem.itemData.itemName}}
+          </div>
+          <div>
+            ================
+          </div>
+          <div>
+            时间：{{mouseItem.time}}
+          </div>
+          <div>
+            值：{{mouseItem.value}}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +64,11 @@ export default {
       pathArray: [],
       dataPathArray: [],
       signdataList: [],
+      tipTop: 0,
+      tipLeft: 0,
+      tipView: false,
+      mouseItem: '',
+      updateDataArray: [],
     }
 
   },
@@ -89,7 +110,6 @@ export default {
         this.dataPathArray.push({
           path: dataone(this.pathArray[i]),
           circleData: this.pathArray[i],
-          value: this.pathArray[i]
         })
 
       }
@@ -160,6 +180,11 @@ export default {
       var arr1 = this.pathArray[this.pathIndex];
       var arr2 = arr1[this.clickIndex];
       arr1[this.clickIndex] = this.clickItem;
+      if (this.svgHeight - 0.5 <= this.clickItem.y) {
+        this.clickItem.value = 0
+      } else {
+        this.clickItem.value = Math.round((this.svgHeight - e.offsetY) / (this.svgHeight / this.rows) * 10)
+      }
 
       //console.log(arr1[this.clickIndex])
       //this.$set(this.pathArray,1,arr1)
@@ -169,8 +194,32 @@ export default {
       this.calculatePath();
     },
     areaMouseUp(e) {
+      console.log(this.clickItem)
+
       this.area.removeEventListener('mousemove', this.areaMouseMove);
       this.area.removeEventListener('mouseup', this.areaMouseUp);
+      let moveValue
+      if (this.svgHeight - 0.5 <= this.clickItem.y) {
+        moveValue = 0;
+      } else {
+        moveValue = Math.round((this.svgHeight - this.clickItem.y) / (this.svgHeight / this.rows) * 10);
+      }
+
+      this.updateDataArray.push({
+        itemName: this.clickItem.itemData.itemCode,
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
+        eventNo: 0,
+        timePoint: new Date(this.clickItem.time),
+        itemValue: moveValue,
+        operator: "mdsd"
+      })
+      console.log(this.updateDataArray)
+      let params = this.updateDataArray;
+      this.api.updateMedPatientMonitorDatas(params)
+        .then(res => {})
+
     },
 
     getSignName() {
@@ -229,14 +278,14 @@ export default {
                   arr1.push({
                     value: sortArray[j].dataValue[i],
                     time: sortArray[j].time,
-                    itemCode: list[i].itemCode
+                    itemData: list[i]
 
                   })
                 } else {
                   arr1.push({
                     value: "",
                     time: sortArray[j].time,
-                    itemCode: list[i].itemCode
+                    itemData: list[i]
 
                   })
                 }
@@ -246,8 +295,6 @@ export default {
 
 
             }
-            console.log(newArray)
-
             for (var i = 0; i < newArray.length; i++) {
               for (var j = 0; j < newArray[i].length; j++) {
                 let min = this.getMinuteDif(this.config.userInfo.inDateTime, newArray[i][j].time);
@@ -271,6 +318,13 @@ export default {
       min = (enTime - sTime) / 1000 / 60;
       return Math.round(min)
     },
+
+    showData(item) {
+      this.mouseItem = item;
+      this.tipLeft = item.x;
+      this.tipTop = item.y + 20;
+      this.tipView = !this.tipView;
+    }
   },
   mounted() {
     this.getLineXy();
