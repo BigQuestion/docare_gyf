@@ -53,10 +53,11 @@
     </div>
     <div v-if="value.type=='operControlGrid'">
       <operControlGrid :page="isPage.isPage"></operControlGrid>
-      <div v-if="value.type=='div'">
-        <div style="box-sizing:border-box;" :style="{width:value.width+'px',height:value.height+'px',border:value.borderStyle}"></div>
-      </div>
     </div>
+    <div v-if="value.type=='div'">
+      <div style="box-sizing:border-box;" :style="{width:value.width+'px',height:value.height+'px',border:value.borderStyle}"></div>
+    </div>
+  </div>
 </template>
 <script>
 import commonSelect from '@/components/commonSelect/commonSelect.vue';
