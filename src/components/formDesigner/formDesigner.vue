@@ -35,13 +35,16 @@
             </div>
             <div class="autoBox">
                 <div class="designArea" ref="area" @dragover.prevent @drop="drop" @mousedown="areaMouseDown($event)">
-                    <div @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item,index)" tabindex="0">
+                    <!-- <div style="height: 2000px;width: 400px;background-color: red;position: relative;left: 50px;" ref="areadiv"> -->
+                        <div @keyup="show(index,$event)" class="item" style="position:absolute;min-height: 19px;min-width:10px;" :class="{choosed:item.chosen}" v-for="(item,index) in formItems" :style="{left:item.x+'px',top:item.y+'px'}" @click.stop="" @mousedown.stop="itemMouseDown($event,item,index)" tabindex="0">
                         <form-element :value="item" :isPage="dataInfo"></form-element>
                     </div>
                     <div class="mask">
                         <div v-if="drawing" style="background:rgba(0,0,0,0.3);position:absolute;" :style="{left:chooseRect.startX+'px',top:chooseRect.startY+'px',width:(chooseRect.endX-chooseRect.startX)+'px',height:(chooseRect.endY-chooseRect.startY)+'px'}"></div>
                     </div>
-                </div>
+                    </div>
+                    
+                <!-- </div> -->
                 <div style="display:flex;flex-direction:row-reverse;padding-top:10px;">
                     <button @click="save">保存</button>
                 </div>
@@ -549,14 +552,20 @@ export default {
             e.dataTransfer.setData('data', obj);
         },
         drop: function(e) {
+            console.log(e)
             if (this.handleItem.type) {
                 this.handleItem.x = e.clientX - 200 - this.offsetX;
                 this.handleItem.y = e.clientY - this.offsetY;
                 this.handleItem = {};
             } else {
                 let data = JSON.parse(e.dataTransfer.getData('data'));
+                var m = this.$refs.areadiv
+                console.log(m.offsetWidth+"---")
+                console.log(m.offsetLeft+"---")
+                console.log(this.$refs.area.offsetLeft+"---")
                 data.x = e.offsetX;
-                data.y = e.offsetY;
+                data.y = e.clientY;
+                //data.x = e.clientX - m.offsetLeft - this.$refs.area.offsetLeft;
                 this.formItems.push(data);
                 this.handleItem = {};
             }
@@ -707,6 +716,10 @@ export default {
     mounted() {
         this.area = this.$refs.area;
         this.selectMedFormTemp();
+        var m = this.$refs.areadiv
+        console.log(m.offsetWidth+"---")
+        console.log(m.offsetLeft+"---")
+        console.log(this.$refs.area.offsetLeft+"---")
     },
     props: ['dataInfo'],
     created() {
