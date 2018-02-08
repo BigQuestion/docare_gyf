@@ -8,7 +8,6 @@
                 <div :style="logo1" style="background-color: rgb(21,111,174);color:white;line-height: 30px;">
                     <span style="margin-left: 30px;">{{nowTime}}</span>
                 </div>
-
             </div>
             <div class="currentPatientInfo">
                 <span style="color:#CD5C5C;font-size:2em;font-weight: bold;">{{lockedPatientInfo.operatingRoomNo}}</span>
@@ -26,7 +25,7 @@
                             <span style="font-size:18px;">入手术室</span>
                         </div>
                         <div>
-                            <input type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5')">
+                            <input style="width:165px;" type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -35,7 +34,7 @@
                             <span style="font-size:18px;">麻醉开始</span>
                         </div>
                         <div>
-                            <input type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10')">
+                            <input style="width:165px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -44,7 +43,7 @@
                             <span style="font-size:18px;">手术开始</span>
                         </div>
                         <div>
-                            <input type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15')">
+                            <input style="width:165px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -53,7 +52,7 @@
                             <span style="font-size:18px;">手术结束</span>
                         </div>
                         <div>
-                            <input type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25')">
+                            <input style="width:165px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -62,7 +61,7 @@
                             <span style="font-size:18px;">麻醉结束</span>
                         </div>
                         <div>
-                            <input type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30')">
+                            <input style="width:165px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30')">
                         </div>
                     </div>
                     <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -71,7 +70,7 @@
                             <span style="font-size:18px;">出手术室</span>
                         </div>
                         <div>
-                            <input type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35')">
+                            <input style="width:165px;" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35')">
                         </div>
                     </div>
                 </div>
@@ -137,7 +136,8 @@
                 </div>
             </div>
             <div class="content">
-                <div class="patientList">
+                <!-- <div class="patientList" :class="{animationClassNone:showData,animationClassShow:showDataTwo}"> -->
+                <div class="patientList" v-show="showData">
                     <div style="height:110px;">
                         <div style="padding-left: 5px;">
                             日期 <input v-model="getTime" type="date" name="" @keyup.enter='searchPatientList'>
@@ -217,7 +217,14 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="leftNoneBox" @click="leftNone">
+                    <div :class="{trans:transData}" class="leftNoneImg">
+                        <img src="../../assets/left.png" alt="">
+                        <img src="../../assets/left.png" alt="">
+                        <img src="../../assets/left.png" alt="">
+                        <img src="../../assets/left.png" alt="">
+                    </div>
+                </div>
                 <div class="patientInfo" v-if="viewInfo">
                     <div class="pat_title title_back">患者详情</div>
                     <div style="margin-top: 5px;">
@@ -372,9 +379,15 @@
                 </div>
 
                 <!--单子信息-->
-                <div style="position: relative;width: calc(100% - 400px);height: 100%;" v-if="formDetail">
+                <div class="information" v-if="formDetail" :class="{allWidth:widthData}">
                     <div class="designArea">
-                        <div class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
+                        <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
+                            <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+                        </div>
+                        <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
+                            <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+                        </div>
+                        <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
                             <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
                         </div>
                     </div>
@@ -482,6 +495,7 @@ export default {
     data() {
         return {
             patientList: [],
+            widthData: false,
             pageShowData: false,
             pages: '',
             size: 5,
@@ -521,6 +535,9 @@ export default {
             endDateTime: "",
             anesEndTime: "",
             outDateTime: "",
+            transData: false,
+            showData: true,
+            showDataTwo: true,
             patientOperationInfoView: { dataInParent: false },
             operationRegisterView: { dataInParent: false },
             // aboutUsData: { dataInParent: false },
@@ -1013,6 +1030,8 @@ export default {
                         )
 
                 });
+            debugger
+
 
         },
         //修改病人手术状态
@@ -1092,6 +1111,13 @@ export default {
         concealmentFour() {
             this.concealmentFourData = !this.concealmentFourData;
             this.isTransformFour = !this.isTransformFour;
+        },
+        // 病人列表显示隐藏
+        leftNone() {
+            this.transData = !this.transData;
+            this.showData = !this.showData;
+            this.widthData = !this.widthData;
+            this.showDataTwo = !this.showDataTwo;
         },
         //获取单子修改的数据
         getValue(dataValue) {
@@ -1200,9 +1226,8 @@ export default {
 
 .patientList {
     height: 100%;
-    width: 400px;
+    width: 380px;
     min-width: 380px;
-    border-right: 1px solid #7F7F7F;
 }
 
 .patientContent {
@@ -1217,7 +1242,7 @@ export default {
 }
 
 .logo {
-    width: 200px;
+    min-width: 200px;
     /*background: #0080FF;*/
 }
 
@@ -1263,11 +1288,84 @@ export default {
     padding-left: 5px;
 }
 
+
+
+
+
+
+
+
+
+/* .animationClassNone {
+    width: 0;
+    min-width: 0;
+    animation: noneBox 1.5s infinite;
+    animation-iteration-count: 1;
+    overflow: hidden;
+}
+
+@keyframes noneBox {
+    from {
+        width: 380px;
+        min-width: 380px;
+    }
+    to {
+        width: 0;
+        min-width: 0;
+    }
+}
+
+.animationClassShow {
+    width: 380px;
+    min-width: 380px;
+    animation: ShowBox 1.5s infinite;
+    animation-iteration-count: 1;
+    overflow: hidden;
+}
+
+@keyframes ShowBox {
+    from {
+        width: 0;
+        min-width: 0;
+    }
+    to {
+        width: 380px;
+        min-width: 380px;
+    }
+} */
+
+.leftNoneBox {
+    height: 100%;
+    min-width: 7px;
+    background-color: #8DB8F0;
+    position: relative;
+    cursor: pointer;
+    border-right: 1px solid #7F7F7F;
+    border-left: 1px solid #7F7F7F;
+}
+
+.leftNoneImg {
+    width: 7px;
+    height: 82px;
+    position: absolute;
+    top: calc(50% - 41px);
+}
+
+.leftNoneImg img {
+    display: block;
+    width: 7px;
+    height: 7px;
+    margin: 10px 0;
+}
+
+.trans {
+    transform: rotate(180deg);
+}
+
 .patientInfo {
-    width: calc(100% - 350px);
+    width: calc(100% - 358px);
     box-sizing: border-box;
     padding-left: 5px;
-    border-left: 1px solid #7F7F7F;
 }
 
 .patientContentBox {
@@ -1350,20 +1448,27 @@ export default {
     color: rgb(76, 121, 187);
 }
 
+.information {
+    position: relative;
+    width: calc(100% - 391px);
+    height: 100%;
+    box-sizing: border-box;
+    padding-left: 5px;
+}
+
+.allWidth {
+    width: calc(100% - 11px) !important;
+}
+
 .designArea {
     position: relative;
-    height: 600px;
-    width: 900px;
+    height: 720px;
+    width: 100%;
     background: white;
     border: 1px solid black;
     overflow: auto;
+    box-sizing: border-box;
 }
-
-
-
-
-
-
 
 
 
@@ -1458,6 +1563,23 @@ export default {
 .bindClass:hover {
     background: linear-gradient(#e3ebf5, #cbe5f7, #dbecf9);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
