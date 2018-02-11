@@ -95,8 +95,7 @@ export default {
         .then(res => {
           var list = res.list;
           for (var i = 0; i < list.length; i++) {
-            this.$set(this.dataArray, i, list[i]);
-            list[i].dataTime = '';
+
             let x1 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME)
             let x2 = ''
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
@@ -105,6 +104,7 @@ export default {
               x2 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].ENDDATE)
             }
             this.createLine(x1 / this.tbMin * (this.svgWidth / this.columns), x2 / this.tbMin * (this.svgWidth / this.columns), this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows, this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows, list[i]);
+            this.$set(this.dataArray, i, list[i]);
           }
         })
     },
@@ -124,8 +124,6 @@ export default {
       var _this = this;
       var gWidth = this.svgWidth / this.columns;
       obj.dataTime = _this.getTime();
-      _this.dataObj = obj;
-      //this.$set(this.dataObj,"dataTime",this.getTime());
       var t = '';
       svg.append("line")
         .attr('stroke-width', 1)
@@ -164,7 +162,6 @@ export default {
           var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
           obj.dataTime = time2;
           _this.dataObj = obj;
-          console.log(_this.dataObj)
 
         })
     },
@@ -181,7 +178,8 @@ export default {
       x3 = (Number(x1) + Number(x2)) / 2;
       y3 = (Number(y1) + Number(y2)) / 2;
       path += " M" + x2 + "," + y2;
-      path += " L" + (Math.round(x2) + Math.round(Par * cosy - (Par / 2.0 * siny))) + "," + (Math.round(y2) + Math.round(Par * siny + (Par / 2.0 * cosy)));
+      path += " L" + (Math.round(x2) + Math.round(Par * cosy - (Par / 2.0 * siny))) + "," + (Math.round(y2) + Math.round(Par * siny
+ + (Par / 2.0 * cosy)));
       path += " M" + (Math.round(x2) + Math.round(Par * cosy + Par / 2.0 * siny) + "," + (Math.round(y2) - Math.round(Par / 2.0 * cosy - Par * siny)));
       path += " L" + x2 + "," + y2;
       return path;
