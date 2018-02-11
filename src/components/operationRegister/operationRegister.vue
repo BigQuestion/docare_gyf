@@ -12,7 +12,7 @@
         <div style="width:75%;">
           <div style="overflow-y: auto;height: 300px;width: 100%;border:1px solid #222;background-color:#fff;">
             <div style="display: flex;">
-              <div style="border:1px solid rgb(177,207,243);" :style="{width:cell.width+'px'}" v-for="cell in tbconfig">
+              <div style="border:1px solid rgb(177,207,243);" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
                 {{cell.title}}
               </div>
             </div>
@@ -81,13 +81,13 @@
         </div>
         <div style="width:25%;padding: 0px 5px;">
           <div style="border:1px solid #3a3a3a;">
-            <div style="height: 180px;flex-wrap:wrap;display: flex;">
-              <button v-for="item in eventTypeList" style="width: 80px;height: 30px;line-height: 30px;text-align: center;margin-right:10px;" @click="medAnesthesiaEventOpenByItemClass(item)">
+            <div style="height: 180px;flex-wrap:wrap;display: flex;overflow:auto;">
+              <button v-for="item in eventTypeList" style="width: 80px;height: 30px;line-height: 30px;text-align: center;margin:5px 5px 0 0;display:block;" @click="medAnesthesiaEventOpenByItemClass(item)">
                 {{item.typeName}}
               </button>
             </div>
             <div style="background-color:#fff;">
-              <div style="display: flex;margin-top: 5px;border:2px solid balck;width: 85%;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
+              <div style="display: flex;margin-top: 5px;width: calc(100% - 21px);" :class="{width1:widthChange}" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
                 <div style="width: 70%;border:1px solid black;">
                   事件名称
                 </div>
@@ -95,13 +95,13 @@
                   规格
                 </div>
               </div>
-              <div v-else style="display: flex;margin-top: 5px;border:2px solid balck;width: 85%;">
+              <div v-else style="display: flex;margin-top: 5px;width: calc(100% - 21px);" :class="{width1:widthChange}">
                 <div style="width: 100%;border:1px solid black;">
                   事件名称
                 </div>
               </div>
               <div style="height: 150px;overflow-y: auto;box-sizing:border-box;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
-                <div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex" @dblclick="addEvent(item)">
+                <div v-for="item in eventNameList" style="width: 100%;display: flex" @dblclick="addEvent(item)">
                   <div style="width: 70%;border:1px solid black;">
                     {{item.itemName}}
                   </div>
@@ -111,7 +111,7 @@
                 </div>
               </div>
               <div v-else style="height: 150px;overflow-y: auto;box-sizing:border-box;">
-                <div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex">
+                <div v-for="item in eventNameList" style="width: 100%;display: flex">
                   <div style="width: 100%;border:1px solid black;" @dblclick="addEvent(item)">
                     {{item.itemName}}
                   </div>
@@ -328,6 +328,7 @@ export default {
       },
       templetName: '',
       saveTempletView: false,
+      widthChange:false,
     }
   },
   methods: {
@@ -371,6 +372,12 @@ export default {
         .then(
           res => {
             this.eventNameList = res.list;
+            console.log(this.eventNameList)
+            if(this.eventNameList.length>=6){
+                this.widthChange = false;
+            }else{
+                this.widthChange = true;
+            }
             this.newEvenNameList = res.list;
           });
     },
@@ -810,6 +817,8 @@ export default {
 button {
   width: 80px;
   height: 35px;
-  ;
+}
+.width1{
+    width: 100% !important;
 }
 </style>
