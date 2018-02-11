@@ -136,43 +136,6 @@
                     <div style="border: 1px solid #686869;width:100%;height:22px;box-sizing:border-box;">
                         <input style="width:100%;height:100%;border:0;display:block;line-height:20px;outline:none;" v-model="serchZm" placeholder="无字符过滤" @keyup="serchEvent">
                     </div>
-            <div>
-              <div v-for="item in eventList" style="display:flex;" @click="clickItem(item)">
-                <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
-                  <div style="height:25px;" v-if="cl.timeEdit">
-                    <input style="height:25px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                  </div>
-                  <div style="height:25px;" v-else-if="cl.isChixu">
-                    <select style="height:29px;width:42px;" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
-                      <option v-bind:value="0">
-                        0
-                      </option>
-                      <option v-bind:value="1">
-                        1
-                      </option>
-                    </select>
-                  </div>
-                  <div v-else style="height:25px;">
-                    <input style="height:25px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                  </div>
-                </div>
-                <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
-                  <div v-if="cl.timeEdit">
-                    <input @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                  </div>
-                  <div v-else-if="cl.isChixu">
-                    <select disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
-                      <option v-bind:value="0">
-                        0
-                      </option>
-                      <option v-bind:value="1">
-                        1
-                      </option>
-                    </select>
-                  </div>
-                  <div v-else>
-                    <input readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                  </div>
                 </div>
               </div>
             </div>
