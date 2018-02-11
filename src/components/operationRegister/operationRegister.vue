@@ -12,7 +12,7 @@
                 <div style="width:75%;">
                     <div style="overflow-y: auto;height: 300px;width: 100%;border:1px solid #222;background-color:#fff;">
                         <div style="display: flex;">
-                            <div style="border:1px solid rgb(177,207,243);" :style="{width:cell.width+'px'}" v-for="cell in tbconfig">
+                            <div style="border:1px solid rgb(177,207,243);" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
                                 {{cell.title}}
                             </div>
                         </div>
@@ -84,13 +84,13 @@
                 </div>
                 <div style="width:25%;padding: 0px 5px;">
                     <div style="border:1px solid #3a3a3a;">
-                        <div style="height: 180px;flex-wrap:wrap;display: flex;">
-                            <button v-for="item in eventTypeList" style="width: 80px;height: 30px;line-height: 30px;text-align: center;margin-right:10px;" @click="medAnesthesiaEventOpenByItemClass(item)">
+                        <div style="height: 180px;flex-wrap:wrap;display: flex;overflow:auto;">
+                            <button v-for="item in eventTypeList" style="display:block;margin-top:5px;width: 80px;height: 30px;line-height: 30px;text-align: center;margin-right:5px;" @click="medAnesthesiaEventOpenByItemClass(item)">
                                 {{item.typeName}}
                             </button>
                         </div>
                         <div style="background-color:#fff;">
-                            <div style="display: flex;margin-top: 5px;border:2px solid balck;width: 85%;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
+                            <div style="display: flex;margin-top: 5px;width:calc(100% - 21px);" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
                                 <div style="width: 70%;border:1px solid black;">
                                     事件名称
                                 </div>
@@ -98,13 +98,13 @@
                                     规格
                                 </div>
                             </div>
-                            <div v-else style="display: flex;margin-top: 5px;border:2px solid balck;width: 85%;">
+                            <div v-else style="display: flex;margin-top: 5px;width:calc(100% - 20px);">
                                 <div style="width: 100%;border:1px solid black;">
                                     事件名称
                                 </div>
                             </div>
                             <div style="height: 150px;overflow-y: auto;box-sizing:border-box;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
-                                <div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex" @dblclick="addEvent(item)">
+                                <div v-for="item in eventNameList" style="width: 100%;display: flex" @dblclick="addEvent(item)">
                                     <div style="width: 70%;border:1px solid black;">
                                         {{item.itemName}}
                                     </div>
@@ -114,7 +114,7 @@
                                 </div>
                             </div>
                             <div v-else style="height: 150px;overflow-y: auto;box-sizing:border-box;">
-                                <div v-for="item in eventNameList" style="width: 90%;border-bottom: 1px solid black;display: flex">
+                                <div v-for="item in eventNameList" style="width: 100%;border-bottom: 1px solid black;display: flex">
                                     <div style="width: 100%;border:1px solid black;" @dblclick="addEvent(item)">
                                         {{item.itemName}}
                                     </div>
@@ -163,39 +163,34 @@
 
             </div>
             <!-- 插入数据位置 -->
-            <div v-if="addView" style="width: 700px;min-height: 400px;background-color: white;z-index: 3;position: absolute;top: 20%;left: 30%;border:2px solid rgb(61,164,206);">
-                <div style="height: 40px;background-color: rgb(61,164,206);">
-                    <span style="line-height: 40px;font-size: 20px;color:white;">插入体征数据</span>
+            <div v-if="addView" style="width: 700px;height: 330px;background-color: #E3EFFF;z-index: 3;position: absolute;top: calc(50% - 155px);left: calc(50% - 350px);border:2px solid rgb(61,164,206);">
+                <div class="load_top">
+                    <div style="font-size: 18px;color:white;">插入体征数据</div>
+                    <div @click="insertView" class="top_active">X</div>
                 </div>
-                <div style="padding: 15px;">
-                    <div style="display: flex;">
-                        <div style="width: 100px;text-align: center;">开始时间</div>
-                        <div>
-                            <input type="datetime-local" v-model="insertStartTime">
-                        </div>
-                        <div style="width: 100px;text-align: center;">结束时间</div>
-                        <div>
-                            <input type="datetime-local" v-model="insertEndTime">
-                        </div>
+                <div style="padding: 15px;box-sizing:border-box;height:calc(100% - 80px);display:flex;flex-wrap:wrap;">
+                    <div style="display: flex;height:21px;">
+                        <div style="width: 80px;">开始时间</div>
+                        <input type="datetime-local" v-model="insertStartTime">
                     </div>
-                    <div style="display: flex;">
-                        <div style="width: 100px;text-align: center;">时间间隔</div>
-                        <div>
-                            <input type="text" v-model="spaceTime">
-                            <span>秒</span>
-                        </div>
+                    <div style="display: flex;height:21px;">
+                        <div style="width: 80px;padding-left:68px;">结束时间</div>
+                        <input type="datetime-local" v-model="insertEndTime">
                     </div>
-                    <div style="display: flex;" v-for="item in itemNameList">
-                        <div style="width: 100px;text-align: center;">{{item.itemName}}</div>
-                        <div>
-                            <input v-model="item.itemValue" type="" name="" @change="getaddItem(item)">
-                            <span>{{item.itemUnit}}</span>
-                        </div>
+                    <div style="display: flex;height:21px;">
+                        <div style="width: 80px;">时间间隔</div>
+                        <input type="text" v-model="spaceTime">
+                        <div style="width:55px;padding:0 10px;">秒</div>
                     </div>
-                    <div style="margin-top: 20px;">
-                        <button @click="addItem" style="width: 80px;">确定</button>
-                        <button @click="insertView" style="width: 80px;">取消</button>
+                    <div style="display: flex;height:21px;" v-for="item in itemNameList">
+                        <div style="width: 80px;">{{item.itemName}}</div>
+                        <input v-model="item.itemValue" type="" name="" @change="getaddItem(item)">
+                        <div style="width:55px;padding:0 10px;">{{item.itemUnit}}</div>
                     </div>
+                </div>
+                <div style="text-align:right;padding-right:10px;">
+                    <button @click="addItem" style="width: 80px;">确定</button>
+                    <button @click="insertView" style="width: 80px;">取消</button>
                 </div>
             </div>
 
