@@ -4,7 +4,7 @@
             <!-- 显示类别 -->
             <div style="box-sizing:border-box;height: 100%;width: 30%;overflow-x: auto;padding-top:5px;border-right: 2px solid rgb(177,207,243);">
                 <ul v-for="item in eventChildData">
-                    <li style="cursor:pointer;" @click="getTypeDetail(item)">
+                    <li class="hoverStyle" style="cursor:pointer;" @click="getTypeDetail(item)">
                         <div style="margin-left: 20px;">{{item.typeName}}</div>
                     </li>
                 </ul>
@@ -272,4 +272,9 @@ export default {
     background-size: cover;
     padding-left: 5px;
 }
+.hoverStyle:hover{
+    background-color: #316AC5;
+    color: #fff;
+}
+
 </style>

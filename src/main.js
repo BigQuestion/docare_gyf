@@ -28,6 +28,7 @@ Vue.prototype.datetimeLocalToDate = function(time) {
 		dateChange.setHours(parseInt(time.substring(11, 13)));
 		dateChange.setMinutes(parseInt(time.substring(14, 16)));
 		return dateChange;
+		console.log(dateChange)
 	}
 	else
 	{
