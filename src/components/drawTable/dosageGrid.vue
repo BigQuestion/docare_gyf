@@ -27,6 +27,8 @@
         </div>
       </div>
     </div>
+    <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
+    </div>
     <div style="height: 100px;width: 140px; position: absolute;top: 0px;left: -140px;">
       <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;" :style="{height:svgHeight/rows-1+'px'}">{{item.ITEM_NAME}}</div>
     </div>
@@ -61,6 +63,7 @@ export default {
       tipLeft: 0,
       tipView: false,
       dataObj: {},
+      xArray: [],
     }
   },
   methods: {
@@ -96,14 +99,26 @@ export default {
           var list = res.list;
           for (var i = 0; i < list.length; i++) {
 
-            let x1 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME)
-            let x2 = ''
+            let t1 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME)
+            let t2 = ''
+            let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+            let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-              x2 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].MAX_TIME)
+              t2 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].MAX_TIME)
             } else {
-              x2 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].ENDDATE)
+              t2 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].ENDDATE)
             }
-            this.createLine(x1 / this.tbMin * (this.svgWidth / this.columns), x2 / this.tbMin * (this.svgWidth / this.columns), this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows, this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows, list[i]);
+            let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)
+            let x2 = t2 / this.tbMin * (this.svgWidth / this.columns)
+            this.createLine(x1, x2, y1, y2, list[i]);
+            this.xArray.push({
+              x1: x1,
+              y1: y1,
+              x2: x2,
+              y2: y2,
+              w: x2 - x1,
+              obj: list[i]
+            })
             this.$set(this.dataArray, i, list[i]);
           }
         })
@@ -139,31 +154,8 @@ export default {
         .attr('stroke-width', 1)
         .attr("fill", "none")
         .attr("stroke", "blue")
-        .on("mouseenter", function(ev) {
-          //clearTimeout(t)
-          _this.tipView = true;
-          _this.tipLeft = x1;
-          _this.tipTop = y2 + 10;
-          _this.dataObj = obj;
-        })
-        .on("mouseleave", function() {
-          // t = setTimeout(function() {
-          _this.tipView = false;
-          // }, 500);
-        })
-        .on("mousemove", function(ev) {
-          _this.$set(_this.dataObj, "dataTime", _this.getTime());
-          var ev = ev || event;
-          //横坐标值
-          var offX = ev.offsetX;
-          var m = Math.round(offX / gWidth * 5);
-          var time = new Date(_this.config.userInfo.inDateTime);
-          var time1 = time.getTime() + m * 60 * 1000;
-          var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
-          obj.dataTime = time2;
-          _this.dataObj = obj;
+        // .on("mouseenter", function(ev) { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.dataObj = obj; // }) // .on("mouseleave", function() { // // t = setTimeout(function() { // _this.tipView = false; // // }, 500); // }) // .on("mousemove", function(ev) { // _this.$set(_this.dataObj, "dataTime", _this.getTime()); // var ev = ev || event; // //横坐标值 // var offX = ev.offsetX; // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.dataTime = time2; // _this.dataObj = obj; // })
 
-        })
     },
 
     drawLineArrow(x1, y1, x2, y2) {
@@ -178,8 +170,8 @@ export default {
       x3 = (Number(x1) + Number(x2)) / 2;
       y3 = (Number(y1) + Number(y2)) / 2;
       path += " M" + x2 + "," + y2;
-      path += " L" + (Math.round(x2) + Math.round(Par * cosy - (Par / 2.0 * siny))) + "," + (Math.round(y2) + Math.round(Par * siny
- + (Par / 2.0 * cosy)));
+      path += " L" + (Math.round(x2) + Math.round(Par * cosy - (Par / 2.0 * siny))) + "," + (Math.round(y2) + Math.round(Par * siny +
+        (Par / 2.0 * cosy)));
       path += " M" + (Math.round(x2) + Math.round(Par * cosy + Par / 2.0 * siny) + "," + (Math.round(y2) - Math.round(Par / 2.0 * cosy - Par * siny)));
       path += " L" + x2 + "," + y2;
       return path;
@@ -187,6 +179,29 @@ export default {
 
     getTime() {
       return new Date().Format("yyyy-MM-dd hh:mm:ss")
+    },
+    showTipInfo(item) {
+      this.tipView = true;
+      this.tipLeft = item.x1;
+      this.tipTop = item.y2 + 10;
+      this.dataObj = item.obj;
+    },
+    hideTipInfo() {
+      this.tipView = false;
+      this.dataObj = '';
+    },
+    mouseMoveInfo(item, ev) {
+      item.obj.nowTime = this.getTime();
+      var gWidth = this.svgWidth / this.columns;
+      this.$set(this.dataObj, "dataTime", this.getTime());
+      //var ev = ev || event;
+      var offX = ev.offsetX + item.x1; //横坐标值
+      var m = Math.round(offX / gWidth * 5);
+      var time = new Date(this.config.userInfo.inDateTime);
+      var time1 = time.getTime() + m * 60 * 1000;
+      var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
+      item.obj.dataTime = time2;
+      this.dataObj = item.obj;
     }
   },
   mounted() {

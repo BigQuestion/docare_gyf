@@ -727,10 +727,6 @@ export default {
   mounted() {
     this.area = this.$refs.area;
     this.selectMedFormTemp();
-    var m = this.$refs.areadiv
-    console.log(m.offsetWidth + "---")
-    console.log(m.offsetLeft + "---")
-    console.log(this.$refs.area.offsetLeft + "---")
   },
   props: ['dataInfo'],
   created() {
@@ -971,6 +967,9 @@ export default {
   background-color: #0078D7;
   color: #fff;
 }
+
+
+
 
 
 
