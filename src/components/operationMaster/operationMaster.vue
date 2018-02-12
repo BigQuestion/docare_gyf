@@ -25,7 +25,7 @@
               <span style="font-size:18px;">入手术室</span>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5')">
+              <input style="width:165px;" type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -34,7 +34,7 @@
               <span style="font-size:18px;">麻醉开始</span>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10')">
+              <input style="width:165px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -43,7 +43,7 @@
               <span style="font-size:18px;">手术开始</span>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15')">
+              <input style="width:165px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -52,7 +52,7 @@
               <span style="font-size:18px;">手术结束</span>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25')">
+              <input style="width:165px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -61,7 +61,7 @@
               <span style="font-size:18px;">麻醉结束</span>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30')">
+              <input style="width:165px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -70,7 +70,7 @@
               <span style="font-size:18px;">出手术室</span>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35')">
+              <input style="width:165px;" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35',$event)">
             </div>
           </div>
         </div>
@@ -90,7 +90,7 @@
             </div>
             <div class="active_back" @click="concealmentOne"><img :class="{transform:isTransformOne}" src="../../assets/bottom.png"></div>
           </div>
-          <div v-if="concealmentOneData" style="padding:5px;">
+          <div v-if="concealmentOneData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button class="list_button">检查信息</button>
             <button class="list_button">检查结果</button>
             <button class="list_button">医嘱信息</button>
@@ -103,7 +103,7 @@
             </div>
             <div class="active_back" @click="concealmentTwe"><img :class="{transform:isTransformTwe}" src="../../assets/bottom.png"></div>
           </div>
-          <div v-if="concealmentTweData" style="padding:5px;">
+          <div v-if="concealmentTweData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
             <button v-if="formDetail" class="list_button" @click="getOperationRegister">术中登记</button>
             <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button>
@@ -117,7 +117,7 @@
             </div>
             <div class="active_back" @click="concealmentThree"><img :class="{transform:isTransformThree}" src="../../assets/bottom.png"></div>
           </div>
-          <div v-if="concealmentThreeData" style="padding:5px;">
+          <div v-if="concealmentThreeData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button @click="dictShow" class="list_button">字典</button>
           </div>
         </div>
@@ -128,7 +128,7 @@
             </div>
             <div class="active_back" @click="concealmentFour"><img :class="{transform:isTransformFour}" src="../../assets/bottom.png"></div>
           </div>
-          <div v-if="concealmentFourData" style="padding:5px;">
+          <div v-if="concealmentFourData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button class="list_button">系统配置</button>
             <button @click="getAboutUs" class="list_button">关于</button>
             <button @click="exitSystem" class="list_button">退出系统</button>
@@ -172,7 +172,7 @@
               </div>
             </div>
           </div>
-          <div style="overflow-y: auto;height:calc(100% - 110px - 100px)">
+          <div style="overflow-y: auto;height:calc(100% - 110px - 98px)">
             <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
               <div class="patientContent title_back">
                 <span>手术间 {{item.operatingRoomNo}}</span>
@@ -188,14 +188,14 @@
           </div>
           <div v-if="pageShowData" class="pageClass">
             <div>
-              <div style="display:flex;items-align:center;">
+              <div style="display:flex;items-align:center;padding-top:3px;">
                 <span>患者数量:</span>
                 <span style="color:rgb(0, 26, 250);padding:0 5px;">{{pageLength.length}}</span>
                 <span style="padding-right:5px;">共{{pages}}页</span>
                 <span>每页显示</span>
                 <input style="width:50px;" type="number" min="5" max="100" @change="dataInSize($event)" v-model="size">
               </div>
-              <div style="display:flex;items-align:center;padding-top:5px;">
+              <div style="display:flex;items-align:center;padding-top:10px;">
                 <button @click="firstPage" style="width:60px;">首页</button>
                 <button @click="pageRe" style="width:60px;">上一页</button>
                 <div @click="showSelect" class="pageInDiv">
@@ -210,11 +210,11 @@
             </div>
             <div>
               <span>排序方式</span>
-              <div>
+              <div @click="sort0">
                 <input type="radio" id="house" name="sort">
                 <label for="house">术间</label>
               </div>
-              <div>
+              <div @click="sort1">
                 <input type="radio" id="timeHo" name="sort">
                 <label for="timeHo">时间</label>
               </div>
@@ -436,7 +436,7 @@
             <!-- 显示类别 -->
             <div style="box-sizing:border-box;height: 100%;width: 30%;overflow-x: auto;padding-top:5px;border-right: 2px solid rgb(177,207,243);">
               <ul v-for="item in comTypeList">
-                <li style="cursor:pointer;" @click="getTypeDetail(item)">
+                <li class="hoverStyle" style="cursor:pointer;" @click="getTypeDetail(item)">
                   <div style="margin-left: 20px;">{{item.typeName}}</div>
                 </li>
               </ul>
@@ -444,14 +444,14 @@
             <!-- 显示详细内容 -->
             <div style="width: 70%;margin-top:5px;overflow-y: auto;">
               <div style="display: flex;margin-left: 10px;">
-                <div style="width: 24%;border:1px solid rgb(177,207,243);" v-for="cell in contentConfig">{{cell.text}}</div>
+                <div class="topList" v-for="cell in contentConfig">{{cell.text}}</div>
               </div>
               <div style="overflow-y: auto;">
                 <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
-                  <div v-for="cl in contentConfig" style="width: 24%;border:1px solid rgb(177,207,243);">
-                    <div v-if="cl.status=='inable'">
-                      <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change">
-                      <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)">
+                  <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177, 207, 243);">
+                    <div style="height:100%;" v-if="cl.status=='inable'">
+                      <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change" style="display:block;width:100%;border:0;height:100%;outline:none;">
+                      <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
                     </div>
                     <div v-if="cl.status!='inable'">
                       {{list[cl.value]}}
@@ -492,7 +492,6 @@ import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent
 import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
 import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
 import monitor from '@/components/monitor/monitor.vue';
-
 export default {
   data() {
     return {
@@ -500,7 +499,8 @@ export default {
       widthData: false,
       pageShowData: false,
       pages: '',
-      size: 5,
+      sortData: '',
+      size: 6,
       pageNum: 1,
       dataInSelect: false,
       pageLength: [],
@@ -551,7 +551,6 @@ export default {
       contentConfig: [{
           text: "序号",
           value: "serialNo"
-
         },
         {
           text: "分类",
@@ -567,7 +566,6 @@ export default {
           value: "newItemCode",
           status: "inable"
         },
-
       ],
       commonTypeList: [],
       dictView: false,
@@ -623,7 +621,6 @@ export default {
         }
         this.getTime = year + "-" + month + "-" + day;
       }
-
       let params = {
         // count: this.size,
         // page: this.pageNum,
@@ -635,10 +632,22 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
           res => {
-            this.patientList = res.list;
-            console.log(this.patientList)
             this.pageLength = res.list;
             if (this.pageLength.length > 5) {
+              let paramsTwo = {
+                count: this.size,
+                page: this.pageNum,
+                dateTime: this.getTime,
+                operStatus: this.operStatus,
+                patientName: this.patientName,
+                patientId: this.patientId
+              }
+              this.api.getMedOperationMasterList(paramsTwo)
+                .then(
+                  res => {
+                    this.patientList = res.list;
+                    console.log(this.patientList)
+                  });
               this.pageShowData = true;
               this.pages = Math.ceil(this.pageLength.length / this.size)
               this.dataTypeInAllSelect = [];
@@ -649,11 +658,50 @@ export default {
               }
               console.log(this.dataTypeInAllSelect)
             } else {
+              this.patientList = res.list;
+              console.log(this.patientList)
               this.pageShowData = false;
+              this.size = 6;
+              this.pageNum = 1;
+              this.sortData = '';
             }
-
           });
-
+    },
+    sort0() {
+      this.sortData = 0;
+      let params = {
+        count: this.size,
+        page: this.pageNum,
+        orderFlag: this.sortData,
+        dateTime: this.getTime,
+        operStatus: this.operStatus,
+        patientName: this.patientName,
+        patientId: this.patientId
+      }
+      this.api.getMedOperationMasterList(params)
+        .then(
+          res => {
+            this.patientList = res.list;
+            console.log(this.patientList)
+          });
+    },
+    sort1() {
+      this.sortData = 1;
+      let params = {
+        count: this.size,
+        page: this.pageNum,
+        orderFlag: this.sortData,
+        dateTime: this.getTime,
+        operStatus: this.operStatus,
+        patientName: this.patientName,
+        patientId: this.patientId
+      }
+      this.api.getMedOperationMasterList(params)
+        .then(
+          res => {
+            this.patientList = res.list;
+            console.log(this.patientList)
+          });
     },
     searchPatientListScreen() {
       if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
@@ -669,10 +717,10 @@ export default {
         }
         this.getTime = year + "-" + month + "-" + day;
       }
-
       let params = {
         count: this.size,
         page: this.pageNum,
+        orderFlag: this.sortData,
         dateTime: this.getTime,
         operStatus: this.operStatus,
         patientName: this.patientName,
@@ -684,14 +732,11 @@ export default {
             this.patientList = res.list;
             console.log(this.patientList)
           });
-
     },
     showSelect() {
       this.dataInSelect = !this.dataInSelect;
     },
-    noClick() {
-
-    },
+    noClick() {},
     // 选择麻醉列表显示数量
     dataInSize(value) {
       this.pageNum = 1;
@@ -713,9 +758,7 @@ export default {
     },
     // 当前页减一
     pageRe() {
-      if (this.pageNum == 1) {
-
-      } else {
+      if (this.pageNum == 1) {} else {
         this.pageNum = this.pageNum - 1;
         console.log(this.pageNum)
         this.searchPatientListScreen();
@@ -723,9 +766,7 @@ export default {
     },
     // 当前页加一
     pageAd() {
-      if (this.pages == this.pageNum) {
-
-      } else {
+      if (this.pages == this.pageNum) {} else {
         this.pageNum = this.pageNum + 1;
         console.log(this.pageNum)
         this.searchPatientListScreen();
@@ -886,7 +927,6 @@ export default {
             this.commonTypeList = res.list;
           });
     },
-
     dictShow() {
       this.dictView = true;
     },
@@ -957,7 +997,6 @@ export default {
           .then(
             res => {
               this.getTypeDetail(this.tempTypeItem);
-
             });
       }
       this.isCancle = true;
@@ -976,7 +1015,6 @@ export default {
             }
             console.log(this.medBillList)
           });
-
     },
     selectMedFormTemp(item) {
       console.log(item)
@@ -995,7 +1033,6 @@ export default {
       }
       let arry = [];
       this.formItems = [];
-
       this.api.selectMedFormTemp(params)
         .then(
           res => {
@@ -1027,14 +1064,20 @@ export default {
                   }
                 }
               )
-
           });
       debugger
-
-
     },
     //修改病人手术状态
-    changeStatus(status) {
+    changeStatus(status, event) {
+      console.log(event.srcElement._value)
+      console.log(
+        this.inRoomDateTime,
+        this.anesStartTime,
+        this.startDateTime,
+        this.endDateTime,
+        this.anesEndTime,
+        this.outDateTime,
+      )
       console.log(this.datetimeLocalToDate(this.inRoomDateTime));
       let params = {
         patientId: this.lockedPatientInfo.patientId,
@@ -1050,7 +1093,6 @@ export default {
         operatingRoom: this.lockedPatientInfo.operatingRoom,
         operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
       }
-
       this.api.changeOperationStatus(params)
         .then(
           res => {
@@ -1074,9 +1116,7 @@ export default {
       if (confirm("是否要取消该手术?")) {
         console.log('还未调用接口')
         alert("手术已取消");
-      } else {
-
-      }
+      } else {}
     },
     // 关于
     getAboutUs() {
@@ -1090,9 +1130,7 @@ export default {
         this.$router.push({
           path: 'login'
         })
-      } else {
-
-      }
+      } else {}
     },
     // 左部选项按下拉显示隐藏及图片切换
     concealmentOne() {
@@ -1120,21 +1158,16 @@ export default {
     },
     //获取单子修改的数据
     getValue(dataValue) {
-      debugger
       var tempData = this.updateFormsData;
       if (tempData.length > 0) {
         var count = 0;
         for (var i = 0; i < this.updateFormsData.length; i++) {
           //如果之前传入有相同的表名与字段名则更新值
-
           if (this.updateFormsData[i].tableName === dataValue.tableName && this.updateFormsData[i].coluName === dataValue.fieldName) {
-
             this.updateFormsData[i].updateStr = dataValue.value;
           } else {
-
             count++;
           }
-
         }
         if (count == this.updateFormsData.length) {
           this.updateFormsData.push({
@@ -1146,7 +1179,6 @@ export default {
             "operId": this.lockedPatientInfo.operId,
           });
         }
-
       } else {
         this.updateFormsData.push({
           "tableName": dataValue.tableName,
@@ -1157,7 +1189,6 @@ export default {
           "operId": this.lockedPatientInfo.operId,
         });
       }
-
     },
     //提交单子修改
     submitSaveForm() {
@@ -1181,7 +1212,6 @@ export default {
       this.updateFormsData = [];
       this.selectMedFormTemp(this.selectFormItemTemp);
     }
-
   },
   mounted() {
     this.searchPatientList();
@@ -1189,7 +1219,6 @@ export default {
     this.selectMedFormList();
     this.patientId = '10966589';
   },
-
   components: {
     formElement,
     formDesigner,
@@ -1256,7 +1285,7 @@ export default {
 .head {
   height: 100px;
   width: 100%;
-  background: #CCCCCC;
+  background: #CCC;
   display: flex;
 }
 
@@ -1285,53 +1314,6 @@ export default {
   padding-bottom: 5px;
   padding-left: 5px;
 }
-
-
-
-
-
-
-
-
-
-
-/* .animationClassNone {
-    width: 0;
-    min-width: 0;
-    animation: noneBox 1.5s infinite;
-    animation-iteration-count: 1;
-    overflow: hidden;
-}
-
-@keyframes noneBox {
-    from {
-        width: 380px;
-        min-width: 380px;
-    }
-    to {
-        width: 0;
-        min-width: 0;
-    }
-}
-
-.animationClassShow {
-    width: 380px;
-    min-width: 380px;
-    animation: ShowBox 1.5s infinite;
-    animation-iteration-count: 1;
-    overflow: hidden;
-}
-
-@keyframes ShowBox {
-    from {
-        width: 0;
-        min-width: 0;
-    }
-    to {
-        width: 380px;
-        min-width: 380px;
-    }
-} */
 
 .leftNoneBox {
   height: 100%;
@@ -1372,7 +1354,6 @@ export default {
   border: 1px solid rgb(177, 207, 243);
   box-sizing: border-box;
 }
-
 
 .pat_title {
   height: 35px;
@@ -1469,20 +1450,18 @@ export default {
   box-sizing: border-box;
 }
 
+.hoverStyle:hover {
+  background-color: #316AC5;
+  color: #fff;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+.topList {
+  width: 160px;
+  border: 1px solid rgb(177, 207, 243);
+  color: #4C79BB;
+  background: url('../../assets/contentTitleBack.jpg')no-repeat;
+  background-size: cover;
+}
 
 
 /* 左部菜单按钮部分样式 */
@@ -1528,7 +1507,7 @@ export default {
 
 .list_button {
   width: 90px;
-  margin: 0 0 5px 2px;
+  margin: 0 0 5px 5px;
 }
 
 .transform {
@@ -1565,47 +1544,10 @@ export default {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* 分页样式 */
 
 .pageClass {
-  height: 100px;
+  height: 98px;
   background-color: lightblue;
   display: flex;
   justify-content: space-between;
