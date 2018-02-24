@@ -729,13 +729,10 @@ export default {
   mounted() {
     this.area = this.$refs.area;
     this.selectMedFormTemp();
-<<<<<<< HEAD
     var m = this.$refs.areadiv
     // console.log(m.offsetWidth + "---")
     // console.log(m.offsetLeft + "---")
     console.log(this.$refs.area.offsetLeft + "---")
-=======
->>>>>>> 0c11913d77c793c34d307471daa8649fb17c9531
   },
   props: ['dataInfo'],
   created() {
@@ -978,29 +975,6 @@ export default {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 0c11913d77c793c34d307471daa8649fb17c9531
 /* 顶部功能按钮样式 */
 
 .buttonOfTop {
