@@ -35,6 +35,16 @@
           </div>
         </div>
       </div>
+      <div style="position: absolute;bottom: 0px;left: -30px;text-align: right;font-size: 12px;">
+        <div v-for="item in yValueArray" style="height: 22px;">
+          {{item}}
+        </div>
+      </div>
+      <div style="position: absolute;bottom: 0px;right: -30px;text-align: left;font-size: 12px;">
+        <div v-for="item in yValueArray" style="height: 22px;">
+          {{item}}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -69,6 +79,7 @@ export default {
       tipView: false,
       mouseItem: '',
       updateDataArray: [],
+      yValueArray: []
     }
 
   },
@@ -218,7 +229,9 @@ export default {
       console.log(this.updateDataArray)
       let params = this.updateDataArray;
       this.api.updateMedPatientMonitorDatas(params)
-        .then(res => {})
+        .then(res => {
+          this.updateDataArray = [];
+        })
 
     },
 
@@ -324,11 +337,20 @@ export default {
       this.tipLeft = item.x;
       this.tipTop = item.y + 20;
       this.tipView = !this.tipView;
+    },
+
+    getYDataArray() {
+      var arry = [0];
+      for (var i = 0; i < 11; i++) {
+        arry.push(i * 20 + 20)
+      }
+      this.yValueArray = arry.reverse();
     }
   },
   mounted() {
     this.getLineXy();
     this.getSignName();
+    this.getYDataArray();
     this.area = this.$refs.area;
   },
   components: {

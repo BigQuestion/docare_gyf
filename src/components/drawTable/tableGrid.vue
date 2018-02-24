@@ -13,6 +13,8 @@
 			</div> -->
       </div>
       <div id="tableGrid" style="position: relative;">
+        <svg :width="svgWidth" :height="svgHeight">
+        </svg>
         <div v-if="tipView">
           <div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
             <div>
@@ -49,6 +51,8 @@
 						ivg
 					</span>
           </div>
+        </div>
+        <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
         </div>
       </div>
     </div>
@@ -92,6 +96,7 @@ export default {
       tipLeft: 0,
       tipView: false,
       lineObj: {},
+      xArray: [],
 
     }
   },
@@ -107,9 +112,7 @@ export default {
       this.ht = h;
 
       //(3) 绘制SVG  
-      var svg = d3.select("#tableGrid").append("svg")
-        .attr("width", w)
-        .attr("height", h);
+      var svg = d3.select("svg")
       //(4) 给SVG添加分组，并设置样式类，样式见<style>标签中的设置  
       // console.log(x(0.51))
       var grid = svg.selectAll(".grid")
@@ -203,16 +206,28 @@ export default {
                 // console.log(this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME))
 
                 //开始时间间隔
-                var sMin = '';
+                let sMin = ''
                 //结束时间间隔
-                var eMin = '';
+                let eMin = ''
                 sMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME);
                 if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
                   eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].MAX_TIME);
                 } else {
                   eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].ENDDATE);
                 }
-                this.createLine(Math.round(sMin / lMin * (w / this.columns)), Math.round(eMin / lMin * (w / this.columns)), Math.round(h / this.rows / 2 * (i + 1) + h / this.rows * i / 2), Math.round(h / this.rows / 2 * (i + 1) + h / this.rows * i / 2), list[i]);
+                let x1 = Math.round(sMin / lMin * (w / this.columns))
+                let x2 = Math.round(eMin / lMin * (w / this.columns))
+                let y1 = Math.round(h / this.rows / 2 * (i + 1) + h / this.rows * i / 2)
+                let y2 = Math.round(h / this.rows / 2 * (i + 1) + h / this.rows * i / 2)
+                this.createLine(x1, x2, y1, y2, list[i]);
+                this.xArray.push({
+                  x1: x1,
+                  y1: y1,
+                  x2: x2,
+                  y2: y2,
+                  w: x2 - x1,
+                  obj: list[i]
+                })
                 this.$set(this.dataArray, i, list[i]);
               }
             }
@@ -250,31 +265,8 @@ export default {
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
-          .on("mouseenter", function() {
-            //clearTimeout(t)
-            _this.tipView = true;
-            _this.tipLeft = x1;
-            _this.tipTop = y2 + 10;
-            _this.lineObj = obj;
-          })
-          .on("mouseleave", function() {
-            //t = setTimeout(function (){
-            _this.tipView = false;
-            //}, 1000);
+        // .on("mouseenter", function() { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.lineObj = obj; // }) // .on("mouseleave", function() { // //t = setTimeout(function (){ // _this.tipView = false; // //}, 1000); // }) // .on("mousemove", function(ev) { // //_this.lineObj.nowTime = new Date(); // _this.$set(_this.lineObj, "nowTime", _this.getTime()); // var ev = ev || event; // var offX = ev.offsetX; //横坐标值 // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.nowTime = time2; // _this.lineObj = obj; // })
 
-          })
-          .on("mousemove", function(ev) {
-            //_this.lineObj.nowTime = new Date();
-            _this.$set(_this.lineObj, "nowTime", _this.getTime());
-            var ev = ev || event;
-            var offX = ev.offsetX; //横坐标值
-            var m = Math.round(offX / gWidth * 5);
-            var time = new Date(_this.config.userInfo.inDateTime);
-            var time1 = time.getTime() + m * 60 * 1000;
-            var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
-            obj.nowTime = time2;
-            _this.lineObj = obj;
-          })
       } else {
         svg.append("line")
           .attr("stroke", "blue")
@@ -284,30 +276,30 @@ export default {
           .attr("y2", y2)
           .attr("x1", x1)
           .attr("x2", x2)
-          .on("mouseenter", function() {
+        // .on("mouseenter", function() {
 
-            _this.tipView = true;
-            _this.tipLeft = x1;
-            _this.tipTop = y2 + 10;
-            _this.lineObj = obj;
+        //   _this.tipView = true;
+        //   _this.tipLeft = x1;
+        //   _this.tipTop = y2 + 10;
+        //   _this.lineObj = obj;
 
-          })
-          .on("mouseleave", function() {
-            _this.tipView = false;
-          })
-          .on("mousemove", function(ev) {
-            //_this.lineObj.nowTime = new Date();
-            _this.$set(_this.lineObj, "nowTime", _this.getTime());
-            var ev = ev || event;
-            var offX = ev.offsetX; //横坐标值
-            var m = Math.round(offX / gWidth * 5);
-            var time = new Date(_this.config.userInfo.inDateTime);
-            var time1 = time.getTime() + m * 60 * 1000;
-            var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
-            obj.nowTime = time2;
-            _this.lineObj = obj;
-            console.log(_this.lineObj)
-          })
+        // })
+        // .on("mouseleave", function() {
+        //   _this.tipView = false;
+        // })
+        // .on("mousemove", function(ev) {
+        //   //_this.lineObj.nowTime = new Date();
+        //   _this.$set(_this.lineObj, "nowTime", _this.getTime());
+        //   var ev = ev || event;
+        //   var offX = ev.offsetX; //横坐标值
+        //   var m = Math.round(offX / gWidth * 5);
+        //   var time = new Date(_this.config.userInfo.inDateTime);
+        //   var time1 = time.getTime() + m * 60 * 1000;
+        //   var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
+        //   obj.nowTime = time2;
+        //   _this.lineObj = obj;
+        //   console.log(_this.lineObj)
+        // })
         svg.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
@@ -345,7 +337,31 @@ export default {
     },
     getTime() {
       return new Date().Format("yyyy-MM-dd hh:mm:ss")
+    },
+    showTipInfo(item) {
+      this.tipView = true;
+      this.tipLeft = item.x1;
+      this.tipTop = item.y2 + 10;
+      this.lineObj = item.obj;
+    },
+    hideTipInfo() {
+      this.tipView = false;
+      this.lineObj = '';
+    },
+    mouseMoveInfo(item, ev) {
+      item.obj.nowTime = this.getTime();
+      var gWidth = this.svgWidth / this.columns;
+      this.$set(this.lineObj, "nowTime", this.getTime());
+      //var ev = ev || event;
+      var offX = ev.offsetX + item.x1; //横坐标值
+      var m = Math.round(offX / gWidth * 5);
+      var time = new Date(this.config.userInfo.inDateTime);
+      var time1 = time.getTime() + m * 60 * 1000;
+      var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
+      item.obj.nowTime = time2;
+      this.lineObj = item.obj;
     }
+
   },
   mounted() {
     this.area = this.$refs.area;
