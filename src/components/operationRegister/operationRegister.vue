@@ -841,6 +841,7 @@ button {
     left: calc(50% - 350px);
     border: 2px solid rgb(61, 164, 206);
     box-shadow: 1px 1px 20px #AAA;
+    background-color: #E3EFFF;
 }
 
 .animation {
