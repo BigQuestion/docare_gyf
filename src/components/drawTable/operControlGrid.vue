@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative;margin:2px;">
+  <div style="position: relative;margin:2px;" @contextmenu="showMenu">
     <div>
       <svg :width="svgWidth" :height="svgHeight" id="operGrid" ref="area">
         <g v-for="item in lineArray">
@@ -16,7 +16,9 @@
 				</g> -->
         <g v-for="(item,index1) in dataPathArray" style="z-index: 22">
           <path :d="item.path" stroke-width="1" fill="none" stroke="blue"></path>
-          <circle v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir)" @mouseleave="showData(cir)"></circle>
+          <circle v-for="(cir,index2) in item.circleData" v-if="item.flag==0" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir)" @mouseleave="showData(cir)"></circle>
+          <circle v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir)" @mouseleave="showData(cir)"></circle>
+          <polygon points="1,4 8,4 4,10" style="fill:lime;"></polygon>
         </g>
       </svg>
       <div v-if="tipView">
@@ -46,6 +48,11 @@
         </div>
       </div>
     </div>
+    <div v-if="showStyleView" style="background-color: #e6e6e6;position: absolute;top: 30%;" :style="{ top:rightViewY+'px',left:rightViewX+'px'}">
+      <div style="padding: 10px;">
+        个性化体征显示
+      </div>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
@@ -54,6 +61,7 @@ export default {
   name: 'dosage',
   data() {
     return {
+      showStyleView: false,
       lineArray: [],
       svgWidth: 700,
       svgHeight: 420,
@@ -79,13 +87,23 @@ export default {
       tipView: false,
       mouseItem: '',
       updateDataArray: [],
-      yValueArray: []
+      yValueArray: [],
+      rightViewX: '',
+      rightViewY: '',
     }
 
   },
   methods: {
+    showMenu: function(parameter) {
+      parameter.preventDefault()
+      this.rightViewX = parameter.offsetX;
+      this.rightViewY = parameter.offsetY;
+      //this.showStyleView = true;
+
+    },
     getLineXy() {
-      // this.pathArray.push(this.data); // this.pathArray.push(this.data1);
+      // this.pathArray.push(this.data); 
+      // this.pathArray.push(this.data1);
 
       var array = [];
       for (var i = 0; i < 50; i++) {
@@ -118,10 +136,19 @@ export default {
           }
         );
       for (var i = 0; i < this.pathArray.length; i++) {
-        this.dataPathArray.push({
-          path: dataone(this.pathArray[i]),
-          circleData: this.pathArray[i],
-        })
+        if (i % 2 == 0)
+          this.dataPathArray.push({
+            path: dataone(this.pathArray[i]),
+            circleData: this.pathArray[i],
+            flag: 0
+          })
+        else
+          this.dataPathArray.push({
+            path: dataone(this.pathArray[i]),
+            circleData: this.pathArray[i],
+            flag: 1
+          })
+
 
       }
 

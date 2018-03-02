@@ -4,7 +4,7 @@
       <g v-for="item in lineArray">
         <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
       </g>
-      <g v-for="item in lineArray">
+      <g v-for="(item,index) in lineArray" v-if="index <= rows">
         <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
       </g>
     </svg>
@@ -154,7 +154,7 @@ export default {
         .attr('stroke-width', 1)
         .attr("fill", "none")
         .attr("stroke", "blue")
-        // .on("mouseenter", function(ev) { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.dataObj = obj; // }) // .on("mouseleave", function() { // // t = setTimeout(function() { // _this.tipView = false; // // }, 500); // }) // .on("mousemove", function(ev) { // _this.$set(_this.dataObj, "dataTime", _this.getTime()); // var ev = ev || event; // //横坐标值 // var offX = ev.offsetX; // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.dataTime = time2; // _this.dataObj = obj; // })
+      // .on("mouseenter", function(ev) { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.dataObj = obj; // }) // .on("mouseleave", function() { // // t = setTimeout(function() { // _this.tipView = false; // // }, 500); // }) // .on("mousemove", function(ev) { // _this.$set(_this.dataObj, "dataTime", _this.getTime()); // var ev = ev || event; // //横坐标值 // var offX = ev.offsetX; // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.dataTime = time2; // _this.dataObj = obj; // })
 
     },
 

@@ -10,10 +10,18 @@
         <div v-for="(item,index) in dataArray" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 14px;line-height: 12px;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;"> {{item.ITEM_NAME}}
         </div>
         <!-- <div v-for="(item,index) in dataArray" v-if="index!=0" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
-			</div> -->
+      </div> -->
       </div>
       <div id="tableGrid" style="position: relative;">
-        <svg :width="svgWidth" :height="svgHeight">
+        <!-- <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
+        </svg> -->
+        <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
+          <g v-for="item in lineArray">
+            <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
+          </g>
+          <g v-for="(item,index) in lineArray" v-if="index <= rows">
+            <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
+          </g>
         </svg>
         <div v-if="tipView">
           <div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
@@ -43,13 +51,13 @@
         <div style="position: absolute;top: 0px; left: 100px;background-color: white;">
           <div style="height: 8px;">
             <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
-						ivg
-					</span>
+            ivg
+          </span>
           </div>
           <div style="height: 8px;">
             <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
-						ivg
-					</span>
+            ivg
+          </span>
           </div>
         </div>
         <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
@@ -66,6 +74,14 @@
         </div>
       </div>
       <div id="tableGrid" style="position: relative;">
+        <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
+          <g v-for="item in lineArray">
+            <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
+          </g>
+          <g v-for="item in lineArray">
+            <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
+          </g>
+        </svg>
       </div>
     </div>
   </div>
@@ -97,11 +113,27 @@ export default {
       tipView: false,
       lineObj: {},
       xArray: [],
+      lineArray: [],
 
     }
   },
   methods: {
-
+    getLineXy() {
+      var array = [];
+      for (var i = 0; i < 50; i++) {
+        array.push({
+          x: {
+            x1: i * (this.svgWidth / this.columns),
+            x2: i * (this.svgWidth / this.columns),
+          },
+          y: {
+            y1: i * (this.svgHeight / this.rows),
+            y2: i * (this.svgHeight / this.rows)
+          }
+        })
+      }
+      this.lineArray = array;
+    },
     init() {
       var w = this.svgWidth,
         h = this.svgHeight,
@@ -112,7 +144,7 @@ export default {
       this.ht = h;
 
       //(3) 绘制SVG  
-      var svg = d3.select("svg")
+      var svg = d3.select("#tableSvg")
       //(4) 给SVG添加分组，并设置样式类，样式见<style>标签中的设置  
       // console.log(x(0.51))
       var grid = svg.selectAll(".grid")
@@ -173,7 +205,7 @@ export default {
       } else {
         this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
       }
-      this.init();
+      this.getLineXy();
       this.selectMedAnesthesiaEventList();
 
     },
@@ -195,6 +227,7 @@ export default {
       if (this.page) {
         return;
       }
+
       this.api.selectMedAnesthesiaEventList(params)
         .then(res => {
           var list = res.list;
@@ -246,7 +279,7 @@ export default {
     },
     createLine(x1, x2, y1, y2, obj) {
 
-      var svg = d3.select("svg");
+      var svg = d3.select("#tableSvg");
       var _this = this;
       var t;
       obj.nowTime = _this.getTime();

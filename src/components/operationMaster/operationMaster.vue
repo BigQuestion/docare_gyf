@@ -383,20 +383,22 @@
         </div>
         <!--单子信息-->
         <div class="information" v-if="formDetail" :class="{allWidth:widthData}">
-          <div class="designArea">
-            <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
-              <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
-            </div>
-            <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
-              <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
-            </div>
-            <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-              <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+          <div ref="mybox">
+            <div class="designArea" id="form1" :class="printed?'printFont':'no-printFont'" style="font-size: 8pt;">
+              <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
+                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+              </div>
+              <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
+                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+              </div>
+              <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
+                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+              </div>
             </div>
           </div>
           <div v-if="formDetail" style="position: absolute;bottom:30px;right: 20px;">
             <button @click="submitSaveForm">保存</button>
-            <button @click="">打印</button>
+            <button @click="printPdf">打印</button>
             <button @click="formSetting">配置</button>
             <button @click="refreshForm">刷新</button>
           </div>
@@ -492,9 +494,12 @@ import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent
 import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
 import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
 import monitor from '@/components/monitor/monitor.vue';
+import { getLodop } from '@/assets/js/LodopFuncs';
+let LODOP
 export default {
   data() {
     return {
+      printed: false,
       patientList: [],
       widthData: false,
       pageShowData: false,
@@ -601,6 +606,28 @@ export default {
     }
   },
   methods: {
+
+    printPdf() {
+      this.printed = true;
+      this.CreateOneFormPage();
+      //        LODOP.PRINT();
+      //LODOP.PREVIEW();
+      LODOP.PRINT_DESIGN();
+    },
+    CreateOneFormPage() {
+      LODOP = getLodop();
+
+      // LODOP.PRINT_INIT("订货单");
+      LODOP.SET_PRINT_STYLE("FontColor", "#000000"); //字体颜色 
+      LODOP.SET_PRINT_STYLE("FontSize", 8);
+      LODOP.SET_PRINT_STYLE("FontSize", 14);
+
+      var strBodyStyle = "<style> div{fontSize:5pt}</style>";
+      // LODOP.ADD_PRINT_HTM(10, 20, "100%","100%", document.getElementById("form1").innerHTML);
+      LODOP.ADD_PRINT_HTM(10, 20, "100%", "100%", strBodyStyle + this.$refs.mybox.innerHTML);
+      //this.printed = false;
+
+    },
     inputBlur(list) {
       list.writeAble = false;
     },
@@ -1065,7 +1092,6 @@ export default {
                 }
               )
           });
-      debugger
     },
     //修改病人手术状态
     changeStatus(status, event) {
@@ -1464,6 +1490,16 @@ export default {
 }
 
 
+
+
+
+
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1542,6 +1578,83 @@ export default {
 .bindClass:hover {
   background: linear-gradient(#e3ebf5, #cbe5f7, #dbecf9);
 }
+
+.printFont {
+  font-size: 8pt;
+}
+
+.no-printFont {
+  font-size: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* 分页样式 */
