@@ -89,20 +89,20 @@
             <input type="" name="" v-model="chooseItems[0].opacity">
           </div>
           <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                                        <div class="ediChild">
-                                                                                            TopMost：
-                                                                                        </div>
-                                                                                        <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
-                                                                                            <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
-                                                                                        </select>
-                                                                                    </div> -->
+                                                                                          <div class="ediChild">
+                                                                                              TopMost：
+                                                                                          </div>
+                                                                                          <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
+                                                                                              <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
+                                                                                          </select>
+                                                                                      </div> -->
           <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                                                        <div class="ediChild">
-                                                                                                            Font:
-                                                                                                        </div>
-                                                                                                        <input type="text">
-                                                                                                        <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
-                                                                                                    </div> -->
+                                                                                                          <div class="ediChild">
+                                                                                                              Font:
+                                                                                                          </div>
+                                                                                                          <input type="text">
+                                                                                                          <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
+                                                                                                      </div> -->
           <div v-if="chooseItems[0]" class="ediclass">
             <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
             <div class="ediChild">
@@ -577,7 +577,9 @@ export default {
       } else {
         let data = JSON.parse(e.dataTransfer.getData('data'));
         data.x = e.clientX - this.area.offsetLeft;
-        data.y = e.clientY - this.area.offsetTop;
+        data.y = e.clientY - this.area.offsetTop + this.area.scrollTop;
+        console.log(e.clientY)
+        console.log(this.area.scrollTop)
         this.formItems.push(data);
         console.log(this.formItems)
         this.handleItem = {};
@@ -727,6 +729,10 @@ export default {
   mounted() {
     this.area = this.$refs.area;
     this.selectMedFormTemp();
+    var m = this.$refs.areadiv
+    // console.log(m.offsetWidth + "---")
+    // console.log(m.offsetLeft + "---")
+    console.log(this.$refs.area.offsetLeft + "---")
   },
   props: ['dataInfo'],
   created() {
@@ -967,28 +973,6 @@ export default {
   background-color: #0078D7;
   color: #fff;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* 顶部功能按钮样式 */
