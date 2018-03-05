@@ -2,15 +2,13 @@
   <div style="position: relative;margin:2px;">
     <!-- <div style="height: 2px;width: 700px;background-color: red;margin-bottom: 20px;"></div> -->
     <div v-if="!page">
-      <div style="max-height: 20px;">
+      <div style="max-height: 20px;padding: 2px 0px;">
         <div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;" :title="item">{{item}}</div>
         <div v-else style="width: 12px;display: inline-block;"></div>
       </div>
       <div>
-        <div v-for="(item,index) in dataArray" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 14px;line-height: 12px;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;"> {{item.ITEM_NAME}}
+        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 14px;line-height: 14px;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;"> {{item.ITEM_NAME}}
         </div>
-        <!-- <div v-for="(item,index) in dataArray" v-if="index!=0" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 13px;line-height: 12px;width: 130px;border-bottom: 1px solid #9fc9ee;border-left: 1px solid;font-size: 12px;position: absolute;left: -130px;">  {{item.ITEM_NAME}}
-      </div> -->
       </div>
       <div id="tableGrid" style="position: relative;">
         <!-- <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
@@ -19,7 +17,7 @@
           <g v-for="item in lineArray">
             <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
-          <g v-for="(item,index) in lineArray" v-if="index <= rows">
+          <g v-for="(item,index) in lineArray" v-if="index < rows">
             <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
         </svg>

@@ -384,7 +384,7 @@
         <!--单子信息-->
         <div class="information" v-if="formDetail" :class="{allWidth:widthData}">
           <div ref="mybox">
-            <div class="designArea" id="form1" :class="printed?'printFont':'no-printFont'" style="font-size: 8pt;">
+            <div class="designArea" id="form1" :class="printed?'printFont':'no-printFont'" style="font-size: 9pt;">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
                 <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
               </div>
@@ -611,20 +611,15 @@ export default {
       this.printed = true;
       this.CreateOneFormPage();
       //        LODOP.PRINT();
-      //LODOP.PREVIEW();
-      LODOP.PRINT_DESIGN();
+      LODOP.PREVIEW();
+      // LODOP.PRINT_DESIGN();
     },
     CreateOneFormPage() {
       LODOP = getLodop();
 
       // LODOP.PRINT_INIT("订货单");
-      LODOP.SET_PRINT_STYLE("FontColor", "#000000"); //字体颜色 
-      LODOP.SET_PRINT_STYLE("FontSize", 8);
-      LODOP.SET_PRINT_STYLE("FontSize", 14);
-
-      var strBodyStyle = "<style> div{fontSize:5pt}</style>";
       // LODOP.ADD_PRINT_HTM(10, 20, "100%","100%", document.getElementById("form1").innerHTML);
-      LODOP.ADD_PRINT_HTM(10, 20, "100%", "100%", strBodyStyle + this.$refs.mybox.innerHTML);
+      LODOP.ADD_PRINT_HTM(10, 20, "100%", "100%", this.$refs.mybox.innerHTML);
       //this.printed = false;
 
     },
@@ -1500,6 +1495,12 @@ export default {
 
 
 
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1586,6 +1587,12 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
 
 
 
