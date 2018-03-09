@@ -1,10 +1,12 @@
 <script type="text/javascript">
+const userId = "MDSD";
+const userInfo = "";
+const isPrintedView = false; //是否在打印预览
 
-  const userId="MDSD";
-  const userInfo = "";
+export default {
+  userId,
+  userInfo,
+  isPrintedView
+}
 
-  export default{
-      userId,
-      userInfo
-  }
 </script>

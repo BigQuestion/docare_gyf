@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!settingView" style="height:100%;position:relative;">
+  <div v-if="!settingView" style="height:100%;position:relative;overflow-y:hidden;">
     <div class="head">
       <div class="logo">
         <div :style="logo">
@@ -383,8 +383,8 @@
         </div>
         <!--单子信息-->
         <div class="information" v-if="formDetail" :class="{allWidth:widthData}">
-          <div ref="mybox">
-            <div class="designArea" id="form1" :class="printed?'printFont':'no-printFont'" style="font-size: 9pt;">
+          <div>
+            <div class="designArea">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
                 <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
               </div>
@@ -396,7 +396,23 @@
               </div>
             </div>
           </div>
+          <div ref="mybox" id="mybox" style="visibility:hidden;">
+            <div class="designArea" style="font-size: 9pt;">
+              <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
+                <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element-print>
+              </div>
+              <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
+                <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element-print>
+              </div>
+              <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
+                <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element-print>
+              </div>
+            </div>
+          </div>
           <div v-if="formDetail" style="position: absolute;bottom:30px;right: 20px;">
+            <button @click="">首页</button>
+            <button @click="">上一页</button>
+            <button @click="">下一页</button>
             <button @click="submitSaveForm">保存</button>
             <button @click="printPdf">打印</button>
             <button @click="formSetting">配置</button>
@@ -487,6 +503,7 @@
 <script>
 import formDesigner from '@/components/formDesigner/formDesigner.vue';
 import formElement from '@/components/formElement/formElement.vue';
+import formElementPrint from '@/components/formElement/formElementPrint.vue';
 import patientOperationInfo from '@/components/patientOperationInfo/patientOperationInfo.vue';
 import operationRegister from '@/components/operationRegister/operationRegister.vue';
 import aboutUs from '@/components/aboutUs/aboutUs.vue';
@@ -500,6 +517,7 @@ export default {
   data() {
     return {
       printed: false,
+      isPrint: false,
       patientList: [],
       widthData: false,
       pageShowData: false,
@@ -609,17 +627,30 @@ export default {
 
     printPdf() {
       this.printed = true;
-      this.CreateOneFormPage();
+      this.$set(this.config, 'isPrintedView', true);
+      this.isPrint = true;
+      // this.selectMedFormTemp(this.selectFormItemTemp);
+
+
       //        LODOP.PRINT();
+      const _this = this;
+      this.CreateOneFormPage();
       LODOP.PREVIEW();
+      if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
+        //不在打印预览界面
+        if (Value == 0) {
+          _this.$set(_this.config, 'isPrintedView', false);
+          _this.isPrint = false;
+        }
+
+      };
       // LODOP.PRINT_DESIGN();
     },
     CreateOneFormPage() {
       LODOP = getLodop();
+      LODOP.PRINT_INIT("");
+      LODOP.ADD_PRINT_HTM(10, 20, "100%", "100%", document.getElementById("mybox").innerHTML);
 
-      // LODOP.PRINT_INIT("订货单");
-      // LODOP.ADD_PRINT_HTM(10, 20, "100%","100%", document.getElementById("form1").innerHTML);
-      LODOP.ADD_PRINT_HTM(10, 20, "100%", "100%", this.$refs.mybox.innerHTML);
       //this.printed = false;
 
     },
@@ -668,7 +699,6 @@ export default {
                 .then(
                   res => {
                     this.patientList = res.list;
-                    console.log(this.patientList)
                   });
               this.pageShowData = true;
               this.pages = Math.ceil(this.pageLength.length / this.size)
@@ -678,10 +708,8 @@ export default {
                   number: i
                 })
               }
-              console.log(this.dataTypeInAllSelect)
             } else {
               this.patientList = res.list;
-              console.log(this.patientList)
               this.pageShowData = false;
               this.size = 6;
               this.pageNum = 1;
@@ -704,7 +732,6 @@ export default {
         .then(
           res => {
             this.patientList = res.list;
-            console.log(this.patientList)
           });
     },
     sort1() {
@@ -722,7 +749,6 @@ export default {
         .then(
           res => {
             this.patientList = res.list;
-            console.log(this.patientList)
           });
     },
     searchPatientListScreen() {
@@ -752,7 +778,6 @@ export default {
         .then(
           res => {
             this.patientList = res.list;
-            console.log(this.patientList)
           });
     },
     showSelect() {
@@ -762,7 +787,6 @@ export default {
     // 选择麻醉列表显示数量
     dataInSize(value) {
       this.pageNum = 1;
-      console.log(value.srcElement._value)
       this.size = value.srcElement._value;
       this.pages = Math.ceil(this.pageLength.length / this.size)
       this.dataTypeInAllSelect = [];
@@ -782,7 +806,6 @@ export default {
     pageRe() {
       if (this.pageNum == 1) {} else {
         this.pageNum = this.pageNum - 1;
-        console.log(this.pageNum)
         this.searchPatientListScreen();
       }
     },
@@ -790,7 +813,6 @@ export default {
     pageAd() {
       if (this.pages == this.pageNum) {} else {
         this.pageNum = this.pageNum + 1;
-        console.log(this.pageNum)
         this.searchPatientListScreen();
       }
     },
@@ -860,7 +882,6 @@ export default {
       }, 1000);
     },
     lockedPatient(item) {
-      console.log(item)
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
@@ -941,7 +962,6 @@ export default {
         .then(
           res => {
             var m = res.list.length;
-            console.log(res.list)
             for (var i = 0; i < m; i++) {
               res.list[i].newItemName = res.list[i].itemName;
               res.list[i].newItemCode = res.list[i].itemCode;
@@ -960,7 +980,6 @@ export default {
       this.isDelete = false;
     },
     deleteByMedAnesthesiaInputDict() {
-      console.log(this.obj.itemCode);
       let params = {
         itemClass: this.obj.itemClass,
         itemName: this.obj.itemName
@@ -989,7 +1008,6 @@ export default {
       var li = this.commonTypeList;
       var k = li.length;
       let params = [];
-      console.log(li)
       for (var i = 0; i < k; i++) {
         if ((li[i].newItemName != li[i].itemName || li[i].newItemCode != li[i].itemCode) && li[i].itemName != "") {
           params.push({
@@ -1035,11 +1053,9 @@ export default {
             for (var i = 0; i <= res.list.length - 1; i++) {
               this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
             }
-            console.log(this.medBillList)
           });
     },
     selectMedFormTemp(item) {
-      console.log(item)
       for (var i = 0; i <= this.medBillList.length - 1; i++) {
         this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
       }
@@ -1090,16 +1106,6 @@ export default {
     },
     //修改病人手术状态
     changeStatus(status, event) {
-      console.log(event.srcElement._value)
-      console.log(
-        this.inRoomDateTime,
-        this.anesStartTime,
-        this.startDateTime,
-        this.endDateTime,
-        this.anesEndTime,
-        this.outDateTime,
-      )
-      console.log(this.datetimeLocalToDate(this.inRoomDateTime));
       let params = {
         patientId: this.lockedPatientInfo.patientId,
         visitId: this.lockedPatientInfo.visitId,
@@ -1213,7 +1219,6 @@ export default {
     },
     //提交单子修改
     submitSaveForm() {
-      console.log(this.updateFormsData)
       let params = []
       params = this.updateFormsData;
       this.api.updateSqlBatch(params)
@@ -1226,7 +1231,6 @@ export default {
     formSetting() {
       this.settingView = !this.settingView;
       this.selectFormItemTemp.isPage = !this.selectFormItemTemp.isPage;
-      console.log(this.selectFormItemTemp)
     },
     //单子刷新按钮
     refreshForm() {
@@ -1242,6 +1246,7 @@ export default {
   },
   components: {
     formElement,
+    formElementPrint,
     formDesigner,
     patientOperationInfo,
     operationRegister,
@@ -1501,6 +1506,8 @@ export default {
 
 
 
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1587,6 +1594,78 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,10 +2,8 @@
   <div style="position: relative;">
     <div v-if="conInfo.dictTableName">
       <div v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" @dblclick="showView" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}" style="display:inline-block;border:1px solid #A9A9A9;min-height:19px;font-size:13.3333px;font-family:Arial;">{{infoData[attrName]}}</div>
-      <input type="" name="" @change="changeTest($event)" :value="infoData[attrName]">
       <input v-if="conInfo.isEditMode=='true'&&conInfo.readOnlyMode=='false'" @dblclick="showView" v-focus="focusState" @blur="focusState =  false,disapear(infoData[attrName])" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}">
-<input v-if="conInfo.readOnlyMode=='true'" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}" :readonly="true">
-
+      <input v-if="conInfo.readOnlyMode=='true'" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}" :readonly="true">
       <div v-if="nameView" style="position: absolute;top: 0px;height: 300px;overflow: auto;border:1px solid;z-index: 1;background-color:white;" :style="{width:conInfo.width+'px',}">
         <div>
           <input v-model="serchZm" @keyup="serchJm">
@@ -45,7 +43,6 @@ export default {
       console.log(ev)
     },
     showView() {
-      console.log(this.conInfo)
       this.nameView = true;
       let params = {
         tableName: this.conInfo.dictTableName,
@@ -138,7 +135,7 @@ export default {
   },
   props: ['conInfo', 'attrName', 'data'],
   mounted() {
-    console.log(this.conInfo)
+
   },
   created() {
     // 点击其他不在的区域触发事件
