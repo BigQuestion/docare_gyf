@@ -1,10 +1,10 @@
 <template>
   <div style="position: relative;margin:2px;">
-    <svg :width="svgWidth" :height="svgHeight" id="dosage">
+    <svg :width="svgWidth" :height="svgHeight" id="dosagePrint">
       <g v-for="item in lineArray">
         <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
       </g>
-      <g v-for="(item,index) in lineArray" v-if="index < rows">
+      <g v-for="(item,index) in lineArray" v-if="index <= rows">
         <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
       </g>
     </svg>
@@ -30,7 +30,7 @@
     <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
     </div>
     <div style="height: 100px;width: 140px; position: absolute;top: 0px;left: -140px;">
-      <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;padding-left: 5px;" :style="{height:svgHeight/rows-1+'px'}">{{item.ITEM_NAME}}</div>
+      <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;" :style="{height:svgHeight/rows-1+'px'}">{{item.ITEM_NAME}}</div>
     </div>
     <div style="width: 25px; position: absolute;top: 0px;left: -165px;border-right: 1px solid #8391a2;border-bottom: 1px solid #8391a2;    display: flex;align-items: center;" :style="{height:forRows*(svgHeight/rows)-1+'px'}">
       输液
@@ -46,7 +46,7 @@
 <script type="text/javascript">
 import * as d3 from 'd3';
 export default {
-  name: 'dosage',
+  name: 'dosagePrint',
   data() {
 
     return {
@@ -135,7 +135,7 @@ export default {
     },
 
     createLine(x1, x2, y1, y2, obj) {
-      var svg = d3.select("#dosage");
+      var svg = d3.select("#dosagePrint");
       var _this = this;
       var gWidth = this.svgWidth / this.columns;
       obj.dataTime = _this.getTime();

@@ -285,64 +285,64 @@ export default {
     return {
       formItems: [],
       btns: [{
-        text: '自动获取',
-        type: 'autoInput',
-        value: '输入文字',
-        selectKeyfield: 'id',
-        ForeColor: '#000',
-      },
-      {
-        text: '文本控件',
-        type: 'title',
-        value: '输入文字',
-        width: '80',
-        ForeColor: '#000',
-        height: '',
-      }, {
-        text: '文本',
-        type: 'text',
-        value: '输入文字',
-        width: '80',
-        height: '',
-        fieldName: '',
-        tableName: '',
-        ForeColor: '#0000FF',
-        borderStyle: '1px solid #222',
-      }, {
-        text: '输入框',
-        type: 'input',
-        width: '80',
-        fieldName: '',
-        tableName: '',
-        dictTableName: '',
-        dictSelect: '',
-        dictShowFiled: '',
-        dictField: '',
-        borderStyle: '1px solid #222',
-        value: '',
-        ForeColor: '#0000FF',
-        opacity: 1,
-        MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
-        MultiSelectMode: 'false', //真为多选，假为单选
-        isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
-        readOnlyMode: 'false',
-        isEdit: [{ isData: 'true' }, { isData: 'false' }],
-        isEditMode: 'true',
-        strFormat: [{ isData: 'true' }, { isData: 'false' }], //格式化字符串
-        strFormatMode: 'false', //格式化字符串
-        nullString: [{ isData: 'true' }, { isData: 'false' }], //真可以为空，假不能为空
-        topMostMode: 'false',
-        topMost: [{ isData: 'true' }, { isData: 'false' }],
-        nullStringMode: 'true',
-        cursor: [
-          { isData: 'auto' },
-          { isData: 'ibeam' },
-          { isData: 'pointer' },
-          { isData: 'wait' },
-          { isData: 'not-allowed' },
-          { isData: 'text' },
-        ],
-        cursorMode: 'auto',
+          text: '自动获取',
+          type: 'autoInput',
+          value: '输入文字',
+          selectKeyfield: 'id',
+          ForeColor: '#000',
+        },
+        {
+          text: '文本控件',
+          type: 'title',
+          value: '输入文字',
+          width: '80',
+          ForeColor: '#000',
+          height: '',
+        }, {
+          text: '文本',
+          type: 'text',
+          value: '输入文字',
+          width: '80',
+          height: '',
+          fieldName: '',
+          tableName: '',
+          ForeColor: '#0000FF',
+          borderStyle: '1px solid #222',
+        }, {
+          text: '输入框',
+          type: 'input',
+          width: '80',
+          fieldName: '',
+          tableName: '',
+          dictTableName: '',
+          dictSelect: '',
+          dictShowFiled: '',
+          dictField: '',
+          borderStyle: '1px solid #222',
+          value: '',
+          ForeColor: '#0000FF',
+          opacity: 1,
+          MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
+          MultiSelectMode: 'false', //真为多选，假为单选
+          isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
+          readOnlyMode: 'false',
+          isEdit: [{ isData: 'true' }, { isData: 'false' }],
+          isEditMode: 'true',
+          strFormat: [{ isData: 'true' }, { isData: 'false' }], //格式化字符串
+          strFormatMode: 'false', //格式化字符串
+          nullString: [{ isData: 'true' }, { isData: 'false' }], //真可以为空，假不能为空
+          topMostMode: 'false',
+          topMost: [{ isData: 'true' }, { isData: 'false' }],
+          nullStringMode: 'true',
+          cursor: [
+            { isData: 'auto' },
+            { isData: 'ibeam' },
+            { isData: 'pointer' },
+            { isData: 'wait' },
+            { isData: 'not-allowed' },
+            { isData: 'text' },
+          ],
+          cursorMode: 'auto',
 
       }, {
         text: '单选',
@@ -604,9 +604,9 @@ export default {
         }
         this.api.updateMedFormContent(params)
           .then(
-          res => {
-            this.selectMedFormTemp();
-          });
+            res => {
+              this.selectMedFormTemp();
+            });
       } else {
 
       }
@@ -620,14 +620,14 @@ export default {
         }
         this.api.selectMedFormTemp(params)
           .then(
-          res => {
-            if (res.formContent == "null" || res.formContent == null) {
-              this.formItems = [];
-            } else {
-              this.formItems = JSON.parse(res.formContent);
-            }
+            res => {
+              if (res.formContent == "null" || res.formContent == null) {
+                this.formItems = [];
+              } else {
+                this.formItems = JSON.parse(res.formContent);
+              }
 
-          });
+            });
       }
     },
     show(index, ev) {
@@ -1032,4 +1032,5 @@ export default {
   margin: 3px auto 0;
   position: relative;
 }
+
 </style>

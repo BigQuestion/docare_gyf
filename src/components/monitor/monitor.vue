@@ -3,7 +3,7 @@
         <div class="window_load">
             <div class="load_top">
                 <div>监护仪</div>
-                <div v-if="data" @click="aboutNone" class="top_active">X</div>
+                <div @click="aboutNone" class="top_active">X</div>
             </div>
 
             <div style="display:flex;position:absolute;top:34px;left:4px;">
@@ -52,6 +52,7 @@
 export default {
     data() {
         return {
+            userInfoDataBody: this.config,
             data: this.dataOfNoneClick.noneData,
             machineList: [
                 {
@@ -159,6 +160,8 @@ export default {
             thisOnchange: '',
             cancelData: '',
             cancelDataTwo: '',
+            bothClick1: false,
+            bothClick2: false,
         }
     },
     props: [
@@ -197,7 +200,8 @@ export default {
                         this.machineList[0].width = 171;
                     }
                     for (var a = 0; a < res.list.length; a++) {
-                        if (this.commonTypeList[a].operId !== null && this.commonTypeList[a].visitId !== null && this.commonTypeList[a].patientId !== null) {
+                        if (this.commonTypeList[a].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeList[a].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeList[a].patientId == this.userInfoDataBody.userInfo.patientId) {
+
                             this.$set(this.commonTypeList[a], 'isBeChoosed', true)
                             this.$set(this.commonTypeList[a], 'checkedData', true)
                         } else {
@@ -238,7 +242,7 @@ export default {
                         this.anesthesiaList[0].width = 171;
                     }
                     for (var a = 0; a < res.list.length; a++) {
-                        if (this.commonTypeListTwo[a].operId !== null && this.commonTypeListTwo[a].visitId !== null && this.commonTypeListTwo[a].patientId !== null) {
+                        if (this.commonTypeListTwo[a].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeListTwo[a].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeListTwo[a].patientId == this.userInfoDataBody.userInfo.patientId) {
                             this.$set(this.commonTypeListTwo[a], 'isBeChoosed', true)
                             this.$set(this.commonTypeListTwo[a], 'checkedData', true)
                         } else {
@@ -342,14 +346,17 @@ export default {
             console.log(this.binding)
             // console.log(this.commonTypeList)
             if (this.thisAdata == true) {
+                // this.bothClick1 = true;
                 for (var i = 0; i <= this.commonTypeList.length - 1; i++) {
                     if (index == i && this.commonTypeList[index].checkedData == true) {
                         this.$set(this.commonTypeList[index], 'checkedData', false)
                         this.cancelData = true;
+                        // this.bothClick1 = !this.bothClick1;
                     } else if (index == i && this.commonTypeList[index].checkedData == false) {
                         if (this.commonTypeList[index].checkedData == false) {
                             this.$set(this.commonTypeList[index], 'checkedData', true)
                             this.cancelData = false;
+                            // this.bothClick1 = false;
                         } else {
 
                         }
@@ -358,9 +365,11 @@ export default {
                     }
 
                 }
-                console.log(this.cancelData)
+                // console.log(this.bothClick1)
 
             } else {
+                // this.bothClick1 = !this.bothClick1;
+                // console.log(this.bothClick1)
                 for (var i = 0; i <= this.commonTypeList.length - 1; i++) {
                     if (index == i) {
                         this.$set(this.commonTypeList[index], 'checkedData', true)
@@ -372,7 +381,7 @@ export default {
                     }
                 }
                 this.cancelData = false;
-                console.log('222222')
+
             }
 
             // for(){
@@ -405,10 +414,12 @@ export default {
                     if (index == i && this.commonTypeListTwo[index].checkedData == true) {
                         this.$set(this.commonTypeListTwo[index], 'checkedData', false)
                         this.cancelDataTwo = true;
+                        // this.bothClick2 = !this.bothClick2;
                     } else if (index == i && this.commonTypeListTwo[index].checkedData == false) {
                         if (this.commonTypeListTwo[index].checkedData == false) {
                             this.$set(this.commonTypeListTwo[index], 'checkedData', true)
                             this.cancelDataTwo = false;
+                            // this.bothClick2 = false;
                         } else {
 
                         }
@@ -417,9 +428,11 @@ export default {
                     }
 
                 }
-                console.log(this.cancelDataTwo)
+                // console.log(this.bothClick2)
 
             } else {
+                // this.bothClick2 = !this.bothClick2;
+                // console.log(this.bothClick2)
                 for (var i = 0; i <= this.commonTypeListTwo.length - 1; i++) {
                     if (index == i) {
                         // console.log(this.commonTypeListTwo[index])
@@ -441,7 +454,8 @@ export default {
             console.log(this.bindingTwo)
             console.log(this.clickMonitor)
             // 监护仪
-            if (this.binding !== '' && this.clickMonitor == true && this.cancelData !== true && this.clickMonitor !== '') {
+            // && this.bothClick1 == true & this.bothClick2 == false
+            if (this.binding !== '' && this.clickMonitor == true && this.cancelData == false) {
                 alert('1')
                 this.api.bindPatientMonitor(this.binding).then(
                     res => {
@@ -455,7 +469,8 @@ export default {
                 )
             } else
                 // 麻醉机
-                if (this.bindingTwo !== '' && this.clickMonitor == false && this.cancelDataTwo !== true && this.clickMonitor !== '') {
+                // && this.bothClick2 == true && this.bothClick1 == false
+                if (this.bindingTwo !== '' && this.clickMonitor == false && this.cancelDataTwo == false) {
                     alert('2')
                     this.api.bindPatientMonitor(this.bindingTwo).then(
                         res => {
@@ -467,6 +482,7 @@ export default {
                         }
                     )
                 } else
+                    // && this.bothClick1 == true && this.bothClick2 == false
                     if (this.binding !== '' && this.clickMonitor == true && this.cancelData == true) {
                         alert('3')
                         let cancelQues = {
@@ -483,6 +499,7 @@ export default {
                             }
                             )
                     } else
+                        // && this.bothClick2 == true && this.bothClick1 == false
                         if (this.bindingTwo !== '' && this.clickMonitor == false && this.cancelDataTwo == true) {
                             alert('4')
                             let cancelQuesT = {
@@ -500,6 +517,7 @@ export default {
                                 )
                         } else
                             if (this.thisAdata == true && this.thisBdata == true && this.clickMonitor == '') {
+                                alert('5')
                                 this.api.bindPatientMonitor(this.binding).then(
                                     res => {
                                         if (res.success == true) {
@@ -514,7 +532,53 @@ export default {
                                         }
                                     }
                                 )
-
+                                // && this.bothClick1 == true && this.bothClick2 == true
+                            } else if (this.binding !== '' && this.bindingTwo !== '' && this.cancelData == false) {
+                                alert('6')
+                                this.api.bindPatientMonitor(this.binding).then(
+                                    res => {
+                                        if (res.success == true) {
+                                            this.firstmonitor();
+                                        }
+                                    }
+                                )
+                                this.api.bindPatientMonitor(this.bindingTwo).then(
+                                    res => {
+                                        if (res.success == true) {
+                                            this.dataInAnesthesia();
+                                        }
+                                    }
+                                )
+                            }
+                            // && this.bothClick1 == false && this.bothClick2 == false
+                            else if (this.binding !== '' && this.bindingTwo !== '' && this.cancelData == true) {
+                                alert('7')
+                                let cancelQuesB1 = {
+                                    monitorLabel: this.binding.monitorLabel,
+                                }
+                                let cancelQuesB2 = {
+                                    monitorLabel: this.bindingTwo.monitorLabel,
+                                }
+                                this.api.cancleBindPatientMonitor(cancelQuesB1)
+                                    .then(
+                                    res => {
+                                        console.log(res.success)
+                                        if (res.success == true) {
+                                            this.firstmonitor();
+                                            this.cancelDataTwo = '';
+                                        }
+                                    }
+                                    )
+                                this.api.cancleBindPatientMonitor(cancelQuesB2)
+                                    .then(
+                                    res => {
+                                        console.log(res.success)
+                                        if (res.success == true) {
+                                            this.dataInAnesthesia();
+                                            this.cancelDataTwo = '';
+                                        }
+                                    }
+                                    )
                             }
             //  else {
             //         console.log(this.thisAdata)
@@ -541,9 +605,8 @@ export default {
         },
         firstFun() {
             for (var a = 0; a < this.commonTypeList.length; a++) {
-                if (this.commonTypeList[a].operId !== null && this.commonTypeList[a].visitId !== null && this.commonTypeList[a].patientId !== null) {
+                if (this.commonTypeList[a].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeList[a].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeList[a].patientId == this.userInfoDataBody.userInfo.patientId) {
                     this.thisAdata = true;
-                    console.log()
                     this.defaultRecvFrequency = this.commonTypeList[a].defaultRecvFrequency;
                     this.currentRecvFrequency = this.commonTypeList[a].currentRecvFrequency
                     this.currentRecvtimesUplimit = this.commonTypeList[a].currentRecvtimesUplimit
@@ -568,7 +631,7 @@ export default {
         secendFun() {
             console.log(this.commonTypeListTwo)
             for (var j = 0; j < this.commonTypeListTwo.length; j++) {
-                if (this.commonTypeListTwo[j].operId !== null && this.commonTypeListTwo[j].visitId !== null && this.commonTypeListTwo[j].patientId !== null) {
+                if (this.commonTypeListTwo[j].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeListTwo[j].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeListTwo[j].patientId == this.userInfoDataBody.userInfo.patientId) {
                     this.thisBdata = true;
                     this.defaultRecvFrequency = this.commonTypeListTwo[j].defaultRecvFrequency;
                     this.currentRecvFrequency = this.commonTypeListTwo[j].currentRecvFrequency

@@ -1,6 +1,6 @@
 import axios from 'axios'
-// axios.defaults.baseURL = 'http://182.61.36.247:8080';
-axios.defaults.baseURL = 'http://192.168.0.101:8088';
+axios.defaults.baseURL = 'http://182.61.36.247:8080';
+// axios.defaults.baseURL = 'http://192.168.0.101:8088';
 
 //返回状态判断
 axios.interceptors.response.use((res) => {
