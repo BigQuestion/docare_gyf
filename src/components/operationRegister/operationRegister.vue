@@ -353,6 +353,7 @@ export default {
                     }
                     this.eventList = res.list;
                     this.eventTempList = res.list;
+                    console.log(res.list)
                 });
         },
         allMedAnesthesiaEventType() {

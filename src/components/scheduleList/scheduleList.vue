@@ -9,7 +9,7 @@
             <div class="flex1 topButton" :class="{clickClass:clickDataThree}" @click="revocationVue()">
                 <span :class="{clickClass:clickDataThree}">3</span>手术撤销</div>
             <div class="flex1 topButton" :class="{clickClass:clickDataFour}" @click="noticeVue()">
-                <span :class="{clickClass:clickDataFour}">4</span>手术通知单</div>
+                <span :class="{clickClass:clickDataFour}">4</span>手术安排表</div>
             <!-- <div class="flex1 topButton" @click="goScheduleReportView()">4.手术通知单</div> -->
             <div class="flex1 topButton" :class="{clickClass:clickDataFive}" @click="systemVue()">
                 <span :class="{clickClass:clickDataFive}">5</span>系统配置</div>

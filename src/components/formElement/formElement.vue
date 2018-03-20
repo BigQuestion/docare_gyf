@@ -10,10 +10,10 @@
       <common-select v-if="!isPage.isPage" :conInfo="value" attrName="value" :data="updateData" v-on:toparentevent="getChlidValue"></common-select>
       <input v-else type="text" :style="{width:value.width+'px'}" readonly="true">
       <!-- <div v-if="value.dictTableName">
-            </div> -->
+                </div> -->
       <!-- <div v-else>
-                <input :style="{width:value.width+'px',border:value.borderStyle,color:value.ForeColor,}" v-model="value.value" style="min-width: 20px;min-height: 20px;">
-            </div> -->
+                    <input :style="{width:value.width+'px',border:value.borderStyle,color:value.ForeColor,}" v-model="value.value" style="min-width: 20px;min-height: 20px;">
+                </div> -->
     </div>
     <div v-if="value.type=='radio'">
       <input type="radio" name="" v-model="value.text">
@@ -54,6 +54,12 @@
     <div v-if="value.type=='operControlGrid'">
       <operControlGrid :page="isPage.isPage"></operControlGrid>
     </div>
+    <div v-if="value.type=='signGrid'" style="background-color:red;" :style="{width:value.width+'px',height:value.height+'px'}">
+      <signGrid :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></signGrid>
+    </div>
+    <div v-if="value.type=='dataOfGrid'" style="background-color:lightBlue;" :style="{width:value.width+'px',height:value.height+'px'}">
+      <dataOfGrid :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></dataOfGrid>
+    </div>
     <div v-if="value.type=='div'">
       <div style="box-sizing:border-box;" :style="{width:value.width+'px',height:value.height+'px',border:value.borderStyle}"></div>
     </div>
@@ -65,6 +71,8 @@ import checkBox from '@/components/checkBox/checkBox.vue';
 import tableGrid from '@/components/drawTable/tableGrid.vue';
 import dosageGrid from '@/components/drawTable/dosageGrid.vue';
 import operControlGrid from '@/components/drawTable/operControlGrid.vue';
+import signGrid from '@/components/drawTable/signGrid.vue';
+import dataOfGrid from '@/components/drawTable/dataOfGrid.vue';
 export default {
   data() {
     return {
@@ -77,7 +85,7 @@ export default {
       this.$emit('toTopEvent', data);
     },
   },
-  props: ['value', 'isPage'], // 设置value为props属性-必须
+  props: ['value', 'isPage','objectItem'], // 设置value为props属性-必须
   computed: {
 
   },
@@ -86,15 +94,16 @@ export default {
     checkBox,
     tableGrid,
     dosageGrid,
-    operControlGrid
+    operControlGrid,
+    signGrid,
+    dataOfGrid,
   },
   mounted() {
-
+    // console.log(this.objectItem)
   }
 }
 
 </script>
 <style type="text/css" scoped>
-
 
 </style>

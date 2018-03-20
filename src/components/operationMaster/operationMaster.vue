@@ -1,5 +1,6 @@
 <template>
   <div v-if="!settingView" style="height:100%;position:relative;">
+
     <div class="head">
       <div class="logo">
         <div :style="logo">
@@ -385,13 +386,13 @@
         <div class="information" v-if="formDetail" :class="{allWidth:widthData}">
           <div class="designArea">
             <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
-              <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+              <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
             </div>
             <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
-              <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+              <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
             </div>
             <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-              <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+              <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
             </div>
           </div>
           <div v-if="formDetail" style="position: absolute;bottom:30px;right: 20px;">
@@ -403,7 +404,7 @@
         </div>
       </div>
     </div>
-    <monitor v-if="monitorDataShow.noneData" :parentToChild="monitorDataShow"></monitor>
+    <monitor v-if="monitorDataShow.noneData" :dataOfNoneClick="firstRoom" :parentToChild="monitorDataShow"></monitor>
     <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView"></patientOperationInfo>
     <operationRegister v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
@@ -473,6 +474,7 @@
         <anestheticConstant v-if="anestheticConstant"></anestheticConstant>
       </div>
     </div>
+    <cancel v-if="cancelData.dataInParent" :dataInParent="cancelData"></cancel>
   </div>
   <div v-else style="height: 100%;width: 100%;z-index: 99;position:relative;">
     <div class="load_top">
@@ -492,6 +494,7 @@ import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent
 import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
 import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
 import monitor from '@/components/monitor/monitor.vue';
+import cancel from '@/components/cancel/cancel.vue';
 export default {
   data() {
     return {
@@ -532,6 +535,7 @@ export default {
       lockedPatientInfo: "",
       formDetail: false,
       inRoomDateTime: "",
+      cancelData: { dataInParent: false },
       anesStartTime: "",
       startDateTime: "",
       endDateTime: "",
@@ -549,23 +553,23 @@ export default {
       anestheticMethod: false,
       anestheticConstant: false,
       contentConfig: [{
-          text: "序号",
-          value: "serialNo"
-        },
-        {
-          text: "分类",
-          value: "itemClass"
-        },
-        {
-          text: "名称",
-          value: "newItemName",
-          status: "inable"
-        },
-        {
-          text: "编码",
-          value: "newItemCode",
-          status: "inable"
-        },
+        text: "序号",
+        value: "serialNo"
+      },
+      {
+        text: "分类",
+        value: "itemClass"
+      },
+      {
+        text: "名称",
+        value: "newItemName",
+        status: "inable"
+      },
+      {
+        text: "编码",
+        value: "newItemCode",
+        status: "inable"
+      },
       ],
       commonTypeList: [],
       dictView: false,
@@ -598,6 +602,7 @@ export default {
       selectFormItemTemp: '', //获取选中的单子
       atherInput: { isPage: false },
       monitorDataShow: { noneData: false },
+      firstRoom: { noneData: false },
     }
   },
   methods: {
@@ -629,43 +634,44 @@ export default {
         patientName: this.patientName,
         patientId: this.patientId
       }
+      console.log(params)
       this.api.getMedOperationMasterList(params)
         .then(
-          res => {
-            this.pageLength = res.list;
-            if (this.pageLength.length > 5) {
-              let paramsTwo = {
-                count: this.size,
-                page: this.pageNum,
-                dateTime: this.getTime,
-                operStatus: this.operStatus,
-                patientName: this.patientName,
-                patientId: this.patientId
-              }
-              this.api.getMedOperationMasterList(paramsTwo)
-                .then(
-                  res => {
-                    this.patientList = res.list;
-                    console.log(this.patientList)
-                  });
-              this.pageShowData = true;
-              this.pages = Math.ceil(this.pageLength.length / this.size)
-              this.dataTypeInAllSelect = [];
-              for (var i = 1; i <= this.pages; i++) {
-                this.dataTypeInAllSelect.push({
-                  number: i
-                })
-              }
-              console.log(this.dataTypeInAllSelect)
-            } else {
-              this.patientList = res.list;
-              console.log(this.patientList)
-              this.pageShowData = false;
-              this.size = 6;
-              this.pageNum = 1;
-              this.sortData = '';
+        res => {
+          this.pageLength = res.list;
+          if (this.pageLength.length > 5) {
+            let paramsTwo = {
+              count: this.size,
+              page: this.pageNum,
+              dateTime: this.getTime,
+              operStatus: this.operStatus,
+              patientName: this.patientName,
+              patientId: this.patientId
             }
-          });
+            this.api.getMedOperationMasterList(paramsTwo)
+              .then(
+              res => {
+                this.patientList = res.list;
+                console.log(this.patientList)
+              });
+            this.pageShowData = true;
+            this.pages = Math.ceil(this.pageLength.length / this.size)
+            this.dataTypeInAllSelect = [];
+            for (var i = 1; i <= this.pages; i++) {
+              this.dataTypeInAllSelect.push({
+                number: i
+              })
+            }
+            console.log(this.dataTypeInAllSelect)
+          } else {
+            this.patientList = res.list;
+            console.log(this.patientList)
+            this.pageShowData = false;
+            this.size = 6;
+            this.pageNum = 1;
+            this.sortData = '';
+          }
+        });
     },
     sort0() {
       this.sortData = 0;
@@ -680,10 +686,10 @@ export default {
       }
       this.api.getMedOperationMasterList(params)
         .then(
-          res => {
-            this.patientList = res.list;
-            console.log(this.patientList)
-          });
+        res => {
+          this.patientList = res.list;
+          console.log(this.patientList)
+        });
     },
     sort1() {
       this.sortData = 1;
@@ -698,10 +704,10 @@ export default {
       }
       this.api.getMedOperationMasterList(params)
         .then(
-          res => {
-            this.patientList = res.list;
-            console.log(this.patientList)
-          });
+        res => {
+          this.patientList = res.list;
+          console.log(this.patientList)
+        });
     },
     searchPatientListScreen() {
       if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
@@ -728,15 +734,15 @@ export default {
       }
       this.api.getMedOperationMasterList(params)
         .then(
-          res => {
-            this.patientList = res.list;
-            console.log(this.patientList)
-          });
+        res => {
+          this.patientList = res.list;
+          console.log(this.patientList)
+        });
     },
     showSelect() {
       this.dataInSelect = !this.dataInSelect;
     },
-    noClick() {},
+    noClick() { },
     // 选择麻醉列表显示数量
     dataInSize(value) {
       this.pageNum = 1;
@@ -758,7 +764,7 @@ export default {
     },
     // 当前页减一
     pageRe() {
-      if (this.pageNum == 1) {} else {
+      if (this.pageNum == 1) { } else {
         this.pageNum = this.pageNum - 1;
         console.log(this.pageNum)
         this.searchPatientListScreen();
@@ -766,7 +772,7 @@ export default {
     },
     // 当前页加一
     pageAd() {
-      if (this.pages == this.pageNum) {} else {
+      if (this.pages == this.pageNum) { } else {
         this.pageNum = this.pageNum + 1;
         console.log(this.pageNum)
         this.searchPatientListScreen();
@@ -795,9 +801,9 @@ export default {
       }
       this.api.getPatienDetailInfo(params)
         .then(
-          res => {
-            this.patientInfo = res;
-          });
+        res => {
+          this.patientInfo = res;
+        });
       this.viewInfo = true;
     },
     setIntervaled() {
@@ -843,6 +849,8 @@ export default {
       //当前病人信息存储起来
       this.config.userInfo = item;
       this.inRoomDateTime = this.changeDateFormat(item.inDateTime);
+      console.log(this.inRoomDateTime)
+
       this.anesStartTime = this.changeDateFormat(item.anesStartTime);
       this.startDateTime = this.changeDateFormat(item.startDateTime);
       this.endDateTime = this.changeDateFormat(item.endDateTime);
@@ -853,6 +861,7 @@ export default {
       this.isBackOne = true;
       this.isBackTwo = false;
       this.isBackThree = false;
+
       this.isBackFour = false;
       this.commoTerms = true;
       this.anaesthesiaEvent = false;
@@ -861,9 +870,9 @@ export default {
       let params = {}
       this.api.getMedAnesthesiaCommType(params)
         .then(
-          res => {
-            this.comTypeList = res.list;
-          });
+        res => {
+          this.comTypeList = res.list;
+        });
     },
     getEvent() {
       this.isBackOne = false;
@@ -877,9 +886,9 @@ export default {
       let params = {}
       this.api.allMedAnesthesiaEventType(params)
         .then(
-          res => {
-            this.eventDataType = res.list;
-          });
+        res => {
+          this.eventDataType = res.list;
+        });
     },
     getMethods() {
       this.isBackOne = false;
@@ -917,15 +926,15 @@ export default {
       }
       this.api.getMedAnesthesiaCommDictByItemClass(params)
         .then(
-          res => {
-            var m = res.list.length;
-            console.log(res.list)
-            for (var i = 0; i < m; i++) {
-              res.list[i].newItemName = res.list[i].itemName;
-              res.list[i].newItemCode = res.list[i].itemCode;
-            }
-            this.commonTypeList = res.list;
-          });
+        res => {
+          var m = res.list.length;
+          console.log(res.list)
+          for (var i = 0; i < m; i++) {
+            res.list[i].newItemName = res.list[i].itemName;
+            res.list[i].newItemCode = res.list[i].itemCode;
+          }
+          this.commonTypeList = res.list;
+        });
     },
     dictShow() {
       this.dictView = true;
@@ -945,9 +954,9 @@ export default {
       }
       this.api.deleteByMedAnesthesiaInputDict(params)
         .then(
-          res => {
-            this.getTypeDetail(this.tempTypeItem);
-          });
+        res => {
+          this.getTypeDetail(this.tempTypeItem);
+        });
     },
     addMedAnesthesiaInputDict() {
       this.commonTypeList.push({ serialNo: this.commonTypeList.length, itemClass: this.tempTypeItem.typeName, newItemName: "", newItemCode: "", itemName: "", itemCode: "" });
@@ -987,17 +996,17 @@ export default {
           }
           this.api.insertMedAnesthesiaInputDict(params1)
             .then(
-              res => {
-                this.getTypeDetail(this.tempTypeItem);
-              });
+            res => {
+              this.getTypeDetail(this.tempTypeItem);
+            });
         }
       }
       if (params.length > 0) {
         this.api.updateMedAnesthesiaInputDict(params)
           .then(
-            res => {
-              this.getTypeDetail(this.tempTypeItem);
-            });
+          res => {
+            this.getTypeDetail(this.tempTypeItem);
+          });
       }
       this.isCancle = true;
       this.isAdd = false;
@@ -1007,14 +1016,14 @@ export default {
       let params = {}
       this.api.selectMedFormList(params)
         .then(
-          res => {
-            this.medBillList = res.list;
-            this.bindClassData = false;
-            for (var i = 0; i <= res.list.length - 1; i++) {
-              this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
-            }
-            console.log(this.medBillList)
-          });
+        res => {
+          this.medBillList = res.list;
+          this.bindClassData = false;
+          for (var i = 0; i <= res.list.length - 1; i++) {
+            this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
+          }
+          console.log(this.medBillList)
+        });
     },
     selectMedFormTemp(item) {
       console.log(item)
@@ -1035,40 +1044,45 @@ export default {
       this.formItems = [];
       this.api.selectMedFormTemp(params)
         .then(
-          res => {
-            if (res.formContent == "null" || res.formContent == null) {
-              return;
+        res => {
+          if (res.formContent == "null" || res.formContent == null) {
+            return;
+          }
+          this.formItems = JSON.parse(res.formContent);
+          var list = this.formItems;
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].fieldName) {
+              arry.push({
+                "patientId": this.lockedPatientInfo.patientId,
+                "visitId": this.lockedPatientInfo.visitId,
+                "operId": this.lockedPatientInfo.operId,
+                "tableName": list[i].tableName,
+                "coluName": list[i].fieldName,
+              })
             }
-            this.formItems = JSON.parse(res.formContent);
-            var list = this.formItems;
-            for (var i = 0; i < list.length; i++) {
-              if (list[i].fieldName) {
-                arry.push({
-                  "patientId": this.lockedPatientInfo.patientId,
-                  "visitId": this.lockedPatientInfo.visitId,
-                  "operId": this.lockedPatientInfo.operId,
-                  "tableName": list[i].tableName,
-                  "coluName": list[i].fieldName,
-                })
+          }
+          this.api.getFormSqlResult(arry)
+            .then(
+            result => {
+              for (var i = 0; i < list.length; i++) {
+                if (list[i].fieldName) {
+                  let obj = this.formItems[i];
+                  obj.value = result[list[i].fieldName];
+                  this.$set(this.formItems, i, obj);
+                }
               }
             }
-            this.api.getFormSqlResult(arry)
-              .then(
-                result => {
-                  for (var i = 0; i < list.length; i++) {
-                    if (list[i].fieldName) {
-                      let obj = this.formItems[i];
-                      obj.value = result[list[i].fieldName];
-                      this.$set(this.formItems, i, obj);
-                    }
-                  }
-                }
-              )
-          });
-      debugger
+            )
+        });
+      // debugger
     },
     //修改病人手术状态
     changeStatus(status, event) {
+      console.log(this.operStatus)
+      if (this.lockedPatientInfo.operStatus === 0 && status == 5) {
+        this.firstRoom.noneData = false;
+        this.monitorDataShow.noneData = true;
+      }
       console.log(event.srcElement._value)
       console.log(
         this.inRoomDateTime,
@@ -1095,9 +1109,11 @@ export default {
       }
       this.api.changeOperationStatus(params)
         .then(
-          res => {
-            this.searchPatientList();
-          });
+        res => {
+          this.searchPatientList();
+        });
+
+
     },
     //手术信息
     getPatientOperationInfo() {
@@ -1110,13 +1126,23 @@ export default {
     // 监护仪
     monitor() {
       this.monitorDataShow.noneData = !this.monitorDataShow.noneData;
+      this.firstRoom.noneData = true;
     },
     // 取消手术
     cancel() {
-      if (confirm("是否要取消该手术?")) {
-        console.log('还未调用接口')
-        alert("手术已取消");
-      } else {}
+      this.cancelData.dataInParent = true;
+      // if (confirm("是否要取消该手术?")) {
+      //   console.log('还未调用接口')
+      //   alert("手术已取消");
+      // } else {}
+
+      // var a = prompt("请输入你要取消手术的原因", "");
+      // if (a !== "" && a !== null) {
+      //   alert("手术已取消！");
+      // } else {
+      //   // 取消了操作
+      // }
+
     },
     // 关于
     getAboutUs() {
@@ -1130,7 +1156,7 @@ export default {
         this.$router.push({
           path: 'login'
         })
-      } else {}
+      } else { }
     },
     // 左部选项按下拉显示隐藏及图片切换
     concealmentOne() {
@@ -1229,6 +1255,7 @@ export default {
     anestheticMethod,
     anestheticConstant,
     monitor,
+    cancel,
   },
 }
 
@@ -1464,6 +1491,15 @@ export default {
 }
 
 
+
+
+
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1544,6 +1580,15 @@ export default {
 }
 
 
+
+
+
+
+
+
+
+
+
 /* 分页样式 */
 
 .pageClass {
@@ -1580,5 +1625,4 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
-
 </style>

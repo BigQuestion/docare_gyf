@@ -2,9 +2,11 @@
 
   const userId="MDSD";
   const userInfo = "";
+  const wardCode = 38;
 
   export default{
       userId,
-      userInfo
+      userInfo,
+      wardCode
   }
 </script>

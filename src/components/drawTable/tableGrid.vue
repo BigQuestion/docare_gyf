@@ -349,12 +349,14 @@ export default {
       this.lineObj = '';
     },
     mouseMoveInfo(item, ev) {
+      console.log(ev.offsetX)
       item.obj.nowTime = this.getTime();
       var gWidth = this.svgWidth / this.columns;
       this.$set(this.lineObj, "nowTime", this.getTime());
       //var ev = ev || event;
       var offX = ev.offsetX + item.x1; //横坐标值
       var m = Math.round(offX / gWidth * 5);
+      console.log(m)
       var time = new Date(this.config.userInfo.inDateTime);
       var time1 = time.getTime() + m * 60 * 1000;
       var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
