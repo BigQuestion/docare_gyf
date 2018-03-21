@@ -89,20 +89,20 @@
             <input type="" name="" v-model="chooseItems[0].opacity">
           </div>
           <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                                          <div class="ediChild">
-                                                                                              TopMost：
-                                                                                          </div>
-                                                                                          <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
-                                                                                              <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
-                                                                                          </select>
-                                                                                      </div> -->
+                                                                                            <div class="ediChild">
+                                                                                                TopMost：
+                                                                                            </div>
+                                                                                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
+                                                                                                <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
+                                                                                            </select>
+                                                                                        </div> -->
           <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                                                          <div class="ediChild">
-                                                                                                              Font:
-                                                                                                          </div>
-                                                                                                          <input type="text">
-                                                                                                          <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
-                                                                                                      </div> -->
+                                                                                                            <div class="ediChild">
+                                                                                                                Font:
+                                                                                                            </div>
+                                                                                                            <input type="text">
+                                                                                                            <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
+                                                                                                        </div> -->
           <div v-if="chooseItems[0]" class="ediclass">
             <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
             <div class="ediChild">
@@ -344,63 +344,72 @@ export default {
           ],
           cursorMode: 'auto',
 
-        }, {
-          text: '单选',
-          type: 'radio'
-        }, {
-          text: '多选',
-          type: 'checkbox'
-        }, {
-          text: '横线',
-          type: 'line',
-          width: '100',
-          ForeColor: '#0000FF',
-        }, {
-          text: '竖线',
-          type: 'verticalLine',
-          height: '100',
-        }, {
-          text: "文本区",
-          type: "textarea",
-          height: "100",
-          width: "300",
-          ForeColor: '#0000FF',
-        }, {
-          text: "麻醉量表格组件",
-          type: "formDiv",
-        }, {
-          text: "入量表格组件",
-          type: "formInGrid",
-        }, {
-          text: "监控组件",
-          type: "operControlGrid",
-        }, {}, {
-          text: "自定义控件",
-          type: "checkBoxAll",
-          defaultItems: "集合",
-          SourceFieldName: "",
-          SourceTableName: "",
-          listData: [],
-          MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
-          MultiSelectMode: 'false',
-
-        }, {
-          text: "MedLegengGraph",
-          type: "div",
-          width: "300",
-          height: "300",
-          borderStyle: '1px solid #222',
-          cursor: [
-            { isData: 'auto' },
-            { isData: 'ibeam' },
-            { isData: 'pointer' },
-            { isData: 'wait' },
-            { isData: 'not-allowed' },
-            { isData: 'text' },
-          ],
-          cursorMode: 'auto',
-          opacity: 1,
-        }
+      }, {
+        text: '单选',
+        type: 'radio'
+      }, {
+        text: '多选',
+        type: 'checkbox'
+      }, {
+        text: '横线',
+        type: 'line',
+        width: '100',
+        ForeColor: '#0000FF',
+      }, {
+        text: '竖线',
+        type: 'verticalLine',
+        height: '100',
+      }, {
+        text: "文本区",
+        type: "textarea",
+        height: "100",
+        width: "300",
+        ForeColor: '#0000FF',
+      }, {
+        text: "麻醉量表格组件",
+        type: "formDiv",
+      }, {
+        text: "入量表格组件",
+        type: "formInGrid",
+      }, {
+        text: "监控组件",
+        type: "operControlGrid",
+      }, {
+        text: "标记组件",
+        type: "signGrid",
+        width: 600,
+        height: 72,
+      }, {
+        text: "标记详细组件",
+        type: "dataOfGrid",
+        width: 600,
+        height: 72,
+      }, {
+        text: "自定义控件",
+        type: "checkBoxAll",
+        defaultItems: "集合",
+        SourceFieldName: "",
+        SourceTableName: "",
+        listData: [],
+        MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
+        MultiSelectMode: 'false',
+      }, {
+        text: "MedLegengGraph",
+        type: "div",
+        width: "300",
+        height: "300",
+        borderStyle: '1px solid #222',
+        cursor: [
+          { isData: 'auto' },
+          { isData: 'ibeam' },
+          { isData: 'pointer' },
+          { isData: 'wait' },
+          { isData: 'not-allowed' },
+          { isData: 'text' },
+        ],
+        cursorMode: 'auto',
+        opacity: 1,
+      }
       ],
       handleItem: {},
       offsetX: '',
@@ -519,6 +528,7 @@ export default {
         this.clearClick(e);
       }
       for (var i = 0; i < this.formItems.length; i++) {
+
         if ((this.formItems[i].x > this.chooseRect.startX) && (this.formItems[i].x < this.chooseRect.endX) &&
           (this.formItems[i].y > this.chooseRect.startY) && (this.formItems[i].y < this.chooseRect.endY)) {
           this.chooseItems.push(this.formItems[i]);
@@ -734,7 +744,7 @@ export default {
     // console.log(m.offsetLeft + "---")
     console.log(this.$refs.area.offsetLeft + "---")
   },
-  props: ['dataInfo'],
+  props: ['dataInfo','objectItem'],
   created() {
     let component = this;
     document.onkeydown = function(e) {
@@ -973,6 +983,7 @@ export default {
   background-color: #0078D7;
   color: #fff;
 }
+
 
 
 /* 顶部功能按钮样式 */

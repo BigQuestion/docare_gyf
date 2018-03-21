@@ -386,13 +386,13 @@
           <div>
             <div class="designArea">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
-                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
               </div>
               <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
-                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
               </div>
               <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element>
+                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
               </div>
             </div>
           </div>
@@ -421,7 +421,7 @@
         </div>
       </div>
     </div>
-    <monitor v-if="monitorDataShow.noneData" :parentToChild="monitorDataShow"></monitor>
+    <monitor v-if="monitorDataShow.noneData" :dataOfNoneClick="firstRoom" :parentToChild="monitorDataShow"></monitor>
     <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView"></patientOperationInfo>
     <operationRegister v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
@@ -491,6 +491,7 @@
         <anestheticConstant v-if="anestheticConstant"></anestheticConstant>
       </div>
     </div>
+    <cancel v-if="cancelData.dataInParent" :dataInParent="cancelData"></cancel>
   </div>
   <div v-else style="height: 100%;width: 100%;z-index: 99;position:relative;">
     <div class="load_top">
@@ -511,6 +512,7 @@ import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent
 import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
 import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
 import monitor from '@/components/monitor/monitor.vue';
+import cancel from '@/components/cancel/cancel.vue';
 import { getLodop } from '@/assets/js/LodopFuncs';
 let LODOP
 export default {
@@ -555,6 +557,7 @@ export default {
       lockedPatientInfo: "",
       formDetail: false,
       inRoomDateTime: "",
+      cancelData: { dataInParent: false },
       anesStartTime: "",
       startDateTime: "",
       endDateTime: "",
@@ -621,7 +624,17 @@ export default {
       selectFormItemTemp: '', //获取选中的单子
       atherInput: { isPage: false },
       monitorDataShow: { noneData: false },
+      <<
+      <<
+      << < HEAD
       pageButtonView: false, //翻页按钮
+      ===
+      ===
+      =
+      firstRoom: { noneData: false },
+      >>>
+      >>>
+      > 433 df27963eb2a838d03fbf19f7a49b52d180480
     }
   },
   methods: {
@@ -887,6 +900,8 @@ export default {
       //当前病人信息存储起来
       this.config.userInfo = item;
       this.inRoomDateTime = this.changeDateFormat(item.inDateTime);
+      console.log(this.inRoomDateTime)
+
       this.anesStartTime = this.changeDateFormat(item.anesStartTime);
       this.startDateTime = this.changeDateFormat(item.startDateTime);
       this.endDateTime = this.changeDateFormat(item.endDateTime);
@@ -897,6 +912,7 @@ export default {
       this.isBackOne = true;
       this.isBackTwo = false;
       this.isBackThree = false;
+
       this.isBackFour = false;
       this.commoTerms = true;
       this.anaesthesiaEvent = false;
@@ -1054,6 +1070,7 @@ export default {
             for (var i = 0; i <= res.list.length - 1; i++) {
               this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
             }
+            console.log(this.medBillList)
           });
     },
     selectMedFormTemp(item) {
@@ -1119,11 +1136,19 @@ export default {
                     }
                   }
                 }
+
               )
           });
+      // debugger
     },
     //修改病人手术状态
     changeStatus(status, event) {
+      console.log(this.operStatus)
+      if (this.lockedPatientInfo.operStatus === 0 && status == 5) {
+        this.firstRoom.noneData = false;
+        this.monitorDataShow.noneData = true;
+      }
+
       let params = {
         patientId: this.lockedPatientInfo.patientId,
         visitId: this.lockedPatientInfo.visitId,
@@ -1143,6 +1168,8 @@ export default {
           res => {
             this.searchPatientList();
           });
+
+
     },
     //手术信息
     getPatientOperationInfo() {
@@ -1155,13 +1182,23 @@ export default {
     // 监护仪
     monitor() {
       this.monitorDataShow.noneData = !this.monitorDataShow.noneData;
+      this.firstRoom.noneData = true;
     },
     // 取消手术
     cancel() {
-      if (confirm("是否要取消该手术?")) {
-        console.log('还未调用接口')
-        alert("手术已取消");
-      } else {}
+      this.cancelData.dataInParent = true;
+      // if (confirm("是否要取消该手术?")) {
+      //   console.log('还未调用接口')
+      //   alert("手术已取消");
+      // } else {}
+
+      // var a = prompt("请输入你要取消手术的原因", "");
+      // if (a !== "" && a !== null) {
+      //   alert("手术已取消！");
+      // } else {
+      //   // 取消了操作
+      // }
+
     },
     // 关于
     getAboutUs() {
@@ -1273,6 +1310,7 @@ export default {
     anestheticMethod,
     anestheticConstant,
     monitor,
+    cancel,
   },
 }
 
@@ -1509,30 +1547,6 @@ export default {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1619,160 +1633,6 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* 分页样式 */
