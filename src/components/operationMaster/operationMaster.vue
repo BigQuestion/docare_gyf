@@ -410,9 +410,9 @@
             </div>
           </div>
           <div v-if="formDetail" style="position: absolute;bottom:30px;right: 20px;">
-            <button @click="">首页</button>
-            <button @click="">上一页</button>
-            <button @click="">下一页</button>
+            <button v-if="pageButtonView" @click="">首页</button>
+            <button v-if="pageButtonView" @click="">上一页</button>
+            <button v-if="pageButtonView" @click="">下一页</button>
             <button @click="submitSaveForm">保存</button>
             <button @click="printPdf">打印</button>
             <button @click="formSetting">配置</button>
@@ -621,6 +621,7 @@ export default {
       selectFormItemTemp: '', //获取选中的单子
       atherInput: { isPage: false },
       monitorDataShow: { noneData: false },
+      pageButtonView: false, //翻页按钮
     }
   },
   methods: {
@@ -1056,6 +1057,23 @@ export default {
           });
     },
     selectMedFormTemp(item) {
+
+      let timeParam = {
+        "patientId": this.lockedPatientInfo.patientId,
+        "visitId": this.lockedPatientInfo.visitId,
+        "operId": this.lockedPatientInfo.operId,
+      }
+      this.api.selectMaxTime(timeParam)
+        .then(res => {
+
+          //let t = this.coutTimes(this.config.userInfo.inDateTime, '2013-10-21 15:00', 'minute')
+          let t1 = this.coutTimes(this.config.userInfo.inDateTime, res.TOTALMAXTIME, 'minute')
+          if (t1 > 250) {
+            this.pageButtonView = true
+          } else
+            this.pageButtonView = false
+        })
+
       for (var i = 0; i <= this.medBillList.length - 1; i++) {
         this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
       }
@@ -1508,6 +1526,13 @@ export default {
 
 
 
+
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1594,6 +1619,13 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
+
 
 
 

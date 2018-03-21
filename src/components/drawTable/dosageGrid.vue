@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
+    <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
     </div>
     <div style="height: 100px;width: 140px; position: absolute;top: 0px;left: -140px;">
       <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;padding-left: 5px;" :style="{height:svgHeight/rows-1+'px'}">{{item.ITEM_NAME}}</div>
@@ -180,9 +180,9 @@ export default {
     getTime() {
       return new Date().Format("yyyy-MM-dd hh:mm:ss")
     },
-    showTipInfo(item) {
+    showTipInfo(item, ev) {
       this.tipView = true;
-      this.tipLeft = item.x1;
+      this.tipLeft = ev.offsetX;
       this.tipTop = item.y2 + 10;
       this.dataObj = item.obj;
     },

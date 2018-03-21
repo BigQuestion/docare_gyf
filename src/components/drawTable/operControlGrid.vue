@@ -8,17 +8,18 @@
         <g v-for="item in lineArray">
           <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
         </g>
-        <!-- 	<g v-for="(item,index) in data">
-					<circle :cx="item.x" :cy="item.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,item,index)"></circle>
-				</g>
-				<g>
-					<path :d="pathData" stroke-width="1" fill="none" stroke="blue" ></path>
-				</g> -->
+        <!--  <g v-for="(item,index) in data">
+          <circle :cx="item.x" :cy="item.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,item,index)"></circle>
+        </g>
+        <g>
+          <path :d="pathData" stroke-width="1" fill="none" stroke="blue" ></path>
+        </g> -->
         <g v-for="(item,index1) in dataPathArray" style="z-index: 22">
           <path :d="item.path" stroke-width="1" fill="none" stroke="blue"></path>
-          <circle v-for="(cir,index2) in item.circleData" v-if="item.flag==0" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir)" @mouseleave="showData(cir)"></circle>
-          <circle v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir)" @mouseleave="showData(cir)"></circle>
-          <polygon points="1,4 8,4 4,10" style="fill:lime;"></polygon>
+          <circle v-for="(cir,index2) in item.circleData" v-if="item.flag==0" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
+          <circle v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
+          <!-- <polygon points="1,4 8,4 4,10" style="fill:lime;"></polygon>
+ -->
         </g>
       </svg>
       <div v-if="tipView">
@@ -102,9 +103,6 @@ export default {
 
     },
     getLineXy() {
-      // this.pathArray.push(this.data); 
-      // this.pathArray.push(this.data1);
-
       var array = [];
       for (var i = 0; i < 50; i++) {
         array.push({
@@ -171,38 +169,38 @@ export default {
       // .attr('r', 3)
       // .attr('fill','green')
       // // .on('mouseover', function() {
-      // // 	d3.select(this).transition().duration(500).attr('r', 5);
+      // //   d3.select(this).transition().duration(500).attr('r', 5);
       // // })
       // // .on('mouseout', function() {
-      // // 	d3.select(this).transition().duration(500).attr('r', 3);
+      // //   d3.select(this).transition().duration(500).attr('r', 3);
       // // }) 
       // .on('mousedown',function(data,ev){
-      // 	var ev = ev || event;
-      // 	isdown = true;
-      // 	console.log(data)
-      // 	console.log(ev)
+      //  var ev = ev || event;
+      //  isdown = true;
+      //  console.log(data)
+      //  console.log(ev)
       // })
       // .on('mousemove',function(data){
 
-      // 	if(isdown){
-      // 		svg.selectAll("circle").remove()
-      // 		var p = d3.select("#operGrid")
-      // 		.select("path").remove()
+      //  if(isdown){
+      //    svg.selectAll("circle").remove()
+      //    var p = d3.select("#operGrid")
+      //    .select("path").remove()
 
-      // 		 _this.data = [{ "x": 14, "y": 400 },
-      // 		{ "x": 28, "y": 410 },
-      // 		{ "x": 42, "y": 40 },
-      // 		{ "x": 56, "y": 5 },
-      // 		]
-      // 		_this.calculatePath(); 
-      // 	}
+      //     _this.data = [{ "x": 14, "y": 400 },
+      //    { "x": 28, "y": 410 },
+      //    { "x": 42, "y": 40 },
+      //    { "x": 56, "y": 5 },
+      //    ]
+      //    _this.calculatePath(); 
+      //  }
 
 
       // })
       // .on('mouseup',function(ev){
-      // 	isdown = false;
-      // 	var ev = ev || event;
-      // 	console.log(ev)
+      //  isdown = false;
+      //  var ev = ev || event;
+      //  console.log(ev)
       // })
     },
     itemMouseDown(e, currentItem, index1, index2) {
@@ -359,9 +357,9 @@ export default {
       return Math.round(min)
     },
 
-    showData(item) {
+    showData(item, ev) {
       this.mouseItem = item;
-      this.tipLeft = item.x;
+      this.tipLeft = ev.offsetX;
       this.tipTop = item.y + 20;
       this.tipView = !this.tipView;
     },

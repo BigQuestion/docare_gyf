@@ -164,7 +164,7 @@ export default {
     },
     //加载病人麻醉事件里面麻醉用药数据
     selectMedAnesthesiaEventList() {
-
+      //this.timeControl(this.maxTime);
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight;
@@ -180,16 +180,18 @@ export default {
       if (this.page) {
         return;
       }
-
+      var m = 0;
+      this.dataArray = [];
       this.api.selectMedAnesthesiaEventList(params)
         .then(res => {
           var list = res.list;
           for (var i = 0; i < list.length; i++) {
+            this.maxTime = list[i].MAX_TIME;
             if (list[i].START_TIME) {
               if (i == this.rows)
                 break;
               else {
-                // console.log(this.getMinuteDif(this.config.userInfo.inDateTime,list[i].START_TIME))
+
 
                 //开始时间间隔
                 let sMin = ''
@@ -203,20 +205,26 @@ export default {
                 }
                 let x1 = Math.round(sMin / lMin * (w / this.columns))
                 let x2 = Math.round(eMin / lMin * (w / this.columns))
-                let y1 = Math.round(h / this.rows / 2 * (i + 1) + h / this.rows * i / 2)
-                let y2 = Math.round(h / this.rows / 2 * (i + 1) + h / this.rows * i / 2)
-                this.createLine(x1, x2, y1, y2, list[i]);
-                this.xArray.push({
-                  x1: x1,
-                  y1: y1,
-                  x2: x2,
-                  y2: y2,
-                  w: x2 - x1,
-                  obj: list[i]
-                })
-                this.$set(this.dataArray, i, list[i]);
+                let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+                let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+                if (list[i].DURATIVE_INDICATOR == 1) {
+                  this.xArray.push({
+                    x1: x1,
+                    y1: y1,
+                    x2: x2,
+                    y2: y2,
+                    w: x2 - x1,
+                    obj: list[i]
+                  })
+                  this.dataArray.push(list[i]);
+                  this.createLine(x1, x2, y1, y2, list[i]);
+                  m++;
+                }
               }
             }
+          }
+          for (var k = 0; k < this.rows - m; k++) {
+            this.dataArray.push(m)
           }
 
         });
@@ -237,23 +245,31 @@ export default {
       var t;
       obj.nowTime = _this.getTime();
       var gWidth = this.svgWidth / this.columns;
-      svg.append("line")
-        .attr('stroke-width', 1)
-        .attr("fill", "none")
-        .attr("stroke", "blue")
-        .attr("y1", y1 - 4)
-        .attr("y2", y2 + 4)
-        .attr("x1", x1)
-        .attr("x2", x1)
-      if (obj.DURATIVE_INDICATOR == 1) {
+      if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
+        svg.append("line")
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("y1", y1 - 4)
+          .attr("y2", y2 + 4)
+          .attr("x1", x1)
+          .attr("x2", x1)
         svg.append("path")
           .attr('d', this.drawLineArrow(x1, y1, x2, y2))
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
-        // .on("mouseenter", function() { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.lineObj = obj; // }) // .on("mouseleave", function() { // //t = setTimeout(function (){ // _this.tipView = false; // //}, 1000); // }) // .on("mousemove", function(ev) { // //_this.lineObj.nowTime = new Date(); // _this.$set(_this.lineObj, "nowTime", _this.getTime()); // var ev = ev || event; // var offX = ev.offsetX; //横坐标值 // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.nowTime = time2; // _this.lineObj = obj; // })
 
-      } else {
+      }
+      if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
+        svg.append("line")
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("y1", y1 - 4)
+          .attr("y2", y2 + 4)
+          .attr("x1", x1)
+          .attr("x2", x1)
         svg.append("line")
           .attr("stroke", "blue")
           .attr("fill", "none")
@@ -262,30 +278,6 @@ export default {
           .attr("y2", y2)
           .attr("x1", x1)
           .attr("x2", x2)
-        // .on("mouseenter", function() {
-
-        //   _this.tipView = true;
-        //   _this.tipLeft = x1;
-        //   _this.tipTop = y2 + 10;
-        //   _this.lineObj = obj;
-
-        // })
-        // .on("mouseleave", function() {
-        //   _this.tipView = false;
-        // })
-        // .on("mousemove", function(ev) {
-        //   //_this.lineObj.nowTime = new Date();
-        //   _this.$set(_this.lineObj, "nowTime", _this.getTime());
-        //   var ev = ev || event;
-        //   var offX = ev.offsetX; //横坐标值
-        //   var m = Math.round(offX / gWidth * 5);
-        //   var time = new Date(_this.config.userInfo.inDateTime);
-        //   var time1 = time.getTime() + m * 60 * 1000;
-        //   var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
-        //   obj.nowTime = time2;
-        //   _this.lineObj = obj;
-        //   console.log(_this.lineObj)
-        // })
         svg.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")

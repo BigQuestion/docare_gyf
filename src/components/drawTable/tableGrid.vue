@@ -59,7 +59,7 @@
   </div>
 </div>
  -->
-        <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
+        <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
         </div>
       </div>
     </div>
@@ -193,7 +193,7 @@ export default {
       var timeDate = new Date(startTime);
       var toMin = timeDate.getTime() + 1000 * 60 * m;
       var timeArray = [];
-      for (var i = 0; i < this.columns; i++) {
+      for (var i = 0; i <= this.columns; i++) {
         timeArray.push(new Date(timeDate.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         this.maxTime = new Date(timeDate.getTime() + 1000 * 60 * m * i);
       }
@@ -212,6 +212,8 @@ export default {
     },
     //加载病人麻醉事件里面麻醉用药数据
     selectMedAnesthesiaEventList() {
+
+
       //this.timeControl(this.maxTime);
       var w = this.svgWidth,
         lMin = this.tbMin,
@@ -234,7 +236,7 @@ export default {
         .then(res => {
           var list = res.list;
           for (var i = 0; i < list.length; i++) {
-            this.maxTime = list[i].MAX_TIME;
+
             if (list[i].START_TIME) {
               if (i == this.rows)
                 break;
@@ -288,7 +290,6 @@ export default {
 
     },
     createLine(x1, x2, y1, y2, obj) {
-
       var svg = d3.select("#tableSvg");
       var _this = this;
       var t;
@@ -391,9 +392,9 @@ export default {
     getTime() {
       return new Date().Format("yyyy-MM-dd hh:mm:ss")
     },
-    showTipInfo(item) {
+    showTipInfo(item, ev) {
       this.tipView = true;
-      this.tipLeft = item.x1;
+      this.tipLeft = ev.offsetX;
       this.tipTop = item.y2 + 10;
       this.lineObj = item.obj;
     },
@@ -413,12 +414,22 @@ export default {
       var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
       item.obj.nowTime = time2;
       this.lineObj = item.obj;
-    }
+    },
+    //计算时间差距
+    coutTime() {
+
+      let t = this.coutTimes(this.config.userInfo.inDateTime, '2013-10-21 15:00', 'minute')
+      let t1 = this.coutTimes(this.config.userInfo.inDateTime, this.maxTime, 'minute')
+      let i = Math.ceil(t / t1);
+      this.pageTotal = i;
+
+    },
 
   },
   mounted() {
     this.area = this.$refs.area;
     this.xTimeInit();
+    this.coutTime();
 
   },
   components: {

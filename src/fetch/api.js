@@ -1,6 +1,6 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'http://182.61.36.247:8080';
-//axios.defaults.baseURL = 'http://localhost:8088';
+axios.defaults.baseURL = 'http://localhost:8088';
 
 //返回状态判断
 axios.interceptors.response.use((res) => {
@@ -465,5 +465,13 @@ export default {
    */
   updateSqlBatch(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/updateSqlBatch', params)
+  },
+
+  /**
+   * 获取病人麻醉过程里面最久的时间
+   * 
+   */
+  selectMaxTime(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/selectMaxTime', params)
   },
 }
