@@ -624,17 +624,8 @@ export default {
       selectFormItemTemp: '', //获取选中的单子
       atherInput: { isPage: false },
       monitorDataShow: { noneData: false },
-      <<
-      <<
-      << < HEAD
       pageButtonView: false, //翻页按钮
-      ===
-      ===
-      =
       firstRoom: { noneData: false },
-      >>>
-      >>>
-      > 433 df27963eb2a838d03fbf19f7a49b52d180480
     }
   },
   methods: {
@@ -1547,6 +1538,7 @@ export default {
 
 
 
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1633,6 +1625,7 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
 
 
 /* 分页样式 */

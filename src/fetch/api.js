@@ -1,10 +1,6 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'http://182.61.36.247:8080';
-<<<<<<< HEAD
-axios.defaults.baseURL = 'http://localhost:8088';
-=======
 // axios.defaults.baseURL = 'http://192.168.0.101:8088';
->>>>>>> 433df27963eb2a838d03fbf19f7a49b52d180480
 
 //返回状态判断
 axios.interceptors.response.use((res) => {
@@ -23,19 +19,19 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-      method: 'post',
-      url: url,
-      data: JSON.stringify(params),
-      timeout: config.timeout,
-      headers: {
-        'Content-type': 'application/json',
-        "Accept": "*/*",
-      },
-      datatype: "json",
-    })
-      .then(function (response) {
+        method: 'post',
+        url: url,
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype: "json",
+      })
+      .then(function(response) {
         resolve(response.data);
-      }).catch(function (error) {
+      }).catch(function(error) {
         reject(error);
       });
   })
@@ -470,7 +466,6 @@ export default {
   updateSqlBatch(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/updateSqlBatch', params)
   },
-<<<<<<< HEAD
 
   /**
    * 获取病人麻醉过程里面最久的时间
@@ -479,11 +474,10 @@ export default {
   selectMaxTime(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/selectMaxTime', params)
   },
-=======
   /**
- * 获取监护仪(麻醉仪)列表
- * 
- */
+   * 获取监护仪(麻醉仪)列表
+   * 
+   */
   selectMonitorList(params, config) {
     return fetch('medicalsystem/rest/medMonitorDictCon/selectMonitorList', params)
   },
@@ -501,7 +495,7 @@ export default {
   bindPatientMonitor(params, config) {
     return fetch('medicalsystem/rest/medMonitorDictCon/bindPatientMonitor', params)
   },
-    /**
+  /**
    * 取消绑定监护仪
    * 
    */
@@ -515,6 +509,5 @@ export default {
   cancleOperationMaster(params, config) {
     return fetch('medicalsystem/rest/medOperationMaster/cancleOperationMaster', params)
   },
-  
->>>>>>> 433df27963eb2a838d03fbf19f7a49b52d180480
+
 }
