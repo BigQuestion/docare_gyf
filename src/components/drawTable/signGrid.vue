@@ -4,7 +4,7 @@
             <div v-for="item in dataBody" @mousemove.stop="moveEventInItem(item)" :style="{left:item.left+'px',bottom:item.bottom+'px'}" style="position:absolute;cursor:default;">{{item.leng}}</div>
         </div>
         <div v-else>
-        <!-- 表单设计器显示元素 -->
+            <!-- 表单设计器显示元素 -->
         </div>
         <div v-if="tipView">
             <div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10;padding: 0 2px;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
@@ -71,7 +71,7 @@ export default {
                             // bottom: 0 + i * 15,
                             bottom: 0,
                             name: res.list[i].ITEM_NAME,
-                            time:res.list[i].START_TIME,
+                            time: res.list[i].START_TIME,
                         })
                         // console.log(this.dataBody)
                     }
@@ -90,7 +90,7 @@ export default {
                             for (var g = 0; g < this.dataBody.length; g++) {
                                 // console.log(this.dataBody)
                                 if (tmp[k] == this.dataBody[g].left) {
-                                    pei = pei+1;
+                                    pei = pei + 1;
                                     // console.log(this.dataBody[g])
                                     this.dataBody[g].bottom = -15 + pei * 15;
                                     // console.log(this.dataOfBottom[g].bottom)
@@ -144,10 +144,13 @@ export default {
         // console.log(this.width)
         // console.log(this.height)
         // console.log(this.config.userInfo)
-        this.selectMedAnesthesiaEventList();
-        this.anesStartTime = this.changeDateFormat(this.dataOfPeo.inDateTime);
-        var at = this.anesStartTime.split('T');
-        this.dataStart = new Date(at[0] + ' ' + at[1]);
+        if (this.page == false) {
+            this.selectMedAnesthesiaEventList();
+            this.anesStartTime = this.changeDateFormat(this.dataOfPeo.inDateTime);
+            var at = this.anesStartTime.split('T');
+            this.dataStart = new Date(at[0] + ' ' + at[1]);
+        }
+
         // console.log(this.dataStart)
 
     },

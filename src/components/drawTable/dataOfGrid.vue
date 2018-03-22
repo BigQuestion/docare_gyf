@@ -1,10 +1,13 @@
 <template>
     <div style="width:100%;height:100%;display:flex;flex-direction:column;flex-wrap:wrap;">
-        <div :title="item.titleWord" v-for="item in dataBody" style="width:auto;font-size:14px;padding:0 20px 2px 0;display:flex;cursor:default;">
+        <div v-if="page == false" :title="item.titleWord" v-for="item in dataBody" style="width:auto;font-size:14px;padding:0 20px 2px 0;display:flex;cursor:default;">
             <span style="padding-right:5px;width:26px;display:block;">{{item.number}}</span>
             <span style="padding-right:5px;">{{item.ITEM_NAME}}</span>
             <span style="padding-right:">{{item.DOSAGE}}</span>
             <span>{{item.DOSAGE_UNITS}}</span>
+        </div>
+        <div v-else>
+
         </div>
     </div>
 </template>
@@ -22,7 +25,9 @@ export default {
     },
     methods: {
         selectMedAnesthesiaEventList() {
+            console.log(this.page)
 
+            console.log(this.dataOfPeo)
             let params = {
                 patientId: this.dataOfPeo.patientId,
                 operId: this.dataOfPeo.operId,
@@ -51,11 +56,15 @@ export default {
                     }
                     this.dataBody = res.list;
                 });
+
+
         },
     },
-    props: ['dataOfPeo'],
+    props: ['dataOfPeo', 'page'],
     mounted() {
-        this.selectMedAnesthesiaEventList();
+        if (this.page == false) {
+            this.selectMedAnesthesiaEventList();
+        }
     }
 }
 </script>
