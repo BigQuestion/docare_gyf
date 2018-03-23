@@ -51,14 +51,17 @@ export default {
       this.api.selectMedAnesthesiaEventList(params)
         .then(
           res => {
+            console.log(res.list)
             for (var i = 0; i < res.list.length; i++) {
               var time = new Date(res.list[i].START_TIME);
-
+              console.log(time)
               var time1 = time.getTime() - this.dataStart.getTime()
               var leftPlace = (time1 * 3) / 60 / 1000;
               this.dataOfBottom.push({
                 leftData: leftPlace
               })
+              console.log(time1)
+              console.log(leftPlace)
 
               // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
               this.dataBody.push({
@@ -72,10 +75,12 @@ export default {
               // console.log(this.dataBody)
             }
 
+            console.log(this.dataOfBottom)
             var data = [];
             for (var a = 0; a < this.dataOfBottom.length; a++) {
               data.push(this.dataOfBottom[a].leftData);
             }
+            console.log(data)
             var tmp = data.sort();
             var pei = 0;
             for (var k = 0; k < data.length; k++) {
@@ -119,6 +124,7 @@ export default {
       var offX = event.offsetX / 3; //横坐标值
       var m = Math.round(offX);
       this.dataOfXlength = m;
+      // console.log(m)
       var time = new Date(this.config.userInfo.inDateTime);
       var time1 = time.getTime() + m * 60 * 1000;
       var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
@@ -137,10 +143,13 @@ export default {
     // console.log(this.width)
     // console.log(this.height)
     // console.log(this.config.userInfo)
-    this.selectMedAnesthesiaEventList();
-    this.anesStartTime = this.changeDateFormat(this.dataOfPeo.inDateTime);
-    var at = this.anesStartTime.split('T');
-    this.dataStart = new Date(at[0] + ' ' + at[1]);
+    if (this.page == false) {
+      this.selectMedAnesthesiaEventList();
+      this.anesStartTime = this.changeDateFormat(this.dataOfPeo.inDateTime);
+      var at = this.anesStartTime.split('T');
+      this.dataStart = new Date(at[0] + ' ' + at[1]);
+    }
+
     // console.log(this.dataStart)
 
   },
