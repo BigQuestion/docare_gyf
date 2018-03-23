@@ -79,10 +79,6 @@ export default {
     },
     //单选的时候
     getSingleSelect(item, index) {
-      console.log(this.isSelected)
-      console.log(item)
-      console.log(this.defaultSelectValue)
-      console.log(this.boxValue)
       for (var i = 0; i < this.isSelected.length; i++) {
         if (i == index) {
           if (this.isSelected[i]) {

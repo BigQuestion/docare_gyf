@@ -177,7 +177,6 @@ export default {
       // .on('mousedown',function(data,ev){
       //  var ev = ev || event;
       //  isdown = true;
-      //  console.log(data)
       //  console.log(ev)
       // })
       // .on('mousemove',function(data){
@@ -230,8 +229,6 @@ export default {
       this.calculatePath();
     },
     areaMouseUp(e) {
-      console.log(this.clickItem)
-
       this.area.removeEventListener('mousemove', this.areaMouseMove);
       this.area.removeEventListener('mouseup', this.areaMouseUp);
       let moveValue
@@ -251,7 +248,7 @@ export default {
         itemValue: moveValue,
         operator: "mdsd"
       })
-      console.log(this.updateDataArray)
+
       let params = this.updateDataArray;
       this.api.updateMedPatientMonitorDatas(params)
         .then(res => {

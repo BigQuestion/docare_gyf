@@ -386,13 +386,13 @@
           <div>
             <div class="designArea">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
-                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
+                <form-element ref="formElement" :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
               </div>
               <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
-                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
+                <form-element ref="formElement" :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
               </div>
               <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
-                <form-element :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
+                <form-element ref="formElement" :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
               </div>
             </div>
           </div>
@@ -410,9 +410,9 @@
             </div>
           </div>
           <div v-if="formDetail" style="position: absolute;bottom:30px;right: 20px;">
-            <button v-if="pageButtonView" @click="">首页</button>
-            <button v-if="pageButtonView" @click="">上一页</button>
-            <button v-if="pageButtonView" @click="">下一页</button>
+            <button v-if="pageButtonView" @click="toChangePage(0)">首页</button>
+            <button v-if="pageButtonView" @click="toChangePage(-1)">上一页</button>
+            <button v-if="pageButtonView" @click="toChangePage(1)">下一页</button>
             <button @click="submitSaveForm">保存</button>
             <button @click="printPdf">打印</button>
             <button @click="formSetting">配置</button>
@@ -891,13 +891,13 @@ export default {
       //当前病人信息存储起来
       this.config.userInfo = item;
       this.inRoomDateTime = this.changeDateFormat(item.inDateTime);
-      console.log(this.inRoomDateTime)
 
       this.anesStartTime = this.changeDateFormat(item.anesStartTime);
       this.startDateTime = this.changeDateFormat(item.startDateTime);
       this.endDateTime = this.changeDateFormat(item.endDateTime);
       this.anesEndTime = this.changeDateFormat(item.anesEndTime);
       this.outDateTime = this.changeDateFormat(item.outDateTime);
+
     },
     getComType() {
       this.isBackOne = true;
@@ -1061,7 +1061,7 @@ export default {
             for (var i = 0; i <= res.list.length - 1; i++) {
               this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
             }
-            console.log(this.medBillList)
+
           });
     },
     selectMedFormTemp(item) {
@@ -1076,6 +1076,8 @@ export default {
 
           //let t = this.coutTimes(this.config.userInfo.inDateTime, '2013-10-21 15:00', 'minute')
           let t1 = this.coutTimes(this.config.userInfo.inDateTime, res.TOTALMAXTIME, 'minute')
+          let i = Math.ceil(t1 / 250);
+          this.config.pageTotal = i;
           if (t1 > 250) {
             this.pageButtonView = true
           } else
@@ -1134,7 +1136,7 @@ export default {
     },
     //修改病人手术状态
     changeStatus(status, event) {
-      console.log(this.operStatus)
+
       if (this.lockedPatientInfo.operStatus === 0 && status == 5) {
         this.firstRoom.noneData = false;
         this.monitorDataShow.noneData = true;
@@ -1282,12 +1284,39 @@ export default {
     refreshForm() {
       this.updateFormsData = [];
       this.selectMedFormTemp(this.selectFormItemTemp);
-    }
+    },
+    //单子首页
+    toChangePage(num) {
+      if (num == 0) {
+        this.config.pageNum = 1;
+        this.config.pageOper = num;
+      }
+      if (num == -1) {
+        if (this.config.pageNum >= 2) {
+          this.config.pageNum = this.config.pageNum - 1;
+          this.config.pageOper = num;
+        } else
+          return
+
+      }
+      if (num == 1) {
+        if (this.config.pageNum < this.config.pageTotal) {
+          this.config.pageNum = this.config.pageNum + 1;
+          this.config.pageOper = num;
+        } else
+          return
+
+      }
+
+      window.eventHub.$emit("test", num);
+    },
+
   },
   mounted() {
     this.searchPatientList();
     this.setIntervaled();
     this.selectMedFormList();
+
     this.patientId = '10966589';
   },
   components: {
@@ -1539,6 +1568,48 @@ export default {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1625,6 +1696,48 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
