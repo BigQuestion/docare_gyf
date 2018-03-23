@@ -25,9 +25,6 @@ export default {
   },
   methods: {
     selectMedAnesthesiaEventList() {
-      console.log(this.page)
-
-      console.log(this.dataOfPeo)
       let params = {
         patientId: this.dataOfPeo.patientId,
         operId: this.dataOfPeo.operId,
@@ -36,7 +33,6 @@ export default {
       this.api.selectMedAnesthesiaEventList(params)
         .then(
           res => {
-            console.log(res.list)
             for (var i = 0; i < res.list.length; i++) {
               this.$set(res.list[i], 'number', i + 1);
               if (res.list[i].ENDDATE !== null) {

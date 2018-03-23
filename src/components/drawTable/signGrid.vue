@@ -53,7 +53,6 @@ export default {
           res => {
             for (var i = 0; i < res.list.length; i++) {
               var time = new Date(res.list[i].START_TIME);
-              console.log(time)
               var time1 = time.getTime() - this.dataStart.getTime()
               var leftPlace = (time1 * 3) / 60 / 1000;
               this.dataOfBottom.push({

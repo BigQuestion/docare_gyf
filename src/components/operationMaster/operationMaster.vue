@@ -1284,6 +1284,7 @@ export default {
     refreshForm() {
       this.updateFormsData = [];
       this.selectMedFormTemp(this.selectFormItemTemp);
+      this.config.pageOper = 0;
     },
     //单子首页
     toChangePage(num) {
@@ -1610,6 +1611,8 @@ export default {
 
 
 
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1696,6 +1699,8 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
 
 
 
