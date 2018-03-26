@@ -344,72 +344,72 @@ export default {
           ],
           cursorMode: 'auto',
 
-      }, {
-        text: '单选',
-        type: 'radio'
-      }, {
-        text: '多选',
-        type: 'checkbox'
-      }, {
-        text: '横线',
-        type: 'line',
-        width: '100',
-        ForeColor: '#0000FF',
-      }, {
-        text: '竖线',
-        type: 'verticalLine',
-        height: '100',
-      }, {
-        text: "文本区",
-        type: "textarea",
-        height: "100",
-        width: "300",
-        ForeColor: '#0000FF',
-      }, {
-        text: "麻醉量表格组件",
-        type: "formDiv",
-      }, {
-        text: "入量表格组件",
-        type: "formInGrid",
-      }, {
-        text: "监控组件",
-        type: "operControlGrid",
-      }, {
-        text: "标记组件",
-        type: "signGrid",
-        width: 600,
-        height: 72,
-      }, {
-        text: "标记详细组件",
-        type: "dataOfGrid",
-        width: 600,
-        height: 72,
-      }, {
-        text: "自定义控件",
-        type: "checkBoxAll",
-        defaultItems: "集合",
-        SourceFieldName: "",
-        SourceTableName: "",
-        listData: [],
-        MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
-        MultiSelectMode: 'false',
-      }, {
-        text: "MedLegengGraph",
-        type: "div",
-        width: "300",
-        height: "300",
-        borderStyle: '1px solid #222',
-        cursor: [
-          { isData: 'auto' },
-          { isData: 'ibeam' },
-          { isData: 'pointer' },
-          { isData: 'wait' },
-          { isData: 'not-allowed' },
-          { isData: 'text' },
-        ],
-        cursorMode: 'auto',
-        opacity: 1,
-      }
+        }, {
+          text: '单选',
+          type: 'radio'
+        }, {
+          text: '多选',
+          type: 'checkbox'
+        }, {
+          text: '横线',
+          type: 'line',
+          width: '100',
+          ForeColor: '#0000FF',
+        }, {
+          text: '竖线',
+          type: 'verticalLine',
+          height: '100',
+        }, {
+          text: "文本区",
+          type: "textarea",
+          height: "100",
+          width: "300",
+          ForeColor: '#0000FF',
+        }, {
+          text: "麻醉量表格组件",
+          type: "formDiv",
+        }, {
+          text: "入量表格组件",
+          type: "formInGrid",
+        }, {
+          text: "监控组件",
+          type: "operControlGrid",
+        }, {
+          text: "标记组件",
+          type: "signGrid",
+          width: 600,
+          height: 72,
+        }, {
+          text: "标记详细组件",
+          type: "dataOfGrid",
+          width: 600,
+          height: 72,
+        }, {
+          text: "自定义控件",
+          type: "checkBoxAll",
+          defaultItems: "集合",
+          SourceFieldName: "",
+          SourceTableName: "",
+          listData: [],
+          MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
+          MultiSelectMode: 'false',
+        }, {
+          text: "MedLegengGraph",
+          type: "div",
+          width: "300",
+          height: "300",
+          borderStyle: '1px solid #222',
+          cursor: [
+            { isData: 'auto' },
+            { isData: 'ibeam' },
+            { isData: 'pointer' },
+            { isData: 'wait' },
+            { isData: 'not-allowed' },
+            { isData: 'text' },
+          ],
+          cursorMode: 'auto',
+          opacity: 1,
+        }
       ],
       handleItem: {},
       offsetX: '',
@@ -438,9 +438,9 @@ export default {
   methods: {
     selectData(obj, paramName, value) {
       // obj[paramName] = isData;
-      console.log(obj) //数组名字
-      console.log(paramName) //参数名字
-      console.log(value) //参数值
+      // console.log(obj) //数组名字
+      // console.log(paramName) //参数名字
+      // console.log(value) //参数值
 
     },
     itemClick() {
@@ -456,8 +456,6 @@ export default {
       this.currentItem = currentItem;
       this.area.addEventListener('mousemove', this.areaMouseMove);
       this.area.addEventListener('mouseup', this.areaMouseUp);
-      console.log(e)
-      console.log(currentItem)
       this.dataIncurrentIten = currentItem;
       this.deleteDataDom = index;
     },
@@ -523,7 +521,6 @@ export default {
       // this.chooseRect.endY = e.clientY;
     },
     drawEnd(e) {
-      console.log(this.formItems)
       if (this.drawStartX == e.clientX && this.drawStartY == e.clientY) {
         this.clearClick(e);
       }
@@ -588,10 +585,10 @@ export default {
         let data = JSON.parse(e.dataTransfer.getData('data'));
         data.x = e.clientX - this.area.offsetLeft;
         data.y = e.clientY - this.area.offsetTop + this.area.scrollTop;
-        console.log(e.clientY)
-        console.log(this.area.scrollTop)
+        // console.log(e.clientY)
+        // console.log(this.area.scrollTop)
         this.formItems.push(data);
-        console.log(this.formItems)
+        // console.log(this.formItems)
         this.handleItem = {};
       }
     },
@@ -696,7 +693,6 @@ export default {
     },
     // 左位移
     leftMove(dataIn) {
-      console.log(dataIn)
       if (dataIn == '') {
 
       } else {
@@ -705,7 +701,6 @@ export default {
     },
     // 右位移
     rightMove(dataIn) {
-      console.log(dataIn)
       if (dataIn == '') {
 
       } else {
@@ -714,7 +709,6 @@ export default {
     },
     // 上位移
     topMove(dataIn) {
-      console.log(dataIn)
       if (dataIn == '') {
 
       } else {
@@ -723,7 +717,6 @@ export default {
     },
     // 右位移
     bottomMove(dataIn) {
-      console.log(dataIn)
       if (dataIn == '') {
 
       } else {
@@ -742,9 +735,8 @@ export default {
     var m = this.$refs.areadiv
     // console.log(m.offsetWidth + "---")
     // console.log(m.offsetLeft + "---")
-    console.log(this.$refs.area.offsetLeft + "---")
   },
-  props: ['dataInfo','objectItem'],
+  props: ['dataInfo', 'objectItem'],
   created() {
     let component = this;
     document.onkeydown = function(e) {
@@ -983,6 +975,11 @@ export default {
   background-color: #0078D7;
   color: #fff;
 }
+
+
+
+
+
 
 
 

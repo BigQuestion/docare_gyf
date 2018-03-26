@@ -1289,20 +1289,20 @@ export default {
     //单子首页
     toChangePage(num) {
       if (num == 0) {
-        this.config.pageNum = 1;
+        this.config.pagePercentNum = 1;
         this.config.pageOper = num;
       }
       if (num == -1) {
-        if (this.config.pageNum >= 2) {
-          this.config.pageNum = this.config.pageNum - 1;
+        if (this.config.pagePercentNum >= 2) {
+          this.config.pagePercentNum = this.config.pagePercentNum - 1;
           this.config.pageOper = num;
         } else
           return
 
       }
       if (num == 1) {
-        if (this.config.pageNum < this.config.pageTotal) {
-          this.config.pageNum = this.config.pageNum + 1;
+        if (this.config.pagePercentNum < this.config.pageTotal) {
+          this.config.pagePercentNum = this.config.pagePercentNum + 1;
           this.config.pageOper = num;
         } else
           return
@@ -1319,6 +1319,7 @@ export default {
     this.selectMedFormList();
 
     this.patientId = '10966589';
+    console.log(this.$store.state.count)
   },
   components: {
     formElement,
@@ -1613,6 +1614,10 @@ export default {
 
 
 
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1699,6 +1704,10 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
 
 
 
