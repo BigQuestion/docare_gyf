@@ -64,6 +64,7 @@ export default {
       tipView: false,
       dataObj: {},
       xArray: [],
+      percentPageData: [],
     }
   },
   methods: {
@@ -84,6 +85,7 @@ export default {
       this.lineArray = array;
     },
     getData() {
+      this.dataArray = [];
       for (var i = 0; i < this.forRows; i++) {
         this.dataArray.push(i)
       }
@@ -124,7 +126,7 @@ export default {
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
-          .attr("class", "test")
+          .attr("class", "dosagegrid")
           .attr("y1", y1 - 4)
           .attr("y2", y2 + 4)
           .attr("x1", x1)
@@ -134,8 +136,7 @@ export default {
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
-          .attr("class", "test")
-        // .on("mouseenter", function() { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.lineObj = obj; // }) // .on("mouseleave", function() { // //t = setTimeout(function (){ // _this.tipView = false; // //}, 1000); // }) // .on("mousemove", function(ev) { // //_this.lineObj.nowTime = new Date(); // _this.$set(_this.lineObj, "nowTime", _this.getTime()); // var ev = ev || event; // var offX = ev.offsetX; //横坐标值 // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.nowTime = time2; // _this.lineObj = obj; // })
+          .attr("class", "dosagegrid")
 
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
@@ -143,7 +144,7 @@ export default {
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
-          .attr("class", "test")
+          .attr("class", "dosagegrid")
           .attr("y1", y1 - 4)
           .attr("y2", y2 + 4)
           .attr("x1", x1)
@@ -152,7 +153,7 @@ export default {
           .attr("stroke", "blue")
           .attr("fill", "none")
           .attr("stroke-width", 1)
-          .attr("class", "test")
+          .attr("class", "dosagegrid")
           .attr("y1", y1)
           .attr("y2", y2)
           .attr("x1", x1)
@@ -161,7 +162,7 @@ export default {
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
-          .attr("class", "test")
+          .attr("class", "dosagegrid")
           .attr("y1", y1 - 4)
           .attr("y2", y2 + 4)
           .attr("x1", x2)
@@ -196,6 +197,9 @@ export default {
       this.tipView = true;
       this.tipLeft = ev.offsetX;
       this.tipTop = item.y2 + 10;
+      if (item.obj.ENDDATE == null || item.obj.ENDDATE == "") {
+        item.obj.ENDDATE = (item.obj.MAX_TIME);
+      }
       this.dataObj = item.obj;
     },
     hideTipInfo() {
@@ -209,7 +213,7 @@ export default {
       //var ev = ev || event;
       var offX = ev.offsetX + item.x1; //横坐标值
       var m = Math.round(offX / gWidth * 5);
-      var time = new Date(this.config.userInfo.inDateTime);
+      var time = new Date(this.config.initTime);
       var time1 = time.getTime() + m * 60 * 1000;
       var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
       item.obj.dataTime = time2;
@@ -225,10 +229,14 @@ export default {
           if (i == this.forRows) {
             break;
           } else {
-
-            let t1 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME)
+            let t1 = ''
             let t2 = ''
-
+            if (this.config.pagePercentNum == 1) {
+              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            } else {
+              t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            }
+            console.log(this.config.initTime, list[i].vStartTime)
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
               if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
@@ -258,50 +266,36 @@ export default {
                 w: x2 - x1,
                 obj: list[i]
               })
-
-              // this.$set(this.dataArray, i, list[i]);
               this.dataArray.push(list[i]);
               m++;
             }
-
-            // this.createLine(x1, x2, y1, y2, list[i]);
-            // this.xArray.push({
-            //   x1: x1,
-            //   y1: y1,
-            //   x2: x2,
-            //   y2: y2,
-            //   w: x2 - x1,
-            //   obj: list[i]
-            // })
-            // this.$set(this.dataArray, i, list[i]);
           }
         }
       }
 
-      for (var k = 0; k < this.rows - m; k++) {
+      for (var k = 0; k < this.forRows - m; k++) {
         this.dataArray.push(m)
       }
     },
     //翻页
     pageTurnFun() {
-      // var svg = d3.selectAll(".test") // svg.remove();
+      var svg = d3.selectAll(".dosagegrid")
+      svg.remove();
 
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
         this.getData();
       }
       if (this.config.pageOper == -1) {
+        let m = this.config.initTime.getTime();
         var list = [];
         list = this.percentPageData;
-
         for (var i = 0; i < list.length; i++) {
           if (this.config.pagePercentNum != 1 && list[i].MAX_TIME) {
             list[i].vStartTime = new Date(m).Format("yyyy-MM-dd hh:mm:ss");
           }
         }
-
         this.dataListOperFun(list);
-
       }
       if (this.config.pageOper == 1) {
         let arrList = this.dataArray;
@@ -310,15 +304,16 @@ export default {
         var list = this.dataArray;
         for (var i = 0; i < list.length; i++) {
           if (list[i].MAX_TIME) {
+            debugger
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
-              if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
-                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
+              if (new Date(list[i].MAX_TIME) > this.config.initTime) {
+                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
                 arrayList.push(list[i]);
               } else {}
             } else {
-              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
-                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
+              if (new Date(list[i].ENDDATE) > this.config.initTime) {
+                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
                 arrayList.push(list[i]);
               } else {
 
@@ -328,7 +323,7 @@ export default {
         }
 
         this.dataListOperFun(arrayList);
-        console.log(this.dataArray)
+
       }
     },
   },
