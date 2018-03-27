@@ -157,11 +157,19 @@ export default {
             clickMonitor: '',
             thisAdata: '',
             thisBdata: '',
+            hasDataFirst: false,
+            hasDataSecend: '',
+            thisNowId: '',
+            thisNowIdTwo: '',
             thisOnchange: '',
             cancelData: '',
             cancelDataTwo: '',
             bothClick1: '',
             bothClick2: '',
+            changeFirstData: '',
+            changeSecendData: '',
+            firstTimeChangeData:'',
+            secendTimeChangeData:'',
         }
     },
     props: [
@@ -258,9 +266,12 @@ export default {
         dataOfChange(index, event) {
             // alert(this.thisAdata)
             // alert(this.bothClick2)
+            this.changeFirstData = false;
+            this.changeSecendData = false;
             this.thisOnchange = true;
-            if (this.thisAdata == true&&this.thisBdata == false) {
-                // alert('1')
+            if ((this.thisAdata == true && this.thisBdata == false)||(this.firstTimeChangeData == true&&this.secendTimeChangeData == false)) {
+                this.changeFirstData = true;
+                // alert('11')
                 if (index == '1') {
                     console.log(event.srcElement.value)
                     this.binding.datalogStartTime = event.srcElement.value.replace('T', ' ');
@@ -275,8 +286,9 @@ export default {
                     console.log(event.srcElement.value)
                     this.binding.currentRecvtimesUplimit = event.srcElement.value;
                 }
-            } else if (this.thisBdata == true&&this.thisAdata == false) {
-                // alert('2')
+            } else if ((this.thisBdata == true && this.thisAdata == false)||(this.secendTimeChangeData == true&&this.firstTimeChangeData == false)) {
+                this.changeSecendData = true;
+                // alert('12')
                 console.log(this.bindingTwo)
                 if (index == '1') {
                     console.log(event.srcElement.value)
@@ -294,6 +306,9 @@ export default {
                     this.bindingTwo.currentRecvtimesUplimit = event.srcElement.value;
                 }
             } else if (this.thisAdata == true && this.thisBdata == true) {
+                this.changeFirstData = true;
+                this.changeSecendData = true;
+                alert('13')
                 if (index == '1') {
                     console.log(event.srcElement.value)
                     this.binding.datalogStartTime = event.srcElement.value.replace('T', ' ');
@@ -315,7 +330,9 @@ export default {
 
         },
         getSingleSelect(item, index) {
+            this.hasDataFirst = false;
             this.clickMonitor = true;
+            this.firstTimeChangeData = false;
             let inputData;
             console.log(item)
             console.log(index)
@@ -341,6 +358,7 @@ export default {
                 monitorLabel: item.monitorLabel,
             }
             console.log(this.binding)
+            console.log(this.thisAdata)
             if (this.thisAdata == true) {
                 for (var i = 0; i <= this.commonTypeList.length - 1; i++) {
                     if (index == i && this.commonTypeList[index].checkedData == true) {
@@ -360,12 +378,18 @@ export default {
                 }
 
             } else {
-                for (var i = 0; i <= this.commonTypeList.length - 1; i++) {
+                this.firstTimeChangeData = true;
+                for (var i = 0; i < this.commonTypeList.length; i++) {
+                    if (index == i && this.commonTypeList[i].operId !== null && this.commonTypeList[i].visitId !== null && this.commonTypeList[i].patientId !== null) {
+                        this.hasDataFirst = true;
+                        this.thisNowId = this.commonTypeList[i].patientId;
+                    }
                     if (index == i && this.commonTypeList[index].checkedData == false) {
                         this.$set(this.commonTypeList[index], 'checkedData', true)
                     } else if (index == i && this.commonTypeList[index].checkedData == true) {
                         this.$set(this.commonTypeList[i], 'checkedData', false)
-
+                    } else {
+                        this.$set(this.commonTypeList[i], 'checkedData', false)
                     }
                 }
                 this.cancelData = false;
@@ -375,6 +399,8 @@ export default {
         },
         getSingleSelectTwo(item, index) {
             this.clickMonitor = false;
+            this.hasDataSecend = false;
+            this.secendTimeChangeData = false;
             // console.log(item)
             // console.log(index)
             // console.log(this.commonTypeListTwo)
@@ -414,7 +440,12 @@ export default {
                 }
 
             } else {
+                this.secendTimeChangeData = true;
                 for (var i = 0; i <= this.commonTypeListTwo.length - 1; i++) {
+                    if (index == i && this.commonTypeListTwo[i].operId !== null && this.commonTypeListTwo[i].visitId !== null && this.commonTypeListTwo[i].patientId !== null) {
+                        this.hasDataSecend = true;
+                        this.thisNowIdTwo = this.commonTypeListTwo[i].patientId;
+                    }
                     if (index == i && this.commonTypeListTwo[index].checkedData == false) {
                         this.$set(this.commonTypeListTwo[index], 'checkedData', true)
                     } else if (index == i && this.commonTypeListTwo[index].checkedData == true) {
@@ -433,6 +464,7 @@ export default {
                     if (index == i && this.commonTypeList[index].checkedData == true) {
                         // alert('绑定')
                         this.bothClick1 = true;
+
                     } else if (index == i && this.commonTypeList[index].checkedData == false) {
                         // alert('取消')
                         this.bothClick1 = false;
@@ -456,36 +488,78 @@ export default {
         },
         bindingFunction() {
             // debugger
-            console.log(this.thisOnchange)
-            console.log(this.binding)
-            console.log(this.bindingTwo)
+            console.log(this.bothClick1)
+            console.log(this.bothClick2)
+            console.log(this.thisAdata)
+            console.log(this.thisBdata)
+            console.log(this.cancelData)
+            console.log(this.cancelDataTwo)
             // 监护仪
-            if (this.binding !== '' && this.cancelData == false && this.bothClick1 == true & this.bothClick2 == false) {
+            if (this.binding !== '' && this.cancelData == false && this.bothClick1 == true && this.bothClick2 == false) {
                 // alert('1')
-                this.api.bindPatientMonitor(this.binding).then(
-                    res => {
-                        console.log(res.success)
-                        if (res.success == true) {
-                            this.firstmonitor();
-                            this.thisOnchange = false;
-                        }
+                console.log(this.hasDataFirst)
+                if (this.hasDataFirst) {
+                    if (confirm("你选择的监护仪正在被" + this.thisNowId + "使用，是否强制启用此监护仪？")) {
+                        this.api.bindPatientMonitor(this.binding).then(
+                            res => {
+                                console.log(res.success)
+                                if (res.success == true) {
+                                    this.firstmonitor();
+                                    this.thisOnchange = false;
+                                    this.bothClick1 = false;
+                                }
+                            }
+                        )
+                    } else {
+
                     }
-                )
+                } else {
+                    this.api.bindPatientMonitor(this.binding).then(
+                        res => {
+                            console.log(res.success)
+                            if (res.success == true) {
+                                this.firstmonitor();
+                                this.thisOnchange = false;
+                                this.bothClick1 = false;
+                            }
+                        }
+                    )
+                }
+
             } else
                 // 麻醉机
                 if (this.bindingTwo !== '' && this.cancelDataTwo == false && this.bothClick2 == true && this.bothClick1 == false) {
                     // alert('2')
-                    this.api.bindPatientMonitor(this.bindingTwo).then(
-                        res => {
-                            console.log(res.success)
-                            if (res.success == true) {
-                                this.dataInAnesthesia();
-                                this.thisOnchange = false;
-                            }
+                    if (this.hasDataSecend) {
+                        if (confirm("你选择的麻醉机正在被" + this.thisNowIdTwo + "使用，是否强制启用此监护仪？")) {
+                            this.api.bindPatientMonitor(this.bindingTwo).then(
+                                res => {
+                                    console.log(res.success)
+                                    if (res.success == true) {
+                                        this.dataInAnesthesia();
+                                        this.thisOnchange = false;
+                                        this.bothClick2 = false;
+                                    }
+                                }
+                            )
+                        } else {
+
                         }
-                    )
+                    } else {
+                        this.api.bindPatientMonitor(this.bindingTwo).then(
+                            res => {
+                                console.log(res.success)
+                                if (res.success == true) {
+                                    this.dataInAnesthesia();
+                                    this.thisOnchange = false;
+                                    this.bothClick2 = false;
+                                }
+                            }
+                        )
+                    }
+
                 } else
-                    if (this.binding !== '' && this.cancelData == true && this.bothClick1 == false&&this.thisAdata == true &&this.thisBdata == false) {
+                    if (this.binding !== '' && this.cancelData == true && this.cancelDataTwo == '' && this.bothClick1 == false && this.thisAdata == true) {
                         // alert('3')
                         let cancelQues = {
                             monitorLabel: this.binding.monitorLabel,
@@ -497,11 +571,12 @@ export default {
                                 if (res.success == true) {
                                     this.firstmonitor();
                                     this.cancelData = '';
+                                    this.thisOnchange = false;
                                 }
                             }
                             )
                     } else
-                        if (this.bindingTwo !== '' && this.cancelDataTwo == true && this.bothClick2 == false&&this.thisBdata == true &&this.thisAdata == false) {
+                        if (this.bindingTwo !== '' && this.cancelDataTwo == true && this.cancelData == '' && this.bothClick2 == false && this.thisBdata == true) {
                             // alert('4')
                             let cancelQuesT = {
                                 monitorLabel: this.bindingTwo.monitorLabel,
@@ -513,11 +588,12 @@ export default {
                                     if (res.success == true) {
                                         this.dataInAnesthesia();
                                         this.cancelDataTwo = '';
+                                        this.thisOnchange = false;
                                     }
                                 }
                                 )
                         } else
-                            if (this.thisAdata == true && this.thisBdata == true&&this.thisOnchange == true) {
+                            if (this.thisAdata == true && this.thisBdata == true && this.thisOnchange == true) {
                                 // alert('5')
                                 this.api.bindPatientMonitor(this.binding).then(
                                     res => {
@@ -536,22 +612,54 @@ export default {
                                 this.thisOnchange = false;
                             } else if (this.binding !== '' && this.bindingTwo !== '' && this.cancelData == false && this.bothClick1 == true && this.bothClick2 == true) {
                                 // alert('6')
-                                this.api.bindPatientMonitor(this.binding).then(
-                                    res => {
-                                        if (res.success == true) {
-                                            this.firstmonitor();
-                                        }
+                                if (this.hasDataFirst && this.hasDataSecend) {
+                                    if (confirm("你选择的监护仪正在被" + this.thisNowId + "使用，是否强制启用此监护仪？")) {
+                                        this.api.bindPatientMonitor(this.binding).then(
+                                            res => {
+                                                console.log(res.success)
+                                                if (res.success == true) {
+                                                    this.firstmonitor();
+                                                    this.thisOnchange = false;
+                                                }
+                                            }
+                                        )
+                                    } else {
+
                                     }
-                                )
-                                this.api.bindPatientMonitor(this.bindingTwo).then(
-                                    res => {
-                                        if (res.success == true) {
-                                            this.dataInAnesthesia();
-                                        }
+                                    if (confirm("你选择的麻醉机正在被" + this.thisNowIdTwo + "使用，是否强制启用此监护仪？")) {
+                                        this.api.bindPatientMonitor(this.bindingTwo).then(
+                                            res => {
+                                                console.log(res.success)
+                                                if (res.success == true) {
+                                                    this.dataInAnesthesia();
+                                                    this.thisOnchange = false;
+                                                }
+                                            }
+                                        )
+                                    } else {
+
                                     }
-                                )
+                                } else {
+                                    this.api.bindPatientMonitor(this.binding).then(
+                                        res => {
+                                            if (res.success == true) {
+                                                this.firstmonitor();
+                                                this.thisOnchange = false;
+                                            }
+                                        }
+                                    )
+                                    this.api.bindPatientMonitor(this.bindingTwo).then(
+                                        res => {
+                                            if (res.success == true) {
+                                                this.dataInAnesthesia();
+                                                this.thisOnchange = false;
+                                            }
+                                        }
+                                    )
+                                }
+
                             }
-                            else if (this.binding !== '' && this.bindingTwo !== '' && this.cancelData == true && this.cancelDataTwo == true && this.bothClick1 == false && this.bothClick2 == false&&this.thisAdata == true &&this.thisBdata == true) {
+                            else if (this.binding !== '' && this.bindingTwo !== '' && this.cancelData == true && this.cancelDataTwo == true && this.bothClick1 == false && this.bothClick2 == false && this.thisAdata == true && this.thisBdata == true) {
                                 // alert('7')
                                 let cancelQuesB1 = {
                                     monitorLabel: this.binding.monitorLabel,
@@ -566,6 +674,7 @@ export default {
                                         if (res.success == true) {
                                             this.firstmonitor();
                                             this.cancelDataTwo = '';
+                                            this.thisOnchange = false;
                                         }
                                     }
                                     )
@@ -576,84 +685,111 @@ export default {
                                         if (res.success == true) {
                                             this.dataInAnesthesia();
                                             this.cancelDataTwo = '';
+                                            this.thisOnchange = false;
                                         }
                                     }
                                     )
+                            } else if (this.changeFirstData == true && this.changeSecendData == false) {
+                                // alert('8')
+                                this.api.bindPatientMonitor(this.binding).then(
+                                    res => {
+                                        if (res.success == true) {
+                                            this.firstmonitor();
+                                            this.thisOnchange = false;
+                                        }
+                                    }
+                                )
+                            } else if (this.changeFirstData == false && this.changeSecendData == true) {
+                                // alert('9')
+                                this.api.bindPatientMonitor(this.bindingTwo).then(
+                                    res => {
+                                        if (res.success == true) {
+                                            this.dataInAnesthesia();
+                                            this.thisOnchange = false;
+                                        }
+                                    }
+                                )
                             }
-                            // else if (this.thisOnchange == true && this.bothClick1 == '' && this.bothClick2 == '') {
-                            
-                                //         console.log(this.thisAdata)
-                                //         console.log(this.thisBdata)
-                                //         if (this.thisAdata == true || this.thisBdata == true) {
-                                //             if (this.thisOnchange == true) {
-                                //                 if (this.thisAdata == true) {
-                                //                     alert('1')
-                                //                     // 修改接口
-                                //                 } else if (this.thisBdata == true) {
-                                //                     alert('2')
-                                //                     // 修改接口
-                                //                 }
-                                //             } else {
-                                //                 alert('该系列采集程序已启动。')
-                                //             }
+            // else if (this.thisOnchange == true && this.bothClick1 == '' && this.bothClick2 == '') {
 
-                                //         } else {
-                                //             alert('启动采集程序需要勾选列表中的采集器。')
-                                //         }
+            //         console.log(this.thisAdata)
+            //         console.log(this.thisBdata)
+            //         if (this.thisAdata == true || this.thisBdata == true) {
+            //             if (this.thisOnchange == true) {
+            //                 if (this.thisAdata == true) {
+                                // alert('1')
+            //                     // 修改接口
+            //                 } else if (this.thisBdata == true) {
+            //                     alert('2')
+            //                     // 修改接口
+            //                 }
+            //             } else {
+            //                 alert('该系列采集程序已启动。')
+            //             }
 
-                            // }
+            //         } else {
+            //             alert('启动采集程序需要勾选列表中的采集器。')
+            //         }
+
+            // }
 
         },
         firstFun() {
             this.thisAdata = false;
-            for (var a = 0; a < this.commonTypeList.length; a++) {
-                if (this.commonTypeList[a].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeList[a].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeList[a].patientId == this.userInfoDataBody.userInfo.patientId) {
-                    this.thisAdata = true;
-                    this.defaultRecvFrequency = this.commonTypeList[a].defaultRecvFrequency;
-                    this.currentRecvFrequency = this.commonTypeList[a].currentRecvFrequency
-                    this.currentRecvtimesUplimit = this.commonTypeList[a].currentRecvtimesUplimit
-                    this.binding = {
-                        itemType: 0,
-                        wardCode: this.config.wardCode,
-                        wardType: 0,
-                        operId: this.config.userInfo.operId,
-                        patientId: this.config.userInfo.patientId,
-                        visitId: this.config.userInfo.visitId,
-                        datalogStartTime: this.dataOfStartSql,
-                        currentRecvFrequency: this.commonTypeList[a].currentRecvFrequency,
-                        currentRecvtimesUplimit: this.commonTypeList[a].currentRecvtimesUplimit,
-                        defaultRecvFrequency: this.commonTypeList[a].defaultRecvFrequency,
-                        monitorLabel: this.commonTypeList[a].monitorLabel,
-                    }
-                } else {
 
+            for (var a = 0; a < this.commonTypeList.length; a++) {
+                if (this.commonTypeList[a].operId !== null && this.commonTypeList[a].visitId !== null && this.commonTypeList[a].patientId !== null) {
+                    if (this.commonTypeList[a].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeList[a].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeList[a].patientId == this.userInfoDataBody.userInfo.patientId) {
+                        this.thisAdata = true;
+                        this.defaultRecvFrequency = this.commonTypeList[a].defaultRecvFrequency;
+                        this.currentRecvFrequency = this.commonTypeList[a].currentRecvFrequency
+                        this.currentRecvtimesUplimit = this.commonTypeList[a].currentRecvtimesUplimit
+                        this.binding = {
+                            itemType: 0,
+                            wardCode: this.config.wardCode,
+                            wardType: 0,
+                            operId: this.config.userInfo.operId,
+                            patientId: this.config.userInfo.patientId,
+                            visitId: this.config.userInfo.visitId,
+                            datalogStartTime: this.dataOfStartSql,
+                            currentRecvFrequency: this.commonTypeList[a].currentRecvFrequency,
+                            currentRecvtimesUplimit: this.commonTypeList[a].currentRecvtimesUplimit,
+                            defaultRecvFrequency: this.commonTypeList[a].defaultRecvFrequency,
+                            monitorLabel: this.commonTypeList[a].monitorLabel,
+                        }
+                    } else {
+
+                    }
                 }
+
             }
         },
         secendFun() {
             this.thisBdata = false;
             console.log(this.commonTypeListTwo)
             for (var j = 0; j < this.commonTypeListTwo.length; j++) {
-                if (this.commonTypeListTwo[j].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeListTwo[j].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeListTwo[j].patientId == this.userInfoDataBody.userInfo.patientId) {
-                    this.thisBdata = true;
-                    this.defaultRecvFrequency = this.commonTypeListTwo[j].defaultRecvFrequency;
-                    this.currentRecvFrequency = this.commonTypeListTwo[j].currentRecvFrequency
-                    this.currentRecvtimesUplimit = this.commonTypeListTwo[j].currentRecvtimesUplimit
-                    this.bindingTwo = {
-                        itemType: 1,
-                        wardCode: this.config.wardCode,
-                        wardType: 0,
-                        operId: this.config.userInfo.operId,
-                        patientId: this.config.userInfo.patientId,
-                        visitId: this.config.userInfo.visitId,
-                        datalogStartTime: this.dataOfStartSql,
-                        currentRecvFrequency: this.commonTypeListTwo[j].currentRecvFrequency,
-                        currentRecvtimesUplimit: this.commonTypeListTwo[j].currentRecvtimesUplimit,
-                        defaultRecvFrequency: this.commonTypeListTwo[j].defaultRecvFrequency,
-                        monitorLabel: this.commonTypeListTwo[j].monitorLabel,
-                    }
-                } else {
+                if (this.commonTypeListTwo[j].operId !== null && this.commonTypeListTwo[j].visitId !== null && this.commonTypeListTwo[j].patientId !== null) {
+                    if (this.commonTypeListTwo[j].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeListTwo[j].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeListTwo[j].patientId == this.userInfoDataBody.userInfo.patientId) {
+                        this.thisBdata = true;
+                        this.defaultRecvFrequency = this.commonTypeListTwo[j].defaultRecvFrequency;
+                        this.currentRecvFrequency = this.commonTypeListTwo[j].currentRecvFrequency
+                        this.currentRecvtimesUplimit = this.commonTypeListTwo[j].currentRecvtimesUplimit
+                        this.bindingTwo = {
+                            itemType: 1,
+                            wardCode: this.config.wardCode,
+                            wardType: 0,
+                            operId: this.config.userInfo.operId,
+                            patientId: this.config.userInfo.patientId,
+                            visitId: this.config.userInfo.visitId,
+                            datalogStartTime: this.dataOfStartSql,
+                            currentRecvFrequency: this.commonTypeListTwo[j].currentRecvFrequency,
+                            currentRecvtimesUplimit: this.commonTypeListTwo[j].currentRecvtimesUplimit,
+                            defaultRecvFrequency: this.commonTypeListTwo[j].defaultRecvFrequency,
+                            monitorLabel: this.commonTypeListTwo[j].monitorLabel,
+                        }
+                    } else {
 
+                    }
                 }
             }
         }
