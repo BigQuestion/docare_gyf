@@ -97,30 +97,7 @@ export default {
       this.api.selectMedAnesthesiaEventList(params)
         .then(res => {
           var list = res.list;
-          for (var i = 0; i < list.length; i++) {
-
-            let t1 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME)
-            let t2 = ''
-            let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
-            let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
-            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-              t2 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].MAX_TIME)
-            } else {
-              t2 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].ENDDATE)
-            }
-            let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)
-            let x2 = t2 / this.tbMin * (this.svgWidth / this.columns)
-            this.createLine(x1, x2, y1, y2, list[i]);
-            this.xArray.push({
-              x1: x1,
-              y1: y1,
-              x2: x2,
-              y2: y2,
-              w: x2 - x1,
-              obj: list[i]
-            })
-            this.$set(this.dataArray, i, list[i]);
-          }
+          this.dataListOperFun(list)
         })
     },
 
@@ -154,8 +131,6 @@ export default {
         .attr('stroke-width', 1)
         .attr("fill", "none")
         .attr("stroke", "blue")
-      // .on("mouseenter", function(ev) { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.dataObj = obj; // }) // .on("mouseleave", function() { // // t = setTimeout(function() { // _this.tipView = false; // // }, 500); // }) // .on("mousemove", function(ev) { // _this.$set(_this.dataObj, "dataTime", _this.getTime()); // var ev = ev || event; // //横坐标值 // var offX = ev.offsetX; // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.dataTime = time2; // _this.dataObj = obj; // })
-
     },
 
     drawLineArrow(x1, y1, x2, y2) {
@@ -202,11 +177,54 @@ export default {
       var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
       item.obj.dataTime = time2;
       this.dataObj = item.obj;
-    }
+    },
+    //数据处理
+    dataListOperFun(list) {
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].START_TIME) {
+          if (i == this.forRows) {
+            break;
+          } else {
+
+            let t1 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME)
+            let t2 = ''
+            let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+            let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+              if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
+                t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
+              } else {
+                t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
+              }
+            } else {
+              t2 = this.getMinuteDif(this.config.initTime, list[i].ENDDATE)
+            }
+            let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)
+            let x2 = t2 / this.tbMin * (this.svgWidth / this.columns)
+            this.createLine(x1, x2, y1, y2, list[i]);
+            this.xArray.push({
+              x1: x1,
+              y1: y1,
+              x2: x2,
+              y2: y2,
+              w: x2 - x1,
+              obj: list[i]
+            })
+            this.$set(this.dataArray, i, list[i]);
+          }
+        }
+
+      }
+    },
+    //翻页
+    pageTurnFun() {
+
+    },
   },
   mounted() {
     this.getLineXy();
     this.getData();
+    window.eventHub.$on("test", this.pageTurnFun);
   },
   components: {
 

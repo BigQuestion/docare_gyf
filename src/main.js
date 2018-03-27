@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 
 import './assets/css/index.css'
 
@@ -10,6 +11,8 @@ import config from './components/configFile/config'
 
 
 Vue.config.productionTip = false
+//空的全局的Vue实例,其他的组件利用这个实例emit和on自定义事件
+window.eventHub = new Vue();
 
 
 import api from '@/fetch/api.js';
@@ -28,7 +31,6 @@ Vue.prototype.datetimeLocalToDate = function(time) {
     dateChange.setHours(parseInt(time.substring(11, 13)));
     dateChange.setMinutes(parseInt(time.substring(14, 16)));
     return dateChange;
-    console.log(dateChange)
   } else {
 
     return null;
@@ -122,6 +124,7 @@ Vue.filter('discount', function(time) {
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: {
     App
