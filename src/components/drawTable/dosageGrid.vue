@@ -116,21 +116,58 @@ export default {
       var _this = this;
       var gWidth = this.svgWidth / this.columns;
       obj.dataTime = _this.getTime();
-      var t = '';
-      svg.append("line")
-        .attr('stroke-width', 1)
-        .attr("fill", "none")
-        .attr("stroke", "blue")
-        .attr("y1", y1 - 4)
-        .attr("y2", y2 + 4)
-        .attr("x1", x1)
-        .attr("x2", x1)
+      var t;
+      obj.nowTime = '';
+      var gWidth = this.svgWidth / this.columns;
+      if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
+        svg.append("line")
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("class", "test")
+          .attr("y1", y1 - 4)
+          .attr("y2", y2 + 4)
+          .attr("x1", x1)
+          .attr("x2", x1)
+        svg.append("path")
+          .attr('d', this.drawLineArrow(x1, y1, x2, y2))
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("class", "test")
+        // .on("mouseenter", function() { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.lineObj = obj; // }) // .on("mouseleave", function() { // //t = setTimeout(function (){ // _this.tipView = false; // //}, 1000); // }) // .on("mousemove", function(ev) { // //_this.lineObj.nowTime = new Date(); // _this.$set(_this.lineObj, "nowTime", _this.getTime()); // var ev = ev || event; // var offX = ev.offsetX; //横坐标值 // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.nowTime = time2; // _this.lineObj = obj; // })
 
-      svg.append("path")
-        .attr('d', this.drawLineArrow(x1, y1, x2, y2))
-        .attr('stroke-width', 1)
-        .attr("fill", "none")
-        .attr("stroke", "blue")
+      }
+      if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
+        svg.append("line")
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("class", "test")
+          .attr("y1", y1 - 4)
+          .attr("y2", y2 + 4)
+          .attr("x1", x1)
+          .attr("x2", x1)
+        svg.append("line")
+          .attr("stroke", "blue")
+          .attr("fill", "none")
+          .attr("stroke-width", 1)
+          .attr("class", "test")
+          .attr("y1", y1)
+          .attr("y2", y2)
+          .attr("x1", x1)
+          .attr("x2", x2)
+        svg.append("line")
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("class", "test")
+          .attr("y1", y1 - 4)
+          .attr("y2", y2 + 4)
+          .attr("x1", x2)
+          .attr("x2", x2)
+
+      }
     },
 
     drawLineArrow(x1, y1, x2, y2) {
@@ -180,6 +217,9 @@ export default {
     },
     //数据处理
     dataListOperFun(list) {
+      var m = 0;
+      this.xArray = [];
+      this.dataArray = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].START_TIME) {
           if (i == this.forRows) {
@@ -188,8 +228,7 @@ export default {
 
             let t1 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME)
             let t2 = ''
-            let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
-            let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
               if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
@@ -197,28 +236,100 @@ export default {
                 t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
               }
             } else {
-              t2 = this.getMinuteDif(this.config.initTime, list[i].ENDDATE)
+              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
+                t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
+              } else {
+                t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
+              }
             }
             let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)
             let x2 = t2 / this.tbMin * (this.svgWidth / this.columns)
-            this.createLine(x1, x2, y1, y2, list[i]);
-            this.xArray.push({
-              x1: x1,
-              y1: y1,
-              x2: x2,
-              y2: y2,
-              w: x2 - x1,
-              obj: list[i]
-            })
-            this.$set(this.dataArray, i, list[i]);
+            let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+            let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+
+            if (list[i].DURATIVE_INDICATOR == 1) {
+              list[i].vStartTime = '';
+              this.createLine(x1, x2, y1, y2, list[i]);
+              this.xArray.push({
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                w: x2 - x1,
+                obj: list[i]
+              })
+
+              // this.$set(this.dataArray, i, list[i]);
+              this.dataArray.push(list[i]);
+              m++;
+            }
+
+            // this.createLine(x1, x2, y1, y2, list[i]);
+            // this.xArray.push({
+            //   x1: x1,
+            //   y1: y1,
+            //   x2: x2,
+            //   y2: y2,
+            //   w: x2 - x1,
+            //   obj: list[i]
+            // })
+            // this.$set(this.dataArray, i, list[i]);
           }
         }
+      }
 
+      for (var k = 0; k < this.rows - m; k++) {
+        this.dataArray.push(m)
       }
     },
     //翻页
     pageTurnFun() {
+      // var svg = d3.selectAll(".test") // svg.remove();
 
+      if (this.config.pageOper == 0) {
+        this.config.pageNum = 1;
+        this.getData();
+      }
+      if (this.config.pageOper == -1) {
+        var list = [];
+        list = this.percentPageData;
+
+        for (var i = 0; i < list.length; i++) {
+          if (this.config.pagePercentNum != 1 && list[i].MAX_TIME) {
+            list[i].vStartTime = new Date(m).Format("yyyy-MM-dd hh:mm:ss");
+          }
+        }
+
+        this.dataListOperFun(list);
+
+      }
+      if (this.config.pageOper == 1) {
+        let arrList = this.dataArray;
+        this.percentPageData = arrList;
+        var arrayList = [];
+        var list = this.dataArray;
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].MAX_TIME) {
+            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+
+              if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
+                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {}
+            } else {
+              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
+                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {
+
+              }
+            }
+          }
+        }
+
+        this.dataListOperFun(arrayList);
+        console.log(this.dataArray)
+      }
     },
   },
   mounted() {
