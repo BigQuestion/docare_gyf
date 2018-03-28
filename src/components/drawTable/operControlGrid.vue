@@ -59,7 +59,7 @@
 <script type="text/javascript">
 import * as d3 from 'd3';
 export default {
-  name: 'dosage',
+  name: 'opercontrolgrid',
   data() {
     return {
       showStyleView: false,
@@ -149,58 +149,6 @@ export default {
 
 
       }
-
-      // var isdown = false;
-      // var svg = d3.select("#operGrid")
-      // svg.append("path")
-      //   .attr("d", dataone(this.data))
-      //   .attr('stroke-width', 1)
-      //   .attr("fill", "none")
-      //   .attr("stroke", "blue")
-
-      // var g = svg.selectAll('circle')
-      // .data(this.data)
-      // .enter()
-      // .append('g')
-      // .append('circle')
-      // //.attr('class', 'linecircle')
-      // .attr('cx', dataone.x())
-      // .attr('cy', dataone.y())
-      // .attr('r', 3)
-      // .attr('fill','green')
-      // // .on('mouseover', function() {
-      // //   d3.select(this).transition().duration(500).attr('r', 5);
-      // // })
-      // // .on('mouseout', function() {
-      // //   d3.select(this).transition().duration(500).attr('r', 3);
-      // // }) 
-      // .on('mousedown',function(data,ev){
-      //  var ev = ev || event;
-      //  isdown = true;
-      //  console.log(ev)
-      // })
-      // .on('mousemove',function(data){
-
-      //  if(isdown){
-      //    svg.selectAll("circle").remove()
-      //    var p = d3.select("#operGrid")
-      //    .select("path").remove()
-
-      //     _this.data = [{ "x": 14, "y": 400 },
-      //    { "x": 28, "y": 410 },
-      //    { "x": 42, "y": 40 },
-      //    { "x": 56, "y": 5 },
-      //    ]
-      //    _this.calculatePath(); 
-      //  }
-
-
-      // })
-      // .on('mouseup',function(ev){
-      //  isdown = false;
-      //  var ev = ev || event;
-      //  console.log(ev)
-      // })
     },
     itemMouseDown(e, currentItem, index1, index2) {
       this.area.addEventListener('mousemove', this.areaMouseMove);
