@@ -1141,7 +1141,6 @@ export default {
     //修改病人手术状态
     changeStatus(status, event) {
       this.nextDATA = '';
-      console.log(this.operStatus)
 
       if (this.lockedPatientInfo.operStatus === 0 && status == 5) {
         this.firstRoom.noneData = false;
@@ -1163,20 +1162,15 @@ export default {
         operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
       }
       this.nextDATA = params;
-      console.log(this.nextDATA)
       this.api.changeOperationStatus(params)
         .then(
           res => {
-            console.log(res)
             this.searchPatientList();
           });
 
     },
     // 出手术室操作修改病人状态
-    finalStatus(sta) {
-      console.log(sta)
-      console.log(this.nextDATA)
-    },
+    finalStatus(sta) {},
     //手术信息
     getPatientOperationInfo() {
       this.patientOperationInfoView.dataInParent = !this.patientOperationInfoView.dataInParent;
@@ -1336,7 +1330,6 @@ export default {
     this.selectMedFormList();
 
     this.patientId = '10966589';
-    console.log(this.$store.state.count)
   },
   components: {
     formElement,
@@ -1626,6 +1619,11 @@ export default {
 
 
 
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1712,6 +1710,11 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
 
 
 

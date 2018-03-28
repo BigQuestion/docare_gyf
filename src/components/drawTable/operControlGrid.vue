@@ -168,12 +168,6 @@ export default {
       } else {
         this.clickItem.value = Math.round((this.svgHeight - e.offsetY) / (this.svgHeight / this.rows) * 10)
       }
-
-      //console.log(arr1[this.clickIndex])
-      //this.$set(this.pathArray,1,arr1)
-      // this.dataPathArray[this.pathIndex].circleData
-      // var p = d3.select("#operGrid")
-      //   .select("path").remove()
       this.calculatePath();
     },
     areaMouseUp(e) {
@@ -315,13 +309,18 @@ export default {
         arry.push(i * 20 + 20)
       }
       this.yValueArray = arry.reverse();
-    }
+    },
+    pageTurnFun() {
+      this.pathArray = [];
+      this.calculatePath();
+    },
   },
   mounted() {
     this.getLineXy();
     this.getSignName();
     this.getYDataArray();
     this.area = this.$refs.area;
+    window.eventHub.$on("test", this.pageTurnFun);
   },
   components: {
 
