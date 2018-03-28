@@ -64,6 +64,7 @@ export default {
       tipView: false,
       dataObj: {},
       xArray: [],
+      percentPageData: [],
     }
   },
   methods: {
@@ -84,6 +85,7 @@ export default {
       this.lineArray = array;
     },
     getData() {
+      this.dataArray = [];
       for (var i = 0; i < this.forRows; i++) {
         this.dataArray.push(i)
       }
@@ -116,21 +118,57 @@ export default {
       var _this = this;
       var gWidth = this.svgWidth / this.columns;
       obj.dataTime = _this.getTime();
-      var t = '';
-      svg.append("line")
-        .attr('stroke-width', 1)
-        .attr("fill", "none")
-        .attr("stroke", "blue")
-        .attr("y1", y1 - 4)
-        .attr("y2", y2 + 4)
-        .attr("x1", x1)
-        .attr("x2", x1)
+      var t;
+      obj.nowTime = '';
+      var gWidth = this.svgWidth / this.columns;
+      if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
+        svg.append("line")
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("class", "dosagegrid")
+          .attr("y1", y1 - 4)
+          .attr("y2", y2 + 4)
+          .attr("x1", x1)
+          .attr("x2", x1)
+        svg.append("path")
+          .attr('d', this.drawLineArrow(x1, y1, x2, y2))
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("class", "dosagegrid")
 
-      svg.append("path")
-        .attr('d', this.drawLineArrow(x1, y1, x2, y2))
-        .attr('stroke-width', 1)
-        .attr("fill", "none")
-        .attr("stroke", "blue")
+      }
+      if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
+        svg.append("line")
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("class", "dosagegrid")
+          .attr("y1", y1 - 4)
+          .attr("y2", y2 + 4)
+          .attr("x1", x1)
+          .attr("x2", x1)
+        svg.append("line")
+          .attr("stroke", "blue")
+          .attr("fill", "none")
+          .attr("stroke-width", 1)
+          .attr("class", "dosagegrid")
+          .attr("y1", y1)
+          .attr("y2", y2)
+          .attr("x1", x1)
+          .attr("x2", x2)
+        svg.append("line")
+          .attr('stroke-width', 1)
+          .attr("fill", "none")
+          .attr("stroke", "blue")
+          .attr("class", "dosagegrid")
+          .attr("y1", y1 - 4)
+          .attr("y2", y2 + 4)
+          .attr("x1", x2)
+          .attr("x2", x2)
+
+      }
     },
 
     drawLineArrow(x1, y1, x2, y2) {
@@ -159,6 +197,9 @@ export default {
       this.tipView = true;
       this.tipLeft = ev.offsetX;
       this.tipTop = item.y2 + 10;
+      if (item.obj.ENDDATE == null || item.obj.ENDDATE == "") {
+        item.obj.ENDDATE = (item.obj.MAX_TIME);
+      }
       this.dataObj = item.obj;
     },
     hideTipInfo() {
@@ -172,7 +213,7 @@ export default {
       //var ev = ev || event;
       var offX = ev.offsetX + item.x1; //横坐标值
       var m = Math.round(offX / gWidth * 5);
-      var time = new Date(this.config.userInfo.inDateTime);
+      var time = new Date(this.config.initTime);
       var time1 = time.getTime() + m * 60 * 1000;
       var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
       item.obj.dataTime = time2;
@@ -180,16 +221,22 @@ export default {
     },
     //数据处理
     dataListOperFun(list) {
+      var m = 0;
+      this.xArray = [];
+      this.dataArray = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].START_TIME) {
           if (i == this.forRows) {
             break;
           } else {
-
-            let t1 = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME)
+            let t1 = ''
             let t2 = ''
-            let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
-            let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+            if (this.config.pagePercentNum == 1) {
+              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            } else {
+              t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            }
+            console.log(this.config.initTime, list[i].vStartTime)
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
               if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
@@ -197,28 +244,87 @@ export default {
                 t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
               }
             } else {
-              t2 = this.getMinuteDif(this.config.initTime, list[i].ENDDATE)
+              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
+                t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
+              } else {
+                t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
+              }
             }
             let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)
             let x2 = t2 / this.tbMin * (this.svgWidth / this.columns)
-            this.createLine(x1, x2, y1, y2, list[i]);
-            this.xArray.push({
-              x1: x1,
-              y1: y1,
-              x2: x2,
-              y2: y2,
-              w: x2 - x1,
-              obj: list[i]
-            })
-            this.$set(this.dataArray, i, list[i]);
+            let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+            let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+
+            if (list[i].DURATIVE_INDICATOR == 1) {
+              list[i].vStartTime = '';
+              this.createLine(x1, x2, y1, y2, list[i]);
+              this.xArray.push({
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                w: x2 - x1,
+                obj: list[i]
+              })
+              this.dataArray.push(list[i]);
+              m++;
+            }
           }
         }
+      }
 
+      for (var k = 0; k < this.forRows - m; k++) {
+        this.dataArray.push(m)
       }
     },
     //翻页
     pageTurnFun() {
+      var svg = d3.selectAll(".dosagegrid")
+      svg.remove();
 
+      if (this.config.pageOper == 0) {
+        this.config.pageNum = 1;
+        this.getData();
+      }
+      if (this.config.pageOper == -1) {
+        let m = this.config.initTime.getTime();
+        var list = [];
+        list = this.percentPageData;
+        for (var i = 0; i < list.length; i++) {
+          if (this.config.pagePercentNum != 1 && list[i].MAX_TIME) {
+            list[i].vStartTime = new Date(m).Format("yyyy-MM-dd hh:mm:ss");
+          }
+        }
+        this.dataListOperFun(list);
+      }
+      if (this.config.pageOper == 1) {
+        let arrList = this.dataArray;
+        this.percentPageData = arrList;
+        var arrayList = [];
+        var list = this.dataArray;
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].MAX_TIME) {
+            debugger
+            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+
+              if (new Date(list[i].MAX_TIME) > this.config.initTime) {
+                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {}
+            } else {
+              if (new Date(list[i].ENDDATE) > this.config.initTime) {
+                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {
+
+              }
+            }
+          }
+        }
+
+        this.dataListOperFun(arrayList);
+
+      }
     },
   },
   mounted() {

@@ -194,7 +194,7 @@
             <div>
               <div style="display:flex;items-align:center;padding-top:3px;">
                 <span>患者数量:</span>
-                <span style="color:rgb(0, 26, 250);padding:0 5px;">{{pageLength.length}}</span>
+                <span style="color:rgb(0, 26, 250);padding:0 5px;">{{pageLength}}</span>
                 <span style="padding-right:5px;">共{{pages}}页</span>
                 <span>每页显示</span>
                 <input style="width:50px;" type="number" min="5" max="100" @change="dataInSize($event)" v-model="size">
@@ -533,7 +533,7 @@ export default {
       size: 6,
       pageNum: 1,
       dataInSelect: false,
-      pageLength: [],
+      pageLength: '',
       dataTypeInAllSelect: [],
       formItems: [],
       bindClassData: '',
@@ -686,8 +686,8 @@ export default {
         this.getTime = year + "-" + month + "-" + day;
       }
       let params = {
-        // count: this.size,
-        // page: this.pageNum,
+        count: this.size,
+        page: this.pageNum,
         dateTime: this.getTime,
         operStatus: this.operStatus,
         patientName: this.patientName,
@@ -696,8 +696,9 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
         res => {
-          this.pageLength = res.list;
-          if (this.pageLength.length > 5) {
+
+          console.log(res)
+          if (res.total > 5) {
             let paramsTwo = {
               count: this.size,
               page: this.pageNum,
@@ -709,16 +710,20 @@ export default {
             this.api.getMedOperationMasterList(paramsTwo)
               .then(
               res => {
+                this.pageShowData = true;
+                this.pages = res.pages;
                 this.patientList = res.list;
+                this.pageLength = res.total;
+                this.sortData = '';
+                  this.dataTypeInAllSelect = [];
+                  for (var i = 1; i <= this.pages; i++) {
+                    this.dataTypeInAllSelect.push({
+                      number: i
+                    })
+                  }
               });
-            this.pageShowData = true;
-            this.pages = Math.ceil(this.pageLength.length / this.size)
-            this.dataTypeInAllSelect = [];
-            for (var i = 1; i <= this.pages; i++) {
-              this.dataTypeInAllSelect.push({
-                number: i
-              })
-            }
+            //   this.pages = Math.ceil(this.pageLength.length / this.size)
+
           } else {
             this.patientList = res.list;
             this.pageShowData = false;
@@ -799,7 +804,7 @@ export default {
     dataInSize(value) {
       this.pageNum = 1;
       this.size = value.srcElement._value;
-      this.pages = Math.ceil(this.pageLength.length / this.size)
+      this.pages = Math.ceil(this.pageLength / this.size)
       this.dataTypeInAllSelect = [];
       for (var i = 1; i <= this.pages; i++) {
         this.dataTypeInAllSelect.push({
@@ -1179,11 +1184,11 @@ export default {
         .then(
         res => {
           console.log(res)
-          if(res.success == true){
+          if (res.success == true) {
             this.searchPatientList();
-            this.lockedPatientInfo.operStatus=status;
+            this.lockedPatientInfo.operStatus = status;
           }
-          
+
         });
 
     },
@@ -1206,7 +1211,7 @@ export default {
           if (res.success == true) {
             this.searchPatientList();
             this.doShowData = false;
-          }else{
+          } else {
             alert(res.msg)
           }
 
@@ -1334,6 +1339,10 @@ export default {
       this.updateFormsData = [];
       this.selectMedFormTemp(this.selectFormItemTemp);
       this.config.pageOper = 0;
+      this.config.maxTime = '';
+      this.config.initTime = '';
+      this.config.pagePercentNum = 1;
+
     },
     //单子首页
     toChangePage(num) {
@@ -1438,7 +1447,7 @@ export default {
 
 .patientList {
   height: 100%;
-  width: 380px;
+  width: 385px;
   min-width: 380px;
 }
 
@@ -1650,6 +1659,7 @@ export default {
 
 
 
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1736,6 +1746,7 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
 
 
 
