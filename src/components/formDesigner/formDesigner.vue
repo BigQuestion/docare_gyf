@@ -89,20 +89,20 @@
             <input type="" name="" v-model="chooseItems[0].opacity">
           </div>
           <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                                            <div class="ediChild">
-                                                                                                TopMost：
-                                                                                            </div>
-                                                                                            <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
-                                                                                                <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
-                                                                                            </select>
-                                                                                        </div> -->
+                                                                                                  <div class="ediChild">
+                                                                                                      TopMost：
+                                                                                                  </div>
+                                                                                                  <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
+                                                                                                      <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
+                                                                                                  </select>
+                                                                                              </div> -->
           <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                                                            <div class="ediChild">
-                                                                                                                Font:
-                                                                                                            </div>
-                                                                                                            <input type="text">
-                                                                                                            <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
-                                                                                                        </div> -->
+                                                                                                                  <div class="ediChild">
+                                                                                                                      Font:
+                                                                                                                  </div>
+                                                                                                                  <input type="text">
+                                                                                                                  <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
+                                                                                                              </div> -->
           <div v-if="chooseItems[0]" class="ediclass">
             <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
             <div class="ediChild">
@@ -201,6 +201,30 @@
                 <option v-for="btn in chooseItems[0].strFormat" :value="btn.isData">{{btn.isData}}</option>
               </select>
             </div>
+            <div v-if="chooseItems[0]" class="ediclass">
+              <!-- 格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat"> -->
+              <div class="ediChild">
+                打印底线:
+              </div>
+              <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].bottomLine,'isData',chooseItems[0].bottomLineMode)" v-model="chooseItems[0].bottomLineMode">
+                <option v-for="btn in chooseItems[0].bottomLine" :value="btn.isData">{{btn.isData}}</option>
+              </select>
+            </div>
+            <div v-if="chooseItems[0]" class="ediclass">
+              <!-- 格式化字符串:<input type="" name="" v-model="chooseItems[0].strFormat"> -->
+              <div class="ediChild">
+                底线风格:
+              </div>
+              <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].lineType,'isData',chooseItems[0].lineTypeMode)" v-model="chooseItems[0].lineTypeMode">
+                <option v-for="btn in chooseItems[0].lineType" :value="btn.isData">{{btn.isData}}</option>
+              </select>
+            </div>
+            <div v-if="chooseItems[0]" class="ediclass">
+              <div class="ediChild">
+                底线颜色:
+              </div>
+              <colorPicker v-model="chooseItems[0].lineColor"></colorPicker>{{chooseItems[0].lineColor}}
+            </div>
           </div>
           <div v-if="chooseItems[0]&&chooseItems[0].type=='checkBoxAll' ">
             <div class="ediclass">
@@ -285,131 +309,136 @@ export default {
     return {
       formItems: [],
       btns: [{
-          text: '自动获取',
-          type: 'autoInput',
-          value: '输入文字',
-          selectKeyfield: 'id',
-          ForeColor: '#000',
-        },
-        {
-          text: '文本控件',
-          type: 'title',
-          value: '输入文字',
-          width: '80',
-          ForeColor: '#000',
-          height: '',
-        }, {
-          text: '文本',
-          type: 'text',
-          value: '输入文字',
-          width: '80',
-          height: '',
-          fieldName: '',
-          tableName: '',
-          ForeColor: '#0000FF',
-          borderStyle: '1px solid #222',
-        }, {
-          text: '输入框',
-          type: 'input',
-          width: '80',
-          fieldName: '',
-          tableName: '',
-          dictTableName: '',
-          dictSelect: '',
-          dictShowFiled: '',
-          dictField: '',
-          borderStyle: '1px solid #222',
-          value: '',
-          ForeColor: '#0000FF',
-          opacity: 1,
-          MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
-          MultiSelectMode: 'false', //真为多选，假为单选
-          isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
-          readOnlyMode: 'false',
-          isEdit: [{ isData: 'true' }, { isData: 'false' }],
-          isEditMode: 'true',
-          strFormat: [{ isData: 'true' }, { isData: 'false' }], //格式化字符串
-          strFormatMode: 'false', //格式化字符串
-          nullString: [{ isData: 'true' }, { isData: 'false' }], //真可以为空，假不能为空
-          topMostMode: 'false',
-          topMost: [{ isData: 'true' }, { isData: 'false' }],
-          nullStringMode: 'true',
-          cursor: [
-            { isData: 'auto' },
-            { isData: 'ibeam' },
-            { isData: 'pointer' },
-            { isData: 'wait' },
-            { isData: 'not-allowed' },
-            { isData: 'text' },
-          ],
-          cursorMode: 'auto',
+        text: '自动获取',
+        type: 'autoInput',
+        value: '输入文字',
+        selectKeyfield: 'id',
+        ForeColor: '#000',
+      },
+      {
+        text: '文本控件',
+        type: 'title',
+        value: '输入文字',
+        width: '80',
+        ForeColor: '#000',
+        height: '',
+      }, {
+        text: '文本',
+        type: 'text',
+        value: '输入文字',
+        width: '80',
+        height: '',
+        fieldName: '',
+        tableName: '',
+        ForeColor: '#0000FF',
+        borderStyle: '1px solid #222',
+      }, {
+        text: '输入框',
+        type: 'input',
+        width: '80',
+        fieldName: '',
+        tableName: '',
+        dictTableName: '',
+        dictSelect: '',
+        dictShowFiled: '',
+        dictField: '',
+        borderStyle: '1px solid #222',
+        value: '',
+        ForeColor: '#0000FF',
+        opacity: 1,
+        MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
+        MultiSelectMode: 'false', //真为多选，假为单选
+        isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
+        readOnlyMode: 'false',
+        isEdit: [{ isData: 'true' }, { isData: 'false' }],
+        isEditMode: 'true',
+        strFormat: [{ isData: 'true' }, { isData: 'false' }], //格式化字符串
+        strFormatMode: 'false', //格式化字符串
+        nullString: [{ isData: 'true' }, { isData: 'false' }], //真可以为空，假不能为空
+        topMostMode: 'false',
+        topMost: [{ isData: 'true' }, { isData: 'false' }],
+        bottomLine: [{ isData: 'true' }, { isData: 'false' }], //打印底线
+        bottomLineMode: 'true',
+        lineType: [{ isData: 'solid' }, { isData: 'dashed' }], //底线风格
+        lineTypeMode: 'solid',
+        lineColor:'#222222',
+        nullStringMode: 'true',
+        cursor: [
+          { isData: 'auto' },
+          { isData: 'ibeam' },
+          { isData: 'pointer' },
+          { isData: 'wait' },
+          { isData: 'not-allowed' },
+          { isData: 'text' },
+        ],
+        cursorMode: 'auto',
 
-        }, {
-          text: '单选',
-          type: 'radio'
-        }, {
-          text: '多选',
-          type: 'checkbox'
-        }, {
-          text: '横线',
-          type: 'line',
-          width: '100',
-          ForeColor: '#0000FF',
-        }, {
-          text: '竖线',
-          type: 'verticalLine',
-          height: '100',
-        }, {
-          text: "文本区",
-          type: "textarea",
-          height: "100",
-          width: "300",
-          ForeColor: '#0000FF',
-        }, {
-          text: "麻醉量表格组件",
-          type: "formDiv",
-        }, {
-          text: "入量表格组件",
-          type: "formInGrid",
-        }, {
-          text: "监控组件",
-          type: "operControlGrid",
-        }, {
-          text: "标记组件",
-          type: "signGrid",
-          width: 600,
-          height: 72,
-        }, {
-          text: "标记详细组件",
-          type: "dataOfGrid",
-          width: 600,
-          height: 72,
-        }, {
-          text: "自定义控件",
-          type: "checkBoxAll",
-          defaultItems: "集合",
-          SourceFieldName: "",
-          SourceTableName: "",
-          listData: [],
-          MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
-          MultiSelectMode: 'false',
-        }, {
-          text: "MedLegengGraph",
-          type: "div",
-          width: "300",
-          height: "300",
-          borderStyle: '1px solid #222',
-          cursor: [
-            { isData: 'auto' },
-            { isData: 'ibeam' },
-            { isData: 'pointer' },
-            { isData: 'wait' },
-            { isData: 'not-allowed' },
-            { isData: 'text' },
-          ],
-          cursorMode: 'auto',
-          opacity: 1,
-        }
+      }, {
+        text: '单选',
+        type: 'radio'
+      }, {
+        text: '多选',
+        type: 'checkbox'
+      }, {
+        text: '横线',
+        type: 'line',
+        width: '100',
+        ForeColor: '#0000FF',
+      }, {
+        text: '竖线',
+        type: 'verticalLine',
+        height: '100',
+      }, {
+        text: "文本区",
+        type: "textarea",
+        height: "100",
+        width: "300",
+        ForeColor: '#0000FF',
+      }, {
+        text: "麻醉量表格组件",
+        type: "formDiv",
+      }, {
+        text: "入量表格组件",
+        type: "formInGrid",
+      }, {
+        text: "监控组件",
+        type: "operControlGrid",
+      }, {
+        text: "标记组件",
+        type: "signGrid",
+        width: 600,
+        height: 72,
+      }, {
+        text: "标记详细组件",
+        type: "dataOfGrid",
+        width: 600,
+        height: 72,
+      }, {
+        text: "自定义控件",
+        type: "checkBoxAll",
+        defaultItems: "集合",
+        SourceFieldName: "",
+        SourceTableName: "",
+        listData: [],
+        MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
+        MultiSelectMode: 'false',
+      }, {
+        text: "MedLegengGraph",
+        type: "div",
+        width: "300",
+        height: "300",
+        borderStyle: '1px solid #222',
+        cursor: [
+          { isData: 'auto' },
+          { isData: 'ibeam' },
+          { isData: 'pointer' },
+          { isData: 'wait' },
+          { isData: 'not-allowed' },
+          { isData: 'text' },
+        ],
+        cursorMode: 'auto',
+        opacity: 1,
+      }
       ],
       handleItem: {},
       offsetX: '',
@@ -601,9 +630,9 @@ export default {
         }
         this.api.updateMedFormContent(params)
           .then(
-            res => {
-              this.selectMedFormTemp();
-            });
+          res => {
+            this.selectMedFormTemp();
+          });
       } else {
 
       }
@@ -617,14 +646,14 @@ export default {
         }
         this.api.selectMedFormTemp(params)
           .then(
-            res => {
-              if (res.formContent == "null" || res.formContent == null) {
-                this.formItems = [];
-              } else {
-                this.formItems = JSON.parse(res.formContent);
-              }
+          res => {
+            if (res.formContent == "null" || res.formContent == null) {
+              this.formItems = [];
+            } else {
+              this.formItems = JSON.parse(res.formContent);
+            }
 
-            });
+          });
       }
     },
     show(index, ev) {
@@ -983,6 +1012,9 @@ export default {
 
 
 
+
+
+
 /* 顶部功能按钮样式 */
 
 .buttonOfTop {
@@ -1029,5 +1061,4 @@ export default {
   margin: 3px auto 0;
   position: relative;
 }
-
 </style>

@@ -37,7 +37,7 @@
               <input style="width:165px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10',$event)">
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="inRoomDateTime">
+          <div style="margin:0px 5px;" v-if="anesStartTime">
             <div class="lightBox">
               <img style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">手术开始</span>
@@ -46,7 +46,7 @@
               <input style="width:165px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15',$event)">
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="inRoomDateTime">
+          <div style="margin:0px 5px;" v-if="startDateTime">
             <div class="lightBox">
               <img style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">手术结束</span>
@@ -55,7 +55,7 @@
               <input style="width:165px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25',$event)">
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="inRoomDateTime">
+          <div style="margin:0px 5px;" v-if="endDateTime">
             <div class="lightBox">
               <img style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">麻醉结束</span>
@@ -64,14 +64,14 @@
               <input style="width:165px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30',$event)">
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="inRoomDateTime">
-            <div class="lightBox" style="position:relative;">
+          <div style="margin:0px 5px;" v-if="anesEndTime">
+            <div ref="area" @contextmenu.prevent="showDoubleList(lockedPatientInfo.operStatus)" class="lightBox" style="position:relative;">
               <img style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">出手术室</span>
-              <!-- <div class="inseide">
+              <div v-if="doShowData" class="inseide">
                 <div class="insideHover" @click="finalStatus('60')">转入病房</div>
                 <div class="insideHover" @click="finalStatus('45')">进复苏室</div>
-              </div> -->
+              </div>
             </div>
             <div>
               <input style="width:165px;" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35',$event)">
@@ -524,6 +524,7 @@ export default {
     return {
       printed: false,
       isPrint: false,
+      doShowData: false,
       patientList: [],
       widthData: false,
       pageShowData: false,
@@ -570,7 +571,7 @@ export default {
       transData: false,
       showData: true,
       showDataTwo: true,
-      nextDATA:'',
+      nextDATA: '',
       patientOperationInfoView: { dataInParent: false },
       operationRegisterView: { dataInParent: false },
       // aboutUsData: { dataInParent: false },
@@ -893,6 +894,7 @@ export default {
     },
     lockedPatient(item) {
       this.lockedPatientInfo = item;
+      console.log(item)
       //当前病人信息存储起来
       this.config.userInfo = item;
       this.inRoomDateTime = this.changeDateFormat(item.inDateTime);
@@ -901,6 +903,15 @@ export default {
       this.endDateTime = this.changeDateFormat(item.endDateTime);
       this.anesEndTime = this.changeDateFormat(item.anesEndTime);
       this.outDateTime = this.changeDateFormat(item.outDateTime);
+
+    },
+    showDoubleList(status) {
+      console.log(status)
+      if (status == 45) {
+        this.doShowData = true
+      } else {
+
+      }
 
     },
     getComType() {
@@ -1059,14 +1070,14 @@ export default {
       let params = {}
       this.api.selectMedFormList(params)
         .then(
-          res => {
-            this.medBillList = res.list;
-            this.bindClassData = false;
-            for (var i = 0; i <= res.list.length - 1; i++) {
-              this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
-            }
+        res => {
+          this.medBillList = res.list;
+          this.bindClassData = false;
+          for (var i = 0; i <= res.list.length - 1; i++) {
+            this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
+          }
 
-          });
+        });
     },
     selectMedFormTemp(item) {
 
@@ -1168,14 +1179,39 @@ export default {
         .then(
         res => {
           console.log(res)
-          this.searchPatientList();
+          if(res.success == true){
+            this.searchPatientList();
+            this.lockedPatientInfo.operStatus=status;
+          }
+          
         });
 
     },
     // 出手术室操作修改病人状态
-    finalStatus(sta){
+    finalStatus(sta) {
       console.log(sta)
       console.log(this.nextDATA)
+      let params = {
+        patientId: this.lockedPatientInfo.patientId,
+        visitId: this.lockedPatientInfo.visitId,
+        operId: this.lockedPatientInfo.operId,
+        operStatus: sta,
+      }
+      this.nextDATA = params;
+      console.log(this.nextDATA)
+      this.api.changeOperationStatus(params)
+        .then(
+        res => {
+          console.log(res)
+          if (res.success == true) {
+            this.searchPatientList();
+            this.doShowData = false;
+          }else{
+            alert(res.msg)
+          }
+
+        });
+
     },
     //手术信息
     getPatientOperationInfo() {
@@ -1611,6 +1647,9 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1697,6 +1736,9 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
 /* 分页样式 */
 
 .pageClass {
