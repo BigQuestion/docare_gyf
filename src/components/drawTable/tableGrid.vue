@@ -540,9 +540,9 @@ export default {
 
   },
   mounted() {
-    this.area = this.$refs.area;
-    this.xTimeInit();
-    window.eventHub.$on("test", this.pageChange);
+    // this.area = this.$refs.area;
+    // this.xTimeInit();
+    // window.eventHub.$on("test", this.pageChange);
 
   },
   components: {

@@ -327,9 +327,9 @@ export default {
     },
   },
   mounted() {
-    this.getLineXy();
-    this.getData();
-    window.eventHub.$on("test", this.pageTurnFun);
+    // this.getLineXy();
+    // this.getData();
+    // window.eventHub.$on("test", this.pageTurnFun);
   },
   components: {
 

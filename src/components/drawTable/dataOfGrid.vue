@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%;height:100%;display:flex;flex-direction:column;flex-wrap:wrap;">
-    <div v-if="page == false" :title="item.titleWord" v-for="item in dataBody" style="width:auto;font-size:14px;padding:0 20px 2px 0;display:flex;cursor:default;">
+    <div v-if="page == false" :title="item.titleWord" v-for="item in dataBody" style="width:auto;max-width:300px;min-width:220px;font-size:14px;padding:0 20px 2px 0;display:flex;cursor:default;">
       <span style="padding-right:5px;width:26px;display:block;">{{item.number}}</span>
       <span style="padding-right:5px;">{{item.ITEM_NAME}}</span>
       <span style="padding-right:">{{item.DOSAGE}}</span>

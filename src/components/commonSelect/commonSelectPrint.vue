@@ -1,6 +1,12 @@
 <template>
   <div style="position: relative;">
-    <div :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}">
+    <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt solid'+conInfo.lineColor}">
+      {{infoData[attrName]}}
+    </div>
+    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt dashed'+conInfo.lineColor}">
+      {{infoData[attrName]}}
+    </div>
+    <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}">
       {{infoData[attrName]}}
     </div>
   </div>
@@ -54,7 +60,7 @@ export default {
   },
   props: ['conInfo', 'attrName', 'data'],
   mounted() {
-
+    
   },
   created() {
     // 点击其他不在的区域触发事件
@@ -88,4 +94,9 @@ export default {
   color: #fff;
 }
 
+.borderBottom {
+  border: 0;
+  border-bottom: 1px solid #222;
+  color: red !important;
+}
 </style>

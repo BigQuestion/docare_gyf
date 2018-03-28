@@ -316,11 +316,11 @@ export default {
     },
   },
   mounted() {
-    this.getLineXy();
-    this.getSignName();
-    this.getYDataArray();
-    this.area = this.$refs.area;
-    window.eventHub.$on("test", this.pageTurnFun);
+    // this.getLineXy();
+    // this.getSignName();
+    // this.getYDataArray();
+    // this.area = this.$refs.area;
+    // window.eventHub.$on("test", this.pageTurnFun);
   },
   components: {
 
