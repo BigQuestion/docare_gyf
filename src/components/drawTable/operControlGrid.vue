@@ -16,8 +16,8 @@
         </g> -->
         <g v-for="(item,index1) in dataPathArray" style="z-index: 22">
           <path :d="item.path" stroke-width="1" fill="none" stroke="blue"></path>
-          <circle v-for="(cir,index2) in item.circleData" v-if="item.flag==0" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
-          <circle v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
+          <circle class="opercontrol" v-for="(cir,index2) in item.circleData" v-if="item.flag==0" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
+          <circle class="opercontrol" v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
           <!-- <polygon points="1,4 8,4 4,10" style="fill:lime;"></polygon>
  -->
         </g>
@@ -91,6 +91,7 @@ export default {
       yValueArray: [],
       rightViewX: '',
       rightViewY: '',
+      signNameLisg: [],
     }
 
   },
@@ -168,12 +169,6 @@ export default {
       } else {
         this.clickItem.value = Math.round((this.svgHeight - e.offsetY) / (this.svgHeight / this.rows) * 10)
       }
-
-      //console.log(arr1[this.clickIndex])
-      //this.$set(this.pathArray,1,arr1)
-      // this.dataPathArray[this.pathIndex].circleData
-      // var p = d3.select("#operGrid")
-      //   .select("path").remove()
       this.calculatePath();
     },
     areaMouseUp(e) {
@@ -204,7 +199,7 @@ export default {
         })
 
     },
-
+    //获取病人生命体征项目
     getSignName() {
       let params = {
         patientId: this.config.userInfo.patientId,
@@ -220,6 +215,7 @@ export default {
               res[i].itemValue = "";
             }
             this.getSignTimeData(res.length, res);
+            this.signNameLisg = res;
           })
     },
 
@@ -235,10 +231,10 @@ export default {
           res => {
             var sortArray = [];
             for (var i = 0; i < res.length; i++) {
-              let item = res[i].dataValue;
+              var item = res[i].dataValue;
               item = eval('(' + item + ')');
-              //item = JSON.parse(item);
               let xL = len - item.length
+
               if (xL > 0) {
                 for (var j = 0; j < xL; j++) {
                   item.push('');
@@ -254,7 +250,7 @@ export default {
             }
             this.signdataList = sortArray;
             var newArray = [];
-            for (var i = 0; i < 8; i++) {
+            for (var i = 0; i < len; i++) {
               var arr1 = [];
               for (var j = 0; j < sortArray.length; j++) {
                 if (sortArray[j].dataValue[i]) {
@@ -288,6 +284,8 @@ export default {
               }
             }
 
+
+
             this.pathArray = newArray;
             this.calculatePath();
           })
@@ -315,6 +313,69 @@ export default {
         arry.push(i * 20 + 20)
       }
       this.yValueArray = arry.reverse();
+    },
+    pageTurnFun() {
+      if (this.config.pageOper == 0) {
+        this.config.pageNum = 1;
+      }
+      var list = this.signNameLisg;
+      console.log(this.pathArray)
+      let arryList = this.signdataList;
+      let sortArray = [];
+      for (var i = 0; i < arryList.length; i++) {
+        if (new Date(arryList[i].time) > this.config.initTime) {
+          sortArray.push(arryList[i])
+        }
+
+      }
+      if (sortArray.length < 1) {
+        this.pathArray = [];
+        this.calculatePath();
+        return
+      }
+
+      this.dataOperFun(sortArray);
+
+
+    },
+
+    //数据处理
+    dataOperFun(sortArray) {
+      var list = this.signNameLisg;
+      var newArray = [];
+      for (var i = 0; i < 8; i++) {
+        var arr1 = [];
+        for (var j = 0; j < sortArray.length; j++) {
+          if (sortArray[j].dataValue[i]) {
+            arr1.push({
+              value: sortArray[j].dataValue[i],
+              time: sortArray[j].time,
+              itemData: list[i]
+
+            })
+          } else {
+            arr1.push({
+              value: "",
+              time: sortArray[j].time,
+              itemData: list[i]
+
+            })
+          }
+
+        }
+        newArray.push(arr1)
+      }
+      for (var i = 0; i < newArray.length; i++) {
+        for (var j = 0; j < newArray[i].length; j++) {
+          let min = this.getMinuteDif(this.config.initTime, newArray[i][j].time);
+          let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
+          let y = this.svgHeight - Math.round(newArray[i][j].value / 10 * (this.svgHeight / this.rows))
+          newArray[i][j].x = x;
+          newArray[i][j].y = y;
+        }
+      }
+      this.pathArray = newArray;
+      this.calculatePath();
     }
   },
   mounted() {
@@ -322,6 +383,7 @@ export default {
     this.getSignName();
     this.getYDataArray();
     this.area = this.$refs.area;
+    window.eventHub.$on("test", this.pageTurnFun);
   },
   components: {
 

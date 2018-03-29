@@ -697,18 +697,44 @@ export default {
         .then(
         res => {
           console.log(res)
+          //   this.pages = Math.ceil(this.pageLength.length / this.size)
+
+          console.log(res)
           if (res.total > 5) {
+            this.pageShowData = true;
+            this.pages = res.pages;
+            this.patientList = res.list;
+            this.pageLength = res.total;
+            this.sortData = '';
+            this.dataTypeInAllSelect = [];
+            for (var i = 1; i <= this.pages; i++) {
+              this.dataTypeInAllSelect.push({
+                number: i
+              })
+            }
+            let paramsTwo = {
+              count: this.size,
+              page: this.pageNum,
+              dateTime: this.getTime,
+              operStatus: this.operStatus,
+              patientName: this.patientName,
+              patientId: this.patientId
+            }
+            this.api.getMedOperationMasterList(paramsTwo)
+              .then(
+              res => {
                 this.pageShowData = true;
                 this.pages = res.pages;
                 this.patientList = res.list;
                 this.pageLength = res.total;
                 this.sortData = '';
-                  this.dataTypeInAllSelect = [];
-                  for (var i = 1; i <= this.pages; i++) {
-                    this.dataTypeInAllSelect.push({
-                      number: i
-                    })
-                  }
+                this.dataTypeInAllSelect = [];
+                for (var i = 1; i <= this.pages; i++) {
+                  this.dataTypeInAllSelect.push({
+                    number: i
+                  })
+                }
+              });
             //   this.pages = Math.ceil(this.pageLength.length / this.size)
 
           } else {
@@ -1106,6 +1132,42 @@ export default {
       }
       let arry = [];
       this.formItems = [];
+
+      // if (item.formContent == "null" || item.formContent == null) {
+      //   return;
+      // }
+      // this.formItems = JSON.parse(item.formContent);
+      // var list = this.formItems;
+      // for (var i = 0; i < list.length; i++) {
+
+      //   if (list[i].fieldName) {
+      //     if (list[i].tableName == "") {
+      //       console.log(list[i])
+      //     }
+      //     arry.push({
+      //       "patientId": this.lockedPatientInfo.patientId,
+      //       "visitId": this.lockedPatientInfo.visitId,
+      //       "operId": this.lockedPatientInfo.operId,
+      //       "tableName": list[i].tableName,
+      //       "coluName": list[i].fieldName,
+      //     })
+      //   }
+      // }
+      // this.api.getFormSqlResult(arry)
+      //   .then(
+      //     result => {
+      //       for (var i = 0; i < list.length; i++) {
+      //         if (list[i].fieldName) {
+      //           let obj = this.formItems[i];
+      //           obj.value = result[list[i].fieldName];
+      //           this.$set(this.formItems, i, obj);
+      //         }
+      //       }
+      //     }
+
+      //   )
+
+
       this.api.selectMedFormTemp(params)
         .then(
         res => {
@@ -1139,12 +1201,10 @@ export default {
 
             )
         });
-      // debugger
     },
     //修改病人手术状态
     changeStatus(status, event) {
       this.nextDATA = '';
-      console.log(this.operStatus)
 
       if (this.lockedPatientInfo.operStatus === 0 && status == 5) {
         this.firstRoom.noneData = false;
@@ -1166,11 +1226,9 @@ export default {
         operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
       }
       this.nextDATA = params;
-      console.log(this.nextDATA)
       this.api.changeOperationStatus(params)
         .then(
         res => {
-          console.log(res)
           if (res.success == true) {
             this.searchPatientList();
             this.lockedPatientInfo.operStatus = status;
@@ -1364,7 +1422,6 @@ export default {
     this.selectMedFormList();
 
     this.patientId = '10966589';
-    console.log(this.$store.state.count)
   },
   components: {
     formElement,
@@ -1647,6 +1704,14 @@ export default {
 
 
 
+
+
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1733,6 +1798,15 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
+
+
+
 
 
 

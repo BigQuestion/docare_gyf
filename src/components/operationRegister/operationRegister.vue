@@ -593,7 +593,7 @@ export default {
           itemValue: item.itemValue,
           timePoint: this.datetimeLocalToDate(this.insertStartTime),
           recordingDate: new Date(),
-          operator: 'mdsd'
+          operator: this.config.userId,
         });
       } else {
         alert("输入时间");
@@ -613,22 +613,25 @@ export default {
       var time1 = this.datetimeLocalToDate(this.insertStartTime);
       //
       var m1 = this.addItemList.length;
-      for (var i = 1; i <= k3; i++) {
-        var time2 = new Date(time1.getTime() + parseInt(this.spaceTime / 60) * i * 1000 * 60);
-        for (var j = 0; j < m1; j++) {
-          this.addItemList.push({
-            patientId: this.objectItem.patientId,
-            operId: this.objectItem.operId,
-            visitId: this.objectItem.visitId,
-            eventNo: 0,
-            itemName: this.addItemList[j].itemName,
-            itemValue: this.addItemList[j].itemValue,
-            timePoint: time2,
-            recordingDate: new Date(),
-            operator: 'mdsd'
-          });
+      if (k3 > 0) {
+        for (var i = 1; i <= k3; i++) {
+          var time2 = new Date(time1.getTime() + parseInt(this.spaceTime / 60) * i * 1000 * 60);
+          for (var j = 0; j < m1; j++) {
+            this.addItemList.push({
+              patientId: this.objectItem.patientId,
+              operId: this.objectItem.operId,
+              visitId: this.objectItem.visitId,
+              eventNo: 0,
+              itemName: this.addItemList[j].itemName,
+              itemValue: this.addItemList[j].itemValue,
+              timePoint: time2,
+              recordingDate: new Date(),
+              operator: this.config.userId,
+            });
+          }
         }
       }
+
       this.api.insertBatchMedPatientMonitorData(this.addItemList)
         .then(res => {
           this.addItemList = [];
