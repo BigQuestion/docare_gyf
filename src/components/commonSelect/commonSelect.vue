@@ -9,7 +9,10 @@
           <input v-model="serchZm" @keyup="serchJm">
         </div>
         <div class="listIngt" @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" :style="{width:conInfo.width+'px'}">
-          {{item.SPENAME}}
+          <div v-if="conInfo.dictShowFiled!=''&&conInfo.dictShowFiled!=null">
+            {{item.DICTSHOWFILED}}
+          </div>
+          <div v-else>{{item.DICTFILED}}</div>
         </div>
       </div>
     </div>
@@ -47,7 +50,8 @@ export default {
       let params = {
         tableName: this.conInfo.dictTableName,
         dictSelect: this.conInfo.dictSelect,
-        coluName: this.conInfo.dictField
+        coluName: this.conInfo.dictField,
+        dictShowFiled: this.conInfo.dictShowFiled, //字典显示字段名称
       }
       this.api.getColumContext(params)
         .then(res => {
@@ -61,16 +65,27 @@ export default {
 
     },
     getSelected(item) {
-      if (this.infoData.MultiSelectMode == 'true') {
-        if (this.conInfo.value == null) {
-          this.conInfo.value = item.SPENAME;
+      if (this.conInfo.dictShowFiled != '' && this.conInfo.dictShowFiled != null) {
+        if (this.infoData.MultiSelectMode == 'true') {
+          if (this.conInfo.value == null || this.conInfo.value == '') {
+            this.conInfo.value = item.DICTSHOWFILED;
+          } else {
+            this.conInfo.value = this.conInfo.value + "," + item.DICTSHOWFILED;
+          }
         } else {
-          this.conInfo.value = this.conInfo.value + "," + item.SPENAME;
+          this.conInfo.value = item.DICTSHOWFILED;
         }
       } else {
-        this.conInfo.value = item.SPENAME;
+        if (this.infoData.MultiSelectMode == 'true') {
+          if (this.conInfo.value == null || this.conInfo.value == '') {
+            this.conInfo.value = item.DICTFILED;
+          } else {
+            this.conInfo.value = this.conInfo.value + "," + item.DICTFILED;
+          }
+        } else {
+          this.conInfo.value = item.DICTFILED;
+        }
       }
-
       this.nameView = !this.nameView;
     },
     disapear(dataInput) {

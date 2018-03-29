@@ -1119,6 +1119,42 @@ export default {
       }
       let arry = [];
       this.formItems = [];
+
+      // if (item.formContent == "null" || item.formContent == null) {
+      //   return;
+      // }
+      // this.formItems = JSON.parse(item.formContent);
+      // var list = this.formItems;
+      // for (var i = 0; i < list.length; i++) {
+
+      //   if (list[i].fieldName) {
+      //     if (list[i].tableName == "") {
+      //       console.log(list[i])
+      //     }
+      //     arry.push({
+      //       "patientId": this.lockedPatientInfo.patientId,
+      //       "visitId": this.lockedPatientInfo.visitId,
+      //       "operId": this.lockedPatientInfo.operId,
+      //       "tableName": list[i].tableName,
+      //       "coluName": list[i].fieldName,
+      //     })
+      //   }
+      // }
+      // this.api.getFormSqlResult(arry)
+      //   .then(
+      //     result => {
+      //       for (var i = 0; i < list.length; i++) {
+      //         if (list[i].fieldName) {
+      //           let obj = this.formItems[i];
+      //           obj.value = result[list[i].fieldName];
+      //           this.$set(this.formItems, i, obj);
+      //         }
+      //       }
+      //     }
+
+      //   )
+
+
       this.api.selectMedFormTemp(params)
         .then(
           res => {
@@ -1152,7 +1188,6 @@ export default {
 
               )
           });
-      // debugger
     },
     //修改病人手术状态
     changeStatus(status, event) {
@@ -1656,6 +1691,13 @@ export default {
 
 
 
+
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1742,6 +1784,13 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
+
 
 
 

@@ -303,7 +303,6 @@ export default {
         var list = this.dataArray;
         for (var i = 0; i < list.length; i++) {
           if (list[i].MAX_TIME) {
-            debugger
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
               if (new Date(list[i].MAX_TIME) > this.config.initTime) {
@@ -327,9 +326,9 @@ export default {
     },
   },
   mounted() {
-    // this.getLineXy();
-    // this.getData();
-    // window.eventHub.$on("test", this.pageTurnFun);
+    this.getLineXy();
+    this.getData();
+    window.eventHub.$on("test", this.pageTurnFun);
   },
   components: {
 

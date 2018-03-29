@@ -335,6 +335,30 @@ export default {
           .attr("y2", y2)
           .attr("x1", x1)
           .attr("x2", x2)
+        // .on("mouseenter", function() {
+
+        //   _this.tipView = true;
+        //   _this.tipLeft = x1;
+        //   _this.tipTop = y2 + 10;
+        //   _this.lineObj = obj;
+
+        // })
+        // .on("mouseleave", function() {
+        //   _this.tipView = false;
+        // })
+        // .on("mousemove", function(ev) {
+        //   //_this.lineObj.nowTime = new Date();
+        //   _this.$set(_this.lineObj, "nowTime", _this.getTime());
+        //   var ev = ev || event;
+        //   var offX = ev.offsetX; //横坐标值
+        //   var m = Math.round(offX / gWidth * 5);
+        //   var time = new Date(_this.config.userInfo.inDateTime);
+        //   var time1 = time.getTime() + m * 60 * 1000;
+        //   var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
+        //   obj.nowTime = time2;
+        //   _this.lineObj = obj;
+        //   console.log(_this.lineObj)
+        // })
         svg.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
@@ -479,6 +503,7 @@ export default {
             } else {
               sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
             }
+            console.log(sMin)
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
@@ -500,6 +525,8 @@ export default {
               } else {
                 eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
               }
+
+
             } else {
 
               if (new Date(list[i].ENDDATE) > this.config.maxTime) {
@@ -540,9 +567,9 @@ export default {
 
   },
   mounted() {
-    // this.area = this.$refs.area;
-    // this.xTimeInit();
-    // window.eventHub.$on("test", this.pageChange);
+    this.area = this.$refs.area;
+    this.xTimeInit();
+    window.eventHub.$on("test", this.pageChange);
 
   },
   components: {
