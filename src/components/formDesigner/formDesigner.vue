@@ -278,7 +278,7 @@
               <button @click="deleteItem">移除</button>
             </div>
             <div style="width: 200px;">
-              <button @click="addDefaultItemCon">确定</button>
+              <button @click="cancleAddDefaultItem">确定</button>
               <button @click="cancleAddDefaultItem">取消</button>
             </div>
           </div>
@@ -352,8 +352,8 @@ export default {
         readOnlyMode: 'false',
         isEdit: [{ isData: 'true' }, { isData: 'false' }],
         isEditMode: 'true',
-        strFormat: [{ isData: 'true' }, { isData: 'false' }], //格式化字符串
-        strFormatMode: 'false', //格式化字符串
+        strFormat: [{ isData: '' },{ isData: 'yyyy-MM-dd' }, { isData: 'hh:mm'}, { isData: 'yyyy-MM-dd hh:mm'}], //格式化字符串
+        strFormatMode: '', //格式化字符串
         nullString: [{ isData: 'true' }, { isData: 'false' }], //真可以为空，假不能为空
         topMostMode: 'false',
         topMost: [{ isData: 'true' }, { isData: 'false' }],

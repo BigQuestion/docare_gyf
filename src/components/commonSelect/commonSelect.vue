@@ -14,7 +14,7 @@
       </div>
     </div>
     <div v-else>
-      <div v-if="conInfo.strFormatMode == 'true'">
+      <div v-if="conInfo.strFormatMode != ''&&conInfo.strFormatMode != 'false'&&conInfo.strFormatMode != 'true'">
         <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
       </div>
       <div v-else>
@@ -115,21 +115,11 @@ export default {
   },
   computed: {
     strToDate() {
-      if (this.conInfo.strFormatMode == 'true' && this.infoData.value) {
-        var time = new Date(this.conInfo.value);
-        var y = time.getFullYear();
-        if (y < 10) {
-          y = '0' + y;
-        }
-        var m = time.getMonth() + 1;
-        if (m < 10) {
-          m = '0' + m;
-        }
-        var d = time.getDate();
-        if (d < 10) {
-          d = '0' + d;
-        }
-        return y + '-' + m + '-' + d;
+      if (this.infoData.value) {
+        var time = new Date(this.conInfo.value).Format(this.conInfo.strFormatMode);
+        debugger
+        console.log(time)
+        return time;
       }
     }
   },
@@ -168,5 +158,4 @@ export default {
   background-color: #1E90FF;
   color: #fff;
 }
-
 </style>

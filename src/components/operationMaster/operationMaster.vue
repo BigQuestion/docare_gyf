@@ -696,20 +696,8 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
         res => {
-
           console.log(res)
           if (res.total > 5) {
-            let paramsTwo = {
-              count: this.size,
-              page: this.pageNum,
-              dateTime: this.getTime,
-              operStatus: this.operStatus,
-              patientName: this.patientName,
-              patientId: this.patientId
-            }
-            this.api.getMedOperationMasterList(paramsTwo)
-              .then(
-              res => {
                 this.pageShowData = true;
                 this.pages = res.pages;
                 this.patientList = res.list;
@@ -721,7 +709,6 @@ export default {
                       number: i
                     })
                   }
-              });
             //   this.pages = Math.ceil(this.pageLength.length / this.size)
 
           } else {
@@ -1759,6 +1746,7 @@ export default {
   justify-content: space-between;
   box-sizing: border-box;
   padding: 5px;
+  font-size: 14px;
 }
 
 .pageInDiv {
