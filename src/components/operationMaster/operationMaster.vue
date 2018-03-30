@@ -696,9 +696,21 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
           res => {
+            //   this.pages = Math.ceil(this.pageLength.length / this.size)
 
             console.log(res)
             if (res.total > 5) {
+              this.pageShowData = true;
+              this.pages = res.pages;
+              this.patientList = res.list;
+              this.pageLength = res.total;
+              this.sortData = '';
+              this.dataTypeInAllSelect = [];
+              for (var i = 1; i <= this.pages; i++) {
+                this.dataTypeInAllSelect.push({
+                  number: i
+                })
+              }
               let paramsTwo = {
                 count: this.size,
                 page: this.pageNum,
@@ -1171,273 +1183,287 @@ export default {
                   "operId": this.lockedPatientInfo.operId,
                   "tableName": list[i].tableName,
                   "coluName": list[i].fieldName,
-                  "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
-                  "dictTableName": list[i].dictTableName, //字典表名称
-                  "dictField": list[i].dictField, //字典字段名称
-                  "dictSelect": list[i].dictSelect,
                 })
               }
-            }
-            this.api.getFormSqlResult(arry)
-              .then(
-                result => {
-                  for (var i = 0; i < list.length; i++) {
-                    if (list[i].fieldName) {
-                      let obj = this.formItems[i];
-                      if (list[i].dictShowFiled == 'USER_IDA') {
-                        obj.value = result[list[i].dictShowFiled];
-                      } else {
-                        obj.value = result[list[i].fieldName];
+              this.formItems = JSON.parse(res.formContent);
+              var list = this.formItems;
+              for (var i = 0; i < list.length; i++) {
+                if (list[i].fieldName) {
+                  arry.push({
+                    "patientId": this.lockedPatientInfo.patientId,
+                    "visitId": this.lockedPatientInfo.visitId,
+                    "operId": this.lockedPatientInfo.operId,
+                    "tableName": list[i].tableName,
+                    "coluName": list[i].fieldName,
+                    "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
+                    "dictTableName": list[i].dictTableName, //字典表名称
+                    "dictField": list[i].dictField, //字典字段名称
+                    "dictSelect": list[i].dictSelect,
+                  })
+                }
+              }
+              this.api.getFormSqlResult(arry)
+                .then(
+                  result => {
+                    for (var i = 0; i < list.length; i++) {
+                      if (list[i].fieldName) {
+                        let obj = this.formItems[i];
+                        if (list[i].dictShowFiled == 'USER_IDA') {
+                          obj.value = result[list[i].dictShowFiled];
+                        } else {
+                          obj.value = result[list[i].fieldName];
+                        }
+                        this.$set(this.formItems, i, obj);
                       }
-                      this.$set(this.formItems, i, obj);
                     }
                   }
+
+
+                )
+            });
+        },
+        //修改病人手术状态
+        changeStatus(status, event) {
+          this.nextDATA = '';
+
+          if (this.lockedPatientInfo.operStatus === 0 && status == 5) {
+            this.firstRoom.noneData = false;
+            this.monitorDataShow.noneData = true;
+          }
+
+          let params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            inDateTime: this.datetimeLocalToDate(this.inRoomDateTime),
+            anesStartTime: this.datetimeLocalToDate(this.anesStartTime),
+            startDateTime: this.datetimeLocalToDate(this.startDateTime),
+            endDateTime: this.datetimeLocalToDate(this.endDateTime),
+            anesEndTime: this.datetimeLocalToDate(this.anesEndTime),
+            outDateTime: this.datetimeLocalToDate(this.outDateTime),
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+          this.nextDATA = params;
+          this.api.changeOperationStatus(params)
+            .then(
+              res => {
+                if (res.success == true) {
+                  this.searchPatientList();
+                  this.lockedPatientInfo.operStatus = status;
                 }
 
-              )
-          });
-    },
-    //修改病人手术状态
-    changeStatus(status, event) {
-      this.nextDATA = '';
+              });
 
-      if (this.lockedPatientInfo.operStatus === 0 && status == 5) {
-        this.firstRoom.noneData = false;
-        this.monitorDataShow.noneData = true;
-      }
-
-      let params = {
-        patientId: this.lockedPatientInfo.patientId,
-        visitId: this.lockedPatientInfo.visitId,
-        operId: this.lockedPatientInfo.operId,
-        inDateTime: this.datetimeLocalToDate(this.inRoomDateTime),
-        anesStartTime: this.datetimeLocalToDate(this.anesStartTime),
-        startDateTime: this.datetimeLocalToDate(this.startDateTime),
-        endDateTime: this.datetimeLocalToDate(this.endDateTime),
-        anesEndTime: this.datetimeLocalToDate(this.anesEndTime),
-        outDateTime: this.datetimeLocalToDate(this.outDateTime),
-        operStatus: status,
-        operatingRoom: this.lockedPatientInfo.operatingRoom,
-        operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
-      }
-      this.nextDATA = params;
-      this.api.changeOperationStatus(params)
-        .then(
-          res => {
-            if (res.success == true) {
-              this.searchPatientList();
-              this.lockedPatientInfo.operStatus = status;
-            }
-
-          });
-
-    },
-    // 出手术室操作修改病人状态
-    finalStatus(sta) {
-      console.log(sta)
-      console.log(this.nextDATA)
-      let params = {
-        patientId: this.lockedPatientInfo.patientId,
-        visitId: this.lockedPatientInfo.visitId,
-        operId: this.lockedPatientInfo.operId,
-        operStatus: sta,
-      }
-      this.nextDATA = params;
-      console.log(this.nextDATA)
-      this.api.changeOperationStatus(params)
-        .then(
-          res => {
-            console.log(res)
-            if (res.success == true) {
-              this.searchPatientList();
-              this.doShowData = false;
-            } else {
-              alert(res.msg)
-            }
-
-          });
-
-    },
-    //手术信息
-    getPatientOperationInfo() {
-      this.patientOperationInfoView.dataInParent = !this.patientOperationInfoView.dataInParent;
-    },
-    //术中登记
-    getOperationRegister() {
-      this.operationRegisterView.dataInParent = !this.operationRegisterView.dataInParent;
-    },
-    // 监护仪
-    monitor() {
-      this.monitorDataShow.noneData = !this.monitorDataShow.noneData;
-      this.firstRoom.noneData = true;
-    },
-    // 取消手术
-    cancel() {
-      this.cancelData.dataInParent = true;
-      // if (confirm("是否要取消该手术?")) {
-      //   console.log('还未调用接口')
-      //   alert("手术已取消");
-      // } else {}
-
-      // var a = prompt("请输入你要取消手术的原因", "");
-      // if (a !== "" && a !== null) {
-      //   alert("手术已取消！");
-      // } else {
-      //   // 取消了操作
-      // }
-
-    },
-    // 关于
-    getAboutUs() {
-      this.aboutUsData.dataInParent = !this.aboutUsData.dataInParent;
-      // this.getAboutUs();
-      // console.log(this.aboutUsData.dataInParent)
-    },
-    // 退出系统
-    exitSystem() {
-      if (confirm("是否要退出系统？")) {
-        this.$router.push({
-          path: 'login'
-        })
-      } else {}
-    },
-    // 左部选项按下拉显示隐藏及图片切换
-    concealmentOne() {
-      this.concealmentOneData = !this.concealmentOneData;
-      this.isTransformOne = !this.isTransformOne;
-    },
-    concealmentTwe() {
-      this.concealmentTweData = !this.concealmentTweData;
-      this.isTransformTwe = !this.isTransformTwe;
-    },
-    concealmentThree() {
-      this.concealmentThreeData = !this.concealmentThreeData;
-      this.isTransformThree = !this.isTransformThree;
-    },
-    concealmentFour() {
-      this.concealmentFourData = !this.concealmentFourData;
-      this.isTransformFour = !this.isTransformFour;
-    },
-    // 病人列表显示隐藏
-    leftNone() {
-      this.transData = !this.transData;
-      this.showData = !this.showData;
-      this.widthData = !this.widthData;
-      this.showDataTwo = !this.showDataTwo;
-    },
-    //获取单子修改的数据
-    getValue(dataValue) {
-      var modifyValue = '';
-      if (dataValue.dictShowFiled != '' && dataValue.dictShowFiled != null) {
-        modifyValue = dataValue.modifyFiledValue
-      } else {
-        modifyValue = dataValue.value;
-      }
-      var tempData = this.updateFormsData;
-      if (tempData.length > 0) {
-        var count = 0;
-        for (var i = 0; i < this.updateFormsData.length; i++) {
-          //如果之前传入有相同的表名与字段名则更新值
-          if (this.updateFormsData[i].tableName === dataValue.tableName && this.updateFormsData[i].coluName === dataValue.fieldName) {
-            this.updateFormsData[i].updateStr = modifyValue;
-          } else {
-            count++;
+        },
+        // 出手术室操作修改病人状态
+        finalStatus(sta) {
+          console.log(sta)
+          console.log(this.nextDATA)
+          let params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            operStatus: sta,
           }
-        }
-        if (count == this.updateFormsData.length) {
-          this.updateFormsData.push({
-            "tableName": dataValue.tableName,
-            "coluName": dataValue.fieldName,
-            "updateStr": dataValue.value,
-            "patientId": this.lockedPatientInfo.patientId,
-            "visitId": this.lockedPatientInfo.visitId,
-            "operId": this.lockedPatientInfo.operId,
-          });
-        }
-      } else {
-        this.updateFormsData.push({
-          "tableName": dataValue.tableName,
-          "coluName": dataValue.fieldName,
-          "updateStr": dataValue.value,
-          "patientId": this.lockedPatientInfo.patientId,
-          "visitId": this.lockedPatientInfo.visitId,
-          "operId": this.lockedPatientInfo.operId,
-        });
-      }
-    },
-    //提交单子修改
-    submitSaveForm() {
-      let params = []
-      params = this.updateFormsData;
-      this.api.updateSqlBatch(params)
-        .then(res => {
+          this.nextDATA = params;
+          console.log(this.nextDATA)
+          this.api.changeOperationStatus(params)
+            .then(
+              res => {
+                console.log(res)
+                if (res.success == true) {
+                  this.searchPatientList();
+                  this.doShowData = false;
+                } else {
+                  alert(res.msg)
+                }
+
+              });
+
+        },
+        //手术信息
+        getPatientOperationInfo() {
+          this.patientOperationInfoView.dataInParent = !this.patientOperationInfoView.dataInParent;
+        },
+        //术中登记
+        getOperationRegister() {
+          this.operationRegisterView.dataInParent = !this.operationRegisterView.dataInParent;
+        },
+        // 监护仪
+        monitor() {
+          this.monitorDataShow.noneData = !this.monitorDataShow.noneData;
+          this.firstRoom.noneData = true;
+        },
+        // 取消手术
+        cancel() {
+          this.cancelData.dataInParent = true;
+          // if (confirm("是否要取消该手术?")) {
+          //   console.log('还未调用接口')
+          //   alert("手术已取消");
+          // } else {}
+
+          // var a = prompt("请输入你要取消手术的原因", "");
+          // if (a !== "" && a !== null) {
+          //   alert("手术已取消！");
+          // } else {
+          //   // 取消了操作
+          // }
+
+        },
+        // 关于
+        getAboutUs() {
+          this.aboutUsData.dataInParent = !this.aboutUsData.dataInParent;
+          // this.getAboutUs();
+          // console.log(this.aboutUsData.dataInParent)
+        },
+        // 退出系统
+        exitSystem() {
+          if (confirm("是否要退出系统？")) {
+            this.$router.push({
+              path: 'login'
+            })
+          } else {}
+        },
+        // 左部选项按下拉显示隐藏及图片切换
+        concealmentOne() {
+          this.concealmentOneData = !this.concealmentOneData;
+          this.isTransformOne = !this.isTransformOne;
+        },
+        concealmentTwe() {
+          this.concealmentTweData = !this.concealmentTweData;
+          this.isTransformTwe = !this.isTransformTwe;
+        },
+        concealmentThree() {
+          this.concealmentThreeData = !this.concealmentThreeData;
+          this.isTransformThree = !this.isTransformThree;
+        },
+        concealmentFour() {
+          this.concealmentFourData = !this.concealmentFourData;
+          this.isTransformFour = !this.isTransformFour;
+        },
+        // 病人列表显示隐藏
+        leftNone() {
+          this.transData = !this.transData;
+          this.showData = !this.showData;
+          this.widthData = !this.widthData;
+          this.showDataTwo = !this.showDataTwo;
+        },
+        //获取单子修改的数据
+        getValue(dataValue) {
+          var modifyValue = '';
+          if (dataValue.dictShowFiled != '' && dataValue.dictShowFiled != null) {
+            modifyValue = dataValue.modifyFiledValue
+          } else {
+            modifyValue = dataValue.value;
+          }
+          var tempData = this.updateFormsData;
+          if (tempData.length > 0) {
+            var count = 0;
+            for (var i = 0; i < this.updateFormsData.length; i++) {
+              //如果之前传入有相同的表名与字段名则更新值
+              if (this.updateFormsData[i].tableName === dataValue.tableName && this.updateFormsData[i].coluName === dataValue.fieldName) {
+                this.updateFormsData[i].updateStr = modifyValue;
+              } else {
+                count++;
+              }
+            }
+            if (count == this.updateFormsData.length) {
+              this.updateFormsData.push({
+                "tableName": dataValue.tableName,
+                "coluName": dataValue.fieldName,
+                "updateStr": dataValue.value,
+                "patientId": this.lockedPatientInfo.patientId,
+                "visitId": this.lockedPatientInfo.visitId,
+                "operId": this.lockedPatientInfo.operId,
+              });
+            }
+          } else {
+            this.updateFormsData.push({
+              "tableName": dataValue.tableName,
+              "coluName": dataValue.fieldName,
+              "updateStr": dataValue.value,
+              "patientId": this.lockedPatientInfo.patientId,
+              "visitId": this.lockedPatientInfo.visitId,
+              "operId": this.lockedPatientInfo.operId,
+            });
+          }
+        },
+        //提交单子修改
+        submitSaveForm() {
+          let params = []
+          params = this.updateFormsData;
+          this.api.updateSqlBatch(params)
+            .then(res => {
+              this.updateFormsData = [];
+              this.selectMedFormTemp(this.selectFormItemTemp);
+            })
+        },
+        //配置跳转
+        formSetting() {
+          this.settingView = !this.settingView;
+          this.selectFormItemTemp.isPage = !this.selectFormItemTemp.isPage;
+        },
+        //单子刷新按钮
+        refreshForm() {
           this.updateFormsData = [];
           this.selectMedFormTemp(this.selectFormItemTemp);
-        })
-    },
-    //配置跳转
-    formSetting() {
-      this.settingView = !this.settingView;
-      this.selectFormItemTemp.isPage = !this.selectFormItemTemp.isPage;
-    },
-    //单子刷新按钮
-    refreshForm() {
-      this.updateFormsData = [];
-      this.selectMedFormTemp(this.selectFormItemTemp);
-      this.config.pageOper = 0;
-      this.config.maxTime = '';
-      this.config.initTime = '';
-      this.config.pagePercentNum = 1;
+          this.config.pageOper = 0;
+          this.config.maxTime = '';
+          this.config.initTime = '';
+          this.config.pagePercentNum = 1;
+
+        },
+        //单子首页
+        toChangePage(num) {
+          if (num == 0) {
+            this.config.pagePercentNum = 1;
+            this.config.pageOper = num;
+          }
+          if (num == -1) {
+            if (this.config.pagePercentNum >= 2) {
+              this.config.pagePercentNum = this.config.pagePercentNum - 1;
+              this.config.pageOper = num;
+            } else
+              return
+
+          }
+          if (num == 1) {
+            if (this.config.pagePercentNum < this.config.pageTotal) {
+              this.config.pagePercentNum = this.config.pagePercentNum + 1;
+              this.config.pageOper = num;
+            } else
+              return
+
+          }
+
+          window.eventHub.$emit("test", num);
+          // console.log(this.config.maxTime)
+        },
 
     },
-    //单子首页
-    toChangePage(num) {
-      if (num == 0) {
-        this.config.pagePercentNum = 1;
-        this.config.pageOper = num;
-      }
-      if (num == -1) {
-        if (this.config.pagePercentNum >= 2) {
-          this.config.pagePercentNum = this.config.pagePercentNum - 1;
-          this.config.pageOper = num;
-        } else
-          return
+    mounted() {
+      this.searchPatientList();
+      this.setIntervaled();
+      this.selectMedFormList();
 
-      }
-      if (num == 1) {
-        if (this.config.pagePercentNum < this.config.pageTotal) {
-          this.config.pagePercentNum = this.config.pagePercentNum + 1;
-          this.config.pageOper = num;
-        } else
-          return
-
-      }
-
-      window.eventHub.$emit("test", num);
+      this.patientId = '10966589';
     },
-
-  },
-  mounted() {
-    this.searchPatientList();
-    this.setIntervaled();
-    this.selectMedFormList();
-
-    this.patientId = '10966589';
-  },
-  components: {
-    formElement,
-    formElementPrint,
-    formDesigner,
-    patientOperationInfo,
-    operationRegister,
-    aboutUs,
-    anaesthesiaEvent,
-    anestheticMethod,
-    anestheticConstant,
-    monitor,
-    cancel,
-  },
-}
+    components: {
+      formElement,
+      formElementPrint,
+      formDesigner,
+      patientOperationInfo,
+      operationRegister,
+      aboutUs,
+      anaesthesiaEvent,
+      anestheticMethod,
+      anestheticConstant,
+      monitor,
+      cancel,
+    },
+  }
 
 </script>
 <style scoped>
@@ -1717,14 +1743,6 @@ export default {
 
 
 
-
-
-
-
-
-
-
-
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1827,15 +1845,6 @@ export default {
 
 
 
-
-
-
-
-
-
-
-
-
 /* 分页样式 */
 
 .pageClass {
@@ -1845,6 +1854,7 @@ export default {
   justify-content: space-between;
   box-sizing: border-box;
   padding: 5px;
+  font-size: 14px;
 }
 
 .pageInDiv {
