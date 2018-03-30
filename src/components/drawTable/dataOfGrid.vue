@@ -21,10 +21,15 @@ export default {
       tipView: false,
       title: '',
       // showDataMore:'',
+      maxTimeInPage: '',
+      startTimeInPage: '',
     }
   },
   methods: {
     selectMedAnesthesiaEventList() {
+      this.dataBody = [];
+      this.maxTimeInPage = this.config.maxTime.getTime()
+      this.startTimeInPage = this.config.initTime.getTime()
       let params = {
         patientId: this.dataOfPeo.patientId,
         operId: this.dataOfPeo.operId,
@@ -32,8 +37,12 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
-          res => {
-            for (var i = 0; i < res.list.length; i++) {
+        res => {
+          console.log(res)
+          for (var i = 0; i < res.list.length; i++) {
+            var time = new Date(res.list[i].START_TIME).getTime();
+            if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
+              this.dataBody.push(res.list[i]);
               this.$set(res.list[i], 'number', i + 1);
               if (res.list[i].ENDDATE !== null) {
                 if (res.list[i].DOSAGE !== null) {
@@ -48,8 +57,9 @@ export default {
               this.title = titleData.join('\n');
               this.$set(res.list[i], 'titleWord', this.title);
             }
-            this.dataBody = res.list;
-          });
+          }
+
+        });
 
 
     },
@@ -58,12 +68,12 @@ export default {
   mounted() {
     if (this.page == false) {
       this.selectMedAnesthesiaEventList();
+      window.eventHub.$on("test", this.selectMedAnesthesiaEventList);
     }
   }
 }
 
 </script>
 <style scoped>
-
 
 </style>

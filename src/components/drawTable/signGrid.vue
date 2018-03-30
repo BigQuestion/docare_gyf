@@ -38,10 +38,18 @@ export default {
       anesStartTime: '',
       thedoubelData: '',
       // dataOfTop: 0,
+      pageOn: '',
+      maxTimeInPage: '',
+      startTimeInPage: '',
     }
   },
   methods: {
     selectMedAnesthesiaEventList() {
+      this.pageOn = this.config.pageOper;
+      this.maxTimeInPage = this.config.maxTime.getTime()
+      this.startTimeInPage = this.config.initTime.getTime()
+      var bothTimeLeft = this.maxTimeInPage - this.startTimeInPage
+
       this.thedoubelData = '';
       let params = {
         patientId: this.dataOfPeo.patientId,
@@ -50,54 +58,58 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
-          res => {
-            for (var i = 0; i < res.list.length; i++) {
-              var time = new Date(res.list[i].START_TIME);
-              var time1 = time.getTime() - this.dataStart.getTime()
-              var leftPlace = (time1 * 3) / 60 / 1000;
+        res => {
+          this.dataOfBottom = [];
+          this.dataBody = [];
+          this.config.OperatingData = res.list;
+
+          for (var i = 0; i < res.list.length; i++) {
+            var time = new Date(res.list[i].START_TIME).getTime();
+            if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
+              var time1 = time - this.startTimeInPage
+              var leftPlace = ((time1 * 3) / 60 / 1000);
               this.dataOfBottom.push({
                 leftData: leftPlace
               })
 
-              // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
               this.dataBody.push({
                 leng: i + 1,
                 left: leftPlace,
-                // bottom: 0 + i * 15,
                 bottom: 0,
                 name: res.list[i].ITEM_NAME,
                 time: res.list[i].START_TIME,
               })
-              // console.log(this.dataBody)
-            }
-            var data = [];
-            for (var a = 0; a < this.dataOfBottom.length; a++) {
-              data.push(this.dataOfBottom[a].leftData);
-            }
-            var tmp = data.sort();
-            var pei = 0;
-            for (var k = 0; k < data.length; k++) {
-              if (tmp[k] == tmp[k + 1]) {
-                // console.log(tmp[k])
-                for (var g = 0; g < this.dataBody.length; g++) {
-                  // console.log(this.dataBody)
-                  if (tmp[k] == this.dataBody[g].left) {
-                    pei = pei + 1;
-                    // console.log(this.dataBody[g])
-                    this.dataBody[g].bottom = -15 + pei * 15;
-                    // console.log(this.dataOfBottom[g].bottom)
-                  } else {
-                    pei = 0;
-                    // this.dataBody[g].bottom = 0;
-                  }
-                }
-              } else {
-                pei = 0;
-              }
             }
 
-            this.lineArray = res.list;
-          });
+          }
+          var data = [];
+          for (var a = 0; a < this.dataOfBottom.length; a++) {
+            data.push(this.dataOfBottom[a].leftData);
+          }
+          var tmp = data.sort();
+          var pei = 0;
+          for (var k = 0; k < data.length; k++) {
+            if (tmp[k] == tmp[k + 1]) {
+              // console.log(tmp[k])
+              for (var g = 0; g < this.dataBody.length; g++) {
+                // console.log(this.dataBody)
+                if (tmp[k] == this.dataBody[g].left) {
+                  pei = pei + 1;
+                  // console.log(this.dataBody[g])
+                  this.dataBody[g].bottom = -15 + pei * 15;
+                  // console.log(this.dataOfBottom[g].bottom)
+                } else {
+                  pei = 0;
+                  // this.dataBody[g].bottom = 0;
+                }
+              }
+            } else {
+              pei = 0;
+            }
+          }
+
+          this.lineArray = res.list;
+        });
     },
     noFunction() {
 
@@ -130,9 +142,8 @@ export default {
   mounted() {
     if (this.page == false) {
       this.selectMedAnesthesiaEventList();
-      this.anesStartTime = this.changeDateFormat(this.dataOfPeo.inDateTime);
-      var at = this.anesStartTime.split('T');
-      this.dataStart = new Date(at[0] + ' ' + at[1]);
+      window.eventHub.$on("test", this.selectMedAnesthesiaEventList);
+
     }
 
   },
@@ -188,5 +199,4 @@ export default {
   background-color: rgb(227, 239, 255);
   border: 1px solid #A9A9A9;
 }
-
 </style>

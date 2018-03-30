@@ -10,6 +10,8 @@ const wardCode = 38;
 const maxTime = "";
 const initTime = "";
 
+const OperatingData = '';
+
 export default {
   userId,
   userInfo,
@@ -21,6 +23,7 @@ export default {
   pageOper,
   maxTime,
   initTime,
+  OperatingData,
 }
 
 </script>

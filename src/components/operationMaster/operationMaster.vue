@@ -696,7 +696,6 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
         res => {
-          console.log(res)
           //   this.pages = Math.ceil(this.pageLength.length / this.size)
 
           console.log(res)
@@ -1413,6 +1412,7 @@ export default {
       }
 
       window.eventHub.$emit("test", num);
+      // console.log(this.config.maxTime)
     },
 
   },
@@ -1712,6 +1712,7 @@ export default {
 
 
 
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1798,6 +1799,7 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
 
 
 
