@@ -69,27 +69,35 @@ export default {
         if (this.infoData.MultiSelectMode == 'true') {
           if (this.conInfo.value == null || this.conInfo.value == '') {
             this.conInfo.value = item.DICTSHOWFILED;
+            //实际要修改表的值
+            this.$set(this.conInfo, 'modifyFiledValue', item.DICTFIELD);
+            // this.conInfo.modifyFiledValue = item.DICTFILED;
           } else {
             this.conInfo.value = this.conInfo.value + "," + item.DICTSHOWFILED;
+            // this.conInfo.modifyFiledValue = this.conInfo.value + "," + item.DICTFILED;
+            this.$set(this.conInfo, 'modifyFiledValue', this.conInfo.value + "," + item.DICTFIELD);
           }
         } else {
           this.conInfo.value = item.DICTSHOWFILED;
+          this.$set(this.conInfo, 'modifyFiledValue', item.DICTFIELD);
         }
       } else {
         if (this.infoData.MultiSelectMode == 'true') {
           if (this.conInfo.value == null || this.conInfo.value == '') {
-            this.conInfo.value = item.DICTFILED;
+            this.conInfo.value = item.DICTFIELD;
+            this.$set(this.conInfo, 'modifyFiledValue', item.DICTFIELD);
           } else {
-            this.conInfo.value = this.conInfo.value + "," + item.DICTFILED;
+            this.conInfo.value = this.conInfo.value + "," + item.DICTFIELD;
+            this.$set(this.conInfo, 'modifyFiledValue', this.conInfo.value + "," + item.DICTFIELD);
           }
         } else {
-          this.conInfo.value = item.DICTFILED;
+          this.conInfo.value = item.DICTFIELD;
+          this.$set(this.conInfo, 'modifyFiledValue', item.DICTFIELD);
         }
       }
       this.nameView = !this.nameView;
     },
     disapear(dataInput) {
-      console.log(dataInput)
       if (this.conInfo.nullStringMode == 'false') {
         if (dataInput == '') {
           this.focusState = true;

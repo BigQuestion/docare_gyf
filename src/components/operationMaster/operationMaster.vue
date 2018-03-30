@@ -1171,6 +1171,10 @@ export default {
                   "operId": this.lockedPatientInfo.operId,
                   "tableName": list[i].tableName,
                   "coluName": list[i].fieldName,
+                  "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
+                  "dictTableName": list[i].dictTableName, //字典表名称
+                  "dictField": list[i].dictField, //字典字段名称
+                  "dictSelect": list[i].dictSelect,
                 })
               }
             }
@@ -1180,7 +1184,11 @@ export default {
                   for (var i = 0; i < list.length; i++) {
                     if (list[i].fieldName) {
                       let obj = this.formItems[i];
-                      obj.value = result[list[i].fieldName];
+                      if (list[i].dictShowFiled == 'USER_IDA') {
+                        obj.value = result[list[i].dictShowFiled];
+                      } else {
+                        obj.value = result[list[i].fieldName];
+                      }
                       this.$set(this.formItems, i, obj);
                     }
                   }
@@ -1319,13 +1327,19 @@ export default {
     },
     //获取单子修改的数据
     getValue(dataValue) {
+      var modifyValue = '';
+      if (dataValue.dictShowFiled != '' && dataValue.dictShowFiled != null) {
+        modifyValue = dataValue.modifyFiledValue
+      } else {
+        modifyValue = dataValue.value;
+      }
       var tempData = this.updateFormsData;
       if (tempData.length > 0) {
         var count = 0;
         for (var i = 0; i < this.updateFormsData.length; i++) {
           //如果之前传入有相同的表名与字段名则更新值
           if (this.updateFormsData[i].tableName === dataValue.tableName && this.updateFormsData[i].coluName === dataValue.fieldName) {
-            this.updateFormsData[i].updateStr = dataValue.value;
+            this.updateFormsData[i].updateStr = modifyValue;
           } else {
             count++;
           }
@@ -1698,6 +1712,19 @@ export default {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1784,6 +1811,19 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

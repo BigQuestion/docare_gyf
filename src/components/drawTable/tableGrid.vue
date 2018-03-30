@@ -503,7 +503,6 @@ export default {
             } else {
               sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
             }
-            console.log(sMin)
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 

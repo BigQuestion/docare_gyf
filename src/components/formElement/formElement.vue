@@ -87,9 +87,8 @@ export default {
       this.$emit('toTopEvent', data);
     },
   },
-  props: ['value', 'isPage','objectItem', 'isPrint'], // 设置value为props属性-必须
-  computed: {
-  },
+  props: ['value', 'isPage', 'objectItem', 'isPrint'], // 设置value为props属性-必须
+  computed: {},
   components: {
     commonSelect,
     commonSelectPrint,
@@ -107,5 +106,6 @@ export default {
 
 </script>
 <style type="text/css" scoped>
+
 
 </style>

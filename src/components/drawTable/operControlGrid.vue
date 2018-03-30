@@ -319,7 +319,6 @@ export default {
         this.config.pageNum = 1;
       }
       var list = this.signNameLisg;
-      console.log(this.pathArray)
       let arryList = this.signdataList;
       let sortArray = [];
       for (var i = 0; i < arryList.length; i++) {

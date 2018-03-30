@@ -426,7 +426,6 @@ export default {
     },
     //保存按钮
     saveBtn() {
-      debugger
       if (this.changeEvent.length > 0) {
         this.api.updateMedAnesthesiaEventBatch(this.changeEvent)
           .then(res => {
@@ -672,7 +671,6 @@ export default {
     },
     //删除体征项目
     deleteSignItem() {
-      debugger
       let params = {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
@@ -786,7 +784,6 @@ export default {
         .then(res => {
           this.cancleSaveTemp();
         })
-      debugger
     },
     aboutNone() {
       // console.log(this.dataIn)
