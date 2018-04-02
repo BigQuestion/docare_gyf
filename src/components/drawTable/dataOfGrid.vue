@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     selectMedAnesthesiaEventList() {
+      var nber = 1;
       this.dataBody = [];
       this.maxTimeInPage = this.config.maxTime.getTime()
       this.startTimeInPage = this.config.initTime.getTime()
@@ -39,29 +40,28 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
+
           res => {
             console.log(res)
             for (var i = 0; i < res.list.length; i++) {
               var time = new Date(res.list[i].START_TIME).getTime();
               if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
                 this.dataBody.push(res.list[i]);
-                this.$set(res.list[i], 'number', i + 1);
+                this.$set(res.list[i], 'number', nber++);
                 if (res.list[i].ENDDATE !== null) {
                   if (res.list[i].DOSAGE !== null) {
                     var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
                   } else {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE];
+                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME];
                   }
-
-                } else {
-                  var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME];
+                  this.title = titleData.join('\n');
+                  this.$set(res.list[i], 'titleWord', this.title);
                 }
-                this.title = titleData.join('\n');
-                this.$set(res.list[i], 'titleWord', this.title);
               }
             }
 
           });
+
 
 
     },

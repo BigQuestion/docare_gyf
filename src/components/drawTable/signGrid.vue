@@ -46,6 +46,7 @@ export default {
   },
   methods: {
     selectMedAnesthesiaEventList() {
+      var nber = 1;
       this.pageOn = this.config.pageOper;
       this.maxTimeInPage = this.config.maxTime.getTime()
       this.startTimeInPage = this.config.initTime.getTime()
@@ -74,7 +75,7 @@ export default {
                 })
 
                 this.dataBody.push({
-                  leng: i + 1,
+                  leng: nber++,
                   left: leftPlace,
                   bottom: 0,
                   name: res.list[i].ITEM_NAME,

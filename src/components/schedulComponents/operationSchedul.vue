@@ -2,10 +2,24 @@
     <div>
         <div class="tableOut">
             <div class="timechose">
-                <div>
+                <div style="height:75px;padding-left: 5px;">
                     <!-- <datepicker :value="dateValue" language="zh" @change="dateChange"></datepicker> -->
                     <input type="date" name="" v-model="dateValue" @change="test($event)">
                     <button @click="dateChange">查询</button>
+                </div>
+                <div class="itemChoose">
+                    {{chooseData}}
+                </div>
+                <div class="itemChooseContent">
+
+                </div>
+                <div class="itemChooseBox">
+                    <div v-if="item.dataLength !== undefined" class="itemBox" v-for="item in listChooseBody" @click="chooseOne(item)">
+                        {{item.data}}({{item.dataLength}})
+                    </div>
+                    <div v-else class="itemBox" @click="chooseOne(item)">
+                        {{item.data}}
+                    </div>
                 </div>
             </div>
             <div style="width: 80%;overflow:auto;border:1px solid #999;">
@@ -24,8 +38,8 @@
                                 <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
                                     <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
                                         <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
-                                                                                                            {{ MzkUser.userName }}
-                                                                                                         </option> -->
+                                                                                                                            {{ MzkUser.userName }}
+                                                                                                                         </option> -->
                                         <!-- 副麻，洗手列表 -->
                                         <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
                                             {{ MzkUser.userName }}
@@ -212,6 +226,15 @@ export default {
                     width: 100,
                 }
             ],
+            listChooseBody: [
+                { data: '手术', dataLength: 0 },
+                { data: '主麻医生' },
+                { data: '副麻医生' },
+                { data: '麻醉护手' },
+                { data: '洗手护士' },
+                { data: '巡回护士' },
+            ],
+            chooseData: '手术(0)',
             msg: '欢迎登陆！',
             dateValue: '2014-07-08',
             dataInData: '',
@@ -383,20 +406,15 @@ export default {
             this.dateValue = event.srcElement.value;
         },
         dateChange() {
-            // console.log(this.dateValue);
-            // debugger
-            // let date = new Date(this.dateValue);
-            // let y = date.getFullYear();
-            // let m = date.getMonth()+1;
-            // if(m<10){
-            //     m = '0'+m;
-            // }
-            // let d = date.getDate()+1;
-            // if(d<10){
-            //     d = '0'+d;
-            // }
-            // let dateStr = y+'/'+m+'/'+d;
             this.getList(this.dateValue)
+        },
+        chooseOne(item) {
+            console.log(item)
+            if (item.dataLength !== undefined) {
+                this.chooseData = item.data + '(' + item.dataLength + ')'
+            } else {
+                this.chooseData = item.data
+            }
         },
         getList(date) {
             var changeData = date.replace(/-/g, '/')
@@ -519,7 +537,7 @@ export default {
 .tableBox {
     width: 100%;
     /*overflow-x: auto;*/
-    height: 550px;
+    /* height: 550px; */
     /*border: 1px solid #999999;*/
 }
 
@@ -652,6 +670,7 @@ export default {
 
 .tableOut {
     width: 100%;
+    height: 697px;
     display: flex;
     justify-content: space-between;
 }
@@ -661,7 +680,48 @@ export default {
     border: 1px solid #999;
     box-sizing: border-box;
     margin-right: 5px;
+    background-color: #A3BDD9;
+    padding-top: 5px;
+}
+
+.itemChoose {
+    width: 100%;
+    color: white;
+    background: #597CA6;
+    box-sizing: border-box;
+    padding: 2px 0 2px 5px;
+}
+
+.itemChooseContent {
+    width: 100%;
+    height: 350px;
+    background-color: #fff;
+    overflow: auto;
+}
+
+.itemChooseBox {
+    width: 100%;
+    height: 240px;
+    background-color: #597CA6;
+}
+
+.itemBox {
+    height: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid #0D508B;
+    color: #fff;
+    line-height: 40px;
     padding-left: 5px;
+}
+
+.itemBox:hover {
+    background-color: #8383A6;
+    cursor: pointer;
+}
+
+.itemBox:last-child {
+    border-bottom: 1px solid #0D508B;
 }
 
 .selectInThere {
