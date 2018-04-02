@@ -45,6 +45,7 @@
 </template>
 <script type="text/javascript">
 import * as d3 from 'd3';
+import Bus from '@/bus.js';
 export default {
   name: 'dosage',
   data() {
@@ -89,18 +90,20 @@ export default {
       for (var i = 0; i < this.forRows; i++) {
         this.dataArray.push(i)
       }
-      let params = {
-        patientId: this.config.userInfo.patientId,
-        operId: this.config.userInfo.operId,
-        visitId: this.config.userInfo.visitId,
-        itemClass: 3
-      }
+      if (this.page == false) {
+        let params = {
+          patientId: this.config.userInfo.patientId,
+          operId: this.config.userInfo.operId,
+          visitId: this.config.userInfo.visitId,
+          itemClass: 3
+        }
 
-      this.api.selectMedAnesthesiaEventList(params)
-        .then(res => {
-          var list = res.list;
-          this.dataListOperFun(list)
-        })
+        this.api.selectMedAnesthesiaEventList(params)
+          .then(res => {
+            var list = res.list;
+            this.dataListOperFun(list)
+          })
+      }
     },
 
     //计算时间差分钟
@@ -328,7 +331,14 @@ export default {
   mounted() {
     this.getLineXy();
     this.getData();
-    window.eventHub.$on("test", this.pageTurnFun);
+
+    // window.eventHub.$on("test", this.pageTurnFun);
+  },
+  created() {
+    Bus.$on('test', this.pageTurnFun)
+  },
+  beforeDestroy() {
+    Bus.$off('test', this.pageTurnFun);
   },
   components: {
 

@@ -58,6 +58,7 @@
 </template>
 <script type="text/javascript">
 import * as d3 from 'd3';
+import Bus from '@/bus.js';
 export default {
   name: 'opercontrolgrid',
   data() {
@@ -379,10 +380,19 @@ export default {
   },
   mounted() {
     this.getLineXy();
-    this.getSignName();
+    if (this.page == false) {
+      this.getSignName();
+    }
+
     this.getYDataArray();
     this.area = this.$refs.area;
-    window.eventHub.$on("test", this.pageTurnFun);
+    // window.eventHub.$on("test", this.pageTurnFun);
+  },
+  created() {
+    Bus.$on('test', this.pageTurnFun)
+  },
+  beforeDestroy() {
+    Bus.$off('test', this.pageTurnFun);
   },
   components: {
 

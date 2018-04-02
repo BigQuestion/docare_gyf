@@ -87,6 +87,7 @@
 </template>
 <script type="text/javascript">
 import * as d3 from 'd3';
+import Bus from '@/bus.js';
 export default {
   data() {
     return {
@@ -188,12 +189,13 @@ export default {
       var toMin = timeDate.getTime() + 1000 * 60 * m;
       var timeArray = [];
       for (var i = 0; i <= this.columns; i++) {
-        if (i == 0) {
-          this.config.initTime = new Date(timeDate.getTime() + 1000 * 60 * m * i);
-        }
+        // if (i == 0) {
+
+        // }
         timeArray.push(new Date(timeDate.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
-        this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * m * i);
       }
+      this.config.initTime = new Date(timeDate.getTime());
+      this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * m * this.columns);
       this.xTimeArray = timeArray;
     },
     //时间初始化显示
@@ -205,7 +207,10 @@ export default {
         this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
       }
       this.getLineXy();
-      this.selectMedAnesthesiaEventList();
+      if (this.page == false) {
+        this.selectMedAnesthesiaEventList();
+      }
+
     },
     //加载病人麻醉事件里面麻醉用药数据
     selectMedAnesthesiaEventList() {
@@ -449,8 +454,9 @@ export default {
             list[i].vStartTime = new Date(m).Format("yyyy-MM-dd hh:mm:ss");
           }
         }
-
+        console.log(list)
         this.dataOperChange(list);
+
 
       }
       if (this.config.pageOper == 1) {
@@ -568,8 +574,14 @@ export default {
   mounted() {
     this.area = this.$refs.area;
     this.xTimeInit();
-    window.eventHub.$on("test", this.pageChange);
+    // window.eventHub.$on("test", this.pageChange);
 
+  },
+  created() {
+    Bus.$on('test', this.pageChange)
+  },
+  beforeDestroy() {
+    Bus.$off('test', this.pageChange);
   },
   components: {
 
