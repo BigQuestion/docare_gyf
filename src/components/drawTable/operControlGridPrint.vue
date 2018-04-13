@@ -1,42 +1,21 @@
 <template>
   <div style="position: relative;margin:2px;" @contextmenu="showMenu">
     <div>
-      <svg :width="svgWidth" :height="svgHeight" id="operGrid" ref="area">
+      <svg :width="svgWidth" :height="svgHeight" id="operGridprint" ref="area">
         <g v-for="item in lineArray">
           <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
         </g>
-        <g v-for="item in lineArray">
+        <g v-for="(item,index) in lineArray" v-if="index < rows">
           <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
         </g>
-        <!-- 	<g v-for="(item,index) in data">
-					<circle :cx="item.x" :cy="item.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,item,index)"></circle>
-				</g>
-				<g>
-					<path :d="pathData" stroke-width="1" fill="none" stroke="blue" ></path>
-				</g> -->
         <g v-for="(item,index1) in dataPathArray" style="z-index: 22">
-          <path :d="item.path" stroke-width="1" fill="none" stroke="blue"></path>
-          <circle v-for="(cir,index2) in item.circleData" v-if="item.flag==0" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir)" @mouseleave="showData(cir)"></circle>
-          <circle v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir)" @mouseleave="showData(cir)"></circle>
-          <polygon points="1,4 8,4 4,10" style="fill:lime;"></polygon>
+          <!-- <path :d="item.path" stroke-width="1" fill="none" stroke="blue"></path> -->
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1" fill="none"></line>
+          <circle class="opercontrol" v-for="(cir,index2) in item.circleData" v-if="item.flag==0&&cir.x<=700" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
+          <circle class="opercontrol" v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1&&cir.x<=700" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
+          <!-- <polygon points="1,4 8,4 4,10" style="fill:lime;"></polygon>-->
         </g>
       </svg>
-      <div v-if="tipView">
-        <div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10;padding: 0 2px;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
-          <div>
-            {{mouseItem.itemData.itemName}}
-          </div>
-          <div>
-            ================
-          </div>
-          <div>
-            时间：{{mouseItem.time}}
-          </div>
-          <div>
-            值：{{mouseItem.value}}
-          </div>
-        </div>
-      </div>
       <div style="position: absolute;bottom: 0px;left: -30px;text-align: right;font-size: 12px;">
         <div v-for="item in yValueArray" style="height: 22px;">
           {{item}}
@@ -48,17 +27,13 @@
         </div>
       </div>
     </div>
-    <div v-if="showStyleView" style="background-color: #e6e6e6;position: absolute;top: 30%;" :style="{ top:rightViewY+'px',left:rightViewX+'px'}">
-      <div style="padding: 10px;">
-        个性化体征显示
-      </div>
-    </div>
   </div>
 </template>
 <script type="text/javascript">
 import * as d3 from 'd3';
+import Bus from '@/bus.js';
 export default {
-  name: 'dosage',
+  name: 'opercontrolgrid',
   data() {
     return {
       showStyleView: false,
@@ -90,6 +65,7 @@ export default {
       yValueArray: [],
       rightViewX: '',
       rightViewY: '',
+      signNameLisg: [],
     }
 
   },
@@ -102,9 +78,6 @@ export default {
 
     },
     getLineXy() {
-      // this.pathArray.push(this.data); 
-      // this.pathArray.push(this.data1);
-
       var array = [];
       for (var i = 0; i < 50; i++) {
         array.push({
@@ -151,59 +124,6 @@ export default {
 
 
       }
-
-      // var isdown = false;
-      // var svg = d3.select("#operGrid")
-      // svg.append("path")
-      //   .attr("d", dataone(this.data))
-      //   .attr('stroke-width', 1)
-      //   .attr("fill", "none")
-      //   .attr("stroke", "blue")
-
-      // var g = svg.selectAll('circle')
-      // .data(this.data)
-      // .enter()
-      // .append('g')
-      // .append('circle')
-      // //.attr('class', 'linecircle')
-      // .attr('cx', dataone.x())
-      // .attr('cy', dataone.y())
-      // .attr('r', 3)
-      // .attr('fill','green')
-      // // .on('mouseover', function() {
-      // // 	d3.select(this).transition().duration(500).attr('r', 5);
-      // // })
-      // // .on('mouseout', function() {
-      // // 	d3.select(this).transition().duration(500).attr('r', 3);
-      // // }) 
-      // .on('mousedown',function(data,ev){
-      // 	var ev = ev || event;
-      // 	isdown = true;
-      // 	console.log(data)
-      // 	console.log(ev)
-      // })
-      // .on('mousemove',function(data){
-
-      // 	if(isdown){
-      // 		svg.selectAll("circle").remove()
-      // 		var p = d3.select("#operGrid")
-      // 		.select("path").remove()
-
-      // 		 _this.data = [{ "x": 14, "y": 400 },
-      // 		{ "x": 28, "y": 410 },
-      // 		{ "x": 42, "y": 40 },
-      // 		{ "x": 56, "y": 5 },
-      // 		]
-      // 		_this.calculatePath(); 
-      // 	}
-
-
-      // })
-      // .on('mouseup',function(ev){
-      // 	isdown = false;
-      // 	var ev = ev || event;
-      // 	console.log(ev)
-      // })
     },
     itemMouseDown(e, currentItem, index1, index2) {
       this.area.addEventListener('mousemove', this.areaMouseMove);
@@ -223,17 +143,9 @@ export default {
       } else {
         this.clickItem.value = Math.round((this.svgHeight - e.offsetY) / (this.svgHeight / this.rows) * 10)
       }
-
-      //console.log(arr1[this.clickIndex])
-      //this.$set(this.pathArray,1,arr1)
-      // this.dataPathArray[this.pathIndex].circleData
-      // var p = d3.select("#operGrid")
-      //   .select("path").remove()
       this.calculatePath();
     },
     areaMouseUp(e) {
-      console.log(this.clickItem)
-
       this.area.removeEventListener('mousemove', this.areaMouseMove);
       this.area.removeEventListener('mouseup', this.areaMouseUp);
       let moveValue
@@ -253,7 +165,7 @@ export default {
         itemValue: moveValue,
         operator: "mdsd"
       })
-      console.log(this.updateDataArray)
+
       let params = this.updateDataArray;
       this.api.updateMedPatientMonitorDatas(params)
         .then(res => {
@@ -261,7 +173,7 @@ export default {
         })
 
     },
-
+    //获取病人生命体征项目
     getSignName() {
       let params = {
         patientId: this.config.userInfo.patientId,
@@ -277,6 +189,7 @@ export default {
               res[i].itemValue = "";
             }
             this.getSignTimeData(res.length, res);
+            this.signNameLisg = res;
           })
     },
 
@@ -292,10 +205,10 @@ export default {
           res => {
             var sortArray = [];
             for (var i = 0; i < res.length; i++) {
-              let item = res[i].dataValue;
+              var item = res[i].dataValue;
               item = eval('(' + item + ')');
-              //item = JSON.parse(item);
               let xL = len - item.length
+
               if (xL > 0) {
                 for (var j = 0; j < xL; j++) {
                   item.push('');
@@ -311,7 +224,7 @@ export default {
             }
             this.signdataList = sortArray;
             var newArray = [];
-            for (var i = 0; i < 8; i++) {
+            for (var i = 0; i < len; i++) {
               var arr1 = [];
               for (var j = 0; j < sortArray.length; j++) {
                 if (sortArray[j].dataValue[i]) {
@@ -332,12 +245,15 @@ export default {
 
               }
               newArray.push(arr1)
-
-
             }
             for (var i = 0; i < newArray.length; i++) {
               for (var j = 0; j < newArray[i].length; j++) {
-                let min = this.getMinuteDif(this.config.userInfo.inDateTime, newArray[i][j].time);
+                let min = '';
+                if (new Date(newArray[i][j].time) > this.config.maxTime) {
+                  min = this.getMinuteDif(this.config.initTime, this.config.maxTime) + 1;
+                } else {
+                  min = this.getMinuteDif(this.config.initTime, newArray[i][j].time);
+                }
                 let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
                 let y = this.svgHeight - Math.round(newArray[i][j].value / 10 * (this.svgHeight / this.rows))
                 newArray[i][j].x = x;
@@ -359,9 +275,9 @@ export default {
       return Math.round(min)
     },
 
-    showData(item) {
+    showData(item, ev) {
       this.mouseItem = item;
-      this.tipLeft = item.x;
+      this.tipLeft = ev.offsetX;
       this.tipTop = item.y + 20;
       this.tipView = !this.tipView;
     },
@@ -372,13 +288,90 @@ export default {
         arry.push(i * 20 + 20)
       }
       this.yValueArray = arry.reverse();
+    },
+    pageTurnFun() {
+      if (this.config.pageOper == 0) {
+        this.config.pageNum = 1;
+      }
+      var list = this.signNameLisg;
+      let arryList = this.signdataList;
+      let sortArray = [];
+      for (var i = 0; i < arryList.length; i++) {
+        if (new Date(arryList[i].time) > this.config.initTime) {
+          sortArray.push(arryList[i])
+        }
+
+      }
+      if (sortArray.length < 1) {
+        this.pathArray = [];
+        this.calculatePath();
+        return
+      }
+
+      this.dataOperFun(sortArray);
+
+
+    },
+
+    //数据处理
+    dataOperFun(sortArray) {
+      var list = this.signNameLisg;
+      var newArray = [];
+      for (var i = 0; i < 8; i++) {
+        var arr1 = [];
+        for (var j = 0; j < sortArray.length; j++) {
+          if (sortArray[j].dataValue[i]) {
+            arr1.push({
+              value: sortArray[j].dataValue[i],
+              time: sortArray[j].time,
+              itemData: list[i]
+
+            })
+          } else {
+            arr1.push({
+              value: "",
+              time: sortArray[j].time,
+              itemData: list[i]
+
+            })
+          }
+
+        }
+        newArray.push(arr1)
+      }
+      for (var i = 0; i < newArray.length; i++) {
+        for (var j = 0; j < newArray[i].length; j++) {
+          let min = '';
+          if (new Date(newArray[i][j].time) > this.config.maxTime) {
+            min = this.getMinuteDif(this.config.initTime, this.config.maxTime) + 1;
+          } else {
+            min = this.getMinuteDif(this.config.initTime, newArray[i][j].time);
+          }
+          let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
+          let y = this.svgHeight - Math.round(newArray[i][j].value / 10 * (this.svgHeight / this.rows))
+          newArray[i][j].x = x;
+          newArray[i][j].y = y;
+        }
+      }
+      this.pathArray = newArray;
+      this.calculatePath();
     }
   },
   mounted() {
     this.getLineXy();
-    this.getSignName();
+    if (this.page == false) {
+      this.getSignName();
+    }
+
     this.getYDataArray();
     this.area = this.$refs.area;
+    // window.eventHub.$on("test", this.pageTurnFun);
+  },
+  created() {
+    Bus.$on('test', this.pageTurnFun)
+  },
+  beforeDestroy() {
+    Bus.$off('test', this.pageTurnFun);
   },
   components: {
 

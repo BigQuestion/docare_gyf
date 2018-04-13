@@ -47,18 +47,17 @@
           </div>
         </div>
         <!-- <div style="position: absolute;top: 0px; left: 100px;background-color: white;">
-  <div style="height: 8px;">
-    <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
+          <div style="height: 8px;">
+            <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
             ivg
           </span>
-  </div>
-  <div style="height: 8px;">
-    <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
+          </div>
+          <div style="height: 8px;">
+            <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
             ivg
           </span>
-  </div>
-</div>
- -->
+          </div>
+        </div> -->
         <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
         </div>
       </div>
@@ -115,6 +114,8 @@ export default {
       xArray: [],
       lineArray: [],
       percentPageData: [],
+      timeRequestSec: 10000, //多久请求一次
+      setIntervalId: '', //定时器返回的一个ID
 
     }
   },
@@ -454,7 +455,6 @@ export default {
             list[i].vStartTime = new Date(m).Format("yyyy-MM-dd hh:mm:ss");
           }
         }
-        console.log(list)
         this.dataOperChange(list);
 
 
@@ -567,21 +567,34 @@ export default {
         this.dataArray.push(m)
       }
 
-    }
+    },
+    //定时请求数据
+    timeRequest() {
+      this.setIntervalId = setInterval(() => {
+        if (this.page == false) {
+          var svg = d3.selectAll(".test")
+          svg.remove();
+          this.selectMedAnesthesiaEventList();
+        }
+      }, this.timeRequestSec)
+    },
 
 
   },
   mounted() {
     this.area = this.$refs.area;
     this.xTimeInit();
-    // window.eventHub.$on("test", this.pageChange);
 
   },
   created() {
     Bus.$on('test', this.pageChange)
+    // this.timeRequest()
+
   },
   beforeDestroy() {
     Bus.$off('test', this.pageChange);
+    clearInterval(this.setIntervalId)
+
   },
   components: {
 

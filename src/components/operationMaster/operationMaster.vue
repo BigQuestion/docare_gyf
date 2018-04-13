@@ -400,15 +400,15 @@
               </div>
             </div>
           </div>
-          <div ref="mybox" id="mybox" v-if="0==1">
-            <div class="designArea" style="font-size: 9pt;">
-              <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
+          <div ref="mybox" id="mybox" style="display: none; ">
+            <div class="designArea" style="font-size: 9pt;font-family: STSong;">
+              <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2)*0.75)+'pt'}">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element-print>
               </div>
               <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element-print>
               </div>
-              <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
+              <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x*0.75+'pt',top:item.y*0.75+'pt'}">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element-print>
               </div>
             </div>
@@ -422,6 +422,10 @@
             <button @click="formSetting">配置</button>
             <button @click="refreshForm">刷新</button>
           </div>
+        </div>
+        <!-- 显示个性化体征设置 -->
+        <div v-if="personStyleView" style="position: absolute;top: 15%;left:30%;">
+          <personStyle></personStyle>
         </div>
       </div>
     </div>
@@ -507,6 +511,7 @@
 </template>
 <script>
 import formDesigner from '@/components/formDesigner/formDesigner.vue';
+import personStyle from '@/components/drawTable/personStyle.vue';
 import formElement from '@/components/formElement/formElement.vue';
 import formElementPrint from '@/components/formElement/formElementPrint.vue';
 import patientOperationInfo from '@/components/patientOperationInfo/patientOperationInfo.vue';
@@ -633,26 +638,31 @@ export default {
       monitorDataShow: { noneData: false },
       pageButtonView: false, //翻页按钮
       firstRoom: { noneData: false },
+      personStyleView: false, //是否显示个性化体征
     }
   },
   methods: {
 
     printPdf() {
+
       this.printed = true;
       this.$set(this.config, 'isPrintedView', true);
       this.isPrint = true;
-      // this.selectMedFormTemp(this.selectFormItemTemp);
-
-
-      //        LODOP.PRINT();
+      Bus.$emit('print', "print");
+      //LODOP.PRINT();
       const _this = this;
       this.CreateOneFormPage();
-      LODOP.PREVIEW();
+      // LODOP.SET_SHOW_MODE("HIDE_PAGE_PERCENT", true);
+      // LODOP.SET_PRINT_MODE("PRINT_PAGE_PERCENT", "82%");
+      // LODOP.SET_PRINT_MODE("FULL_WIDTH_FOR_OVERFLOW", true);
+
+      // LODOP.PRINT_DESIGN();
       if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
         //不在打印预览界面
         if (Value == 0) {
           _this.$set(_this.config, 'isPrintedView', false);
           _this.isPrint = false;
+          _this.toChangePage(0);
         }
 
       };
@@ -661,7 +671,45 @@ export default {
     CreateOneFormPage() {
       LODOP = getLodop();
       LODOP.PRINT_INIT("");
-      LODOP.ADD_PRINT_HTM(10, 20, "100%", "100%", this.$refs.mybox.innerHTML);
+      LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
+      LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+      var _this = this;
+
+      for (var i = 0; i < 2; i++) {
+        this.$nextTick(function() {
+          LODOP.NewPageA();
+          _this.toChangePage(1);
+          LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
+          LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+        })
+        // var t = setTimeout(function() {
+        //   LODOP.NewPageA();
+        //   _this.toChangePage(1);
+        //   LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
+        //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+        //   LODOP.NewPageA();
+        // }, 1000);
+      }
+      var t1 = setTimeout(function() {
+        LODOP.PREVIEW();
+
+      }, 3000);
+      // this.$nextTick(function() { // => '更新完成'
+      //   LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
+      //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+      //   LODOP.NewPageA();
+      //   LODOP.PREVIEW();
+      // })
+
+      // LODOP.ADD_PRINT_HTM(10, 10, "99%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
+
+
+      // LODOP.ADD_PRINT_HTM(10, 10, "100%", "100%", this.$refs.mybox.innerHTML);
+      // LODOP.NewPageA();
+      // LODOP.NewPageA();
+      // this.toChangePage(1);
+      // LODOP.ADD_PRINT_HTM(10, 20, "100%", "100%", this.$refs.mybox.innerHTML);
+      // LODOP.SET_SHOW_MODE("MESSAGE_GETING_URL", " "); //该语句隐藏进度条或修改提示信息
 
       //this.printed = false;
 
@@ -1426,8 +1474,6 @@ export default {
         } else {
           return
         }
-
-
       }
       if (num == 1) {
         if (this.config.pagePercentNum < this.config.pageTotal) {
@@ -1458,6 +1504,16 @@ export default {
 
     this.patientId = '10966589';
   },
+  created() {
+    Bus.$on('showPersonStyle', (val) => {
+      this.personStyleView = false
+    })
+  },
+  beforeDestroy() {
+    Bus.$off('showPersonStyle', (val) => {
+      this.personStyleView = false
+    });
+  },
   components: {
     formElement,
     formElementPrint,
@@ -1470,6 +1526,7 @@ export default {
     anestheticConstant,
     monitor,
     cancel,
+    personStyle
   },
 }
 
@@ -1526,7 +1583,7 @@ export default {
 
 .patientList {
   height: 100%;
-  width: 385px;
+  width: 383px;
   min-width: 380px;
 }
 
@@ -1718,7 +1775,7 @@ export default {
   height: 720px;
   width: 100%;
   background: white;
-  border: 1px solid black;
+  /*border: 1px solid black;*/
   overflow: auto;
   box-sizing: border-box;
 }
@@ -1735,6 +1792,149 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1862,6 +2062,149 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

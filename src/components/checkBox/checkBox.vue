@@ -3,19 +3,22 @@
     <div v-if="!isEdit" style="display: flex;">
       <div v-if="boxValue.MultiSelectMode=='false'" v-for="(item,index) in boxValue.listData" style="margin:0px 2px;">
         <!-- <div v-if="item.ItemValue==resultValue">
-						<label><input type="checkbox" @change="test" v-model="content.state" v-bind:value="item.ItemValue"/>{{item.ItemName}}</label>
-					</div>
-					<div v-else>
-						<label><input type="checkbox"   v-bind:value="item.ItemValue"/>{{item.ItemName}}</label>
-					</div> -->
+            <label><input type="checkbox" @change="test" v-model="content.state" v-bind:value="item.ItemValue"/>{{item.ItemName}}</label>
+          </div>
+          <div v-else>
+            <label><input type="checkbox"   v-bind:value="item.ItemValue"/>{{item.ItemName}}</label>
+          </div> -->
         <label>
           <input v-if="isSelected[index]" type="checkbox" @change="getSingleSelect(item,index)" checked v-model="isSelected[index]" v-bind:value="item.ItemValue" />
           <input v-if="!isSelected[index]" type="checkbox" @change="getSingleSelect(item,index)" v-model="isSelected[index]" v-bind:value="item.ItemValue" /> {{item.ItemName}}
         </label>
       </div>
       <div v-else>
+        <div>
+        </div>
         <label>
-          <input type="checkbox" @change="getMultSelectValue" v-model="multSelctValue" v-bind:value="item.ItemValue" />{{item.ItemName}}</label>
+          <input type="checkbox" @change="getMultSelectValue" checked v-model="multSelctValue" v-bind:value="item.ItemValue" />{{item.ItemName}}
+        </label>
       </div>
     </div>
     <div v-else style="display: flex;">
