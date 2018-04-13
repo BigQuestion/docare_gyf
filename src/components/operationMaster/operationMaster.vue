@@ -675,25 +675,27 @@ export default {
       LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
       var _this = this;
 
-      for (var i = 0; i < 2; i++) {
-        this.$nextTick(function() {
-          LODOP.NewPageA();
-          _this.toChangePage(1);
-          LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
-          LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-        })
-        // var t = setTimeout(function() {
-        //   LODOP.NewPageA();
-        //   _this.toChangePage(1);
-        //   LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
-        //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-        //   LODOP.NewPageA();
-        // }, 1000);
-      }
-      var t1 = setTimeout(function() {
-        LODOP.PREVIEW();
+      // for (var i = 0; i < 2; i++) {
+      //   this.$nextTick(function() {
+      //     LODOP.NewPageA();
+      //     _this.toChangePage(1);
+      //     LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
+      //     LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+      //   })
+      LODOP.NewPageA();
+      _this.toChangePage(1);
+      var t = setTimeout(function() {
 
-      }, 3000);
+        LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
+        LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+        LODOP.NewPageA();
+        LODOP.PREVIEW();
+      }, 1000);
+      // }
+      // var t1 = setTimeout(function() {
+      //   LODOP.PREVIEW();
+
+      // }, 3000);
       // this.$nextTick(function() { // => '更新完成'
       //   LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
       //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
@@ -1976,6 +1978,9 @@ export default {
 
 
 
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -2062,6 +2067,9 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
 
 
 
