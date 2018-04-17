@@ -1,5 +1,20 @@
 <template>
     <div>
+        <div style="display:flex;justify-content:space-between;padding:10px 5px 10px 0px;">
+            <div class="dataOfDoc">
+                <span>手术间号：{{hasChooseRoom.name}}</span>
+                <span>主麻医师：{{hasChooseRoom.docoptions}}</span>
+                <span>副麻医师1：{{hasChooseRoom.docmzkUsers}}</span>
+                <span>副麻医师2：{{hasChooseRoom.docmzkUsers2}}</span>
+                <span>麻醉助手1：{{hasChooseRoom.assistant}}</span>
+                <span>麻醉助手2：{{hasChooseRoom.assistant2}}</span>
+                <span>洗手护士1：{{hasChooseRoom.docwash}}</span>
+                <span>洗手护士2：{{hasChooseRoom.docwash2}}</span>
+                <span>巡回护士1：{{hasChooseRoom.doctour}}</span>
+                <span>巡回护士2：{{hasChooseRoom.doctour2}}</span>
+            </div>
+            <button @click="submit">手术提交</button>
+        </div>
         <div class="tableOut">
             <div class="timechose">
                 <div style="height:75px;padding-left: 5px;">
@@ -10,8 +25,40 @@
                 <div class="itemChoose">
                     {{chooseData}}
                 </div>
-                <div class="itemChooseContent">
-
+                <div class="itemChooseContent" @click="noneDulClick()">
+                    <div v-if="chooseOneType=='list'">
+                        <div class="flex head" :style="{width:totalWidth+'px'}">
+                            <div v-for="(item,index) in tableConfig" class="cell resizeAble" :style="{width:item.width+'px'}" style="text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;box-sizing: border-box;">
+                                <div style="width:100%;overflow-x: hidden;white-space: nowrap">{{item.text}}</div>
+                                <div class="resizeIcon" :style="{left:item.width-2}" @mousedown="resizeStart($event,index,item)"></div>
+                            </div>
+                        </div>
+                        <div style="position:relative;">
+                            <div v-for="(item,index) in scheduleList" :style="{width:totalWidth+'px'}" class="flex rows" @contextmenu.prevent="arrange($event,item,index)" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
+                                <div v-for="cell in tableConfig" class="cell" :style="{width:cell.width+'px'}" style="box-sizing: border-box; ">
+                                    {{item[cell.value]}}
+                                </div>
+                            </div>
+                            <div @click="pushData()" v-if="showarrange" style="width:100px;height:25px;position:absolute;background-color:red;z-index:99;" :style="{top:clickTop+'px',left:clickLeft+'px'}">
+                                分配手术
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="chooseOneType=='docoptions'" v-for="item in options" @click="joinData('docoptions',item)" class="docList rows">
+                        {{item.userName}}
+                    </div>
+                    <div v-if="chooseOneType=='docmzkUsers'" v-for="item in MzkUsers" @click="joinData('docmzkUsers',item)" class="docList rows">
+                        {{item.userName}}
+                    </div>
+                    <div v-if="chooseOneType=='assistant'" v-for="item in assistant" @click="joinData('assistant',item)" class="docList rows">
+                        {{item.userName}}
+                    </div>
+                    <div v-if="chooseOneType=='docwash'" v-for="item in wash" @click="joinData('docwash',item)" class="docList rows">
+                        {{item.userName}}
+                    </div>
+                    <div v-if="chooseOneType=='doctour'" v-for="item in tour" @click="joinData('doctour',item)" class="docList rows">
+                        {{item.userName}}
+                    </div>
                 </div>
                 <div class="itemChooseBox">
                     <div v-if="item.dataLength !== undefined" class="itemBox" v-for="item in listChooseBody" @click="chooseOne(item)">
@@ -22,61 +69,68 @@
                     </div>
                 </div>
             </div>
-            <div style="width: 80%;overflow:auto;border:1px solid #999;">
-                <div class="tableBox" :style="{width:totalWidth+'px'}">
-                    <div class="flex head" :style="{width:totalWidth+'px'}">
-                        <div v-for="(item,index) in tableConfig" class="cell resizeAble" :style="{width:item.width+'px'}" style="text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;box-sizing: border-box;">
-                            <div style="width:100%;overflow-x: hidden;white-space: nowrap">{{item.text}}</div>
-                            <div class="resizeIcon" :style="{left:item.width-2}" @mousedown="resizeStart($event,index,item)"></div>
+            <div style="width: 80%;overflow:auto;background-color:#E7EBEC;">
+                <div style="width:auto;height:auto;">
+                    <div class="timeLine"></div>
+                    <div class="BoxOf" v-for="(item,index) in roomId">
+                        <div class="operationRoom" @click="chooseClassFun(item,index)" :class="{backgroundColor:item.chooseClass}">
+                            {{item.name}}
                         </div>
-                    </div>
-
-                    <div>
-                        <div v-for="(item,index) in scheduleList" :style="{width:totalWidth+'px'}" class="flex rows" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
-                            <div v-for="cell in tableConfig" class="cell" :style="{width:cell.width+'px'}" style="box-sizing: border-box; ">
-
-                                <div v-if="cell.type=='select'&&(item.state==0||item.state==1)" class="selectInThere">
-                                    <select class="selectBox noneTriangle" v-model="item[cell.value]" @change="nameDataType(item)">
-                                        <!-- <option v-if="cell.value == 'anesthesiaAssistant'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userId">
-                                                                                                                            {{ MzkUser.userName }}
-                                                                                                                         </option> -->
-                                        <!-- 副麻，洗手列表 -->
-                                        <option v-if="cell.value == 'firstAnesthesiaAssistantName'||cell.value == 'secondAnesthesiaAssistantName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
-                                            {{ MzkUser.userName }}
-                                        </option>
-                                        <option v-if="cell.value == 'firstOperationNurseName'||cell.value == 'secondOperationNurseName'" v-for="MzkUser in MzkUsers" v-bind:value="MzkUser.userName">
-                                            {{ MzkUser.userName }}
-                                        </option>
-                                        <!-- 巡回列表 -->
-                                        <option v-if="cell.value == 'firstSupplyNurseName'||cell.value == 'secondtSupplyNurseName'" v-for="option in options" v-bind:value="option.userName">
-                                            {{ option.userName }}
-                                        </option>
-                                    </select>
+                        <div style="width:auto;height:100%;display:flex;">
+                            <div v-if="cell.operatingRoomNo == item.name" v-for="cell in scheduleListRight">
+                                <div v-if="cell.state == 2||cell.state == 3||cell.state == 4" class="roomData">
+                                    <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
+                                        <span style="padding-right:10px;">09:30-11:01</span>
+                                        <span>{{cell.patientName}}</span>
+                                    </div>
+                                    <div style="color:#222;padding:2px 0;">
+                                        <span style="padding-right:10px;">{{cell.patientName}}</span>
+                                        <span style="padding-right:10px;">{{cell.patientId}}</span>
+                                        <span style="padding-right:10px;">{{cell.patientSex}}</span>
+                                        <span>{{cell.patienAge}}</span>
+                                    </div>
+                                    <div style="color:#222;padding:2px 0;font-weight:bold;">
+                                        {{cell.operationSchName}}
+                                    </div>
+                                    <div style="color:#222;padding:2px 0;width:100%;">
+                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.anesthesiaDoctorName}}</span>
+                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">副麻</span>
+                                    </div>
+                                    <div style="padding:2px 0;font-weight:bold;">
+                                        备注：
+                                        <span style="color:red;">{{cell.notesOnOperation}}</span>
+                                    </div>
                                 </div>
-                                <div class="selectInThere" v-else-if="cell.type=='inSelect'">
-                                    <select class="selectBox" @change="operateFun(item,index)" v-model="item[cell.value]">
-                                        <option v-for="option in OptInfo" v-bind:value="option.opt">
-                                            {{ option.opt }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="selectInThere" v-else>
-                                    <div style="overflow: hidden;white-space: nowrap;box-sizing: border-box;text-overflow:ellipsis; ">
-                                        {{item[cell.value]}}
+                                <div v-else style="border:1px solid #95DDB6;" class="roomData">
+                                    <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
+                                        <span style="padding-right:10px;">09:30-11:01</span>
+                                        <span>{{cell.patientName}}</span>
+                                    </div>
+                                    <div style="color:#222;padding:2px 0;">
+                                        <span style="padding-right:10px;">{{cell.patientName}}</span>
+                                        <span style="padding-right:10px;">{{cell.patientId}}</span>
+                                        <span style="padding-right:10px;">{{cell.patientSex}}</span>
+                                        <span>{{cell.patienAge}}</span>
+                                    </div>
+                                    <div style="color:#222;padding:2px 0;font-weight:bold;">
+                                        {{cell.operationSchName}}
+                                    </div>
+                                    <div style="color:#222;padding:2px 0;width:100%;">
+                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.anesthesiaDoctorName}}</span>
+                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">副麻</span>
+                                    </div>
+                                    <div style="padding:2px 0;font-weight:bold;">
+                                        备注：
+                                        <span style="color:red;">{{cell.notesOnOperation}}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
 
-        <div style="display:flex;flex-direction:row-reverse;padding-top:10px;">
-            <button @click="submit">提交</button>
-        </div>
         <div class="mask pCenter" v-if="mask">
             <div class="infoModal">
                 <div class="modalHead">
@@ -107,6 +161,9 @@ export default {
         return {
             options: [],
             MzkUsers: [],
+            assistant: [],
+            wash: [],
+            tour: [],
             handleItem: {},
             OptInfo: [{
                 opt: '开展'
@@ -117,27 +174,26 @@ export default {
             }],
             tableConfig: [
                 {
-                    text: "操作",
+                    text: "手术审核时间",
                     type: "inSelect",
-                    value: "selectInfo",
-                    width: 100
-                },
-                {
-                    text: '手术间号',
-                    value: 'operatingRoomNo',
+                    value: "sqrdatatime",
+                    width: 120
+                }, {
+                    text: '申请时间',
+                    value: 'scheduledDateTime',
+                    width: 60,
+                }, {
+                    text: '科室名称',
+                    value: 'deptName',
+                    width: 60,
+                }, {
+                    text: '床号',
+                    value: 'bedNo',
                     width: 60,
                 }, {
                     text: '台次',
                     value: 'sequence',
                     width: 60,
-                }, {
-                    text: '时间',
-                    value: 'scheduledDateTime',
-                    width: 150,
-                }, {
-                    text: '病人ID',
-                    value: 'patientId',
-                    width: 100,
                 }, {
                     text: '病人姓名',
                     value: 'patientName',
@@ -145,14 +201,6 @@ export default {
                 }, {
                     text: '年龄',
                     value: 'patienAge',
-                    width: 60,
-                }, {
-                    text: '住院号',
-                    value: 'inpNo',
-                    width: 100,
-                }, {
-                    text: '床号',
-                    value: 'bedNo',
                     width: 60,
                 }, {
                     text: '性别',
@@ -171,11 +219,11 @@ export default {
                     value: 'surgeonName',
                     width: 100,
                 }, {
-                    text: '助手1',
+                    text: '手术助手1',
                     value: 'firstAssistantName',
                     width: 100,
                 }, {
-                    text: '助手2',
+                    text: '手术助手1',
                     value: 'secondAssistantName',
                     width: 100,
                 }, {
@@ -183,62 +231,211 @@ export default {
                     value: 'anesthesiaMethod',
                     width: 200,
                 }, {
-                    text: '主麻',
-                    value: 'anesthesiaDoctorName',
-                    width: 100,
-                }, {
-                    text: '副麻1',
-                    value: 'firstAnesthesiaAssistantName',
-                    type: 'select',
-                    width: 100,
-                }, {
-                    text: '副麻2',
-                    value: 'secondAnesthesiaAssistantName',
-                    type: 'select',
-                    width: 100,
-                }, {
-                    text: '洗手1',
-                    value: 'firstOperationNurseName',
-                    type: 'select',
-                    width: 100,
-                }, {
-                    text: '洗手2',
-                    value: 'secondOperationNurseName',
-                    type: 'select',
-                    width: 100,
-                }, {
-                    text: '巡回1',
-                    value: 'firstSupplyNurseName',
-                    type: 'select',
-                    width: 100,
-                }, {
-                    text: '巡回2',
-                    value: 'secondtSupplyNurseName',
-                    type: 'select',
-                    width: 100,
-                }, {
-                    text: '隔离',
-                    value: 'isolationIndicator',
-                    width: 100,
-                }, {
                     text: '备注',
                     value: 'notesOnOperation',
                     width: 100,
                 }
             ],
+            getLength: '0',
             listChooseBody: [
-                { data: '手术', dataLength: 0 },
-                { data: '主麻医生' },
-                { data: '副麻医生' },
-                { data: '麻醉护手' },
-                { data: '洗手护士' },
-                { data: '巡回护士' },
+                { data: '手术', dataLength: 0, type: 'list' },
+                { data: '主麻医生', type: 'docoptions' },
+                { data: '副麻医生', type: 'docmzkUsers' },
+                { data: '麻醉助手', type: 'assistant' },
+                { data: '洗手护士', type: 'docwash' },
+                { data: '巡回护士', type: 'doctour' },
             ],
+            roomId: [
+                {
+                    name: '01',
+                    chooseClass: true,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '02',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '03',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '04',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '05',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '06',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '07',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '08',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '09',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '10',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '11',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '12',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '13',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+                {
+                    name: '14',
+                    chooseClass: false,
+                    docoptions: '',
+                    docmzkUsers: '',
+                    docmzkUsers2: '',
+                    assistant: '',
+                    assistant2: '',
+                    docwash: '',
+                    docwash2: '',
+                    doctour: '',
+                    doctour2: '',
+                },
+            ],
+            hasChooseRoom: {},
+            hasChooseIndex: 0,
             chooseData: '手术(0)',
-            msg: '欢迎登陆！',
+            chooseOneType: 'list',
             dateValue: '2014-07-08',
-            dataInData: '',
             scheduleList: [],
+            scheduleListRight: [],
             mask: false,
             area: '',
             startX: '',
@@ -247,120 +444,39 @@ export default {
             minWidth: 20,
             maxWidth: '',
             totalWidth: 10,
+            showarrange: false,
+            clickTop: '',
+            clickLeft: '',
+            pushDataBody: '',
+            spliceIndex: '',
+            newUpdata: [],
         }
     },
     methods: {
-        operateFun(item, index) {
-            debugger
-            let cancleData;
-            console.log(item.selectInfo)
-            if (item.selectInfo == '取消' && item.state == 2) {
-                if (confirm("你确定要取消手术吗？")) {
-                    item.selectInfo = "开展";
-                    this.$set(this.scheduleList, index, item);
-                    cancleData = {
-                        patientId: item.patientId,
-                        scheduleId: item.scheduleId,
-                        visitId: item.visitId,
-                    }
-                    this.api.cancleMedOperationSchedule(cancleData)
-                        .then(
-                        res => {
-                            this.getList(this.dateValue);
-                        })
-                    // alert("手术已取消");
-                }
-                else {
-                    item.selectInfo = "开展";
-                    this.$set(this.scheduleList, index, item);
-                }
-            } else if (item.selectInfo == '开展' && (item.state == 500 || item.state == -1)) {
-                if (confirm("你确定要恢复手术吗？")) {
-                    item.selectInfo = "取消";
-                    this.$set(this.scheduleList, index, item);
-                    cancleData = {
-                        patientId: item.patientId,
-                        scheduleId: item.scheduleId,
-                        visitId: item.visitId,
-                    }
-                    this.api.addCancleMedOperationSchedule(cancleData)
-                        .then(
-                        res => {
-                            this.getList(this.dateValue);
-                        })
-                    // alert("手术已恢复");
-                } else {
-                    item.selectInfo = "取消";
-                    this.$set(this.scheduleList, index, item);
-                }
-            } else if (item.selectInfo == '作废' && (item.state == 0 || item.state == 1)) {
-                if (confirm("你确定要作废该手术吗？")) {
-                    item.selectInfo = "开展";
-                    this.$set(this.scheduleList, index, item);
-                    cancleData = {
-                        patientId: item.patientId,
-                        scheduleId: item.scheduleId,
-                        visitId: item.visitId,
-                        state: -1,
-                    }
-                    this.api.editSchedule(cancleData)
-                        .then(
-                        res => {
-                            this.getList(this.dateValue);
-                        })
-                    // alert("手术已取消");
-                } else {
-                    item.selectInfo = "开展";
-                    this.$set(this.scheduleList, index, item);
-                }
-            } else {
-                debugger
-                alert("你不能这样操作此手术！");
-                if (item.selectInfo == '开展' && (item.state == 0 || item.state == 1)) {
-                    item.selectInfo = "取消";
-                    this.$set(this.scheduleList, index, item);
-                } else if (item.selectInfo == '作废' && (item.state == 500 || item.state == -1)) {
-                    item.selectInfo = "取消";
-                    this.$set(this.scheduleList, index, item);
-                } else {
-                    item.selectInfo = "开展";
-                    this.$set(this.scheduleList, index, item);
-                }
-
-            }
-
-        },
         nameDataType(item) {
             console.log(item)
         },
         submit() {
             let params = [];
-            let nameDoc = [];
             let dataInName;
-            for (var i = 0; i < this.scheduleList.length; i++) {
-                console.log(this.scheduleList[i].state);
-                if (this.scheduleList[i].state == 1 || this.scheduleList[i].state == 0) {
-                    nameDoc.push({
-                        firstAnesthesiaAssistantName: this.scheduleList[i].firstAnesthesiaAssistantName,
-                        secondAnesthesiaAssistantName: this.scheduleList[i].secondAnesthesiaAssistantName,
-                        firstOperationNurseName: this.scheduleList[i].firstOperationNurseName,
-                        secondOperationNurseName: this.scheduleList[i].secondOperationNurseName,
-                        firstSupplyNurseName: this.scheduleList[i].firstSupplyNurseName,
-                        secondtSupplyNurseName: this.scheduleList[i].secondtSupplyNurseName,
-                    })
-                }
-            }
 
-            console.log(nameDoc)
-            console.log(nameDoc.length)
             // debugger
-            for (var j = 0; j < nameDoc.length; j++) {
-                if (nameDoc[j].firstAnesthesiaAssistantName != null && nameDoc[j].firstOperationNurseName != null && nameDoc[j].firstSupplyNurseName != null) {
+            for (var j = 0; j < this.newUpdata.length; j++) {
+                if (this.newUpdata[j].anesthesiaDoctorName != '') {
                     dataInName = true;
                     params.push({
-                        patientId: this.scheduleList[j].patientId,
-                        scheduleId: this.scheduleList[j].scheduleId,
-                        visitId: this.scheduleList[j].visitId
+                        patientId: this.newUpdata[j].patientId,
+                        scheduleId: this.newUpdata[j].scheduleId,
+                        visitId: this.newUpdata[j].visitId,
+                        anesthesiaDoctor: this.newUpdata[j].anesthesiaDoctorName,
+                        anesthesiaAssistant: this.newUpdata[j].firstAnesthesiaAssistantName,
+                        secondAnesthesiaAssistant: this.newUpdata[j].secondAnesthesiaAssistantName,
+                        firstOperationNurse: this.newUpdata[j].firstOperationNurseName,
+                        secondOperationNurse: this.newUpdata[j].secondOperationNurseName,
+                        firstSupplyNurse: this.newUpdata[j].firstSupplyNurseName,
+                        secondSupplyNurse: this.newUpdata[j].secondtSupplyNurseName,
+                        operatingRoomNo: this.newUpdata[j].operatingRoomNo,
+                        sequence:this.newUpdata[j].sequence,
                     })
                 } else {
 
@@ -373,9 +489,12 @@ export default {
                     res => {
                         // debugger
                         dataInName = false;
-                        this.getList(this.dateValue);
+                        this.getList(this.dateValue)
+                        this.newUpdata = [];
+
                     })
                 alert('提交成功!')
+
             } else {
                 alert('必要的选项不能为空！')
             }
@@ -410,13 +529,76 @@ export default {
         },
         chooseOne(item) {
             console.log(item)
+            this.chooseOneType = item.type;
+            console.log(this.chooseOneType)
             if (item.dataLength !== undefined) {
                 this.chooseData = item.data + '(' + item.dataLength + ')'
             } else {
                 this.chooseData = item.data
             }
         },
+        chooseClassFun(item, index) {
+            console.log(this.roomId.length)
+            for (var i = 0; i < this.roomId.length; i++) {
+                this.$set(this.roomId[i], 'chooseClass', false)
+            }
+            item.chooseClass = true;
+            this.hasChooseRoom = item;
+            console.log(this.hasChooseRoom)
+            this.hasChooseIndex = index;
+            console.log(index)
+        },
+        joinData(type, item) {
+            console.log(item)
+            if (type == 'docoptions') {
+                this.roomId[this.hasChooseIndex].docoptions = item.userId;
+                this.hasChooseRoom.docoptions = item.userId;
+                for (var a = 0; a < this.newUpdata.length; a++) {
+                    this.newUpdata[a].anesthesiaDoctorName = item.userId;
+                }
+            } else if (type == 'docmzkUsers') {
+                this.roomId[this.hasChooseIndex].docmzkUsers = item.userId;
+                this.hasChooseRoom.docmzkUsers = item.userId;
+                for (var b = 0; b < this.newUpdata.length; b++) {
+                    this.newUpdata[b].firstAnesthesiaAssistantName = item.userId;
+                }
+            } else if (type == 'assistant') {
+                this.roomId[this.hasChooseIndex].assistant = item.userId;
+                this.hasChooseRoom.assistant = item.userId;
+                for (var c = 0; c < this.newUpdata.length; c++) {
+                    this.newUpdata[c].firstAssistantName = item.userId;
+                }
+            } else if (type == 'docwash') {
+                this.roomId[this.hasChooseIndex].docwash = item.userId;
+                this.hasChooseRoom.docwash = item.userId;
+                for (var d = 0; d < this.newUpdata.length; d++) {
+                    this.newUpdata[d].firstOperationNurseName = item.userId;
+                }
+            } else if (type == 'doctour') {
+                this.roomId[this.hasChooseIndex].doctour = item.userId;
+                this.hasChooseRoom.doctour = item.userId;
+                for (var e = 0; e < this.newUpdata.length; e++) {
+                    this.newUpdata[e].firstSupplyNurseName = item.userId;
+                }
+            }
+            // else if (type == 'docmzkUsers2') {
+            //     this.roomId[this.hasChooseIndex].docmzkUsers2 = item.userName;
+            //     this.hasChooseRoom.docmzkUsers2 = item.userName;
+            // } else if (type == 'assistant2') {
+            //     this.roomId[this.hasChooseIndex].assistant2 = item.userName;
+            //     this.hasChooseRoom.assistant2 = item.userName;
+            // } else if (type == 'docwash2') {
+            //     this.roomId[this.hasChooseIndex].docwash2 = item.userName;
+            //     this.hasChooseRoom.docwash2 = item.userName;
+            // } else if (type == 'doctour2') {
+            //     this.roomId[this.hasChooseIndex].doctour2 = item.userName;
+            //     this.hasChooseRoom.doctour2 = item.userName;
+            // }
+            console.log(this.hasChooseRoom)
+        },
         getList(date) {
+            this.scheduleList = [];
+            this.scheduleListRight = [];
             var changeData = date.replace(/-/g, '/')
             let params = {
                 "dateTime": changeData, //"2014/07/08"查询日期
@@ -433,28 +615,59 @@ export default {
                         } else {
                             res.list[i].selectInfo = "开展";
                         }
-
                     }
-                    this.scheduleList = res.list;
-                    console.log(res);
+                    for (var j = 0; j < res.list.length; j++) {
+                        if (res.list[j].state == 0 || res.list[j].state == 1) {
+                            this.scheduleList.push(res.list[j])
+                            console.log(res.list[j])
+                        }
+                    }
+                    console.log(this.scheduleList.length)
+                    this.listChooseBody[0].dataLength = this.scheduleList.length;
+                    this.chooseData = '手术(' + this.scheduleList.length + ')';
+                    for (var a = 0; a < res.list.length; a++) {
+                        if (res.list[a].state == 2 || res.list[a].state == 3 || res.list[a].state == 4) {
+                            this.scheduleListRight.push(res.list[a])
+                        }
+                    }
+                    console.log(this.scheduleList)
+                    console.log(this.scheduleListRight)
+                    // this.scheduleList = res.list;
+                    console.log(res.list);
                 });
         },
         getSupplyNurseList() {
-            this.api.getSupplyNurseList()
+            this.getList(this.dateValue);
+            this.api.selectUserListByType({ userType: '主麻医师' })
                 .then(res => {
                     // debugger
-                    console.log(res);
-                    this.options = res.list;
-                    this.getList(this.dateValue);
+                    console.log(res)
+                    this.options = res;
+                    console.log(this.options)
                 })
-        },
-        getMzkUsersList() {
-            this.api.getMzkUsers()
+            this.api.selectUserListByType({ userType: '副麻医师' })
                 .then(res => {
                     // debugger
                     console.log(res);
-                    this.MzkUsers = res.list;
-                    this.getList(this.dateValue);
+                    this.MzkUsers = res;
+                })
+            this.api.selectUserListByType({ userType: '麻醉助手' })
+                .then(res => {
+                    // debugger
+                    console.log(res);
+                    this.assistant = res;
+                })
+            this.api.selectUserListByType({ userType: '洗手护士' })
+                .then(res => {
+                    // debugger
+                    console.log(res);
+                    this.wash = res;
+                })
+            this.api.selectUserListByType({ userType: '巡回护士' })
+                .then(res => {
+                    // debugger
+                    console.log(res);
+                    this.tour = res;
                 })
         },
         resizeStart(e, index, col) {
@@ -472,7 +685,6 @@ export default {
         },
         resizeMove(e) {
             let dX = e.clientX - this.startX;
-
             if (this.maxWidth >= this.handleCol.width + dX && this.minWidth <= this.handleCol.width + dX) {
                 this.startX = e.clientX;
                 this.handleCol.width += dX;
@@ -490,15 +702,53 @@ export default {
                 totalWidth += this.tableConfig[i].width;
             }
             return totalWidth;
+        },
+        noneDulClick() {
+            this.showarrange = false;
+        },
+        arrange(event, item, index) {
+            console.log(event)
+            console.log(item)
+            this.showarrange = true;
+            this.clickTop = event.layerY;
+            this.clickLeft = event.layerX;
+            this.pushDataBody = item;
+            this.spliceIndex = index;
+        },
+        pushData() {
+            let roomNum = [];
+            var dataR = false;
+            var dataNum = 0;
+            console.log(this.pushDataBody)
+            this.pushDataBody.operatingRoomNo = this.hasChooseRoom.name;
+            this.pushDataBody.anesthesiaDoctorName = this.hasChooseRoom.docoptions;
+            for(var a = 0;a<this.scheduleListRight.length;a++){
+                if(this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name){
+                    dataR = true;
+                    roomNum.push(this.scheduleListRight[a].sequence)
+                }
+            }
+            if(dataR == true){
+                this.pushDataBody.sequence=Math.max.apply(Math,roomNum)+1
+            }else{
+                this.pushDataBody.sequence=dataNum+1
+            }
+            console.log(this.pushDataBody.sequence)
+            this.scheduleList.splice(this.spliceIndex, 1);
+            this.scheduleListRight.push(this.pushDataBody)
+            this.newUpdata.push(this.pushDataBody)
+            console.log(this.newUpdata)
+
         }
     },
     mounted() {
         this.getSupplyNurseList();
-        this.getMzkUsersList();
         this.area = window;
         let totalWidth = this.plusAll();
         console.log(totalWidth);
         this.$set(this.$data, 'totalWidth', totalWidth)
+        this.hasChooseRoom = this.roomId[0];
+        console.log(this.hasChooseRoom)
     },
     components: {
         Datepicker: Datepicker,
@@ -508,10 +758,17 @@ export default {
 }
 </script>
 <style scoped>
+.dataOfDoc {
+    padding-left: 5px;
+}
+
+.dataOfDoc span {
+    padding: 0 5px;
+}
+
 .flex {
     height: 25px;
     line-height: 25px;
-    margin: 5px 10px;
 }
 
 .flex:last-child {
@@ -641,6 +898,14 @@ export default {
     cursor: pointer;
 }
 
+.docList {
+    background-color: #ECECEC;
+    border: 1px dashed #999;
+    font-size: 14px;
+    box-sizing: border-box;
+    padding-left: 5px;
+}
+
 .pCenter {
     display: flex;
     align-items: center;
@@ -670,16 +935,19 @@ export default {
 
 .tableOut {
     width: 100%;
-    height: 697px;
+    height: 677px;
     display: flex;
     justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0 5px;
 }
 
 .timechose {
     width: 20%;
+    min-width: 322px;
     border: 1px solid #999;
     box-sizing: border-box;
-    margin-right: 5px;
+    margin-right: 10px;
     background-color: #A3BDD9;
     padding-top: 5px;
 }
@@ -694,7 +962,7 @@ export default {
 
 .itemChooseContent {
     width: 100%;
-    height: 350px;
+    height: 330px;
     background-color: #fff;
     overflow: auto;
 }
@@ -753,5 +1021,46 @@ export default {
 
 .resizeIcon:hover {
     cursor: w-resize;
+}
+
+.timeLine {
+    width: 100%;
+    height: 50px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.BoxOf {
+    width: auto;
+    height: 113px;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    display: flex;
+}
+
+.operationRoom {
+    min-width: 60px;
+    height: 100%;
+    background-color: #fff;
+    text-align: center;
+    line-height: 113px;
+    cursor: pointer;
+}
+
+.backgroundColor {
+    background: url('../../assets/bottomBack2.jpg') no-repeat;
+    background-size: cover;
+}
+
+.roomData {
+    /* border: 1px solid #95DDB6; */
+    border: 1px solid #F5AF93;
+    font-size: 12px;
+    margin: 5px 10px;
+    min-width: 250px;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 0 5px;
 }
 </style>

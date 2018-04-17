@@ -88,6 +88,14 @@ export default {
     return fetch('medicalsystem/rest/medHisUsers/getMzkUsers', params)
   },
   /**
+   * 获取麻醉医生护士角色
+   * 
+   */
+  selectUserListByType(params, config) {
+    return fetch('medicalsystem/rest/medOperationScheduleCommCon/selectUserListByType', params)
+  },
+
+  /**
    * 提交安排手术排班
    * 
    */
