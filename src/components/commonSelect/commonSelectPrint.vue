@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative;">
+  <div style="position: relative;font-size: 10.5pt;font-family: SimSun;">
     <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt solid'+conInfo.lineColor}">
       {{infoData[attrName]}}
     </div>
@@ -60,7 +60,7 @@ export default {
   },
   props: ['conInfo', 'attrName', 'data'],
   mounted() {
-    
+
   },
   created() {
     // 点击其他不在的区域触发事件
@@ -99,4 +99,5 @@ export default {
   border-bottom: 1px solid #222;
   color: red !important;
 }
+
 </style>

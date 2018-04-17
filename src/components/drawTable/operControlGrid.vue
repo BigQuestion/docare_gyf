@@ -1,11 +1,11 @@
 <template>
   <div style="position: relative;margin:2px;" @contextmenu="showMenu">
     <div>
-      <svg :width="svgWidth" :height="svgHeight" id="operGrid" ref="area">
+      <svg :width="svgWidth" :height="svgHeight" id="opercontrolgridprint" ref="area">
         <g v-for="item in lineArray">
           <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
         </g>
-        <g v-for="item in lineArray">
+        <g v-for="(item,index) in lineArray" v-if="index < rows">
           <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
         </g>
         <!--  <g v-for="(item,index) in data">
@@ -15,11 +15,11 @@
           <path :d="pathData" stroke-width="1" fill="none" stroke="blue" ></path>
         </g> -->
         <g v-for="(item,index1) in dataPathArray" style="z-index: 22">
-          <path :d="item.path" stroke-width="1" fill="none" stroke="blue"></path>
+          <!-- <path :d="item.path" stroke-width="1" fill="none" stroke="blue"></path>-->
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <circle class="opercontrol" v-for="(cir,index2) in item.circleData" v-if="item.flag==0" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
           <circle class="opercontrol" v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
-          <!-- <polygon points="1,4 8,4 4,10" style="fill:lime;"></polygon>
- -->
+          <!-- <polygon points="1,4 8,4 4,10" style="fill:lime;"></polygon>-->
         </g>
       </svg>
       <div v-if="tipView">
@@ -50,7 +50,7 @@
       </div>
     </div>
     <div v-if="showStyleView" style="background-color: #e6e6e6;position: absolute;top: 30%;" :style="{ top:rightViewY+'px',left:rightViewX+'px'}">
-      <div style="padding: 10px;">
+      <div style="padding: 10px;" @click="tipShowPersonStyle">
         个性化体征显示
       </div>
     </div>
@@ -60,7 +60,7 @@
 import * as d3 from 'd3';
 import Bus from '@/bus.js';
 export default {
-  name: 'opercontrolgrid',
+  name: 'opercontrolgridprint',
   data() {
     return {
       showStyleView: false,
@@ -101,7 +101,7 @@ export default {
       parameter.preventDefault()
       this.rightViewX = parameter.offsetX;
       this.rightViewY = parameter.offsetY;
-      //this.showStyleView = true;
+      this.showStyleView = true;
 
     },
     getLineXy() {
@@ -277,7 +277,12 @@ export default {
             }
             for (var i = 0; i < newArray.length; i++) {
               for (var j = 0; j < newArray[i].length; j++) {
-                let min = this.getMinuteDif(this.config.userInfo.inDateTime, newArray[i][j].time);
+                let min = '';
+                if (new Date(newArray[i][j].time) > this.config.maxTime) {
+                  min = this.getMinuteDif(this.config.initTime, this.config.maxTime) + 1;
+                } else {
+                  min = this.getMinuteDif(this.config.initTime, newArray[i][j].time);
+                }
                 let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
                 let y = this.svgHeight - Math.round(newArray[i][j].value / 10 * (this.svgHeight / this.rows))
                 newArray[i][j].x = x;
@@ -367,7 +372,12 @@ export default {
       }
       for (var i = 0; i < newArray.length; i++) {
         for (var j = 0; j < newArray[i].length; j++) {
-          let min = this.getMinuteDif(this.config.initTime, newArray[i][j].time);
+          let min = '';
+          if (new Date(newArray[i][j].time) > this.config.maxTime) {
+            min = this.getMinuteDif(this.config.initTime, this.config.maxTime) + 1;
+          } else {
+            min = this.getMinuteDif(this.config.initTime, newArray[i][j].time);
+          }
           let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
           let y = this.svgHeight - Math.round(newArray[i][j].value / 10 * (this.svgHeight / this.rows))
           newArray[i][j].x = x;
@@ -376,6 +386,11 @@ export default {
       }
       this.pathArray = newArray;
       this.calculatePath();
+    },
+    //显示个性化体征
+    tipShowPersonStyle() {
+      this.showStyleView = false;
+      Bus.$emit('showPersonStyle', 1);
     }
   },
   mounted() {

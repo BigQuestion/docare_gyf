@@ -2,17 +2,15 @@
   <div style="position: relative;margin:2px;">
     <!-- <div style="height: 2px;width: 700px;background-color: red;margin-bottom: 20px;"></div> -->
     <div v-if="!page">
-      <div style="max-height: 20px;padding: 2px 0px;">
-        <div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 28px;margin-left: -10px;font-size: 12px;display: inline-block;" :title="item">{{item}}</div>
-        <div v-else style="width: 12px;display: inline-block;"></div>
+      <div style="max-height: 15pt;padding: 1.5pt 0pt;" ref="timelist">
+        <div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 20pt;margin-left: -7pt;font-size: 9pt;display: inline-block;" :title="item">{{item}}</div>
+        <div v-else style="width: 9pt;display: inline-block;"></div>
       </div>
       <div>
-        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 14px;line-height: 14px;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;"> {{item.ITEM_NAME}}
+        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 10pt;line-height: 14*0.75pt;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 9pt;position: absolute;left: -165px;"> {{item.ITEM_NAME}}
         </div>
       </div>
       <div id="tableGrid" style="position: relative;">
-        <!-- <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
-        </svg> -->
         <svg :width="svgWidth" :height="svgHeight" id="tableSvgPrint">
           <g v-for="item in lineArray">
             <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
@@ -21,26 +19,13 @@
             <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
         </svg>
-        <div style="position: absolute;top: 0px; left: 100px;background-color: white;">
-          <div style="height: 8px;">
-            <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
-            ivg
-          </span>
-          </div>
-          <div style="height: 8px;">
-            <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
-            ivg
-          </span>
-          </div>
-        </div>
-        <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
-        </div>
       </div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
 import * as d3 from 'd3';
+import Bus from '@/bus.js';
 export default {
   data() {
     return {
@@ -87,58 +72,6 @@ export default {
       }
       this.lineArray = array;
     },
-    init() {
-      var w = this.svgWidth,
-        h = this.svgHeight,
-        p = this.svgPadding, //内边距  
-        x = d3.scaleLinear().domain([0, 1]).range([0, w - p]), //(2) 定义x和y比例尺  
-        y = d3.scaleLinear().domain([0, 1]).range([0, h - p]);
-      this.wd = w;
-      this.ht = h;
-
-      //(3) 绘制SVG  
-      var svg = d3.select("#tableSvgPrint")
-      //(4) 给SVG添加分组，并设置样式类，样式见<style>标签中的设置  
-      // console.log(x(0.51))
-      var grid = svg.selectAll(".grid")
-        .data(x.ticks(this.columns))
-        .enter()
-        .append("g")
-        .attr("class", "grid");
-      //(5) 添加线条，设置起始坐标(x1,y1)和结束坐标(x2,y2)的值即可  
-      //竖线  
-      grid.append("line")
-        .attr("x1", x)
-        .attr("x2", x)
-        .attr("y1", 0)
-        .attr("y2", h - p);
-
-      //横线  
-      grid.data(y.ticks(this.rows))
-        .append("line")
-        .attr("y1", y)
-        .attr("y2", y)
-        .attr("x1", 0)
-        .attr("x2", w - p);
-
-      const line = d3.line()
-        .x(
-          (d) => {
-            return d.x
-          }
-        )
-        .y(
-          (d) => {
-            return d.y
-          }
-        );
-
-      //     svg.append("path")
-      // .attr('stroke-width', 1)
-      // .attr("fill","none")
-      // .attr("stroke","red")
-      // .attr('d', line(this.data))
-    },
     //对时间进行计算操作
     timeControl(startTime) {
       var m = this.tbMin; //加几分钟
@@ -149,6 +82,11 @@ export default {
         timeArray.push(new Date(timeDate.getTime() + 1000 * 60 * m * i).Format("hh:mm"))
       }
       this.xTimeArray = timeArray;
+
+
+      this.$nextTick(function() {
+        this.xTimeArray = timeArray; // => '更新完成'
+      })
     },
     //时间初始化显示
     xTimeInit() {
@@ -158,8 +96,11 @@ export default {
       } else {
         this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
       }
+      var svg = d3.selectAll(".testprint")
+      // svg.remove();
       this.getLineXy();
       this.selectMedAnesthesiaEventList();
+
 
     },
     //加载病人麻醉事件里面麻醉用药数据
@@ -185,6 +126,8 @@ export default {
       this.api.selectMedAnesthesiaEventList(params)
         .then(res => {
           var list = res.list;
+          this.dataOperChange(list);
+          return false;
           for (var i = 0; i < list.length; i++) {
             this.maxTime = list[i].MAX_TIME;
             if (list[i].START_TIME) {
@@ -239,17 +182,17 @@ export default {
 
     },
     createLine(x1, x2, y1, y2, obj) {
-
       var svg = d3.select("#tableSvgPrint");
       var _this = this;
       var t;
-      obj.nowTime = _this.getTime();
+      obj.nowTime = '';
       var gWidth = this.svgWidth / this.columns;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
         svg.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
+          .attr("class", "testprint")
           .attr("y1", y1 - 4)
           .attr("y2", y2 + 4)
           .attr("x1", x1)
@@ -259,6 +202,8 @@ export default {
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
+          .attr("class", "testprint")
+        // .on("mouseenter", function() { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.lineObj = obj; // }) // .on("mouseleave", function() { // //t = setTimeout(function (){ // _this.tipView = false; // //}, 1000); // }) // .on("mousemove", function(ev) { // //_this.lineObj.nowTime = new Date(); // _this.$set(_this.lineObj, "nowTime", _this.getTime()); // var ev = ev || event; // var offX = ev.offsetX; //横坐标值 // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.nowTime = time2; // _this.lineObj = obj; // })
 
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
@@ -266,6 +211,7 @@ export default {
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
+          .attr("class", "testprint")
           .attr("y1", y1 - 4)
           .attr("y2", y2 + 4)
           .attr("x1", x1)
@@ -274,6 +220,7 @@ export default {
           .attr("stroke", "blue")
           .attr("fill", "none")
           .attr("stroke-width", 1)
+          .attr("class", "testprint")
           .attr("y1", y1)
           .attr("y2", y2)
           .attr("x1", x1)
@@ -282,6 +229,7 @@ export default {
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
+          .attr("class", "testprint")
           .attr("y1", y1 - 4)
           .attr("y2", y2 + 4)
           .attr("x1", x2)
@@ -338,14 +286,142 @@ export default {
       var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
       item.obj.nowTime = time2;
       this.lineObj = item.obj;
+    },
+    //翻页
+    pageChange() {
+      var svg = d3.selectAll(".testprint")
+      svg.remove();
+      this.xTimeArray = [];
+
+      if (this.config.pageOper == 0) {
+        this.config.pageNum = 1;
+        this.timeControl(this.config.userInfo.inDateTime);
+        this.selectMedAnesthesiaEventList();
+      }
+      if (this.config.pageOper == -1) {
+        this.timeControl(this.config.initTime)
+        let m = this.config.initTime.getTime() - 250 * 60 * 1000;
+        // this.timeControl(new Date(m));
+        var list = [];
+        list = this.percentPageData;
+
+        for (var i = 0; i < list.length; i++) {
+          if (this.config.pagePercentNum != 1 && list[i].MAX_TIME) {
+            list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+          }
+        }
+        this.dataOperChange(list);
+      }
+      if (this.config.pageOper == 1) {
+        let arrList = this.dataArray;
+        this.percentPageData = arrList;
+        var arrayList = [];
+        var list = this.dataArray;
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].MAX_TIME) {
+            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+              if (new Date(list[i].MAX_TIME) > this.config.initTime) {
+                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {}
+            } else {
+              if (new Date(list[i].ENDDATE) > this.config.initTime) {
+                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {
+
+              }
+            }
+          }
+        }
+        this.timeControl(this.config.initTime)
+        this.dataOperChange(arrayList);
+      }
+    },
+    //处理数据进行划线
+    dataOperChange(list) {
+      var w = this.svgWidth,
+        lMin = this.tbMin,
+        h = this.svgHeight,
+        m = 0;
+      this.xArray = [];
+      this.dataArray = [];
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].START_TIME) {
+          if (i == this.rows)
+            break;
+          else {
+
+            //开始时间间隔
+            let sMin = ''
+            //结束时间间隔
+            let eMin = ''
+            if (this.config.pagePercentNum == 1) {
+              sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            } else {
+              sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            }
+            //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
+            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+              if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
+                eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
+              } else {
+                eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
+              }
+
+
+            } else {
+
+              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
+                eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
+              } else {
+                eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
+              }
+            }
+            let x1 = Math.round(sMin / lMin * (w / this.columns))
+            let x2 = Math.round(eMin / lMin * (w / this.columns))
+            let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+            let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+            if (list[i].DURATIVE_INDICATOR == 1) {
+              list[i].vStartTime = '';
+              this.createLine(x1, x2, y1, y2, list[i]);
+              this.xArray.push({
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                w: x2 - x1,
+                obj: list[i]
+              })
+
+              // this.$set(this.dataArray, i, list[i]);
+              this.dataArray.push(list[i]);
+              m++;
+            }
+          }
+        }
+      }
+      for (var k = 0; k < this.rows - m; k++) {
+        this.dataArray.push(m)
+      }
+
     }
 
   },
   mounted() {
     this.area = this.$refs.area;
-
     this.xTimeInit();
-
+  },
+  beforecreate() {
+    // Bus.$on('print', this.xTimeInit)
+  },
+  created() {
+    Bus.$on('test', this.pageChange)
+    // Bus.$on('print', this.xTimeInit)
+  },
+  beforeDestroy() {
+    Bus.$off('test', this.pageChange);
+    // Bus.$off('print', this.xTimeInit);
   },
   components: {
 

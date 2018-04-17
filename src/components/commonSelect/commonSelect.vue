@@ -140,8 +140,6 @@ export default {
     strToDate() {
       if (this.infoData.value) {
         var time = new Date(this.conInfo.value).Format(this.conInfo.strFormatMode);
-        debugger
-        console.log(time)
         return time;
       }
     }
@@ -181,4 +179,5 @@ export default {
   background-color: #1E90FF;
   color: #fff;
 }
+
 </style>
