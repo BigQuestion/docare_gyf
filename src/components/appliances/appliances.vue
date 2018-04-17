@@ -5,18 +5,18 @@
     </div> -->
     <div>
       <table style="border-collapse:collapse;width: 100%;" border="1" cellspacing="0" cellpadding="0">
-        <tr>
+        <thead>
           <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
-        </tr>
-        <tr v-for="(item,index) in rows" style="height: 25px;">
-          <td v-for="(de,index2) in titileList">
-            <!-- <input type="text" name="" style="width: 100%;height: 25px;border:none;"> -->
-            <div v-for="item1 in listTemp">
-              <!-- <div v-if="item1.x==index&&item1.y==index2">{{item1.value}}</div> -->
-              <input v-if="item1.x==index&&item1.y==index2" type="text" v-model="item1.value" style="width: 100%;height: 25px;border:none;">
-            </div>
-          </td>
-        </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item,index) in rows" style="height: 25px;">
+            <td v-for="(de,index2) in titileList">
+              <div v-for="item1 in listTemp">
+                <input v-if="item1.x==index2&&item1.y==index" type="text" v-model="item1.value" style="width: 100%;height: 25px;border:none;">
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -45,9 +45,24 @@ export default {
         {
           x: 0,
           y: 1,
-          value: 1213
+          value: '巾  钳'
+        },
+        {
+          x: 0,
+          y: 2,
+          value: '持针钳'
+        },
+        {
+          x: 8,
+          y: 2,
+          value: '持针钳'
         }
       ],
+      dataList: [{
+        type: 1,
+        value: "xx",
+        id: 2
+      }]
     }
   },
   props: ['object', 'isPage'],
