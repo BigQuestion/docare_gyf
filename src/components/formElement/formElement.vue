@@ -64,6 +64,9 @@
     <div v-if="value.type=='div'">
       <div style="box-sizing:border-box;" :style="{width:value.width+'px',height:value.height+'px',border:value.borderStyle}"></div>
     </div>
+    <div v-if="value.type=='qixieList'">
+      <appliances :page="isPage.isPage" :object="value"></appliances>
+    </div>
   </div>
 </template>
 <script>
@@ -75,6 +78,7 @@ import dosageGrid from '@/components/drawTable/dosageGrid.vue';
 import operControlGrid from '@/components/drawTable/operControlGrid.vue';
 import signGrid from '@/components/drawTable/signGrid.vue';
 import dataOfGrid from '@/components/drawTable/dataOfGrid.vue';
+import appliances from '@/components/appliances/appliances.vue';
 export default {
   data() {
     return {
@@ -98,6 +102,7 @@ export default {
     operControlGrid,
     signGrid,
     dataOfGrid,
+    appliances,
   },
   mounted() {
     // console.log(this.objectItem)
