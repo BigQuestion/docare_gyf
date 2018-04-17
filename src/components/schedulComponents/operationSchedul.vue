@@ -77,7 +77,7 @@
                             {{item.name}}
                         </div>
                         <div style="width:auto;height:100%;display:flex;">
-                            <div v-if="cell.operatingRoomNo == item.name" v-for="cell in scheduleListRight">
+                            <div v-if="cell.operatingRoomNo == item.name" v-for="(cell,index) in scheduleListRight">
                                 <div v-if="cell.state == 2||cell.state == 3||cell.state == 4" class="roomData">
                                     <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
                                         <span style="padding-right:10px;">09:30-11:01</span>
@@ -101,7 +101,8 @@
                                         <span style="color:red;">{{cell.notesOnOperation}}</span>
                                     </div>
                                 </div>
-                                <div v-else style="border:1px solid #95DDB6;" class="roomData">
+                                <div v-else style="border:1px solid #95DDB6;position:relative;" class="roomData">
+                                    <div @click="goBackFun(cell,index)" class="goBack">X</div>
                                     <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
                                         <span style="padding-right:10px;">09:30-11:01</span>
                                         <span>{{cell.patientName}}</span>
@@ -476,7 +477,7 @@ export default {
                         firstSupplyNurse: this.newUpdata[j].firstSupplyNurseName,
                         secondSupplyNurse: this.newUpdata[j].secondtSupplyNurseName,
                         operatingRoomNo: this.newUpdata[j].operatingRoomNo,
-                        sequence:this.newUpdata[j].sequence,
+                        sequence: this.newUpdata[j].sequence,
                     })
                 } else {
 
@@ -722,23 +723,28 @@ export default {
             console.log(this.pushDataBody)
             this.pushDataBody.operatingRoomNo = this.hasChooseRoom.name;
             this.pushDataBody.anesthesiaDoctorName = this.hasChooseRoom.docoptions;
-            for(var a = 0;a<this.scheduleListRight.length;a++){
-                if(this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name){
+            for (var a = 0; a < this.scheduleListRight.length; a++) {
+                if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
                     dataR = true;
                     roomNum.push(this.scheduleListRight[a].sequence)
                 }
             }
-            if(dataR == true){
-                this.pushDataBody.sequence=Math.max.apply(Math,roomNum)+1
-            }else{
-                this.pushDataBody.sequence=dataNum+1
+            if (dataR == true) {
+                this.pushDataBody.sequence = Math.max.apply(Math, roomNum) + 1
+            } else {
+                this.pushDataBody.sequence = dataNum + 1
             }
             console.log(this.pushDataBody.sequence)
             this.scheduleList.splice(this.spliceIndex, 1);
             this.scheduleListRight.push(this.pushDataBody)
             this.newUpdata.push(this.pushDataBody)
             console.log(this.newUpdata)
-
+        },
+        goBackFun(cell,index){
+            console.log(cell)
+            console.log(index)
+            this.scheduleListRight.splice(index, 1);
+            this.scheduleList.push(cell);
         }
     },
     mounted() {
@@ -1062,5 +1068,17 @@ export default {
     background-color: #fff;
     border-radius: 5px;
     padding: 0 5px;
+}
+
+.goBack {
+    width: 20px;
+    height: 20px;
+    background-color: #95DDB6;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index:99;
+    text-align: center;
+    cursor: pointer;
 }
 </style>
