@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%;background-color:#f5f5f5;">
+    <div style="height:100%;background-color:#f5f5f5;overflow:auto;">
         <div class="flex w100 topal">
             <img style="width:auto;height:60px;" src="../../assets/logo.png">
             <div class="flex1 topButton" :class="{clickClass:clickDataOne}" @click="operationSchedulVue()">

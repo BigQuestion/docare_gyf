@@ -214,11 +214,11 @@
             </div>
             <div>
               <span>排序方式</span>
-              <div @click="sort0">
+              <div @click="sort1">
                 <input type="radio" id="house" name="sort">
                 <label for="house">术间</label>
               </div>
-              <div @click="sort1">
+              <div @click="sort0">
                 <input type="radio" id="timeHo" name="sort">
                 <label for="timeHo">时间</label>
               </div>
