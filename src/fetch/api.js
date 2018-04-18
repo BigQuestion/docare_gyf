@@ -19,19 +19,19 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-      method: 'post',
-      url: url,
-      data: JSON.stringify(params),
-      timeout: config.timeout,
-      headers: {
-        'Content-type': 'application/json',
-        "Accept": "*/*",
-      },
-      datatype: "json",
-    })
-      .then(function (response) {
+        method: 'post',
+        url: url,
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype: "json",
+      })
+      .then(function(response) {
         resolve(response.data);
-      }).catch(function (error) {
+      }).catch(function(error) {
         reject(error);
       });
   })
@@ -88,9 +88,9 @@ export default {
     return fetch('medicalsystem/rest/medHisUsers/getMzkUsers', params)
   },
   /**
- * 获取麻醉医生护士角色
- * 
- */
+   * 获取麻醉医生护士角色
+   * 
+   */
   selectUserListByType(params, config) {
     return fetch('medicalsystem/rest/medOperationScheduleCommCon/selectUserListByType', params)
   },
@@ -516,6 +516,14 @@ export default {
    */
   cancleOperationMaster(params, config) {
     return fetch('medicalsystem/rest/medOperationMaster/cancleOperationMaster', params)
+  },
+
+  /**
+   * 获取器械清单单子的栏目
+   * 
+   */
+  selectQiXieTitle(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/selectQiXieTitle', params)
   },
 
 }
