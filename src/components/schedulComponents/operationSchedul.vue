@@ -224,7 +224,7 @@ export default {
                     value: 'firstAssistantName',
                     width: 100,
                 }, {
-                    text: '手术助手1',
+                    text: '手术助手2',
                     value: 'secondAssistantName',
                     width: 100,
                 }, {
@@ -558,43 +558,65 @@ export default {
                     this.newUpdata[a].anesthesiaDoctorName = item.userId;
                 }
             } else if (type == 'docmzkUsers') {
-                this.roomId[this.hasChooseIndex].docmzkUsers = item.userId;
-                this.hasChooseRoom.docmzkUsers = item.userId;
-                for (var b = 0; b < this.newUpdata.length; b++) {
-                    this.newUpdata[b].firstAnesthesiaAssistantName = item.userId;
+                if (this.roomId[this.hasChooseIndex].docmzkUsers == '') {
+                    this.roomId[this.hasChooseIndex].docmzkUsers = item.userId;
+                    this.hasChooseRoom.docmzkUsers = item.userId;
+                    for (var b = 0; b < this.newUpdata.length; b++) {
+                        this.newUpdata[b].firstAnesthesiaAssistantName = item.userId;
+                    }
+                } else {
+                    this.roomId[this.hasChooseIndex].docmzkUsers2 = item.userId;
+                    this.hasChooseRoom.docmzkUsers2 = item.userId;
+                    for (var b = 0; b < this.newUpdata.length; b++) {
+                        this.newUpdata[b].secondAnesthesiaAssistantName = item.userId;
+                    }
                 }
+
             } else if (type == 'assistant') {
-                this.roomId[this.hasChooseIndex].assistant = item.userId;
-                this.hasChooseRoom.assistant = item.userId;
-                for (var c = 0; c < this.newUpdata.length; c++) {
-                    this.newUpdata[c].firstAssistantName = item.userId;
+                if (this.roomId[this.hasChooseIndex].assistant == '') {
+                    this.roomId[this.hasChooseIndex].assistant = item.userId;
+                    this.hasChooseRoom.assistant = item.userId;
+                    for (var c = 0; c < this.newUpdata.length; c++) {
+                        this.newUpdata[c].firstAssistantName = item.userId;
+                    }
+                } else {
+                    this.roomId[this.hasChooseIndex].assistant2 = item.userId;
+                    this.hasChooseRoom.assistant2 = item.userId;
+                    for (var c = 0; c < this.newUpdata.length; c++) {
+                        this.newUpdata[c].secondAssistantName = item.userId;
+                    }
                 }
             } else if (type == 'docwash') {
-                this.roomId[this.hasChooseIndex].docwash = item.userId;
-                this.hasChooseRoom.docwash = item.userId;
-                for (var d = 0; d < this.newUpdata.length; d++) {
-                    this.newUpdata[d].firstOperationNurseName = item.userId;
+                if (this.roomId[this.hasChooseIndex].docwash == '') {
+                    this.roomId[this.hasChooseIndex].docwash = item.userId;
+                    this.hasChooseRoom.docwash = item.userId;
+                    for (var d = 0; d < this.newUpdata.length; d++) {
+                        this.newUpdata[d].firstOperationNurseName = item.userId;
+                    }
+                } else {
+                    this.roomId[this.hasChooseIndex].docwash2 = item.userId;
+                    this.hasChooseRoom.docwash2 = item.userId;
+                    for (var d = 0; d < this.newUpdata.length; d++) {
+                        this.newUpdata[d].secondOperationNurseName = item.userId;
+                    }
                 }
+
             } else if (type == 'doctour') {
-                this.roomId[this.hasChooseIndex].doctour = item.userId;
-                this.hasChooseRoom.doctour = item.userId;
-                for (var e = 0; e < this.newUpdata.length; e++) {
-                    this.newUpdata[e].firstSupplyNurseName = item.userId;
+                if (this.roomId[this.hasChooseIndex].doctour == '') {
+                    this.roomId[this.hasChooseIndex].doctour = item.userId;
+                    this.hasChooseRoom.doctour = item.userId;
+                    for (var e = 0; e < this.newUpdata.length; e++) {
+                        this.newUpdata[e].firstSupplyNurseName = item.userId;
+                    }
+                } else {
+                    this.roomId[this.hasChooseIndex].doctour2 = item.userId;
+                    this.hasChooseRoom.doctour2 = item.userId;
+                    for (var e = 0; e < this.newUpdata.length; e++) {
+                        this.newUpdata[e].secondtSupplyNurseName = item.userId;
+                    }
                 }
+
             }
-            // else if (type == 'docmzkUsers2') {
-            //     this.roomId[this.hasChooseIndex].docmzkUsers2 = item.userName;
-            //     this.hasChooseRoom.docmzkUsers2 = item.userName;
-            // } else if (type == 'assistant2') {
-            //     this.roomId[this.hasChooseIndex].assistant2 = item.userName;
-            //     this.hasChooseRoom.assistant2 = item.userName;
-            // } else if (type == 'docwash2') {
-            //     this.roomId[this.hasChooseIndex].docwash2 = item.userName;
-            //     this.hasChooseRoom.docwash2 = item.userName;
-            // } else if (type == 'doctour2') {
-            //     this.roomId[this.hasChooseIndex].doctour2 = item.userName;
-            //     this.hasChooseRoom.doctour2 = item.userName;
-            // }
             console.log(this.hasChooseRoom)
         },
         getList(date) {
@@ -740,7 +762,7 @@ export default {
             this.newUpdata.push(this.pushDataBody)
             console.log(this.newUpdata)
         },
-        goBackFun(cell,index){
+        goBackFun(cell, index) {
             console.log(cell)
             console.log(index)
             this.scheduleListRight.splice(index, 1);
@@ -1077,7 +1099,7 @@ export default {
     position: absolute;
     right: 0;
     top: 0;
-    z-index:99;
+    z-index: 99;
     text-align: center;
     cursor: pointer;
 }
