@@ -9,11 +9,14 @@
           <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
         </thead>
         <tbody>
-          <tr v-for="(item,index) in rows" style="height: 25px;">
-            <td v-for="(de,index2) in titileList">
-              <div v-for="item1 in listTemp">
+          <tr v-for="(item,index) in rowsList" style="height: 25px;">
+            <td v-for="(de,index2) in dataList">
+              <!-- <input type="" name="" v-if="de.isClick">
+              <div v-for="item1 in listTemp" v-else>
                 <input v-if="item1.x==index2&&item1.y==index" type="text" v-model="item1.value" style="width: 100%;height: 25px;border:none;">
-              </div>
+              </div> -->
+              <input style="width: 100%;height: 25px;border:none;" :value="index+'-'+index2" @change="test($event)">
+              <!-- <input style="width: 100%;height: 25px;border:none;" :value="testList[0][0]" @change="test($event)"> -->
             </td>
           </tr>
         </tbody>
@@ -27,6 +30,7 @@ export default {
     return {
       titileList: [],
       rows: 20,
+      rowsList: [],
       listTemp: [{
           x: 0,
           y: 0,
@@ -58,11 +62,11 @@ export default {
           value: '持针钳'
         }
       ],
-      dataList: [{
-        type: 1,
-        value: "xx",
-        id: 2
-      }]
+      dataList: [],
+      testList: [
+        ['', 2, 3],
+        [2, 3, 4]
+      ],
     }
   },
   props: ['object', 'isPage'],
@@ -72,11 +76,31 @@ export default {
       this.api.selectQiXieTitle(params)
         .then(res => {
           this.titileList = res;
+          for (var i = 0; i < res.length; i++) {
+            this.dataList.push({
+              isClick: false
+            })
+          }
         })
+
+
     },
+    dataInit() {
+      for (var i = 0; i < this.rows; i++) {
+        this.rowsList.push(i);
+      }
+      this.selectQiXieTitle();
+
+    },
+    test(ev) {
+      console.log(ev.currentTarget._value)
+      console.log(ev.currentTarget.value)
+      ev.currentTarget.value = 123
+    }
+
   },
   mounted() {
-    this.selectQiXieTitle()
+    this.dataInit();
   },
   created() {},
   beforeDestroy() {},
