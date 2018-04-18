@@ -525,5 +525,12 @@ export default {
   selectQiXieTitle(params, config) {
     return fetch('medicalsystem/rest/medFormCon/selectQiXieTitle', params)
   },
+  /**
+   * 获取病人器械清单数据
+   * 
+   */
+  getPatientQiXieList(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/getPatientQiXieList', params)
+  }
 
 }
