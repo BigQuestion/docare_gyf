@@ -630,15 +630,6 @@ export default {
             }
             this.api.getScheduleList(params)
                 .then(res => {
-                    for (var i = 0; i < res.list.length; i++) {
-                        if (res.list[i].state == -1) {
-                            res.list[i].selectInfo = "取消";
-                        } else if (res.list[i].state == 500) {
-                            res.list[i].selectInfo = "取消";
-                        } else {
-                            res.list[i].selectInfo = "开展";
-                        }
-                    }
                     for (var j = 0; j < res.list.length; j++) {
                         if (res.list[j].state == 0 || res.list[j].state == 1) {
                             this.scheduleList.push(res.list[j])
@@ -1032,10 +1023,6 @@ export default {
     outline: none;
     display: block;
     background-color: rgba(0, 0, 0, 0);
-}
-
-.noneTriangle {
-    appearance: none;
 }
 
 .resizeIcon {
