@@ -43,6 +43,7 @@ export default {
       this.api.selectQiXieTitle(params)
         .then(res => {
           this.titileList = res;
+          // console.log(this.titileList)
         })
 
       let params1 = {
@@ -55,6 +56,7 @@ export default {
         .then(rest => {
           this.listTemp = rest;
           debugger
+          console.log(this.listTemp)
           this.dataChange(rest);
         })
 
@@ -78,6 +80,7 @@ export default {
           tArray[k][j] = ""; //这里将变量初始化，我这边统一初始化为空，后面在用所需的值覆盖里面的值
         }
       }
+      console.log(tArray)
       // var list1 = this.listTemp;
       list1.forEach(item => {
         tArray[item.yPosition][item.xPosition] = item.positionValue
