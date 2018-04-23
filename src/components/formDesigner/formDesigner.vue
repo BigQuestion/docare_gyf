@@ -53,6 +53,10 @@
           <button @click="save">保存</button>
         </div>
       </div>
+      <!-- 显示默认表格数据 -->
+      <qiXieTableDefault v-if="qixieTableView" v-on:closeView="closeQixieTableView"></qiXieTableDefault>
+      <!-- 显示默认表格标题数据 -->
+      <qiXieTableTitle v-if="qixieTableTitleView" v-on:closeTitleView="closeQixieTitleView"></qiXieTableTitle>
       <div class="editBox">
         <div class="antherEdiBox">
           <div style="box-sizing:border-box;padding-left:5px;">
@@ -88,21 +92,6 @@
             </div>
             <input type="" name="" v-model="chooseItems[0].opacity">
           </div>
-          <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                                                  <div class="ediChild">
-                                                                                                      TopMost：
-                                                                                                  </div>
-                                                                                                  <select style="min-width:160px;" name="" id="" v-on:change="selectData(chooseItems[0].topMost,'isData',chooseItems[0].topMostMode)" v-model="chooseItems[0].topMostMode">
-                                                                                                      <option v-for="btn in chooseItems[0].topMost" :value="btn.isData">{{btn.isData}}</option>
-                                                                                                  </select>
-                                                                                              </div> -->
-          <!-- <div v-if="chooseItems[0]" class="ediclass">
-                                                                                                                  <div class="ediChild">
-                                                                                                                      Font:
-                                                                                                                  </div>
-                                                                                                                  <input type="text">
-                                                                                                                  <button @click="fontDataChange" style="width:20px;border-radius:0;display:inline-block;">...</button>
-                                                                                                              </div> -->
           <div v-if="chooseItems[0]" class="ediclass">
             <!-- isReadOnly:<input type="" name="" v-model="chooseItems[0].isReadOnly"> -->
             <div class="ediChild">
@@ -254,6 +243,18 @@
               </select>
             </div>
           </div>
+          <div v-if="chooseItems[0]&&chooseItems[0].type=='qixieList'" class="ediclass">
+            <div class="ediChild">
+              customEdit:
+            </div>
+            <input type="text" value="点击编辑默认数据" @dblclick="showqixieTableTitleView()">
+          </div>
+          <div v-if="chooseItems[0]&&chooseItems[0].type=='qixieList'" class="ediclass">
+            <div class="ediChild">
+              默认数据:
+            </div>
+            <input type="text" value="点击编辑默认数据" @dblclick="showqixieTableView()">
+          </div>
         </div>
       </div>
     </div>
@@ -303,6 +304,8 @@
 import formElement from '@/components/formElement/formElement.vue';
 import colorPicker from '@/components/colorPicker/colorPicker.vue';
 import fontPlug from '@/components/fontPlug/fontPlug.vue';
+import qiXieTableDefault from '@/components/drawTable/qiXieTableDefault.vue';
+import qiXieTableTitle from '@/components/drawTable/qiXieTableTitle.vue';
 export default {
   name: 'login',
   data() {
@@ -467,14 +470,12 @@ export default {
       dataIncurrentIten: '',
       dataInCanDelete: false,
       deleteDataDom: '',
+      qixieTableView: false,
+      qixieTableTitleView: false, //器械清单编辑默认标题窗口显示
     }
   },
   methods: {
     selectData(obj, paramName, value) {
-      // obj[paramName] = isData;
-      // console.log(obj) //数组名字
-      // console.log(paramName) //参数名字
-      // console.log(value) //参数值
 
     },
     itemClick() {
@@ -757,11 +758,27 @@ export default {
         this.$set(dataIn, 'y', dataIn.y + 1);
       }
     },
+    //双击显示默认表格内容
+    showqixieTableView() {
+      this.qixieTableView = true;
+    },
+    closeQixieTableView() {
+      this.qixieTableView = false
+    },
+    //显示器械表头内容
+    showqixieTableTitleView() {
+      this.qixieTableTitleView = true;
+    },
+    closeQixieTitleView() {
+      this.qixieTableTitleView = false
+    },
   },
   components: {
     formElement,
     colorPicker,
-    fontPlug
+    fontPlug,
+    qiXieTableDefault,
+    qiXieTableTitle,
   },
   mounted() {
     this.area = this.$refs.area;
@@ -1009,6 +1026,80 @@ export default {
   background-color: #0078D7;
   color: #fff;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

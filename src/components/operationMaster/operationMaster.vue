@@ -1444,11 +1444,14 @@ export default {
     submitSaveForm() {
       let params = []
       params = this.updateFormsData;
-      this.api.updateSqlBatch(params)
-        .then(res => {
-          this.updateFormsData = [];
-          this.selectMedFormTemp(this.selectFormItemTemp);
-        })
+      if (this.updateFormsData.length > 0) {
+        this.api.updateSqlBatch(params)
+          .then(res => {
+            this.updateFormsData = [];
+            this.selectMedFormTemp(this.selectFormItemTemp);
+          })
+      }
+
     },
     //配置跳转
     formSetting() {
@@ -1981,6 +1984,10 @@ export default {
 
 
 
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -2067,6 +2074,10 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
 
 
 

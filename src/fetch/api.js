@@ -531,6 +531,44 @@ export default {
    */
   getPatientQiXieList(params, config) {
     return fetch('medicalsystem/rest/medFormCon/getPatientQiXieList', params)
-  }
+  },
+  /**
+   * 批量插入病人器械清单数据
+   * 
+   */
+  insertBatchMedQiXieQingDian(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/insertBatchMedQiXieQingDian', params)
+  },
+  /**
+   * 批量修改病人器械清单数据
+   * 
+   */
+  updateBatchMedQiXieQingDian(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/updateBatchMedQiXieQingDian', params)
+  },
+
+  /**
+   * 获取所有器械清单默认表格数据
+   * 
+   */
+  selectAllListMedQiXieDefaultCulumn(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/selectAllListMedQiXieDefaultCulumn', params)
+  },
+
+  /**
+   * 批量插入器械清单默认表格数据
+   * 
+   */
+  insertBatchMedQiXieDefaultCulumn(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/insertBatchMedQiXieDefaultCulumn', params)
+  },
+
+  /**
+   * 批量修改器械清单默认表格数据
+   * 
+   */
+  updateBatchMedQiXieDefaultCulumn(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/updateBatchMedQiXieDefaultCulumn', params)
+  },
 
 }

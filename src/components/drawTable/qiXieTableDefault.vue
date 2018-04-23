@@ -1,9 +1,22 @@
 <template>
-  <div style="border:1px solid;overflow-y: auto" :style="{width:object.width+'px',height:object.height+'px'}">
-    <div v-if="!page">
-      <table style="border-collapse:collapse;width: 100%;" border="1" cellspacing="0" cellpadding="0">
+  <div style="height: 450px;width: 700px;box-shadow: #e8e8ea 0px 0px 5px;position: absolute;top: 20%;left: 25%;background-color: rgb(251,251,251);padding: 5px;z-index: 999;">
+    <div style="height: 25px;width: 100%;text-align: center;position: relative;">
+      <div>
+        默认表格数据编辑
+      </div>
+      <div style="position: absolute;right:20px;top:0px;color:white;background-color: rgb(60,163,203);width: 23px;
+    height: 23px;line-height: 23px;text-align: center;cursor: pointer;" @click="closeWin">
+        X
+      </div>
+    </div>
+    <div style="width: 100%;height: 350px;overflow: auto;border-bottom: 1px solid;">
+      <table style="border-collapse:collapse;table-layout: fixed;" border="1" cellspacing="0" cellpadding="0">
         <thead>
-          <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
+          <th v-for="item in titileList">
+            <div style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 20px;width: 80px;line-height: 20px;">
+              {{item.columnTitleName}}
+            </div>
+          </th>
         </thead>
         <tbody>
           <tr v-for="(item,index) in rows">
@@ -14,7 +27,9 @@
         </tbody>
       </table>
     </div>
-    <button v-if="!page" @click="submitSave">保存</button>
+    <div style="height: 50px;text-align: right;padding: 20px;">
+      <button @click="submitSave">确定</button>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
@@ -22,47 +37,27 @@ export default {
   data() {
     return {
       titileList: [],
-      rows: 30,
-      rowsList: [],
-      dataList: [],
+      defaultArry: [],
       testList: [],
       updateDataList: [], //修改数据
       insertDataList: [], //插入数据
-      isNullArry: [], //病人是否存在数据
-      defaultArry: [], //表格默认数组
+      rows: 30,
     }
   },
-  props: ['object', 'page'],
   methods: {
     selectQiXieTitle() {
       let params = {}
       this.api.selectQiXieTitle(params)
         .then(res => {
           this.titileList = res;
-          // console.log(this.titileList)
         })
 
-      let params1 = {
-        patientId: this.config.userInfo.patientId,
-        visitId: this.config.userInfo.visitId,
-        operId: this.config.userInfo.operId
-      }
-
-      this.api.getPatientQiXieList(params1)
+      let arr = {}
+      this.api.selectAllListMedQiXieDefaultCulumn(arr)
         .then(rest => {
-          this.isNullArry = rest;
-          if (rest.length > 0) {
-            this.dataChange(rest);
-          } else {
-            this.selectAllListMedQiXieDefaultCulumn();
-          }
-
+          this.defaultArry = rest;
+          this.dataChange(rest);
         })
-
-    },
-    dataInit() {
-      this.selectQiXieTitle();
-
     },
     dataChange(list1) {
       let tArray = new Array(); //先声明一维
@@ -81,11 +76,7 @@ export default {
 
       this.testList = tArray;
     },
-
-
     getChangeList(ev, y, x) {
-      // console.log(ev.currentTarget._value)
-      // console.log(ev.currentTarget.value)
       //判断是否有值
       //如果当前修改的位置之前不存在就放入到新增集合里面
       if (this.testList[y][x] === '') {
@@ -102,9 +93,6 @@ export default {
           }
           if (count == this.insertDataList.length) {
             this.insertDataList.push({
-              patientId: this.config.userInfo.patientId,
-              visitId: this.config.userInfo.visitId,
-              operId: this.config.userInfo.operId,
               yPosition: y,
               xPosition: x,
               positionValue: ev.currentTarget.value
@@ -112,9 +100,6 @@ export default {
           }
         } else {
           this.insertDataList.push({
-            patientId: this.config.userInfo.patientId,
-            visitId: this.config.userInfo.visitId,
-            operId: this.config.userInfo.operId,
             yPosition: y,
             xPosition: x,
             positionValue: ev.currentTarget.value
@@ -134,9 +119,6 @@ export default {
           }
           if (count == this.updateDataList.length) {
             this.updateDataList.push({
-              patientId: this.config.userInfo.patientId,
-              visitId: this.config.userInfo.visitId,
-              operId: this.config.userInfo.operId,
               yPosition: y,
               xPosition: x,
               positionValue: ev.currentTarget.value
@@ -144,9 +126,6 @@ export default {
           }
         } else {
           this.updateDataList.push({
-            patientId: this.config.userInfo.patientId,
-            visitId: this.config.userInfo.visitId,
-            operId: this.config.userInfo.operId,
             yPosition: y,
             xPosition: x,
             positionValue: ev.currentTarget.value
@@ -155,67 +134,28 @@ export default {
       }
 
     },
-    arrTest(arr) {
-      var newarry = [];
-      arr.forEach(item => {
-        if (newarry[item.x]) {
-          // if (newarry[item.x][item.y]) {
-          newarry[item.x][item.y] = item.value
-          // }
-        } else {
-          newarry[item.x] = new Array()
-          newarry[item.x][item.y] = item.value
-        }
-      })
-
-      return newarry
-    },
-    //提交之前进行验证
     submitSave() {
-      if (this.isNullArry.length == 0) {
-        let list = this.defaultArry;
-        list.forEach(item => {
-          item.patientId = this.config.userInfo.patientId;
-          item.visitId = this.config.userInfo.visitId;
-          item.operId = this.config.userInfo.operId;
-
-        })
-        this.api.insertBatchMedQiXieQingDian(list)
-          .then(rest => {
-            this.submitSaveFun();
-          })
-      }
-    },
-    //获取默认表格内容
-    selectAllListMedQiXieDefaultCulumn() {
-      let arr = {}
-      this.api.selectAllListMedQiXieDefaultCulumn(arr)
-        .then(rest => {
-          this.defaultArry = rest;
-          this.dataChange(rest)
-        })
-    },
-    //执行提交保存方法
-    submitSaveFun() {
       if (this.updateDataList.length > 0) {
         let updateparams = this.updateDataList
-        this.api.updateBatchMedQiXieQingDian(updateparams)
+        this.api.updateBatchMedQiXieDefaultCulumn(updateparams)
           .then(res => {
             this.updateDataList = [];
           })
       }
       if (this.insertDataList.length > 0) {
         let insertparams = this.insertDataList
-        this.api.insertBatchMedQiXieQingDian(insertparams)
+        this.api.insertBatchMedQiXieDefaultCulumn(insertparams)
           .then(res => {
             this.insertDataList = [];
           })
       }
     },
-
+    closeWin() {
+      this.$emit('closeView');
+    }
   },
   mounted() {
-    this.dataInit();
+    this.selectQiXieTitle()
   },
   created() {},
   beforeDestroy() {},
@@ -226,3 +166,16 @@ export default {
 }
 
 </script>
+<style scope>
+.cont {
+  height: 450px;
+  width: 700px;
+  box-shadow: #e8e8ea 0px 0px 5px;
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  background-color: rgb(251, 251, 251);
+  padding: 5px;
+}
+
+</style>
