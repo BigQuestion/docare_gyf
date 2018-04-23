@@ -39,6 +39,7 @@ export default {
       this.api.selectQiXieTitle(params)
         .then(res => {
           this.titileList = res;
+          // console.log(this.titileList)
         })
 
       let params1 = {

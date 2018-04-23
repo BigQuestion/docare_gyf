@@ -69,25 +69,29 @@
                     </div>
                 </div>
             </div>
-            <div style="width: 80%;overflow:auto;background-color:#E7EBEC;">
-                <div style="width:auto;height:auto;">
-                    <div class="timeLine"></div>
+
+            <div style="width: 80%;overflow:auto;background-color:#E7EBEC;position:relative">
+                <div style="position:absolute;left:0;top:55px;z-index:999;">
+                    <div v-for="(item,index) in roomId" class="operationRoom" @click="chooseClassFun(item,index)" :class="{backgroundColor:item.chooseClass}">
+                        {{item.name}}
+                    </div>
+                </div>
+                <!-- <div style="width:auto;height:auto;"> -->
+                <div class="timeLine"></div>
+                <div style="padding-left: 60px;">
                     <div class="BoxOf" v-for="(item,index) in roomId">
-                        <div class="operationRoom" @click="chooseClassFun(item,index)" :class="{backgroundColor:item.chooseClass}">
-                            {{item.name}}
-                        </div>
                         <div style="width:auto;height:100%;display:flex;">
                             <div v-if="cell.operatingRoomNo == item.name" v-for="(cell,index) in scheduleListRight">
-                                <div v-if="cell.state == 2||cell.state == 3||cell.state == 4" class="roomData">
+                                <div @dblclick="edit(cell)" v-if="cell.state == 2||cell.state == 3||cell.state == 4" class="roomData">
                                     <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
-                                        <span style="padding-right:10px;">09:30-11:01</span>
+                                        <span style="padding-right:10px;">{{cell.scheduledDateTime}}</span>
                                         <span>{{cell.patientName}}</span>
                                     </div>
                                     <div style="color:#222;padding:2px 0;">
                                         <span style="padding-right:10px;">{{cell.patientName}}</span>
                                         <span style="padding-right:10px;">{{cell.patientId}}</span>
                                         <span style="padding-right:10px;">{{cell.patientSex}}</span>
-                                        <span>{{cell.patienAge}}</span>
+                                        <span>{{cell.patienAge}}岁</span>
                                     </div>
                                     <div style="color:#222;padding:2px 0;font-weight:bold;">
                                         {{cell.operationSchName}}
@@ -101,24 +105,24 @@
                                         <span style="color:red;">{{cell.notesOnOperation}}</span>
                                     </div>
                                 </div>
-                                <div v-else style="border:1px solid #95DDB6;position:relative;" class="roomData">
+                                <div v-else @dblclick="edit(cell)" style="border:1px solid #95DDB6;position:relative;" class="roomData">
                                     <div @click="goBackFun(cell,index)" class="goBack">X</div>
                                     <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
-                                        <span style="padding-right:10px;">09:30-11:01</span>
+                                        <span style="padding-right:10px;">{{cell.scheduledDateTime}}</span>
                                         <span>{{cell.patientName}}</span>
                                     </div>
                                     <div style="color:#222;padding:2px 0;">
                                         <span style="padding-right:10px;">{{cell.patientName}}</span>
                                         <span style="padding-right:10px;">{{cell.patientId}}</span>
                                         <span style="padding-right:10px;">{{cell.patientSex}}</span>
-                                        <span>{{cell.patienAge}}</span>
+                                        <span>{{cell.patienAge}}岁</span>
                                     </div>
                                     <div style="color:#222;padding:2px 0;font-weight:bold;">
                                         {{cell.operationSchName}}
                                     </div>
                                     <div style="color:#222;padding:2px 0;width:100%;">
                                         <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.anesthesiaDoctorName}}</span>
-                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">副麻</span>
+                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.firstAnesthesiaAssistantName}}</span>
                                     </div>
                                     <div style="padding:2px 0;font-weight:bold;">
                                         备注：
@@ -129,6 +133,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- </div> -->
             </div>
         </div>
 
@@ -139,10 +145,25 @@
                     <div @click="modalCancel" class="font_active">X</div>
                 </div>
                 <div class="modalBody">
-                    <div v-for="item in tableConfig" class="flex">
+                    <div v-for="(item,index) in tableConfig" class="flex">
                         <div class="label">{{item.text}}：</div>
-                        <textarea v-if="item.text == '备注'" name="" id="" v-model="handleItem[item.value]"></textarea>
-                        <input v-else style="width:130px;" type="" name="" v-model="handleItem[item.value]">
+                        <textarea style="outline:none;" v-if="item.text == '备注'" readonly name="" id="" v-model="handleItem[item.value]"></textarea>
+                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&item.value == 'anesthesiaDoctorName'" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in options" v-bind:value="all.userId">{{all.userName}}</option>
+                        </select>
+                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstAnesthesiaAssistantName'||item.value == 'secondAnesthesiaAssistantName')" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in MzkUsers" v-bind:value="all.userId">{{all.userName}}</option>
+                        </select>
+                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstAssistantName'||item.value == 'secondAssistantName')" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in assistant" v-bind:value="all.userId">{{all.userName}}</option>
+                        </select>
+                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstOperationNurseName'||item.value == 'secondOperationNurseName')" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in wash" v-bind:value="all.userId">{{all.userName}}</option>
+                        </select>
+                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstSupplyNurseName'||item.value == 'secondSupplyNurseName')" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in tour" v-bind:value="all.userId">{{all.userName}}</option>
+                        </select>
+                        <input v-else style="width:130px;outline:none;" readonly type="" name="" v-model="handleItem[item.value]">
                     </div>
                 </div>
                 <div class="modalFoot">
@@ -166,39 +187,38 @@ export default {
             wash: [],
             tour: [],
             handleItem: {},
-            OptInfo: [{
-                opt: '开展'
-            }, {
-                opt: '取消'
-            }, {
-                opt: '作废'
-            }],
             tableConfig: [
                 {
                     text: "手术审核时间",
                     type: "inSelect",
                     value: "sqrdatatime",
-                    width: 120
+                    width: 120,
+                    optin: false,
                 }, {
                     text: '申请时间',
                     value: 'scheduledDateTime',
                     width: 60,
+                    optin: false,
                 }, {
                     text: '科室名称',
                     value: 'deptName',
                     width: 60,
+                    optin: false,
                 }, {
                     text: '床号',
                     value: 'bedNo',
                     width: 60,
+                    optin: false,
                 }, {
                     text: '台次',
                     value: 'sequence',
                     width: 60,
+                    optin: false,
                 }, {
                     text: '病人姓名',
                     value: 'patientName',
                     width: 100,
+                    optin: false,
                 }, {
                     text: '年龄',
                     value: 'patienAge',
@@ -207,34 +227,77 @@ export default {
                     text: '性别',
                     value: 'patientSex',
                     width: 60,
+                    optin: false,
                 }, {
                     text: '诊断',
                     value: 'diagBeforeOperation',
                     width: 200,
+                    optin: false,
                 }, {
                     text: '手术名称',
                     value: 'operationSchName',
                     width: 250,
+                    optin: false,
                 }, {
                     text: '手术医师',
                     value: 'surgeonName',
                     width: 100,
+                    optin: false,
+                }, {
+                    text: '主麻医师',
+                    value: 'anesthesiaDoctorName',
+                    width: 100,
+                    optin: false,
+                }, {
+                    text: '副麻医师1',
+                    value: 'firstAnesthesiaAssistantName',
+                    width: 100,
+                    optin: false,
+                }, {
+                    text: '副麻医师2',
+                    value: 'secondAnesthesiaAssistantName',
+                    width: 100,
+                    optin: false,
                 }, {
                     text: '手术助手1',
                     value: 'firstAssistantName',
                     width: 100,
+                    optin: false,
                 }, {
                     text: '手术助手2',
                     value: 'secondAssistantName',
                     width: 100,
+                    optin: false,
+                }, {
+                    text: '洗手护士1',
+                    value: 'firstOperationNurseName',
+                    width: 100,
+                    optin: false,
+                }, {
+                    text: '洗手护士2',
+                    value: 'secondOperationNurseName',
+                    width: 100,
+                    optin: false,
+                }, {
+                    text: '巡回护士1',
+                    value: 'firstSupplyNurseName',
+                    width: 100,
+                    optin: false,
+                }, {
+                    text: '巡回护士2',
+                    value: 'secondSupplyNurseName',
+                    width: 100,
+                    optin: false,
                 }, {
                     text: '麻醉方法',
                     value: 'anesthesiaMethod',
                     width: 200,
+                    optin: false,
                 }, {
                     text: '备注',
                     value: 'notesOnOperation',
                     width: 100,
+                    optin: false,
                 }
             ],
             getLength: '0',
@@ -259,6 +322,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '02',
@@ -272,6 +344,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '03',
@@ -285,6 +366,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '04',
@@ -298,6 +388,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '05',
@@ -311,6 +410,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '06',
@@ -324,6 +432,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '07',
@@ -337,6 +454,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '08',
@@ -350,6 +476,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '09',
@@ -363,6 +498,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '10',
@@ -376,6 +520,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '11',
@@ -389,6 +542,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '12',
@@ -402,6 +564,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '13',
@@ -415,6 +586,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
                 {
                     name: '14',
@@ -428,6 +608,15 @@ export default {
                     docwash2: '',
                     doctour: '',
                     doctour2: '',
+                    docoptionsId: '',
+                    docmzkUsersId: '',
+                    docmzkUsers2Id: '',
+                    assistantId: '',
+                    assistant2Id: '',
+                    docwashId: '',
+                    docwash2Id: '',
+                    doctourId: '',
+                    doctour2Id: '',
                 },
             ],
             hasChooseRoom: {},
@@ -460,7 +649,6 @@ export default {
         submit() {
             let params = [];
             let dataInName;
-
             // debugger
             for (var j = 0; j < this.newUpdata.length; j++) {
                 if (this.newUpdata[j].anesthesiaDoctorName != '') {
@@ -502,21 +690,73 @@ export default {
 
         },
         modalSure() {
-            let params = this.handleItem
-            this.api.editSchedule(params)
-                .then(
-                res => {
-                    console.log(res);
+            console.log(this.handleItem)
+            for (var b = 0; b < this.newUpdata.length; b++) {
+                if (this.handleItem.visitId == this.newUpdata[b].visitId && this.handleItem.patientId == this.newUpdata[b].patientId && this.handleItem.scheduleId == this.newUpdata[b].scheduleId) {
+                    console.log(this.newUpdata[b])
+                    this.newUpdata[b].anesthesiaDoctorName = this.handleItem.anesthesiaDoctorName;
+                    this.newUpdata[b].firstAnesthesiaAssistantName = this.handleItem.firstAnesthesiaAssistantName;
+                    this.newUpdata[b].secondAnesthesiaAssistantName = this.handleItem.secondAnesthesiaAssistantName;
+                    this.newUpdata[b].firstOperationNurseName = this.handleItem.firstOperationNurseName;
+                    this.newUpdata[b].secondOperationNurseName = this.handleItem.secondOperationNurseName;
+                    this.newUpdata[b].firstSupplyNurseName = this.handleItem.firstSupplyNurseName;
+                    this.newUpdata[b].secondtSupplyNurseName = this.handleItem.secondtSupplyNurseName;
                 }
-                )
+            }
+            // let params = this.handleItem
+
+
+            console.log(this.newUpdata)
             this.mask = false;
+
+        },
+        getNewPushData(item, index) {
+            console.log(item)
+            console.log(index)
         },
         modalCancel() {
             this.mask = false;
         },
         edit(item) {
-            console.log(item);
+            if (item.state == 0 || item.state == 1) {
+                for (var a = 0; a < this.tableConfig.length; a++) {
+                    if (this.tableConfig[a].value == 'anesthesiaDoctorName') {
+                        console.log('主治医生')
+                        this.tableConfig[a].optin = true;
+                    } else if (this.tableConfig[a].value == 'firstAnesthesiaAssistantName') {
+                        console.log('副麻医生1')
+                        this.tableConfig[a].optin = true;
+                    } else if (this.tableConfig[a].value == 'secondAnesthesiaAssistantName') {
+                        console.log('副麻医生2')
+                        this.tableConfig[a].optin = true;
+                    } else if (this.tableConfig[a].value == 'firstAssistantName') {
+                        console.log('手术助手1')
+                        this.tableConfig[a].optin = true;
+                    } else if (this.tableConfig[a].value == 'secondAssistantName') {
+                        console.log('手术助手2')
+                        this.tableConfig[a].optin = true;
+                    } else if (this.tableConfig[a].value == 'firstOperationNurseName') {
+                        console.log('洗手护士1')
+                        this.tableConfig[a].optin = true;
+                    } else if (this.tableConfig[a].value == 'secondOperationNurseName') {
+                        console.log('洗手护士2')
+                        this.tableConfig[a].optin = true;
+                    } else if (this.tableConfig[a].value == 'firstSupplyNurseName') {
+                        console.log('主治医生')
+                        this.tableConfig[a].optin = true;
+                    } else if (this.tableConfig[a].value == 'secondSupplyNurseName') {
+                        console.log('主治医生')
+                        this.tableConfig[a].optin = true;
+                    }
+
+                }
+            } else {
+                for (var b = 0; b < this.tableConfig.length; b++) {
+                    this.tableConfig[b].optin = false;
+                }
+            }
             this.handleItem = item;
+            console.log(this.handleItem)
             this.mask = true;
         },
         test(event) {
@@ -552,50 +792,70 @@ export default {
         joinData(type, item) {
             console.log(item)
             if (type == 'docoptions') {
-                this.roomId[this.hasChooseIndex].docoptions = item.userId;
-                this.hasChooseRoom.docoptions = item.userId;
+                this.roomId[this.hasChooseIndex].docoptionsId = item.userId;
+                this.hasChooseRoom.docoptionsId = item.userId;
+                this.roomId[this.hasChooseIndex].docoptions = item.userName;
+                this.hasChooseRoom.docoptions = item.userName;
+                this.pushDataBody.anesthesiaDoctorName = item.userName;
                 for (var a = 0; a < this.newUpdata.length; a++) {
                     this.newUpdata[a].anesthesiaDoctorName = item.userId;
                 }
             } else if (type == 'docmzkUsers') {
                 if (this.roomId[this.hasChooseIndex].docmzkUsers == '') {
-                    this.roomId[this.hasChooseIndex].docmzkUsers = item.userId;
-                    this.hasChooseRoom.docmzkUsers = item.userId;
+                    this.roomId[this.hasChooseIndex].docmzkUsersId = item.userId;
+                    this.hasChooseRoom.docmzkUsersId = item.userId;
+                    this.roomId[this.hasChooseIndex].docmzkUsers = item.userName;
+                    this.hasChooseRoom.docmzkUsers = item.userName;
+                    this.pushDataBody.firstAnesthesiaAssistantName = item.userName;
                     for (var b = 0; b < this.newUpdata.length; b++) {
                         this.newUpdata[b].firstAnesthesiaAssistantName = item.userId;
                     }
                 } else {
-                    this.roomId[this.hasChooseIndex].docmzkUsers2 = item.userId;
-                    this.hasChooseRoom.docmzkUsers2 = item.userId;
+                    this.roomId[this.hasChooseIndex].docmzkUsers2Id = item.userId;
+                    this.hasChooseRoom.docmzkUsers2Id = item.userId;
+                    this.roomId[this.hasChooseIndex].docmzkUsers2 = item.userName;
+                    this.hasChooseRoom.docmzkUsers2 = item.userName;
+                    this.pushDataBody.secondAnesthesiaAssistantName = item.userName;
                     for (var b = 0; b < this.newUpdata.length; b++) {
                         this.newUpdata[b].secondAnesthesiaAssistantName = item.userId;
                     }
                 }
-
             } else if (type == 'assistant') {
                 if (this.roomId[this.hasChooseIndex].assistant == '') {
-                    this.roomId[this.hasChooseIndex].assistant = item.userId;
-                    this.hasChooseRoom.assistant = item.userId;
+                    this.roomId[this.hasChooseIndex].assistantId = item.userId;
+                    this.hasChooseRoom.assistantId = item.userId;
+                    this.roomId[this.hasChooseIndex].assistant = item.userName;
+                    this.hasChooseRoom.assistant = item.userName;
+                    this.pushDataBody.firstAssistantName = item.userName;
                     for (var c = 0; c < this.newUpdata.length; c++) {
                         this.newUpdata[c].firstAssistantName = item.userId;
                     }
                 } else {
-                    this.roomId[this.hasChooseIndex].assistant2 = item.userId;
-                    this.hasChooseRoom.assistant2 = item.userId;
+                    this.roomId[this.hasChooseIndex].assistant2Id = item.userId;
+                    this.hasChooseRoom.assistant2Id = item.userId;
+                    this.roomId[this.hasChooseIndex].assistant2 = item.userName;
+                    this.hasChooseRoom.assistant2 = item.userName;
+                    this.pushDataBody.secondAssistantName = item.userName;
                     for (var c = 0; c < this.newUpdata.length; c++) {
                         this.newUpdata[c].secondAssistantName = item.userId;
                     }
                 }
             } else if (type == 'docwash') {
                 if (this.roomId[this.hasChooseIndex].docwash == '') {
-                    this.roomId[this.hasChooseIndex].docwash = item.userId;
-                    this.hasChooseRoom.docwash = item.userId;
+                    this.roomId[this.hasChooseIndex].docwashId = item.userId;
+                    this.hasChooseRoom.docwashId = item.userId;
+                    this.roomId[this.hasChooseIndex].docwash = item.userName;
+                    this.hasChooseRoom.docwash = item.userName;
+                    this.pushDataBody.firstOperationNurseName = item.userName;
                     for (var d = 0; d < this.newUpdata.length; d++) {
                         this.newUpdata[d].firstOperationNurseName = item.userId;
                     }
                 } else {
-                    this.roomId[this.hasChooseIndex].docwash2 = item.userId;
-                    this.hasChooseRoom.docwash2 = item.userId;
+                    this.roomId[this.hasChooseIndex].docwash2Id = item.userId;
+                    this.hasChooseRoom.docwash2Id = item.userId;
+                    this.roomId[this.hasChooseIndex].docwash2 = item.userName;
+                    this.hasChooseRoom.docwash2 = item.userName;
+                    this.pushDataBody.secondOperationNurseName = item.userName;
                     for (var d = 0; d < this.newUpdata.length; d++) {
                         this.newUpdata[d].secondOperationNurseName = item.userId;
                     }
@@ -603,21 +863,28 @@ export default {
 
             } else if (type == 'doctour') {
                 if (this.roomId[this.hasChooseIndex].doctour == '') {
-                    this.roomId[this.hasChooseIndex].doctour = item.userId;
-                    this.hasChooseRoom.doctour = item.userId;
+                    this.roomId[this.hasChooseIndex].doctourId = item.userId;
+                    this.hasChooseRoom.doctourId = item.userId;
+                    this.roomId[this.hasChooseIndex].doctour = item.userName;
+                    this.hasChooseRoom.doctour = item.userName;
+                    this.pushDataBody.firstOperationNurseName = item.userName;
                     for (var e = 0; e < this.newUpdata.length; e++) {
                         this.newUpdata[e].firstSupplyNurseName = item.userId;
                     }
                 } else {
-                    this.roomId[this.hasChooseIndex].doctour2 = item.userId;
-                    this.hasChooseRoom.doctour2 = item.userId;
+                    this.roomId[this.hasChooseIndex].doctour2Id = item.userId;
+                    this.hasChooseRoom.doctour2Id = item.userId;
+                    this.roomId[this.hasChooseIndex].doctour2 = item.userName;
+                    this.hasChooseRoom.doctour2 = item.userName;
+                    this.pushDataBody.secondOperationNurseName = item.userName;
                     for (var e = 0; e < this.newUpdata.length; e++) {
-                        this.newUpdata[e].secondtSupplyNurseName = item.userId;
+                        this.newUpdata[e].secondSupplyNurseName = item.userId;
                     }
                 }
 
             }
             console.log(this.hasChooseRoom)
+            console.log(this.newUpdata)
         },
         getList(date) {
             this.scheduleList = [];
@@ -734,8 +1001,28 @@ export default {
             var dataR = false;
             var dataNum = 0;
             console.log(this.pushDataBody)
+            console.log(this.hasChooseRoom)
+            // 手术间赋值
             this.pushDataBody.operatingRoomNo = this.hasChooseRoom.name;
+            // 主麻医生赋值
             this.pushDataBody.anesthesiaDoctorName = this.hasChooseRoom.docoptions;
+            // 副麻医生1赋值
+            this.pushDataBody.firstAnesthesiaAssistantName = this.hasChooseRoom.docmzkUsers;
+            // 副麻医生2赋值
+            this.pushDataBody.secondAnesthesiaAssistantName = this.hasChooseRoom.docmzkUsers2;
+            // 麻醉助手1赋值
+            this.pushDataBody.firstAssistantName = this.hasChooseRoom.assistant;
+            // 麻醉助手2赋值
+            this.pushDataBody.secondAssistantName = this.hasChooseRoom.assistant2;
+            // 洗手护士1赋值
+            this.pushDataBody.firstOperationNurseName = this.hasChooseRoom.docwash;
+            // 洗手护士2赋值
+            this.pushDataBody.secondOperationNurseName = this.hasChooseRoom.docwash2;
+            // 巡回护士1赋值
+            this.pushDataBody.firstOperationNurseName = this.hasChooseRoom.doctour;
+            // 巡回护士2赋值
+            this.pushDataBody.secondOperationNurseName = this.hasChooseRoom.doctour2;
+            // 自动添加台次
             for (var a = 0; a < this.scheduleListRight.length; a++) {
                 if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
                     dataR = true;
@@ -747,14 +1034,46 @@ export default {
             } else {
                 this.pushDataBody.sequence = dataNum + 1
             }
-            console.log(this.pushDataBody.sequence)
+            let subMitData = {
+                // 手术间赋值
+                operatingRoomNo: this.hasChooseRoom.name,
+                // 主麻医生赋值
+                anesthesiaDoctorName: this.hasChooseRoom.docoptionsId,
+                // 副麻医生1赋值
+                firstAnesthesiaAssistantName: this.hasChooseRoom.docmzkUsersId,
+                // 副麻医生2赋值
+                secondAnesthesiaAssistantName: this.hasChooseRoom.docmzkUsers2Id,
+                // 麻醉助手1赋值
+                firstAssistantName: this.hasChooseRoom.assistantId,
+                // 麻醉助手2赋值
+                secondAssistantName: this.hasChooseRoom.assistant2Id,
+                // 洗手护士1赋值
+                firstOperationNurseName: this.hasChooseRoom.docwashId,
+                // 洗手护士2赋值
+                secondOperationNurseName: this.hasChooseRoom.docwash2Id,
+                // 巡回护士1赋值
+                firstOperationNurseName: this.hasChooseRoom.doctourId,
+                // 巡回护士2赋值
+                secondOperationNurseName: this.hasChooseRoom.doctour2Id,
+                // 手术台次
+                sequence: this.pushDataBody.sequence,
+                patientId: this.pushDataBody.patientId,
+                scheduleId: this.pushDataBody.scheduleId,
+                visitId: this.pushDataBody.visitId,
+            }
             this.scheduleList.splice(this.spliceIndex, 1);
             this.scheduleListRight.push(this.pushDataBody)
-            this.newUpdata.push(this.pushDataBody)
+            this.newUpdata.push(subMitData)
             console.log(this.newUpdata)
         },
         goBackFun(cell, index) {
             console.log(cell)
+            for (var a = 0; a < this.newUpdata.length; a++) {
+                if (cell.visitId == this.newUpdata[a].visitId && cell.patientId == this.newUpdata[a].patientId && cell.scheduleId == this.newUpdata[a].scheduleId) {
+                    this.newUpdata.splice(a, 1);
+                }
+            }
+
             console.log(index)
             this.scheduleListRight.splice(index, 1);
             this.scheduleList.push(cell);
@@ -788,6 +1107,7 @@ export default {
 .flex {
     height: 25px;
     line-height: 25px;
+    padding: 3px 0;
 }
 
 .flex:last-child {
@@ -796,7 +1116,7 @@ export default {
 
 .flex textarea {
     resize: none;
-    width: 280px;
+    width: 340px;
     height: 40px;
 }
 
@@ -889,10 +1209,11 @@ export default {
     display: flex;
     flex-wrap: wrap;
     height: auto;
+    padding-top: 10px;
 }
 
 .label {
-    width: 80px;
+    width: 120px;
     text-align: right;
 }
 
@@ -942,7 +1263,7 @@ export default {
 }
 
 .infoModal {
-    width: 500px;
+    width: 550px;
     height: auto;
     background: #fff;
     background: rgb(240, 240, 240);
@@ -1051,16 +1372,19 @@ export default {
     height: 113px;
     border-top: 1px solid #fff;
     border-bottom: 1px solid #fff;
-    display: flex;
+    /* position: relative; */
 }
 
 .operationRoom {
-    min-width: 60px;
-    height: 100%;
+    width: 60px;
+    height: 115px;
     background-color: #fff;
     text-align: center;
     line-height: 113px;
     cursor: pointer;
+    /* position: absolute; */
+    /* left: 0; */
+    /* top: 0; */
 }
 
 .backgroundColor {
