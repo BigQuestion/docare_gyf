@@ -183,6 +183,8 @@ export default {
           .then(rest => {
             this.submitSaveFun();
           })
+      } else {
+        this.submitSaveFun();
       }
     },
     //获取默认表格内容

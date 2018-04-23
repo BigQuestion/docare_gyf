@@ -525,6 +525,23 @@ export default {
   selectQiXieTitle(params, config) {
     return fetch('medicalsystem/rest/medFormCon/selectQiXieTitle', params)
   },
+
+  /**
+   * 批量插入器械清单标题
+   * 
+   */
+  insertMedQiXieTitleColumnBatch(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/insertMedQiXieTitleColumnBatch', params)
+  },
+
+  /**
+   * 批量插入器械清单标题
+   * 
+   */
+  updateMedQiXieTitleColumnBatch(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/updateMedQiXieTitleColumnBatch', params)
+  },
+
   /**
    * 获取病人器械清单数据
    * 

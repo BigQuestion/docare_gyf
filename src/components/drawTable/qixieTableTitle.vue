@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 450px;width: 700px;box-shadow: #e8e8ea 0px 0px 5px;position: absolute;top: 20%;left: 25%;background-color: rgb(251,251,251);padding: 5px;">
+  <div style="height: 450px;width: 700px;box-shadow: #e8e8ea 0px 0px 5px;position: absolute;background-color: rgb(251,251,251);padding: 5px;" :style="{top:top+'px',left:left+'px'}">
     <div style="height: 25px;width: 100%;text-align: center;position: relative;">
       <div>
         编辑列
@@ -17,7 +17,7 @@
           </li>
         </ul>
       </div>
-      <div style="padding: 10px;">
+      <div style="padding: 10px;" v-if="chooseItem">
         <table style="border-collapse:collapse;table-layout: fixed;width: 550px;" border="1" cellspacing="0" cellpadding="0">
           <tr>
             <td>
@@ -60,6 +60,13 @@ export default {
       titileList: [],
       chooseItem: {},
       changeDataList: [],
+      startX: 0,
+      startY: 0,
+      offsetLeft: 0,
+      offsetTop: 0,
+      left: 500,
+      top: 200,
+      isDown: false,
     }
   },
   methods: {
@@ -70,15 +77,18 @@ export default {
       let params = {}
       this.api.selectQiXieTitle(params)
         .then(res => {
-          res.forEach(item => {
-            item.isActive = false;
-            item.oldName = item.columnTitleName;
-          })
-          this.titileList = res;
-          if (JSON.stringify(this.chooseItem) == "{}") {
-            this.titileList[0].isActive = true;
-            this.chooseItem = this.titileList[0];
+          if (res.length > 0) {
+            res.forEach(item => {
+              item.isActive = false;
+              item.oldName = item.columnTitleName;
+            })
+            this.titileList = res;
+            if (JSON.stringify(this.chooseItem) == "{}") {
+              this.titileList[0].isActive = true;
+              this.chooseItem = this.titileList[0];
+            }
           }
+
         })
     },
     activeFun(data) {
@@ -119,7 +129,39 @@ export default {
     //提交
     submitFun() {
       console.log(this.changeDataList)
-    }
+      let insertArr = []
+      this.titileList.forEach(item => {
+        if (item.addFlag) {
+          insertArr.push(item)
+        }
+      })
+
+      console.log(insertArr)
+      this.api.insertMedQiXieTitleColumnBatch(insertArr)
+        .then(res => {
+
+        })
+    },
+    //鼠标按下事件
+    clickMouseDown(ev) {
+      let downX = ev.clientX
+      let downY = ev.clientY
+      this.startX = downX
+      this.startY = downY
+      this.isDown = true
+    },
+    divMouseMove(ev) {
+      if (this.isDown) {
+        this.left = ev.clientX - this.startX
+        this.top = ev.clientY - this.startY
+      }
+
+    },
+    mouseStop() {
+      debugger
+      this.isDown = false;
+    },
+
   },
   mounted() {
     this.getTitleList();
