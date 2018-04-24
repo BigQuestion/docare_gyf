@@ -5,7 +5,14 @@
         <thead>
           <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
         </thead>
-        <tbody>
+        <tbody v-if="config.isPrintedView">
+          <tr v-for="(item,index) in rows">
+            <td v-for="(de,index2) in titileList">
+              <div>{{testList[index][index2]}}</div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody v-else>
           <tr v-for="(item,index) in rows">
             <td v-for="(de,index2) in titileList">
               <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2]" @change="getChangeList($event,index,index2)">

@@ -639,6 +639,7 @@ export default {
       pageButtonView: false, //翻页按钮
       firstRoom: { noneData: false },
       personStyleView: false, //是否显示个性化体征
+      currentPageNum: 1
     }
   },
   methods: {
@@ -669,28 +670,33 @@ export default {
       // LODOP.PRINT_DESIGN();
     },
     CreateOneFormPage() {
+
       LODOP = getLodop();
-      LODOP.PRINT_INIT("");
-      LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
-      LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-      var _this = this;
+      this.currentPageNum = 1;
+      this.printPage(this.currentPageNum)
+      // LODOP = getLodop();
+      // LODOP.PRINT_INIT("");
+      // LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
+      // LODOP.PREVIEW();
+      // LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+      // var _this = this;
 
-      // for (var i = 0; i < 2; i++) {
-      //   this.$nextTick(function() {
-      //     LODOP.NewPageA();
-      //     _this.toChangePage(1);
-      //     LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
-      //     LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-      //   })
-      LODOP.NewPageA();
-      _this.toChangePage(1);
-      var t = setTimeout(function() {
+      // // for (var i = 0; i < 2; i++) {
+      // //   this.$nextTick(function() {
+      // //     LODOP.NewPageA();
+      // //     _this.toChangePage(1);
+      // //     LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
+      // //     LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+      // //   })
+      // LODOP.NewPageA();
+      // _this.toChangePage(1);
+      // var t = setTimeout(function() {
 
-        LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
-        LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-        LODOP.NewPageA();
-        LODOP.PREVIEW();
-      }, 1000);
+      //   LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
+      //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+      //   LODOP.NewPageA();
+      //   LODOP.PREVIEW();
+      // }, 1000);
       // }
       // var t1 = setTimeout(function() {
       //   LODOP.PREVIEW();
@@ -714,6 +720,22 @@ export default {
       // LODOP.SET_SHOW_MODE("MESSAGE_GETING_URL", " "); //该语句隐藏进度条或修改提示信息
 
       //this.printed = false;
+
+    },
+    printPage(index) {
+      setTimeout(() => {
+        LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
+        LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+        LODOP.NewPageA();
+        console.log('print' + this.currentPageNum)
+        if (index + 1 <= this.config.pageTotal) {
+          this.toChangePage(1);
+          this.currentPageNum++;
+          this.printPage(this.currentPageNum);
+        } else {
+          LODOP.PREVIEW();
+        }
+      }, 1000)
 
     },
     inputBlur(list) {
@@ -1988,6 +2010,153 @@ export default {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -2074,6 +2243,153 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
