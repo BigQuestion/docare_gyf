@@ -69,7 +69,7 @@ export default {
     },
     dataInit() {
       this.selectQiXieTitle();
-
+      
     },
     dataChange(list1) {
       let tArray = new Array(); //先声明一维
@@ -95,6 +95,9 @@ export default {
       // console.log(ev.currentTarget.value)
       //判断是否有值
       //如果当前修改的位置之前不存在就放入到新增集合里面
+      // var addRows = this.rows++;
+      // this.rows = addRows;
+      // console.log(addRows)
       if (this.testList[y][x] === '') {
 
         if (this.insertDataList.length > 0) {
@@ -112,7 +115,7 @@ export default {
               patientId: this.config.userInfo.patientId,
               visitId: this.config.userInfo.visitId,
               operId: this.config.userInfo.operId,
-              yPosition: y,
+              yPosition: y, 
               xPosition: x,
               positionValue: ev.currentTarget.value
             })

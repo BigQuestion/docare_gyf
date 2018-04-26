@@ -1,34 +1,31 @@
 <template>
-  <div style="height: 450px;width: 700px;box-shadow: #e8e8ea 0px 0px 5px;position: absolute;top: 20%;left: 25%;background-color: rgb(251,251,251);padding: 5px;z-index: 999;">
-    <div style="height: 25px;width: 100%;text-align: center;position: relative;">
-      <div>
-        默认表格数据编辑
+  <div style="width:100%;height:100%;position:fixed;top:0;;left:0;cursor:not-allowed;" @click="atherPlacFuntion">
+    <div class="fontBox" @click.stop="noFunction" :class="{animation:clickAtherPlace}">
+      <div class="fontTop">
+        <span>默认表格数据编辑</span>
+        <div @click="closeWin" class="font_active">X</div>
       </div>
-      <div style="position: absolute;right:20px;top:0px;color:white;background-color: rgb(60,163,203);width: 23px;
-    height: 23px;line-height: 23px;text-align: center;cursor: pointer;" @click="closeWin">
-        X
+      <div style="width: 100%;height: 350px;overflow: auto;border-bottom: 1px solid;margin-top:10px;">
+        <table style="border-collapse:collapse;table-layout: fixed;" border="1" cellspacing="0" cellpadding="0">
+          <thead>
+            <th v-for="item in titileList">
+              <div style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 20px;width: 80px;line-height: 20px;">
+                {{item.columnTitleName}}
+              </div>
+            </th>
+          </thead>
+          <tbody>
+            <tr v-for="(item,index) in rows">
+              <td v-for="(de,index2) in titileList">
+                <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2]" @change="getChangeList($event,index,index2)">
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-    <div style="width: 100%;height: 350px;overflow: auto;border-bottom: 1px solid;">
-      <table style="border-collapse:collapse;table-layout: fixed;" border="1" cellspacing="0" cellpadding="0">
-        <thead>
-          <th v-for="item in titileList">
-            <div style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 20px;width: 80px;line-height: 20px;">
-              {{item.columnTitleName}}
-            </div>
-          </th>
-        </thead>
-        <tbody>
-          <tr v-for="(item,index) in rows">
-            <td v-for="(de,index2) in titileList">
-              <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2]" @change="getChangeList($event,index,index2)">
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div style="height: 50px;text-align: right;padding: 20px;">
-      <button @click="submitSave">确定</button>
+      <div style="text-align: right;padding: 20px 10px 0 0;">
+        <button @click="submitSave">确定</button>
+      </div>
     </div>
   </div>
 </template>
@@ -42,6 +39,7 @@ export default {
       updateDataList: [], //修改数据
       insertDataList: [], //插入数据
       rows: 30,
+      clickAtherPlace: false,
     }
   },
   methods: {
@@ -79,6 +77,11 @@ export default {
     getChangeList(ev, y, x) {
       //判断是否有值
       //如果当前修改的位置之前不存在就放入到新增集合里面
+      var newLength = this.rows+1;
+      // newLength++ 
+      this.rows = newLength;
+      console.log(this.rows)
+      // console.log(this.rows)
       if (this.testList[y][x] === '') {
 
         if (this.insertDataList.length > 0) {
@@ -152,13 +155,22 @@ export default {
     },
     closeWin() {
       this.$emit('closeView');
-    }
+    },
+    atherPlacFuntion() {
+      this.clickAtherPlace = !this.clickAtherPlace;
+      setTimeout(() => {
+        this.clickAtherPlace = !this.clickAtherPlace;
+      }, 1000);
+    },
+    noFunction() {
+
+    },
   },
   mounted() {
     this.selectQiXieTitle()
   },
-  created() {},
-  beforeDestroy() {},
+  created() { },
+  beforeDestroy() { },
   components: {},
   computed: {
 
@@ -167,15 +179,74 @@ export default {
 
 </script>
 <style scope>
-.cont {
+.fontBox {
+  position: absolute;
+  background: rgb(240, 240, 240);
+  border: 1px solid rgb(24, 131, 215);
+  cursor: auto;
+  -webkit-box-shadow: 1px 1px 20px #AAA;
+  box-shadow: 1px 1px 20px #AAA;
   height: 450px;
   width: 700px;
-  box-shadow: #e8e8ea 0px 0px 5px;
-  position: absolute;
-  top: 20%;
-  left: 25%;
-  background-color: rgb(251, 251, 251);
-  padding: 5px;
+  top: calc(50% - 225px);
+  left: calc(50% - 350px);
+  z-index: 999;
 }
 
+.fontTop {
+  width: 100%;
+  height: 30px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding-left: 5px;
+}
+
+.font_active {
+  width: 35px;
+  height: 100%;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+  color: rgb(153, 153, 153);
+  font-family: microsoft YaHei;
+}
+
+.font_active:hover {
+  animation: colorChange 0.5s infinite;
+  animation-iteration-count: 1;
+  color: #fff;
+  background-color: rgb(232, 17, 35);
+}
+
+.font_active:active {
+  background-color: rgb(241, 112, 112);
+  color: #fff;
+}
+
+.animation {
+  animation: backShadow 0.2s linear;
+  animation-iteration-count: 5;
+}
+
+@keyframes backShadow {
+  25% {
+    box-shadow: 1px 1px 20px #AAA;
+    border: 1px solid #AAA;
+  }
+  50% {
+    box-shadow: 1px 1px 10px #AAA;
+    border: 1px solid rgb(24, 131, 215);
+  }
+  75% {
+    box-shadow: 1px 1px 20px #AAA;
+    border: 1px solid #AAA;
+  }
+  100% {
+    box-shadow: 1px 1px 10px #AAA;
+    border: 1px solid rgb(24, 131, 215);
+  }
+}
 </style>

@@ -1,55 +1,52 @@
 <template>
-  <div style="height: 450px;width: 700px;box-shadow: #e8e8ea 0px 0px 5px;position: absolute;background-color: rgb(251,251,251);padding: 5px;" :style="{top:top+'px',left:left+'px'}">
-    <div style="height: 25px;width: 100%;text-align: center;position: relative;">
-      <div>
-        编辑列
+  <div style="width:100%;height:100%;position:fixed;top:0;;left:0;cursor:not-allowed;" @click="atherPlacFuntion">
+    <div class="fontBox" @click.stop="noFunction" :class="{animation:clickAtherPlace}" :style="{top:top+'px',left:left+'px'}">
+      <div class="fontTop">
+        <span>编辑列</span>
+        <div @click="closeTitleWin" class="font_active">X</div>
       </div>
-      <div style="position: absolute;right:20px;top:0px;color:white;background-color: rgb(60,163,203);width: 23px;
-    height: 23px;line-height: 23px;text-align: center;cursor: pointer;" @click="closeTitleWin">
-        X
+      <div class="flex" style="background-color: white;font-size: 10.5pt;">
+        <div style="width: 150px;height: 350px;overflow: auto;border:1px solid;">
+          <ul>
+            <li v-for="item in titileList" :class="{active:item.isActive}" @click="activeFun(item)">
+              <div style="min-height: 20px;">{{item.columnTitleName}}</div>
+            </li>
+          </ul>
+        </div>
+        <div style="padding: 10px;" v-if="chooseItem">
+          <table style="border-collapse:collapse;table-layout: fixed;width: 550px;" border="1" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <div style="width: 50%">
+                  栏目名称
+                </div>
+              </td>
+              <td>
+                <div style="width: 50%">
+                  <input style="width: 100%;border:none;" type="text" v-model="chooseItem.columnTitleName" @change="changeFun">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="width: 50%">
+                  WIDTH
+                </div>
+              </td>
+              <td>
+                <div style="width: 50%">
+                  <input style="width: 100%;border:none;" type="text" v-model="chooseItem.columnWidth" @change="changeFun">
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
-    </div>
-    <div class="flex" style="background-color: white;font-size: 10.5pt;">
-      <div style="width: 150px;height: 350px;overflow: auto;border:1px solid;">
-        <ul>
-          <li v-for="item in titileList" :class="{active:item.isActive}" @click="activeFun(item)">
-            <div style="min-height: 20px;">{{item.columnTitleName}}</div>
-          </li>
-        </ul>
+      <div style="padding: 10px;">
+        <button @click="addTitle">添加</button>
+        <button >删除</button>
+        <button @click="submitFun">确定</button>
       </div>
-      <div style="padding: 10px;" v-if="chooseItem">
-        <table style="border-collapse:collapse;table-layout: fixed;width: 550px;" border="1" cellspacing="0" cellpadding="0">
-          <tr>
-            <td>
-              <div style="width: 50%">
-                栏目名称
-              </div>
-            </td>
-            <td>
-              <div style="width: 50%">
-                <input style="width: 100%;border:none;" type="text" v-model="chooseItem.columnTitleName" @change="changeFun">
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div style="width: 50%">
-                WIDTH
-              </div>
-            </td>
-            <td>
-              <div style="width: 50%">
-                <input style="width: 100%;border:none;" type="text" v-model="chooseItem.columnWidth" @change="changeFun">
-              </div>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-    <div style="padding: 10px;">
-      <button @click="addTitle">添加</button>
-      <button>删除</button>
-      <button @click="submitFun">确定</button>
     </div>
   </div>
 </template>
@@ -67,6 +64,7 @@ export default {
       left: 500,
       top: 200,
       isDown: false,
+      clickAtherPlace: false,
     }
   },
   methods: {
@@ -92,6 +90,7 @@ export default {
         })
     },
     activeFun(data) {
+      console.log(data)
       this.titileList.forEach(item => {
         item.isActive = false;
       })
@@ -109,6 +108,8 @@ export default {
       })
     },
     changeFun() {
+      console.log(this.changeDataList)
+      console.log(this.chooseItem)
       if (this.changeDataList.length == 0) {
         this.changeDataList.push(this.chooseItem);
       } else {
@@ -161,13 +162,22 @@ export default {
       debugger
       this.isDown = false;
     },
+    atherPlacFuntion() {
+      this.clickAtherPlace = !this.clickAtherPlace;
+      setTimeout(() => {
+        this.clickAtherPlace = !this.clickAtherPlace;
+      }, 1000);
+    },
+    noFunction() {
+
+    },
 
   },
   mounted() {
     this.getTitleList();
   },
-  created() {},
-  beforeDestroy() {},
+  created() { },
+  beforeDestroy() { },
   components: {},
   computed: {
 
@@ -181,4 +191,74 @@ ul li.active {
   color: white;
 }
 
+.fontBox {
+  position: absolute;
+  background: rgb(240, 240, 240);
+  border: 1px solid rgb(24, 131, 215);
+  cursor: auto;
+  -webkit-box-shadow: 1px 1px 20px #AAA;
+  box-shadow: 1px 1px 20px #AAA;
+  height: 450px;
+  width: 700px;
+  top: calc(50% - 225px);
+  left: calc(50% - 350px);
+  z-index: 999;
+}
+
+.fontTop {
+  width: 100%;
+  height: 30px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding-left: 5px;
+}
+
+.font_active {
+  width: 35px;
+  height: 100%;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+  color: rgb(153, 153, 153);
+  font-family: microsoft YaHei;
+}
+
+.font_active:hover {
+  animation: colorChange 0.5s infinite;
+  animation-iteration-count: 1;
+  color: #fff;
+  background-color: rgb(232, 17, 35);
+}
+
+.font_active:active {
+  background-color: rgb(241, 112, 112);
+  color: #fff;
+}
+
+.animation {
+  animation: backShadow 0.2s linear;
+  animation-iteration-count: 5;
+}
+
+@keyframes backShadow {
+  25% {
+    box-shadow: 1px 1px 20px #AAA;
+    border: 1px solid #AAA;
+  }
+  50% {
+    box-shadow: 1px 1px 10px #AAA;
+    border: 1px solid rgb(24, 131, 215);
+  }
+  75% {
+    box-shadow: 1px 1px 20px #AAA;
+    border: 1px solid #AAA;
+  }
+  100% {
+    box-shadow: 1px 1px 10px #AAA;
+    border: 1px solid rgb(24, 131, 215);
+  }
+}
 </style>
