@@ -639,7 +639,8 @@ export default {
       pageButtonView: false, //翻页按钮
       firstRoom: { noneData: false },
       personStyleView: false, //是否显示个性化体征
-      currentPageNum: 1
+      currentPageNum: 1,
+      timeTestVal: '',
     }
   },
   methods: {
@@ -702,24 +703,7 @@ export default {
       //   LODOP.PREVIEW();
 
       // }, 3000);
-      // this.$nextTick(function() { // => '更新完成'
-      //   LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
-      //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-      //   LODOP.NewPageA();
-      //   LODOP.PREVIEW();
-      // })
 
-      // LODOP.ADD_PRINT_HTM(10, 10, "99%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
-
-
-      // LODOP.ADD_PRINT_HTM(10, 10, "100%", "100%", this.$refs.mybox.innerHTML);
-      // LODOP.NewPageA();
-      // LODOP.NewPageA();
-      // this.toChangePage(1);
-      // LODOP.ADD_PRINT_HTM(10, 20, "100%", "100%", this.$refs.mybox.innerHTML);
-      // LODOP.SET_SHOW_MODE("MESSAGE_GETING_URL", " "); //该语句隐藏进度条或修改提示信息
-
-      //this.printed = false;
 
     },
     printPage(index) {
@@ -727,7 +711,6 @@ export default {
         LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
         LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
         LODOP.NewPageA();
-        console.log('print' + this.currentPageNum)
         if (index + 1 <= this.config.pageTotal) {
           this.toChangePage(1);
           this.currentPageNum++;
@@ -769,9 +752,6 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
           res => {
-            //   this.pages = Math.ceil(this.pageLength.length / this.size)
-
-            console.log(res)
             if (res.total > 5) {
               this.pageShowData = true;
               this.pages = res.pages;
@@ -1523,6 +1503,11 @@ export default {
       this.config.initTime = '';
       this.config.pagePercentNum = 1;
     },
+    //定时器
+    timeTest() {
+
+      this.timeTestVal = setTimeout(_ => this.timeTest(), 2000)
+    }
   },
   mounted() {
     this.searchPatientList();
@@ -1530,6 +1515,10 @@ export default {
     this.selectMedFormList();
 
     this.patientId = '10966589';
+    if (this.timeTestVal) {
+      clearTimeout(this.timeTestVal);
+    }
+    this.timeTest();
   },
   created() {
     Bus.$on('showPersonStyle', (val) => {
@@ -1826,337 +1815,6 @@ export default {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -2243,6 +1901,14 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
+
+
+
+
+
+
+
+
 
 
 

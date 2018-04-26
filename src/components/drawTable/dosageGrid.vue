@@ -66,6 +66,7 @@ export default {
       dataObj: {},
       xArray: [],
       percentPageData: [],
+      setTimeId: '',
     }
   },
   methods: {
@@ -86,6 +87,8 @@ export default {
       this.lineArray = array;
     },
     getData() {
+      var svg = d3.selectAll(".dosagegrid")
+      svg.remove();
       this.dataArray = [];
       for (var i = 0; i < this.forRows; i++) {
         this.dataArray.push(i)
@@ -102,6 +105,7 @@ export default {
           .then(res => {
             var list = res.list;
             this.dataListOperFun(list)
+            this.setTimeId = setTimeout(_ => this.getData(), this.config.timeSet)
           })
       }
     },
@@ -234,10 +238,15 @@ export default {
           } else {
             let t1 = ''
             let t2 = ''
-            if (this.config.pagePercentNum == 1) {
-              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-            } else {
+            // if (this.config.pagePercentNum == 1) {
+            //   t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            // } else {
+            //   t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            // }
+            if (list[i].vStartTime) {
               t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            } else {
+              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
             }
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
               if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
@@ -248,8 +257,11 @@ export default {
             } else {
               if (new Date(list[i].ENDDATE) > this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
-              } else {
+              } else if (new Date(list[i].ENDDATE) > this.config.initTime) {
                 t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
+              } else {
+                list[i].DURATIVE_INDICATOR = 0;
+                t2 = 0;
               }
             }
             let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)
@@ -327,18 +339,23 @@ export default {
 
       }
     },
+
   },
   mounted() {
+
+    if (this.setTimeId) {
+      clearTimeout(this.setTimeId);
+    }
     this.getLineXy();
     this.getData();
 
-    // window.eventHub.$on("test", this.pageTurnFun);
   },
   created() {
     Bus.$on('test', this.pageTurnFun)
   },
   beforeDestroy() {
     Bus.$off('test', this.pageTurnFun);
+    clearTimeout(this.setTimeId);
   },
   components: {
 

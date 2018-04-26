@@ -93,6 +93,7 @@ export default {
       rightViewX: '',
       rightViewY: '',
       signNameLisg: [],
+      setTimeId: '', //定时器执行
     }
 
   },
@@ -217,6 +218,7 @@ export default {
             }
             this.getSignTimeData(res.length, res);
             this.signNameLisg = res;
+            this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
           })
     },
 
@@ -391,23 +393,34 @@ export default {
     tipShowPersonStyle() {
       this.showStyleView = false;
       Bus.$emit('showPersonStyle', 1);
+    },
+    //初始化执行函数
+    initFun() {
+      this.getLineXy();
+      if (this.page == false) {
+        this.getSignName();
+      }
+
+      this.getYDataArray();
+    },
+    runTimeFun() {
+      this.initFun()
+
     }
   },
   mounted() {
-    this.getLineXy();
-    if (this.page == false) {
-      this.getSignName();
+    if (this.setTimeId) {
+      clearTimeout(this.setTimeId);
     }
-
-    this.getYDataArray();
+    this.initFun()
     this.area = this.$refs.area;
-    // window.eventHub.$on("test", this.pageTurnFun);
   },
   created() {
     Bus.$on('test', this.pageTurnFun)
   },
   beforeDestroy() {
     Bus.$off('test', this.pageTurnFun);
+    clearTimeout(this.setTimeId);
   },
   components: {
 
