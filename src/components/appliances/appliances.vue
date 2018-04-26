@@ -71,7 +71,7 @@ export default {
     },
     dataInit() {
       this.selectQiXieTitle();
-
+      
     },
     dataChange(list1) {
       this.dataAllList = list1;
@@ -132,7 +132,7 @@ export default {
               patientId: this.config.userInfo.patientId,
               visitId: this.config.userInfo.visitId,
               operId: this.config.userInfo.operId,
-              yPosition: y,
+              yPosition: y, 
               xPosition: x,
               positionValue: ev.currentTarget.value
             })

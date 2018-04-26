@@ -78,7 +78,7 @@
             </div>
           </div>
         </div>
-        <div v-if="lockedPatientInfo.patientId" style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;display:flex;box-sizing:border-box;">
+        <div v-if="lockedPatientInfo.patientId" style="height: 30px;position: absolute;bottom: 0px;width: 90%;border-top: 1px solid black;display:flex;box-sizing:border-box;margin-left:5px;">
           <div v-for="item in medBillList" @click="selectMedFormTemp(item)" :class="{bindClass:item.bindClassData}" class="listButton">
             {{item.formName}}
           </div>
@@ -787,8 +787,6 @@ export default {
                       })
                     }
                   });
-              //   this.pages = Math.ceil(this.pageLength.length / this.size)
-
             } else {
               this.patientList = res.list;
               this.pageShowData = false;
@@ -1612,6 +1610,8 @@ export default {
 
 .procedure {
   flex: 1;
+  background: url('../../assets/timeBack.jpg') no-repeat;
+  background-size: cover;
 }
 
 .logo {
@@ -1623,9 +1623,12 @@ export default {
   box-sizing: border-box;
   padding-left: 10px;
   width: 220px;
-  background: #E6E6E6;
+  background: url('../../assets/msgBack.jpg') no-repeat;
+  background-size: cover;
   display: flex;
   align-items: center;
+  border-right: 2px solid #0046A7;
+  border-bottom: 2px solid #0046A7;
 }
 
 .head {
@@ -1815,6 +1818,7 @@ export default {
 
 
 
+<<<<<<< HEAD=======>>>>>>>9f9db0a2696a103abef64e8a162c8a2f8375ba8f
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -2236,13 +2240,7 @@ export default {
 
 
 
-
-
-
-
-
-
-
+<<<<<<< HEAD=======>>>>>>>9f9db0a2696a103abef64e8a162c8a2f8375ba8f
 /* 分页样式 */
 
 .pageClass {
