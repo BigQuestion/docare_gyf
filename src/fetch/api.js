@@ -103,16 +103,9 @@ export default {
     return fetch('medicalsystem/rest/medOperationSchedule/submitMedOperationScheduleList', params)
 
   },
-  /**
-   * 提交安排手术排班
-   * 
-   */
-  scheduleReportView(params, config) {
-    return fetch('medicalsystem/rest/medOperationSchedule/scheduleReportView', params)
 
-  },
   /**
-   * 提交安排手术排班
+   * 执行sql
    * 
    */
   doSql(params, config) {
@@ -120,7 +113,7 @@ export default {
 
   },
   /**
-   * 提交安排手术排班
+   * 获取手术通知安排表
    * 
    */
   getScheduleReportView(params, config) {

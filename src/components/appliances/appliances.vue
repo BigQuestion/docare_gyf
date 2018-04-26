@@ -37,6 +37,8 @@ export default {
       insertDataList: [], //插入数据
       isNullArry: [], //病人是否存在数据
       defaultArry: [], //表格默认数组
+      dataAllList: [],
+      maxY: 0, //Y坐标最大值
     }
   },
   props: ['object', 'page'],
@@ -46,7 +48,6 @@ export default {
       this.api.selectQiXieTitle(params)
         .then(res => {
           this.titileList = res;
-          // console.log(this.titileList)
         })
 
       let params1 = {
@@ -55,6 +56,7 @@ export default {
         operId: this.config.userInfo.operId
       }
 
+      //查询病人
       this.api.getPatientQiXieList(params1)
         .then(rest => {
           this.isNullArry = rest;
@@ -72,6 +74,11 @@ export default {
       
     },
     dataChange(list1) {
+      this.dataAllList = list1;
+      this.findMax(0);
+      if (this.maxY + 1 >= this.rows) {
+        this.rows = this.maxY + 2;
+      }
       let tArray = new Array(); //先声明一维
       for (var k = 0; k < this.rows; k++) { //一维长度为i,i为变量，可以根据实际情况改变
 
@@ -87,6 +94,7 @@ export default {
       })
 
       this.testList = tArray;
+
     },
 
 
@@ -95,9 +103,18 @@ export default {
       // console.log(ev.currentTarget.value)
       //判断是否有值
       //如果当前修改的位置之前不存在就放入到新增集合里面
-      // var addRows = this.rows++;
-      // this.rows = addRows;
-      // console.log(addRows)
+      if (y + 1 == this.rows) {
+        this.rows = this.rows + 1
+        this.dataAllList.push({
+          patientId: this.config.userInfo.patientId,
+          visitId: this.config.userInfo.visitId,
+          operId: this.config.userInfo.operId,
+          yPosition: y,
+          xPosition: x,
+          positionValue: ev.currentTarget.value
+        })
+        this.dataChange(this.dataAllList)
+      }
       if (this.testList[y][x] === '') {
 
         if (this.insertDataList.length > 0) {
@@ -223,6 +240,17 @@ export default {
             this.insertDataList = [];
           })
       }
+      this.dataInit();
+    },
+    //查找y坐标最大值
+    findMax(i) {
+      if (i == this.dataAllList.length) {
+        return this.maxY
+      }
+      if (this.maxY < this.dataAllList[i].yPosition) {
+        this.maxY = this.dataAllList[i].yPosition
+      }
+      this.findMax(i + 1)
     },
 
   },
