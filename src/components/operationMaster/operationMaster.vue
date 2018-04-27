@@ -403,13 +403,13 @@
           <div ref="mybox" id="mybox" style="display: none; ">
             <div class="designArea" style="font-size: 9pt;font-family: STSong;">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2)*0.75)+'pt'}">
-                <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element-print>
+                <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
               </div>
               <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
-                <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element-print>
+                <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
               </div>
               <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x*0.75+'pt',top:item.y*0.75+'pt'}">
-                <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue"></form-element-print>
+                <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
               </div>
             </div>
           </div>
@@ -1779,17 +1779,10 @@ export default {
   background-size: cover;
 }
 
-
-
-
-
-
-
-
-
+<<<<<<< HEAD
 /* 左部菜单按钮部分样式 */
 
-.stretch {
+=======>>>>>>>7204134313e9a0c16d6fc73270b9646dfa236f86 .stretch {
   height: 30px;
   /* background-color: rgb(0, 22, 116); */
   background: url('../../assets/linkButton.jpg') no-repeat;

@@ -48,6 +48,12 @@
     <div v-if="value.type=='operControlGrid'">
       <operControlGridPrint :page="isPage.isPage"></operControlGridPrint>
     </div>
+    <div v-if="value.type=='signGridPrint'">
+      <signGridPrint :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></signGridPrint>
+    </div>
+    <div v-if="value.type=='dataOfGrid'">
+      <dataOfGridPrint :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></dataOfGridPrint>
+    </div>
     <div v-if="value.type=='div'">
       <div style="box-sizing:border-box;" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt',border:value.borderStyle}"></div>
     </div>
@@ -60,6 +66,8 @@ import checkBox from '@/components/checkBox/checkBox.vue';
 import tableGridPrint from '@/components/drawTable/tableGridPrint.vue';
 import dosageGridPrint from '@/components/drawTable/dosageGridPrint.vue';
 import operControlGridPrint from '@/components/drawTable/operControlGridPrint.vue';
+import signGridPrint from '@/components/drawTable/signGridPrint.vue';
+import dataOfGridPrint from '@/components/drawTable/dataOfGridPrint.vue';
 export default {
   data() {
     return {
@@ -72,7 +80,7 @@ export default {
       this.$emit('toTopEvent', data);
     },
   },
-  props: ['value', 'isPage', 'isPrint'], // 设置value为props属性-必须
+  props: ['value', 'isPage', 'isPrint', 'objectItem'], // 设置value为props属性-必须
   computed: {},
   components: {
     commonSelect,
@@ -80,7 +88,9 @@ export default {
     checkBox,
     tableGridPrint,
     dosageGridPrint,
-    operControlGridPrint
+    operControlGridPrint,
+    signGridPrint,
+    dataOfGridPrint
   },
   mounted() {
 
@@ -89,6 +99,5 @@ export default {
 
 </script>
 <style type="text/css" scoped>
-
 
 </style>
