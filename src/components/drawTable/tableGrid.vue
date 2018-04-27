@@ -115,7 +115,7 @@ export default {
       lineArray: [],
       percentPageData: [],
       timeRequestSec: 10000, //多久请求一次
-      setIntervalId: '', //定时器返回的一个ID
+      setTimeId: '', //定时器返回的一个ID
 
     }
   },
@@ -237,54 +237,54 @@ export default {
         .then(res => {
           var list = res.list;
           this.dataOperChange(list);
-
+          this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
           return false;
-          for (var i = 0; i < list.length; i++) {
+          // for (var i = 0; i < list.length; i++) {
 
-            if (list[i].START_TIME) {
-              if (i == this.rows)
-                break;
-              else {
-                //开始时间间隔
-                let sMin = ''
-                //结束时间间隔
-                let eMin = ''
-                sMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME);
-                if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+          //   if (list[i].START_TIME) {
+          //     if (i == this.rows)
+          //       break;
+          //     else {
+          //       //开始时间间隔
+          //       let sMin = ''
+          //       //结束时间间隔
+          //       let eMin = ''
+          //       sMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME);
+          //       if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
-                  if (new Date(list[i].MAX_TIME) > this.maxTime) {
-                    eMin = this.getMinuteDif(this.config.userInfo.inDateTime, this.maxTime);
-                  } else {
-                    eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].MAX_TIME);
-                  }
+          //         if (new Date(list[i].MAX_TIME) > this.maxTime) {
+          //           eMin = this.getMinuteDif(this.config.userInfo.inDateTime, this.maxTime);
+          //         } else {
+          //           eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].MAX_TIME);
+          //         }
 
-                } else {
-                  eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].ENDDATE);
-                }
-                let x1 = Math.round(sMin / lMin * (w / this.columns))
-                let x2 = Math.round(eMin / lMin * (w / this.columns))
-                let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-                let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-                if (list[i].DURATIVE_INDICATOR == 1) {
-                  this.xArray.push({
-                    x1: x1,
-                    y1: y1,
-                    x2: x2,
-                    y2: y2,
-                    w: x2 - x1,
-                    obj: list[i]
-                  })
-                  this.dataArray.push(list[i]);
-                  // this.$set(this.dataArray, i, list[i]);
-                  this.createLine(x1, x2, y1, y2, list[i]);
-                  m++;
-                }
-              }
-            }
-          }
-          for (var k = 0; k < this.rows - m; k++) {
-            this.dataArray.push(m)
-          }
+          //       } else {
+          //         eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].ENDDATE);
+          //       }
+          //       let x1 = Math.round(sMin / lMin * (w / this.columns))
+          //       let x2 = Math.round(eMin / lMin * (w / this.columns))
+          //       let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+          //       let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+          //       if (list[i].DURATIVE_INDICATOR == 1) {
+          //         this.xArray.push({
+          //           x1: x1,
+          //           y1: y1,
+          //           x2: x2,
+          //           y2: y2,
+          //           w: x2 - x1,
+          //           obj: list[i]
+          //         })
+          //         this.dataArray.push(list[i]);
+          //         // this.$set(this.dataArray, i, list[i]);
+          //         this.createLine(x1, x2, y1, y2, list[i]);
+          //         m++;
+          //       }
+          //     }
+          //   }
+          // }
+          // for (var k = 0; k < this.rows - m; k++) {
+          //   this.dataArray.push(m)
+          // }
 
         });
     },
@@ -319,7 +319,6 @@ export default {
           .attr("fill", "none")
           .attr("stroke", "blue")
           .attr("class", "test")
-        // .on("mouseenter", function() { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.lineObj = obj; // }) // .on("mouseleave", function() { // //t = setTimeout(function (){ // _this.tipView = false; // //}, 1000); // }) // .on("mousemove", function(ev) { // //_this.lineObj.nowTime = new Date(); // _this.$set(_this.lineObj, "nowTime", _this.getTime()); // var ev = ev || event; // var offX = ev.offsetX; //横坐标值 // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.nowTime = time2; // _this.lineObj = obj; // })
 
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
@@ -341,30 +340,6 @@ export default {
           .attr("y2", y2)
           .attr("x1", x1)
           .attr("x2", x2)
-        // .on("mouseenter", function() {
-
-        //   _this.tipView = true;
-        //   _this.tipLeft = x1;
-        //   _this.tipTop = y2 + 10;
-        //   _this.lineObj = obj;
-
-        // })
-        // .on("mouseleave", function() {
-        //   _this.tipView = false;
-        // })
-        // .on("mousemove", function(ev) {
-        //   //_this.lineObj.nowTime = new Date();
-        //   _this.$set(_this.lineObj, "nowTime", _this.getTime());
-        //   var ev = ev || event;
-        //   var offX = ev.offsetX; //横坐标值
-        //   var m = Math.round(offX / gWidth * 5);
-        //   var time = new Date(_this.config.userInfo.inDateTime);
-        //   var time1 = time.getTime() + m * 60 * 1000;
-        //   var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
-        //   obj.nowTime = time2;
-        //   _this.lineObj = obj;
-        //   console.log(_this.lineObj)
-        // })
         svg.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
@@ -488,6 +463,8 @@ export default {
     },
     //处理数据进行划线
     dataOperChange(list) {
+      var svg = d3.selectAll(".test")
+      svg.remove();
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight,
@@ -504,11 +481,17 @@ export default {
             let sMin = ''
             //结束时间间隔
             let eMin = ''
-            if (this.config.pagePercentNum == 1) {
-              sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-            } else {
+            // if (this.config.pagePercentNum == 1) {
+            //   sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            // } else {
+            //   sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            // }
+            if (list[i].vStartTime) {
               sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            } else {
+              sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
             }
+
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
@@ -534,10 +517,13 @@ export default {
 
             } else {
 
-              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
+              if (new Date(list[i].ENDDATE) >= this.config.maxTime) {
                 eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
-              } else {
+              } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
                 eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
+              } else {
+                list[i].DURATIVE_INDICATOR = 0;
+                eMin = 0;
               }
             }
             let x1 = Math.round(sMin / lMin * (w / this.columns))
@@ -568,32 +554,24 @@ export default {
       }
 
     },
-    //定时请求数据
-    timeRequest() {
-      this.setIntervalId = setInterval(() => {
-        if (this.page == false) {
-          var svg = d3.selectAll(".test")
-          svg.remove();
-          this.selectMedAnesthesiaEventList();
-        }
-      }, this.timeRequestSec)
-    },
 
 
   },
   mounted() {
     this.area = this.$refs.area;
+    if (this.setTimeId) {
+      clearTimeout(this.setTimeId);
+    }
     this.xTimeInit();
 
   },
   created() {
     Bus.$on('test', this.pageChange)
-    // this.timeRequest()
 
   },
   beforeDestroy() {
     Bus.$off('test', this.pageChange);
-    clearInterval(this.setIntervalId)
+    clearTimeout(this.setTimeId);
 
   },
   components: {

@@ -528,11 +528,19 @@ export default {
   },
 
   /**
-   * 批量插入器械清单标题
+   * 批量修改器械清单标题
    * 
    */
   updateMedQiXieTitleColumnBatch(params, config) {
     return fetch('medicalsystem/rest/medFormCon/updateMedQiXieTitleColumnBatch', params)
+  },
+
+  /**
+   * 批量删除器械清单标题
+   * 
+   */
+  deleteMedQiXieTitleColumnBatch(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/deleteMedQiXieTitleColumnBatch', params)
   },
 
   /**
@@ -555,6 +563,13 @@ export default {
    */
   updateBatchMedQiXieQingDian(params, config) {
     return fetch('medicalsystem/rest/medFormCon/updateBatchMedQiXieQingDian', params)
+  },
+  /**
+   * 批量删除病人器械清单数据
+   * 
+   */
+  deleteBatchMedQiXieQingDian(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/deleteBatchMedQiXieQingDian', params)
   },
 
   /**
@@ -579,6 +594,14 @@ export default {
    */
   updateBatchMedQiXieDefaultCulumn(params, config) {
     return fetch('medicalsystem/rest/medFormCon/updateBatchMedQiXieDefaultCulumn', params)
+  },
+
+  /**
+   * 批量删除器械清单默认表格数据
+   * 
+   */
+  deleteBatchMedQiXieDefaultCulumn(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/deleteBatchMedQiXieDefaultCulumn', params)
   },
 
 }

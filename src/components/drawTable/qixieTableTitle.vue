@@ -35,7 +35,7 @@
               </td>
               <td>
                 <div style="width: 50%">
-                  <input style="width: 100%;border:none;" type="text" v-model="chooseItem.columnWidth" @change="changeFun">
+                  <input style="width: 100%;border:none;" type="number" v-model="chooseItem.columnWidth" @change="changeFun">
                 </div>
               </td>
             </tr>
@@ -44,7 +44,7 @@
       </div>
       <div style="padding: 10px;">
         <button @click="addTitle">添加</button>
-        <button >删除</button>
+        <button @click="removeItem">删除</button>
         <button @click="submitFun">确定</button>
       </div>
     </div>
@@ -57,6 +57,7 @@ export default {
       titileList: [],
       chooseItem: {},
       changeDataList: [],
+      deleteDataList: [],
       startX: 0,
       startY: 0,
       offsetLeft: 0,
@@ -78,7 +79,7 @@ export default {
           if (res.length > 0) {
             res.forEach(item => {
               item.isActive = false;
-              item.oldName = item.columnTitleName;
+              item.isChange = false;
             })
             this.titileList = res;
             if (JSON.stringify(this.chooseItem) == "{}") {
@@ -90,7 +91,6 @@ export default {
         })
     },
     activeFun(data) {
-      console.log(data)
       this.titileList.forEach(item => {
         item.isActive = false;
       })
@@ -104,18 +104,23 @@ export default {
         columnWidth: 60,
         oldName: "列1",
         addFlag: true,
-        orderNo: this.titileList.length + 1
+        orderNo: this.titileList.length + 1,
+        isChange: false,
       })
+      this.titileList.forEach(item => {
+        item.isActive = false;
+      })
+      this.titileList[this.titileList.length - 1].isActive = true;
+      this.chooseItem = this.titileList[this.titileList.length - 1];
     },
     changeFun() {
-      console.log(this.changeDataList)
-      console.log(this.chooseItem)
+      this.chooseItem.isChange = true;
       if (this.changeDataList.length == 0) {
         this.changeDataList.push(this.chooseItem);
       } else {
         let count = 0;
         this.changeDataList.forEach(item => {
-          if (item.columnId == this.chooseItem.columnId) {
+          if (item.orderNo == this.chooseItem.orderNo) {
             item.columnTitleName = this.chooseItem.columnTitleName;
             item.columnWidth = this.chooseItem.columnWidth;
           } else {
@@ -129,19 +134,42 @@ export default {
     },
     //提交
     submitFun() {
-      console.log(this.changeDataList)
       let insertArr = []
+      let count = 0
+      let changeArr = []
       this.titileList.forEach(item => {
         if (item.addFlag) {
           insertArr.push(item)
         }
+        if (item.isChange && item.columnId) {
+          changeArr.push(item)
+        }
       })
+      if (insertArr.length > 0) {
+        this.api.insertMedQiXieTitleColumnBatch(insertArr)
+          .then(res => {
+            count++
+          })
+      }
 
-      console.log(insertArr)
-      this.api.insertMedQiXieTitleColumnBatch(insertArr)
-        .then(res => {
-
-        })
+      if (changeArr.length > 0) {
+        let params = changeArr
+        this.api.updateMedQiXieTitleColumnBatch(params)
+          .then(res => {
+            count++
+          })
+      }
+      if (this.deleteDataList.length > 0) {
+        let param = this.deleteDataList
+        this.api.deleteMedQiXieTitleColumnBatch(param)
+          .then(res => {
+            this.deleteDataList = [];
+            count++
+          })
+      }
+      if (count > 0) {
+        this.getTitleList();
+      }
     },
     //鼠标按下事件
     clickMouseDown(ev) {
@@ -159,7 +187,6 @@ export default {
 
     },
     mouseStop() {
-      debugger
       this.isDown = false;
     },
     atherPlacFuntion() {
@@ -171,13 +198,28 @@ export default {
     noFunction() {
 
     },
+    //移除
+    removeItem() {
+      if (this.chooseItem) {
+        for (var i = 0; i < this.titileList.length; i++) {
+          if (this.titileList[i].orderNo == this.chooseItem.orderNo) {
+
+            if (this.titileList[i].columnId) {
+              //真正的删除数据是在原来的数据上面进行提交
+              this.deleteDataList.push(this.titileList[i])
+            }
+            this.titileList.splice(i, 1)
+          }
+        }
+      }
+    }
 
   },
   mounted() {
     this.getTitleList();
   },
-  created() { },
-  beforeDestroy() { },
+  created() {},
+  beforeDestroy() {},
   components: {},
   computed: {
 
@@ -261,4 +303,5 @@ ul li.active {
     border: 1px solid rgb(24, 131, 215);
   }
 }
+
 </style>

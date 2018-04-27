@@ -15,7 +15,7 @@
         <tbody v-else>
           <tr v-for="(item,index) in rows">
             <td v-for="(de,index2) in titileList">
-              <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2]" @change="getChangeList($event,index,index2)">
+              <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2].positionValue" @change="getChangeList($event,index,index2)">
             </td>
           </tr>
         </tbody>
@@ -71,7 +71,7 @@ export default {
     },
     dataInit() {
       this.selectQiXieTitle();
-      
+
     },
     dataChange(list1) {
       this.dataAllList = list1;
@@ -90,7 +90,7 @@ export default {
         }
       }
       list1.forEach(item => {
-        tArray[item.yPosition][item.xPosition] = item.positionValue
+        tArray[item.yPosition][item.xPosition] = item
       })
 
       this.testList = tArray;
@@ -105,17 +105,25 @@ export default {
       //如果当前修改的位置之前不存在就放入到新增集合里面
       if (y + 1 == this.rows) {
         this.rows = this.rows + 1
+      }
+      if (typeof(this.testList[y][x].positionValue) == "undefined") {
         this.dataAllList.push({
           patientId: this.config.userInfo.patientId,
           visitId: this.config.userInfo.visitId,
           operId: this.config.userInfo.operId,
           yPosition: y,
           xPosition: x,
-          positionValue: ev.currentTarget.value
+          positionValue: ev.currentTarget.value,
+          addFlag: true,
         })
-        this.dataChange(this.dataAllList)
+      } else {
+        this.dataAllList.forEach(item => {
+          if (item.yPosition == y && item.xPosition == x)
+            item.positionValue = ev.currentTarget.value
+        })
       }
-      if (this.testList[y][x] === '') {
+      this.dataChange(this.dataAllList);
+      if (typeof(this.testList[y][x].positionValue) == "undefined" || this.testList[y][x].addFlag) {
 
         if (this.insertDataList.length > 0) {
           //判断这条数据是否存在在集合里面
@@ -132,7 +140,7 @@ export default {
               patientId: this.config.userInfo.patientId,
               visitId: this.config.userInfo.visitId,
               operId: this.config.userInfo.operId,
-              yPosition: y, 
+              yPosition: y,
               xPosition: x,
               positionValue: ev.currentTarget.value
             })
@@ -147,6 +155,7 @@ export default {
             positionValue: ev.currentTarget.value
           })
         }
+        debugger
       } else {
 
         if (this.updateDataList.length > 0) {
@@ -182,21 +191,6 @@ export default {
       }
 
     },
-    arrTest(arr) {
-      var newarry = [];
-      arr.forEach(item => {
-        if (newarry[item.x]) {
-          // if (newarry[item.x][item.y]) {
-          newarry[item.x][item.y] = item.value
-          // }
-        } else {
-          newarry[item.x] = new Array()
-          newarry[item.x][item.y] = item.value
-        }
-      })
-
-      return newarry
-    },
     //提交之前进行验证
     submitSave() {
       if (this.isNullArry.length == 0) {
@@ -226,8 +220,28 @@ export default {
     },
     //执行提交保存方法
     submitSaveFun() {
-      if (this.updateDataList.length > 0) {
-        let updateparams = this.updateDataList
+      let updateArr = []
+      let deleteArr = []
+      this.updateDataList.forEach(item => {
+        if (item.addFlag && item.positionValue != '') {
+          this.insertDataList.push(item)
+        } else if (!item.addFlag && item.positionValue == '') {
+          deleteArr.push(item)
+        } else if (!item.addFlag && item.positionValue != '') {
+          updateArr.push(item)
+        } else {
+
+        }
+      })
+      if (deleteArr.length > 0) {
+        let deleteparams = deleteArr
+        this.api.deleteBatchMedQiXieQingDian(deleteparams)
+          .then(res => {
+
+          })
+      }
+      if (updateArr.length > 0) {
+        let updateparams = updateArr
         this.api.updateBatchMedQiXieQingDian(updateparams)
           .then(res => {
             this.updateDataList = [];
@@ -240,7 +254,7 @@ export default {
             this.insertDataList = [];
           })
       }
-      this.dataInit();
+
     },
     //查找y坐标最大值
     findMax(i) {

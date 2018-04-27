@@ -11,6 +11,7 @@ const maxTime = "";
 const initTime = "";
 
 const OperatingData = '';
+const timeSet = 8000; //表格数据定时刷新时间 ms
 
 export default {
   userId,
@@ -24,6 +25,7 @@ export default {
   maxTime,
   initTime,
   OperatingData,
+  timeSet,
 }
 
 </script>
