@@ -17,7 +17,7 @@
           <tbody>
             <tr v-for="(item,index) in rows">
               <td v-for="(de,index2) in titileList">
-                <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2]" @change="getChangeList($event,index,index2)">
+                <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2].positionValue" @change="getChangeList($event,index,index2)">
               </td>
             </tr>
           </tbody>
@@ -40,6 +40,7 @@ export default {
       insertDataList: [], //插入数据
       rows: 30,
       clickAtherPlace: false,
+      maxY: 0,
     }
   },
   methods: {
@@ -54,7 +55,10 @@ export default {
       this.api.selectAllListMedQiXieDefaultCulumn(arr)
         .then(rest => {
           this.defaultArry = rest;
+          this.findMax(0);
+          this.rows = this.maxY + 2;
           this.dataChange(rest);
+
         })
     },
     dataChange(list1) {
@@ -68,22 +72,39 @@ export default {
           tArray[k][j] = ""; //这里将变量初始化，我这边统一初始化为空，后面在用所需的值覆盖里面的值
         }
       }
-      list1.forEach(item => {
-        tArray[item.yPosition][item.xPosition] = item.positionValue
-      })
+      if (list1.length > 0) {
+        list1.forEach(item => {
+          tArray[item.yPosition][item.xPosition] = item
+        })
+      }
+
 
       this.testList = tArray;
     },
     getChangeList(ev, y, x) {
+      if (y + 1 == this.rows) {
+        this.rows = this.rows + 1
+
+      }
+      if (typeof(this.testList[y][x].positionValue) == "undefined") {
+        this.defaultArry.push({
+          yPosition: y,
+          xPosition: x,
+          positionValue: ev.currentTarget.value,
+          addFlag: true,
+        })
+      } else {
+        this.defaultArry.forEach(item => {
+          if (item.yPosition == y && item.xPosition == x)
+            item.positionValue = ev.currentTarget.value
+        })
+      }
+
+      this.dataChange(this.defaultArry)
+      // this.testList[y][x].positionValue = ev.currentTarget.value;
       //判断是否有值
       //如果当前修改的位置之前不存在就放入到新增集合里面
-      var newLength = this.rows+1;
-      // newLength++ 
-      this.rows = newLength;
-      console.log(this.rows)
-      // console.log(this.rows)
-      if (this.testList[y][x] === '') {
-
+      if (typeof(this.testList[y][x].positionValue) == "undefined" || this.testList[y][x].addFlag) {
         if (this.insertDataList.length > 0) {
           //判断这条数据是否存在在集合里面
           let count = 0;
@@ -138,11 +159,25 @@ export default {
 
     },
     submitSave() {
-      if (this.updateDataList.length > 0) {
-        let updateparams = this.updateDataList
+      let updateArr = []
+      let deleteArr = []
+      this.updateDataList.forEach(item => {
+        if (item.addFlag && item.positionValue != '') {
+          this.insertDataList.push(item)
+        } else if (!item.addFlag && item.positionValue == '') {
+          deleteArr.push(item)
+        } else if (!item.addFlag && item.positionValue != '') {
+          updateArr.push(item)
+        } else {
+
+        }
+      })
+      if (updateArr.length > 0) {
+        let updateparams = updateArr
         this.api.updateBatchMedQiXieDefaultCulumn(updateparams)
           .then(res => {
             this.updateDataList = [];
+
           })
       }
       if (this.insertDataList.length > 0) {
@@ -150,8 +185,17 @@ export default {
         this.api.insertBatchMedQiXieDefaultCulumn(insertparams)
           .then(res => {
             this.insertDataList = [];
+
           })
       }
+      if (deleteArr.length > 0) {
+        let deleteParm = deleteArr
+        this.api.deleteBatchMedQiXieDefaultCulumn(deleteParm)
+          .then(res => {
+
+          })
+      }
+
     },
     closeWin() {
       this.$emit('closeView');
@@ -165,12 +209,22 @@ export default {
     noFunction() {
 
     },
+    //查找y坐标最大值
+    findMax(i) {
+      if (i == this.defaultArry.length) {
+        return this.maxY
+      }
+      if (this.maxY < this.defaultArry[i].yPosition) {
+        this.maxY = this.defaultArry[i].yPosition
+      }
+      this.findMax(i + 1)
+    },
   },
   mounted() {
     this.selectQiXieTitle()
   },
-  created() { },
-  beforeDestroy() { },
+  created() {},
+  beforeDestroy() {},
   components: {},
   computed: {
 
@@ -249,4 +303,5 @@ export default {
     border: 1px solid rgb(24, 131, 215);
   }
 }
+
 </style>

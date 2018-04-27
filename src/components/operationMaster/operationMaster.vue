@@ -388,7 +388,7 @@
         <!--单子信息-->
         <div class="information" v-if="formDetail" :class="{allWidth:widthData}">
           <div>
-            <div class="designArea">
+            <div class="designArea" ref="normal">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
                 <form-element ref="formElement" :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
               </div>
@@ -644,9 +644,7 @@ export default {
     }
   },
   methods: {
-
     printPdf() {
-
       this.printed = true;
       this.$set(this.config, 'isPrintedView', true);
       this.isPrint = true;
@@ -654,11 +652,6 @@ export default {
       //LODOP.PRINT();
       const _this = this;
       this.CreateOneFormPage();
-      // LODOP.SET_SHOW_MODE("HIDE_PAGE_PERCENT", true);
-      // LODOP.SET_PRINT_MODE("PRINT_PAGE_PERCENT", "82%");
-      // LODOP.SET_PRINT_MODE("FULL_WIDTH_FOR_OVERFLOW", true);
-
-      // LODOP.PRINT_DESIGN();
       if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
         //不在打印预览界面
         if (Value == 0) {
@@ -668,43 +661,11 @@ export default {
         }
 
       };
-      // LODOP.PRINT_DESIGN();
     },
     CreateOneFormPage() {
-
       LODOP = getLodop();
       this.currentPageNum = 1;
       this.printPage(this.currentPageNum)
-      // LODOP = getLodop();
-      // LODOP.PRINT_INIT("");
-      // LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
-      // LODOP.PREVIEW();
-      // LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-      // var _this = this;
-
-      // // for (var i = 0; i < 2; i++) {
-      // //   this.$nextTick(function() {
-      // //     LODOP.NewPageA();
-      // //     _this.toChangePage(1);
-      // //     LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
-      // //     LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-      // //   })
-      // LODOP.NewPageA();
-      // _this.toChangePage(1);
-      // var t = setTimeout(function() {
-
-      //   LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", _this.$refs.mybox.innerHTML);
-      //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-      //   LODOP.NewPageA();
-      //   LODOP.PREVIEW();
-      // }, 1000);
-      // }
-      // var t1 = setTimeout(function() {
-      //   LODOP.PREVIEW();
-
-      // }, 3000);
-
-
     },
     printPage(index) {
       setTimeout(() => {
@@ -1148,25 +1109,28 @@ export default {
           });
     },
     selectMedFormTemp(item) {
-      this.initComponementConfig();
+
       let timeParam = {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
         "operId": this.lockedPatientInfo.operId,
       }
-      this.api.selectMaxTime(timeParam)
-        .then(res => {
+      if (item.formName == '麻醉记录单') {
+        this.api.selectMaxTime(timeParam)
+          .then(res => {
 
-          //let t = this.coutTimes(this.config.userInfo.inDateTime, '2013-10-21 15:00', 'minute')
-          let t1 = this.coutTimes(this.config.userInfo.inDateTime, res.TOTALMAXTIME, 'minute')
-          let i = Math.ceil(t1 / 250);
-          this.config.pageTotal = i;
-          if (t1 > 250) {
-            this.pageButtonView = true
-          } else
-            this.pageButtonView = false
-        })
-
+            //let t = this.coutTimes(this.config.userInfo.inDateTime, '2013-10-21 15:00', 'minute')
+            let t1 = this.coutTimes(this.config.userInfo.inDateTime, res.TOTALMAXTIME, 'minute')
+            let i = Math.ceil(t1 / 250);
+            this.config.pageTotal = i;
+            if (t1 > 250) {
+              this.pageButtonView = true
+            } else
+              this.pageButtonView = false
+          })
+      } else {
+        this.initComponementConfig();
+      }
       for (var i = 0; i <= this.medBillList.length - 1; i++) {
         this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
       }
@@ -1488,8 +1452,6 @@ export default {
           return
 
       }
-
-      // window.eventHub.$emit("test", num);
       Bus.$emit('test', num);
 
     },
@@ -1500,12 +1462,8 @@ export default {
       this.config.maxTime = '';
       this.config.initTime = '';
       this.config.pagePercentNum = 1;
+      this.pageButtonView = false
     },
-    //定时器
-    timeTest() {
-
-      this.timeTestVal = setTimeout(_ => this.timeTest(), 2000)
-    }
   },
   mounted() {
     this.searchPatientList();
