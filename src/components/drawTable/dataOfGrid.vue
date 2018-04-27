@@ -25,6 +25,7 @@ export default {
       // showDataMore:'',
       maxTimeInPage: '',
       startTimeInPage: '',
+      setTimeId: '', //定时器执行
     }
   },
   methods: {
@@ -72,7 +73,7 @@ export default {
             }
           }
 
-
+          this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
         });
     },
 
@@ -83,12 +84,17 @@ export default {
       this.selectMedAnesthesiaEventList();
       // window.eventHub.$on("test", this.selectMedAnesthesiaEventList);
     }
+    if (this.setTimeId) {
+      clearTimeout(this.setTimeId);
+    }
   },
   created() {
     Bus.$on('test', this.selectMedAnesthesiaEventList)
+
   },
   beforeDestroy() {
     Bus.$off('test', this.selectMedAnesthesiaEventList);
+    clearTimeout(this.setTimeId);
   },
 }
 

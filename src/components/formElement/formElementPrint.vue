@@ -48,8 +48,8 @@
     <div v-if="value.type=='operControlGrid'">
       <operControlGridPrint :page="isPage.isPage"></operControlGridPrint>
     </div>
-    <div v-if="value.type=='signGrid'">
-      <signGrid :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></signGrid>
+    <div v-if="value.type=='signGridPrint'">
+      <signGridPrint :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></signGridPrint>
     </div>
     <div v-if="value.type=='dataOfGrid'">
       <dataOfGridPrint :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></dataOfGridPrint>
@@ -66,7 +66,7 @@ import checkBox from '@/components/checkBox/checkBox.vue';
 import tableGridPrint from '@/components/drawTable/tableGridPrint.vue';
 import dosageGridPrint from '@/components/drawTable/dosageGridPrint.vue';
 import operControlGridPrint from '@/components/drawTable/operControlGridPrint.vue';
-import signGrid from '@/components/drawTable/signGrid.vue';
+import signGridPrint from '@/components/drawTable/signGridPrint.vue';
 import dataOfGridPrint from '@/components/drawTable/dataOfGridPrint.vue';
 export default {
   data() {
@@ -89,7 +89,7 @@ export default {
     tableGridPrint,
     dosageGridPrint,
     operControlGridPrint,
-    signGrid,
+    signGridPrint,
     dataOfGridPrint
   },
   mounted() {

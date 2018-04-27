@@ -175,12 +175,10 @@ export default {
                     }
                 }
             } else {
-                console.log('abbb')
                 this.outBoxLength = Math.round(this.lengthType % 7);
                 console.log(this.outBoxLength)
                 for (var a = 0; a < this.outBoxLength; a++) {
                     this.forALL.push([])
-                    if (a === 0) {
                         this.forBoxBody = [];
                         for (var j = 0; j < 7; j++) {
                             if (j >= this.dataBody.length) {
@@ -222,48 +220,6 @@ export default {
                         }
                         this.forALL[a] = this.forBoxBody
 
-                    } else {
-                        this.forBoxBody = [];
-                        for (var j = (a + (7 * a)) - 1; j < (7 * a) + 7; j++) {
-                            if (j >= this.dataBody.length) {
-                                break
-                            } else {
-                                this.forBoxBody.push({
-                                    ADMINISTRATOR: this.dataBody[j].ADMINISTRATOR,
-                                    BILL_ATTR: this.dataBody[j].BILL_ATTR,
-                                    BILL_INDICATOR: this.dataBody[j].BILL_INDICATOR,
-                                    CONCENTRATION: this.dataBody[j].CONCENTRATION,
-                                    CONCENTRATION_UNIT: this.dataBody[j].CONCENTRATION_UNIT,
-                                    DOSAGE: this.dataBody[j].DOSAGE,
-                                    DOSAGE_UNITS: this.dataBody[j].DOSAGE_UNITS,
-                                    DURATIVE_INDICATOR: this.dataBody[j].DURATIVE_INDICATOR,
-                                    ENDDATE: this.dataBody[j].ENDDATE,
-                                    EVENT_ATTR: this.dataBody[j].EVENT_ATTR,
-                                    EVENT_NO: this.dataBody[j].EVENT_NO,
-                                    ITEM_CLASS: this.dataBody[j].ITEM_CLASS,
-                                    ITEM_CODE: this.dataBody[j].ITEM_CODE,
-                                    ITEM_NAME: this.dataBody[j].ITEM_NAME,
-                                    ITEM_NO: this.dataBody[j].ITEM_NO,
-                                    ITEM_SPEC: this.dataBody[j].ITEM_SPEC,
-                                    MAX_TIME: this.dataBody[j].MAX_TIME,
-                                    METHOD: this.dataBody[j].METHOD,
-                                    METHOD_PARENT_NO: this.dataBody[j].METHOD_PARENT_NO,
-                                    OPER_ID: this.dataBody[j].OPER_ID,
-                                    PARENT_ITEM_NO: this.dataBody[j].PARENT_ITEM_NO,
-                                    PATIENT_ID: this.dataBody[j].PATIENT_ID,
-                                    PERFORM_SPEED: this.dataBody[j].BILL_ATTR,
-                                    SPEED_UNIT: this.dataBody[j].PERFORM_SPEED,
-                                    START_TIME: this.dataBody[j].START_TIME,
-                                    SUPPLIER_NAME: this.dataBody[j].SUPPLIER_NAME,
-                                    TYPE_NAME: this.dataBody[j].TYPE_NAME,
-                                    VISIT_ID: this.dataBody[j].VISIT_ID,
-                                    number: this.dataBody[j].number,
-                                    titleWord: this.dataBody[j].titleWord,
-                                })
-                            }
-                        }
-                        this.forALL[a] = this.forBoxBody
-                    }
                 }
                 console.log(this.forALL)
             }
