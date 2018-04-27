@@ -6,9 +6,9 @@
           <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
         </thead>
         <tbody v-if="config.isPrintedView">
-          <tr v-for="(item,index) in rows">
+          <tr v-for="(item,index) in rows" style="height: 15pt;">
             <td v-for="(de,index2) in titileList">
-              <div>{{testList[index][index2]}}</div>
+              <div>{{testList[index][index2].positionValue}}</div>
             </td>
           </tr>
         </tbody>
@@ -21,10 +21,11 @@
         </tbody>
       </table>
     </div>
-    <button v-if="!page" @click="submitSave">保存</button>
+    <!-- <button v-if="!page" @click="submitSave">保存</button> -->
   </div>
 </template>
 <script type="text/javascript">
+import Bus from '@/bus.js';
 export default {
   data() {
     return {
@@ -39,6 +40,7 @@ export default {
       defaultArry: [], //表格默认数组
       dataAllList: [],
       maxY: 0, //Y坐标最大值
+      printView: false,
     }
   },
   props: ['object', 'page'],
@@ -99,8 +101,6 @@ export default {
 
 
     getChangeList(ev, y, x) {
-      // console.log(ev.currentTarget._value)
-      // console.log(ev.currentTarget.value)
       //判断是否有值
       //如果当前修改的位置之前不存在就放入到新增集合里面
       if (y + 1 == this.rows) {
@@ -155,7 +155,6 @@ export default {
             positionValue: ev.currentTarget.value
           })
         }
-        debugger
       } else {
 
         if (this.updateDataList.length > 0) {
@@ -271,8 +270,12 @@ export default {
   mounted() {
     this.dataInit();
   },
-  created() {},
-  beforeDestroy() {},
+  created() {
+    Bus.$on('saveFun', this.submitSave)
+  },
+  beforeDestroy() {
+    Bus.$off('saveFun', this.submitSave);
+  },
   components: {},
   computed: {
 

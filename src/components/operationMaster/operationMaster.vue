@@ -668,18 +668,27 @@ export default {
       this.printPage(this.currentPageNum)
     },
     printPage(index) {
-      setTimeout(() => {
-        LODOP.ADD_PRINT_IMAGE(10, 10, "99%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
-        LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-        LODOP.NewPageA();
-        if (index + 1 <= this.config.pageTotal) {
-          this.toChangePage(1);
-          this.currentPageNum++;
-          this.printPage(this.currentPageNum);
-        } else {
+      if (this.selectFormItemTemp.formName == '手术清点单') {
+        setTimeout(() => {
+          LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.normal.innerHTML);
+          LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
           LODOP.PREVIEW();
-        }
-      }, 1000)
+        }, 1000)
+      } else {
+        setTimeout(() => {
+          LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
+          LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+          LODOP.NewPageA();
+          if (index + 1 <= this.config.pageTotal) {
+            this.toChangePage(1);
+            this.currentPageNum++;
+            this.printPage(this.currentPageNum);
+          } else {
+            LODOP.PREVIEW();
+          }
+        }, 1000)
+      }
+
 
     },
     inputBlur(list) {
@@ -1406,14 +1415,18 @@ export default {
     },
     //提交单子修改
     submitSaveForm() {
-      let params = []
-      params = this.updateFormsData;
-      if (this.updateFormsData.length > 0) {
-        this.api.updateSqlBatch(params)
-          .then(res => {
-            this.updateFormsData = [];
-            this.selectMedFormTemp(this.selectFormItemTemp);
-          })
+      if (this.selectFormItemTemp.formName == '手术清点单') {
+        Bus.$emit('saveFun', '保存');
+      } else {
+        let params = []
+        params = this.updateFormsData;
+        if (this.updateFormsData.length > 0) {
+          this.api.updateSqlBatch(params)
+            .then(res => {
+              this.updateFormsData = [];
+              this.selectMedFormTemp(this.selectFormItemTemp);
+            })
+        }
       }
 
     },
@@ -1471,10 +1484,6 @@ export default {
     this.selectMedFormList();
 
     this.patientId = '10966589';
-    if (this.timeTestVal) {
-      clearTimeout(this.timeTestVal);
-    }
-    this.timeTest();
   },
   created() {
     Bus.$on('showPersonStyle', (val) => {
@@ -1776,7 +1785,8 @@ export default {
 
 
 
-<<<<<<< HEAD=======>>>>>>>9f9db0a2696a103abef64e8a162c8a2f8375ba8f
+
+
 /* 左部菜单按钮部分样式 */
 
 .stretch {
@@ -1863,343 +1873,6 @@ export default {
 .no-printFont {
   font-size: 16px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<<<<<<< HEAD=======>>>>>>>9f9db0a2696a103abef64e8a162c8a2f8375ba8f
-/* 分页样式 */
 
 .pageClass {
   height: 98px;

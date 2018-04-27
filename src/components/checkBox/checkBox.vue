@@ -93,7 +93,6 @@ export default {
           this.$set(this.isSelected, i, false);
         }
       }
-      debugger
       this.$emit('toparentevent', {
         "tableName": this.boxValue.SourceTableName,
         "fieldName": this.boxValue.SourceFieldName,
