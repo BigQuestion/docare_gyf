@@ -1474,7 +1474,6 @@ export default {
     if (this.timeTestVal) {
       clearTimeout(this.timeTestVal);
     }
-    this.timeTest();
   },
   created() {
     Bus.$on('showPersonStyle', (val) => {
