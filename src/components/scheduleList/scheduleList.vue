@@ -1,7 +1,7 @@
 <template>
-    <div style="height:100%;background-color:#f5f5f5;overflow:auto;">
+    <div style="height:100%;background-color:#f5f5f5;padding-top:145px;">
         <div class="flex w100 topal">
-            <img style="width:auto;height:60px;" src="../../assets/logo.png">
+            <img style="width:auto;height:55px;" src="../../assets/logo.png">
             <div class="flex1 topButton" :class="{clickClass:clickDataOne}" @click="operationSchedulVue()">
                 <span :class="{clickClass:clickDataOne}">1</span>手术排班</div>
             <div class="flex1 topButton" :class="{clickClass:clickDataTwo}" @click="applicationVue()">
@@ -176,10 +176,13 @@ export default {
 .topal {
     align-items: center;
     height: 70px;
-    width: calc(100% - 10px);
+    width: 100%;
     background: url('../../assets/scheduling.jpg') no-repeat;
     background-size: cover;
-    margin: 5px;
+    /* margin: 5px; */
+    position: fixed;
+    top:0;
+    z-index:9999;
 }
 
 .topButton {

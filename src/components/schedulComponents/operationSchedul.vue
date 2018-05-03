@@ -1,19 +1,21 @@
 <template>
     <div>
-        <div style="display:flex;justify-content:space-between;padding:10px 5px 10px 0px;">
-            <div class="dataOfDoc">
-                <span>手术间号：{{hasChooseRoom.name}}</span>
-                <span>主麻医师：{{hasChooseRoom.docoptions}}</span>
-                <span>副麻医师1：{{hasChooseRoom.docmzkUsers}}</span>
-                <span>副麻医师2：{{hasChooseRoom.docmzkUsers2}}</span>
-                <span>麻醉助手1：{{hasChooseRoom.assistant}}</span>
-                <span>麻醉助手2：{{hasChooseRoom.assistant2}}</span>
-                <span>洗手护士1：{{hasChooseRoom.docwash}}</span>
-                <span>洗手护士2：{{hasChooseRoom.docwash2}}</span>
-                <span>巡回护士1：{{hasChooseRoom.doctour}}</span>
-                <span>巡回护士2：{{hasChooseRoom.doctour2}}</span>
-            </div>
+        <div class="dataOfButton">
+            <span></span>
+            <span style="font-weight: bold;">手术人员安排表</span>
             <button @click="submit">手术提交</button>
+        </div>
+        <div class="dataOfDoc">
+            <span>手术间号：{{hasChooseRoom.name}}</span>
+            <span>主麻医师：{{hasChooseRoom.docoptions}}</span>
+            <span>副麻医师1：{{hasChooseRoom.docmzkUsers}}</span>
+            <span>副麻医师2：{{hasChooseRoom.docmzkUsers2}}</span>
+            <span>麻醉助手1：{{hasChooseRoom.assistant}}</span>
+            <span>麻醉助手2：{{hasChooseRoom.assistant2}}</span>
+            <span>洗手护士1：{{hasChooseRoom.docwash}}</span>
+            <span>洗手护士2：{{hasChooseRoom.docwash2}}</span>
+            <span>巡回护士1：{{hasChooseRoom.doctour}}</span>
+            <span>巡回护士2：{{hasChooseRoom.doctour2}}</span>
         </div>
         <div class="tableOut">
             <div class="timechose">
@@ -82,7 +84,7 @@
                     <div class="BoxOf" v-for="(item,index) in roomId">
                         <div style="width:auto;height:100%;display:flex;">
                             <div v-if="cell.operatingRoomNo == item.name" v-for="(cell,index) in scheduleListRight">
-                                <div @dblclick="edit(cell)" v-if="cell.state == 2||cell.state == 3||cell.state == 4" class="roomData">
+                                <div @click="showShadow(cell)" @dblclick="edit(cell)" v-if="cell.state == 2||cell.state == 3||cell.state == 4" class="roomData" :class="{boxshadow:cell.clickShadowData}">
                                     <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
                                         <span style="padding-right:10px;">{{cell.scheduledDateTime}}</span>
                                         <span>{{cell.patientName}}</span>
@@ -105,8 +107,10 @@
                                         <span style="color:red;">{{cell.notesOnOperation}}</span>
                                     </div>
                                 </div>
-                                <div v-else @dblclick="edit(cell)" style="border:1px solid #95DDB6;position:relative;" class="roomData">
+                                <div v-else @click="showShadow(cell)" @dblclick="edit(cell)" style="border:1px solid #95DDB6;position:relative;" class="roomData" :class="{boxshadow:cell.clickShadowData}">
                                     <div @click="goBackFun(cell,index)" class="goBack">X</div>
+                                    <div @click="goTaoLeft(cell,index)" class="leftLost" title="台次向前排列">←</div>
+                                    <div @click="goTaoRight(cell,index)" class="rightAdd" title="台次向后排列">→</div>
                                     <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
                                         <span style="padding-right:10px;">{{cell.scheduledDateTime}}</span>
                                         <span>{{cell.patientName}}</span>
@@ -626,6 +630,9 @@ export default {
             dateValue: '2014-07-08',
             scheduleList: [],
             scheduleListRight: [],
+            scheduleListRight2: [],
+            MaxLeftNum: '',
+            MaxRightNum: '',
             mask: false,
             area: '',
             startX: '',
@@ -759,6 +766,13 @@ export default {
             console.log(this.handleItem)
             this.mask = true;
         },
+        showShadow(cell) {
+            console.log(cell)
+            for (var a = 0; a < this.scheduleListRight.length; a++) {
+                this.scheduleListRight[a].clickShadowData = false;
+            }
+            cell.clickShadowData = true;
+        },
         test(event) {
             console.log(event.srcElement.value)
             // var change = this.dateValue.replace(/-/g, '/')
@@ -887,6 +901,7 @@ export default {
             console.log(this.newUpdata)
         },
         getList(date) {
+            this.newUpdata = [];
             this.scheduleList = [];
             this.scheduleListRight = [];
             var changeData = date.replace(/-/g, '/')
@@ -899,6 +914,7 @@ export default {
                 .then(res => {
                     for (var j = 0; j < res.list.length; j++) {
                         if (res.list[j].state == 0 || res.list[j].state == 1) {
+                            this.$set(res.list[j], 'clickShadowData', false)
                             this.scheduleList.push(res.list[j])
                             console.log(res.list[j])
                         }
@@ -908,7 +924,9 @@ export default {
                     this.chooseData = '手术(' + this.scheduleList.length + ')';
                     for (var a = 0; a < res.list.length; a++) {
                         if (res.list[a].state == 2 || res.list[a].state == 3 || res.list[a].state == 4) {
+                            this.$set(res.list[a], 'clickShadowData', false)
                             this.scheduleListRight.push(res.list[a])
+                            this.scheduleListRight2.push(res.list[a])
                         }
                     }
                     console.log(this.scheduleList)
@@ -1029,6 +1047,14 @@ export default {
                     roomNum.push(this.scheduleListRight[a].sequence)
                 }
             }
+            for (var b = 0; b < this.scheduleListRight2.length; b++) {
+                if (this.scheduleListRight2[b].operatingRoomNo == this.hasChooseRoom.name) {
+                    dataR = true;
+                    this.MaxLeftNum = this.scheduleListRight2[b].sequence
+                }
+            }
+            console.log(this.MaxLeftNum)
+            this.MaxRightNum = Math.max.apply(Math, roomNum) + 1;
             if (dataR == true) {
                 this.pushDataBody.sequence = Math.max.apply(Math, roomNum) + 1
             } else {
@@ -1073,10 +1099,87 @@ export default {
                     this.newUpdata.splice(a, 1);
                 }
             }
-
-            console.log(index)
+            for (var b = index; b < this.scheduleListRight.length; b++) {
+                if (cell.operatingRoomNo == this.scheduleListRight[b].operatingRoomNo && cell.sequence < this.scheduleListRight[b].sequence) {
+                    this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence - 1;
+                    console.log(this.scheduleListRight)
+                }
+            }
+            for (var c = 0; c < this.newUpdata.length; c++) {
+                if (cell.operatingRoomNo == this.newUpdata[c].operatingRoomNo && cell.sequence < this.newUpdata[c].sequence) {
+                    this.newUpdata[c].sequence = this.newUpdata[c].sequence - 1;
+                }
+            }
             this.scheduleListRight.splice(index, 1);
             this.scheduleList.push(cell);
+        },
+        goTaoLeft(cell, index) {
+            // console.log(cell.sequence)
+            // console.log(this.newUpdata)
+            // console.log(this.MaxLeftNum)
+            if ((cell.sequence == this.MaxLeftNum + 1) || this.MaxLeftNum == '') {
+                alert('已经是第一台手术了。')
+            } else {
+                for (var a = 0; a < this.newUpdata.length; a++) {
+                    if (cell.visitId == this.newUpdata[a].visitId && cell.patientId == this.newUpdata[a].patientId && cell.scheduleId == this.newUpdata[a].scheduleId) {
+                        this.newUpdata[a].sequence = this.newUpdata[a].sequence - 1;
+                        this.newUpdata[a - 1].sequence = this.newUpdata[a - 1].sequence + 1;
+                        this.newUpdata.sort(this.sortNumber);
+                    }
+                }
+                for (var b = 0; b < this.scheduleListRight.length; b++) {
+                    if (cell.visitId == this.scheduleListRight[b].visitId && cell.patientId == this.scheduleListRight[b].patientId && cell.scheduleId == this.scheduleListRight[b].scheduleId) {
+
+                        for (var c = 0; c < this.scheduleListRight.length; c++) {
+                            if (cell.operatingRoomNo == this.scheduleListRight[c].operatingRoomNo && cell.sequence == this.scheduleListRight[c].sequence + 1) {
+                                // console.log(this.scheduleListRight[c])
+                                this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence - 1;
+                                this.scheduleListRight[c].sequence = this.scheduleListRight[c].sequence + 1;
+                            }
+                        }
+                        this.scheduleListRight.sort(this.sortNumber);
+                    }
+                }
+
+            }
+        },
+        sortNumber(a, b) {
+            return a.sequence - b.sequence
+        },
+        goTaoRight(cell, index) {
+            console.log(cell.sequence)
+            console.log(this.pushDataBody)
+            console.log("最后" + this.MaxRightNum)
+            if (cell.sequence == this.MaxRightNum) {
+                alert('已经是最后一台手术了。')
+            } else {
+                console.log(cell)
+                console.log(this.newUpdata)
+                for (var a = 0; a < this.newUpdata.length; a++) {
+                    if (cell.visitId == this.newUpdata[a].visitId && cell.patientId == this.newUpdata[a].patientId && cell.scheduleId == this.newUpdata[a].scheduleId) {
+                        for (var d = 0; d < this.newUpdata.length; d++) {
+                            if (d == a + 1) {
+                                this.newUpdata[a + 1].sequence = this.newUpdata[a + 1].sequence - 1;
+                            }
+                        }
+                        this.newUpdata[a].sequence = this.newUpdata[a].sequence + 1;
+                        this.newUpdata.sort(this.sortNumber);
+                    }
+                }
+                for (var b = 0; b < this.scheduleListRight.length; b++) {
+                    if (cell.visitId == this.scheduleListRight[b].visitId && cell.patientId == this.scheduleListRight[b].patientId && cell.scheduleId == this.scheduleListRight[b].scheduleId) {
+                        for (var c = 0; c < this.scheduleListRight.length; c++) {
+                            if (cell.operatingRoomNo == this.scheduleListRight[c].operatingRoomNo && cell.sequence == this.scheduleListRight[c].sequence - 1) {
+                                this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence + 1;
+                                this.scheduleListRight[c].sequence = this.scheduleListRight[c].sequence - 1;
+                                // console.log(this.scheduleListRight[c])
+                            }
+                        }
+                        this.scheduleListRight.sort(this.sortNumber);
+                    }
+                }
+
+            }
         }
     },
     mounted() {
@@ -1087,6 +1190,8 @@ export default {
         this.$set(this.$data, 'totalWidth', totalWidth)
         this.hasChooseRoom = this.roomId[0];
         console.log(this.hasChooseRoom)
+
+        console.log(321 + 0)
     },
     components: {
         Datepicker: Datepicker,
@@ -1096,8 +1201,25 @@ export default {
 }
 </script>
 <style scoped>
+.dataOfButton {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5px 10px 0px;
+    position: fixed;
+    top: 70px;
+    width: 100%;
+    z-index: 9999;
+    background-color: #f5f5f5;
+}
+
 .dataOfDoc {
     padding-left: 5px;
+    position: fixed;
+    top: 114px;
+    width: 100%;
+    z-index: 9999;
+    padding-bottom: 10px;
+    background-color: #f5f5f5;
 }
 
 .dataOfDoc span {
@@ -1258,7 +1380,7 @@ export default {
     left: 0px;
     width: 100%;
     height: 100%;
-    z-index: 2;
+    z-index: 9999;
     background: rgba(0, 0, 0, 0.1);
 }
 
@@ -1400,7 +1522,11 @@ export default {
     min-width: 250px;
     background-color: #fff;
     border-radius: 5px;
-    padding: 0 5px;
+    padding: 0 24px 0 5px;
+}
+
+.boxshadow {
+    box-shadow: 1px 1px 20px #AAA;
 }
 
 .goBack {
@@ -1413,5 +1539,32 @@ export default {
     z-index: 99;
     text-align: center;
     cursor: pointer;
+    font-family: microsoft YaHei;
+}
+
+.leftLost {
+    width: 20px;
+    height: 20px;
+    background-color: #95DDB6;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    z-index: 99;
+    text-align: center;
+    cursor: pointer;
+    font-family: microsoft YaHei;
+}
+
+.rightAdd {
+    width: 20px;
+    height: 20px;
+    background-color: #95DDB6;
+    position: absolute;
+    right: 0;
+    top: 60px;
+    z-index: 99;
+    text-align: center;
+    cursor: pointer;
+    font-family: microsoft YaHei;
 }
 </style>
