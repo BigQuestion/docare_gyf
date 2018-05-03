@@ -79,6 +79,7 @@ import operControlGrid from '@/components/drawTable/operControlGrid.vue';
 import signGrid from '@/components/drawTable/signGrid.vue';
 import dataOfGrid from '@/components/drawTable/dataOfGrid.vue';
 import appliances from '@/components/appliances/appliances.vue';
+import Bus from '@/bus.js';
 export default {
   data() {
     return {
@@ -106,7 +107,7 @@ export default {
   },
   mounted() {
     // console.log(this.objectItem)
-  }
+  },
 }
 
 </script>

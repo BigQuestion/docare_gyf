@@ -246,7 +246,7 @@ export default {
             if (list[i].vStartTime) {
               t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
             } else {
-              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+              t1 = 0;
             }
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
               if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
