@@ -16,12 +16,12 @@
           <!-- <polygon points="1,4 8,4 4,10" style="fill:lime;"></polygon>-->
         </g>
       </svg>
-      <div style="position: absolute;bottom: 0px;left: -30px;text-align: right;font-size: 12px;">
+      <div style="position: absolute;bottom: 0px;left: -19pt;text-align: right;font-size: 12px;">
         <div v-for="item in yValueArray" style="height: 22px;">
           {{item}}
         </div>
       </div>
-      <div style="position: absolute;bottom: 0px;right: -30px;text-align: left;font-size: 12px;">
+      <div style="position: absolute;bottom: 0px;right: -19pt;text-align: left;font-size: 12px;">
         <div v-for="item in yValueArray" style="height: 22px;">
           {{item}}
         </div>

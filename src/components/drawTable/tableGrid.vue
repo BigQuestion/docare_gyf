@@ -46,18 +46,6 @@
             </div>
           </div>
         </div>
-        <!-- <div style="position: absolute;top: 0px; left: 100px;background-color: white;">
-          <div style="height: 8px;">
-            <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
-            ivg
-          </span>
-          </div>
-          <div style="height: 8px;">
-            <span style="font-size:10px;-webkit-transform:scale(0.8);display: inline-block;">
-            ivg
-          </span>
-          </div>
-        </div> -->
         <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
         </div>
       </div>
@@ -489,7 +477,7 @@ export default {
             if (list[i].vStartTime) {
               sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
             } else {
-              sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+              sMin = 0;
             }
 
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
@@ -530,7 +518,7 @@ export default {
             let x2 = Math.round(eMin / lMin * (w / this.columns))
             let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            if (list[i].DURATIVE_INDICATOR == 1) {
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 > 0) {
               list[i].vStartTime = '';
               this.createLine(x1, x2, y1, y2, list[i]);
               this.xArray.push({

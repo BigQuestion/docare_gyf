@@ -1,14 +1,14 @@
 <template>
-  <div style="border:1px solid;overflow-y: auto" :style="{width:object.width+'px',height:object.height+'px'}">
+  <div v-if="printView" style="border:1px solid;overflow-y: auto" :style="{width:object.width+'px',height:object.height+'px'}">
     <div v-if="!page">
       <table style="border-collapse:collapse;width: 100%;" border="1" cellspacing="0" cellpadding="0">
         <thead>
           <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
         </thead>
-        <tbody v-if="config.isPrintedView">
+        <tbody v-if="!printView">
           <tr v-for="(item,index) in rows" style="height: 15pt;">
             <td v-for="(de,index2) in titileList">
-              <div>{{testList[index][index2].positionValue}}</div>
+              <div style="    font-family:  Arial;">{{testList[index][index2].positionValue}}</div>
             </td>
           </tr>
         </tbody>
@@ -21,7 +21,29 @@
         </tbody>
       </table>
     </div>
-    <!-- <button v-if="!page" @click="submitSave">保存</button> -->
+  </div>
+  <div v-else style="border:1px solid;overflow-y: auto;height: auto;" :style="{width:object.width+'px'}">
+    <div v-if="!page">
+      <table style="border-collapse:collapse;width: 100%;" border="1" cellspacing="0" cellpadding="0">
+        <thead>
+          <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
+        </thead>
+        <tbody v-if="!printView">
+          <tr v-for="(item,index) in rows" style="height: 15pt;">
+            <td v-for="(de,index2) in titileList">
+              <div style="    font-family:  Arial;">{{testList[index][index2].positionValue}}</div>
+            </td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr v-for="(item,index) in rows">
+            <td v-for="(de,index2) in titileList">
+              <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2].positionValue" @change="getChangeList($event,index,index2)">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
@@ -40,7 +62,8 @@ export default {
       defaultArry: [], //表格默认数组
       dataAllList: [],
       maxY: 0, //Y坐标最大值
-      printView: false,
+      printView: true,
+
     }
   },
   props: ['object', 'page'],
@@ -265,6 +288,12 @@ export default {
       }
       this.findMax(i + 1)
     },
+    printFun() {
+      this.printView = false;
+    },
+    noprintFun() {
+      this.printView = true;
+    }
 
   },
   mounted() {
@@ -272,14 +301,18 @@ export default {
   },
   created() {
     Bus.$on('saveFun', this.submitSave)
+    Bus.$on('print', this.printFun)
+    Bus.$on('noprint', this.noprintFun)
   },
   beforeDestroy() {
     Bus.$off('saveFun', this.submitSave);
+    Bus.$off('print', this.printFun);
+    Bus.$off('noprint', this.noprintFun)
   },
   components: {},
   computed: {
 
-  }
+  },
 }
 
 </script>

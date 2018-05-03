@@ -430,7 +430,7 @@
       </div>
     </div>
     <monitor v-if="monitorDataShow.noneData" :dataOfNoneClick="firstRoom" :parentToChild="monitorDataShow"></monitor>
-    <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView"></patientOperationInfo>
+    <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView" v-on:submitSave="submitPatientInfo" v-on:turnToSetting="toSetting"></patientOperationInfo>
     <operationRegister v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
     <div v-if="dictView" class="dictionaries">
@@ -656,6 +656,7 @@ export default {
         //不在打印预览界面
         if (Value == 0) {
           _this.$set(_this.config, 'isPrintedView', false);
+          Bus.$emit('noprint', "print");
           _this.isPrint = false;
           _this.toChangePage(0);
         }
@@ -669,6 +670,7 @@ export default {
     },
     printPage(index) {
       if (this.selectFormItemTemp.formName == '手术清点单') {
+
         setTimeout(() => {
           LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.normal.innerHTML);
           LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
@@ -1396,7 +1398,7 @@ export default {
           this.updateFormsData.push({
             "tableName": dataValue.tableName,
             "coluName": dataValue.fieldName,
-            "updateStr": dataValue.value,
+            "updateStr": modifyValue,
             "patientId": this.lockedPatientInfo.patientId,
             "visitId": this.lockedPatientInfo.visitId,
             "operId": this.lockedPatientInfo.operId,
@@ -1406,7 +1408,7 @@ export default {
         this.updateFormsData.push({
           "tableName": dataValue.tableName,
           "coluName": dataValue.fieldName,
-          "updateStr": dataValue.value,
+          "updateStr": modifyValue,
           "patientId": this.lockedPatientInfo.patientId,
           "visitId": this.lockedPatientInfo.visitId,
           "operId": this.lockedPatientInfo.operId,
@@ -1420,6 +1422,7 @@ export default {
       } else {
         let params = []
         params = this.updateFormsData;
+
         if (this.updateFormsData.length > 0) {
           this.api.updateSqlBatch(params)
             .then(res => {
@@ -1429,6 +1432,21 @@ export default {
         }
       }
 
+    },
+    //提交手术信息修改
+    submitPatientInfo(arry) {
+      if (arry.length > 0) {
+        let params = []
+        params = arry;
+        this.api.updateSqlBatch(params)
+          .then(res => {})
+      }
+    },
+    toSetting(item) {
+      debugger
+      this.selectFormItemTemp = item;
+      this.selectFormItemTemp.isPage = !this.selectFormItemTemp.isPage;
+      this.settingView = !this.settingView;
     },
     //配置跳转
     formSetting() {
