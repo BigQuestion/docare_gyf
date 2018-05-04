@@ -468,7 +468,7 @@
               </ul>
             </div>
             <!-- 显示详细内容 -->
-            <div style="width: 70%;margin-top:5px;overflow-y: auto;">
+            <div style="width: 70%;margin-top:5px;">
               <div style="display: flex;margin-left: 10px;">
                 <div class="topList" v-for="cell in contentConfig">{{cell.text}}</div>
               </div>
@@ -1797,10 +1797,14 @@ export default {
   background-size: cover;
 }
 
-<<<<<<< HEAD
+
+
+
+
+
 /* 左部菜单按钮部分样式 */
 
-=======>>>>>>>7204134313e9a0c16d6fc73270b9646dfa236f86 .stretch {
+.stretch {
   height: 30px;
   /* background-color: rgb(0, 22, 116); */
   background: url('../../assets/linkButton.jpg') no-repeat;

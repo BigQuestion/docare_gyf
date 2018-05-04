@@ -47,6 +47,9 @@ export default {
   },
   methods: {
     selectMedAnesthesiaEventList() {
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId)
+      }
       var nber = 1;
       this.pageOn = this.config.pageOper;
       this.maxTimeInPage = this.config.maxTime.getTime()
@@ -59,6 +62,7 @@ export default {
         operId: this.dataOfPeo.operId,
         visitId: this.dataOfPeo.visitId
       }
+      console.log(new Date())
       this.api.selectMedAnesthesiaEventList(params)
         .then(
           res => {

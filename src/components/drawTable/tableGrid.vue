@@ -204,6 +204,9 @@ export default {
     //加载病人麻醉事件里面麻醉用药数据
     selectMedAnesthesiaEventList() {
       //this.timeControl(this.maxTime);
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId)
+      }
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight;
@@ -225,6 +228,7 @@ export default {
         .then(res => {
           var list = res.list;
           this.dataOperChange(list);
+          console.log(11111)
           this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
           return false;
           // for (var i = 0; i < list.length; i++) {

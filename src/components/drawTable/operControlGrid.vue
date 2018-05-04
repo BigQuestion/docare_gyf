@@ -203,6 +203,9 @@ export default {
     },
     //获取病人生命体征项目
     getSignName() {
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId)
+      }
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
