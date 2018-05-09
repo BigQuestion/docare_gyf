@@ -604,4 +604,34 @@ export default {
     return fetch('medicalsystem/rest/medFormCon/deleteBatchMedQiXieDefaultCulumn', params)
   },
 
+  /**
+   * 批量插入手术清点单模板数据
+   * 
+   */
+  insertBatchMedQiXieTemplate(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/insertBatchMedQiXieTemplate', params)
+  },
+
+  /**
+   * 获取所有清单模板
+   * 
+   */
+  selectAllMedQiXieTemplate(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/selectAllMedQiXieTemplate', params)
+  },
+
+  /**
+   * 根据清单模板名称获取数据
+   * 
+   */
+  selectUserTemlate(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/selectUserTemlate', params)
+  },
+  /**
+   * 删除病人器械数据
+   * 
+   */
+  deletePatientData(params, config) {
+    return fetch('medicalsystem/rest/medFormCon/deletePatientData', params)
+  },
 }

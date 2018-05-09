@@ -1,48 +1,78 @@
 <template>
-  <div v-if="printView" style="border:1px solid;overflow-y: auto" :style="{width:object.width+'px',height:object.height+'px'}">
-    <div v-if="!page">
-      <table style="border-collapse:collapse;width: 100%;" border="1" cellspacing="0" cellpadding="0">
-        <thead>
-          <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
-        </thead>
-        <tbody v-if="!printView">
-          <tr v-for="(item,index) in rows" style="height: 15pt;">
-            <td v-for="(de,index2) in titileList">
-              <div style="    font-family:  Arial;">{{testList[index][index2].positionValue}}</div>
-            </td>
-          </tr>
-        </tbody>
-        <tbody v-else>
-          <tr v-for="(item,index) in rows">
-            <td v-for="(de,index2) in titileList">
-              <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2].positionValue" @change="getChangeList($event,index,index2)">
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div>
+    <div v-if="printView" style="border:1px solid;overflow-y: auto" :style="{width:object.width+'px',height:object.height+'px'}">
+      <div v-if="!page">
+        <table style="border-collapse:collapse;width: 100%;" border="1" cellspacing="0" cellpadding="0">
+          <thead>
+            <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
+          </thead>
+          <tbody v-if="!printView">
+            <tr v-for="(item,index) in rows" style="height: 15pt;">
+              <td v-for="(de,index2) in titileList">
+                <div style="    font-family:  Arial;">{{testList[index][index2].positionValue}}</div>
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr v-for="(item,index) in rows">
+              <td v-for="(de,index2) in titileList">
+                <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2].positionValue" @change="getChangeList($event,index,index2)">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-  <div v-else style="border:1px solid;overflow-y: auto;height: auto;" :style="{width:object.width+'px'}">
-    <div v-if="!page">
-      <table style="border-collapse:collapse;width: 100%;" border="1" cellspacing="0" cellpadding="0">
-        <thead>
-          <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
-        </thead>
-        <tbody v-if="!printView">
-          <tr v-for="(item,index) in rows" style="height: 15pt;">
-            <td v-for="(de,index2) in titileList">
-              <div style="    font-family:  Arial;">{{testList[index][index2].positionValue}}</div>
-            </td>
-          </tr>
-        </tbody>
-        <tbody v-else>
+    <div v-else style="border:1px solid;overflow-y: auto;height: auto;" :style="{width:object.width+'px'}">
+      <div v-if="!page">
+        <table style="border-collapse:collapse;width: 100%;" border="1" cellspacing="0" cellpadding="0">
+          <thead>
+            <th v-for="item in titileList" style="white-space:nowrap;font-weight: normal;overflow:hidden;font-size: 10.5pt;font-family: SimSun;height: 35px;" :style="{width:item.columnWidth+'px'}">{{item.columnTitleName}}</th>
+          </thead>
+          <tbody v-if="!printView">
+            <tr v-for="(item,index) in rows" style="height: 15pt;">
+              <td v-for="(de,index2) in titileList">
+                <div style="font-family:  Arial;" v-if="testList[index][index2]!=''">{{testList[index][index2].positionValue}}</div>
+                <div v-else style=" font-family:  Arial;">/</div>
+              </td>
+            </tr>
+          </tbody>
+          <!--  <tbody v-else>
           <tr v-for="(item,index) in rows">
             <td v-for="(de,index2) in titileList">
               <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2].positionValue" @change="getChangeList($event,index,index2)">
             </td>
           </tr>
-        </tbody>
-      </table>
+        </tbody> -->
+        </table>
+      </div>
+    </div>
+    <div v-if="saveTempView" style="position:fixed;top: 40%;left: 40%;border:1px solid rgb(47, 150, 196);width: 350px;height: 120px;background-color: white;">
+      <div style="height: 30px;background-color: rgb(47, 150, 196);color: white;padding: 0px 10px;line-height: 30px;">保存模板</div>
+      <div style="padding: 10px 20px;">
+        应用模板名称：
+        <input type="" name="" v-model="templateName">
+      </div>
+      <div style="position: absolute;bottom: 10px;left: 20px">
+        <button @click="saveTempalteFun">确定</button>
+        <button @click="openSaveView">取消</button>
+      </div>
+    </div>
+    <div v-if="applyTemplateView" style="position:fixed;top: 20%;left: 40%;border:1px solid rgb(47, 150, 196);width: 300px;height: 400px;background-color: white;">
+      <div style="height: 30px;background-color: rgb(47, 150, 196);color: white;padding: 0px 10px;line-height: 30px;">应用模板</div>
+      <div style="height: 250px;overflow: auto;">
+        <ul>
+          <li v-for="item in tempNameList" @click="chooseTemp(item)">
+            <div style="min-height: 20px;">
+              {{item.templateName}}
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div style="position: absolute;bottom: 0px;left: 0px;height: 50px;background-color: rgb(47, 150, 196);width: 100%;vertical-align: center;">
+        <button @click="applyTemplate" style="margin-top: 15px;margin-left: 15px;">套用</button>
+        <button @click="openTempView">取消</button>
+      </div>
     </div>
   </div>
 </template>
@@ -63,6 +93,11 @@ export default {
       dataAllList: [],
       maxY: 0, //Y坐标最大值
       printView: true,
+      saveTempView: false,
+      templateName: '',
+      applyTemplateView: false,
+      tempNameList: [],
+      chooseItem: {},
 
     }
   },
@@ -293,6 +328,87 @@ export default {
     },
     noprintFun() {
       this.printView = true;
+    },
+    openSaveView() {
+      this.saveTempView = !this.saveTempView;
+    },
+    saveTempalteFun() {
+      if (this.templateName == '') {
+        alert("输入模板名称")
+        return false;
+      }
+      let arr = []
+      let reg = /^[0-9]*$/;
+      for (var i = 0; i < this.testList.length; i++) {
+        for (var j = 0; j < this.testList[i].length; j++) {
+          if (this.testList[i][j] && !reg.test(this.testList[i][j].positionValue)) {
+            arr.push({
+              positionValue: this.testList[i][j].positionValue,
+              userId: this.config.userId,
+              xPosition: this.testList[i][j].xPosition,
+              yPosition: this.testList[i][j].yPosition,
+              templateName: this.templateName
+            })
+          }
+        }
+      }
+      let param = arr
+      this.api.insertBatchMedQiXieTemplate(param)
+        .then(res => {
+          this.saveTempView = false;
+        })
+      console.log(arr)
+    },
+    openTempView() {
+      this.applyTemplateView = !this.applyTemplateView;
+      this.chooseItem = {};
+      if (this.tempNameList.length > 0) {
+        return false;
+      }
+      let param = {
+        userId: this.config.userId
+      }
+      this.api.selectAllMedQiXieTemplate(param)
+        .then(res => {
+          this.tempNameList = res;
+        })
+    },
+    applyTemplate() {
+      if (JSON.stringify(this.chooseItem) == "{}") {
+        alert("选择模板")
+        return false;
+      }
+      let param = {
+        userId: this.config.userId,
+        templateName: this.chooseItem.templateName
+      }
+      this.api.selectUserTemlate(param)
+        .then(res => {
+          let arr = res
+          arr.forEach(item => {
+            item.patientId = this.config.userInfo.patientId;
+            item.visitId = this.config.userInfo.visitId;
+            item.operId = this.config.userInfo.operId
+          })
+          let deleteParam = {
+            patientId: this.config.userInfo.patientId,
+            visitId: this.config.userInfo.visitId,
+            operId: this.config.userInfo.operId
+          }
+          this.api.deletePatientData(deleteParam)
+            .then(result => {
+              this.api.insertBatchMedQiXieQingDian(arr)
+                .then(su => {
+                  this.openTempView();
+                  this.chooseItem = {};
+                  this.tempNameList = [];
+                  this.dataInit();
+                })
+            })
+        })
+    },
+    chooseTemp(item) {
+      this.chooseItem = item;
     }
 
   },
@@ -303,11 +419,15 @@ export default {
     Bus.$on('saveFun', this.submitSave)
     Bus.$on('print', this.printFun)
     Bus.$on('noprint', this.noprintFun)
+    Bus.$on('saveTemp', this.openSaveView)
+    Bus.$on('openApplyTemp', this.openTempView)
   },
   beforeDestroy() {
     Bus.$off('saveFun', this.submitSave);
     Bus.$off('print', this.printFun);
     Bus.$off('noprint', this.noprintFun)
+    Bus.$off('saveTemp', this.openSaveView)
+    Bus.$off('openApplyTemp', this.openTempView)
   },
   components: {},
   computed: {
@@ -316,3 +436,10 @@ export default {
 }
 
 </script>
+<style type="text/css" scoped>
+ul li.active {
+  background-color: blue;
+  color: white;
+}
+
+</style>

@@ -417,6 +417,8 @@
             <button v-if="pageButtonView" @click="toChangePage(0)">首页</button>
             <button v-if="pageButtonView" @click="toChangePage(-1)">上一页</button>
             <button v-if="pageButtonView" @click="toChangePage(1)">下一页</button>
+            <button v-if="tempButtonView" @click="applyTemplateFun">应用模板</button>
+            <button v-if="tempButtonView" @click="openSaveTemView">保存模板</button>
             <button @click="submitSaveForm">保存</button>
             <button @click="printPdf">打印</button>
             <button @click="formSetting">配置</button>
@@ -641,6 +643,8 @@ export default {
       personStyleView: false, //是否显示个性化体征
       currentPageNum: 1,
       timeTestVal: '',
+      tempButtonView: false,
+
     }
   },
   methods: {
@@ -1127,6 +1131,7 @@ export default {
         "operId": this.lockedPatientInfo.operId,
       }
       if (item.formName == '麻醉记录单') {
+        this.tempButtonView = false;
         this.api.selectMaxTime(timeParam)
           .then(res => {
 
@@ -1139,7 +1144,11 @@ export default {
             } else
               this.pageButtonView = false
           })
+      } else if (item.formName == '手术清点单') {
+        this.tempButtonView = true;
+        this.initComponementConfig();
       } else {
+        this.tempButtonView = false;
         this.initComponementConfig();
       }
       for (var i = 0; i <= this.medBillList.length - 1; i++) {
@@ -1495,6 +1504,13 @@ export default {
       this.config.pagePercentNum = 1;
       this.pageButtonView = false
     },
+    //保存模板
+    openSaveTemView() {
+      Bus.$emit('saveTemp', 'save');
+    },
+    applyTemplateFun() {
+      Bus.$emit('openApplyTemp', 'open');
+    },
   },
   mounted() {
     this.searchPatientList();
@@ -1796,6 +1812,13 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
 
 
 
