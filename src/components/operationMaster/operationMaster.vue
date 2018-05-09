@@ -468,7 +468,7 @@
               </ul>
             </div>
             <!-- 显示详细内容 -->
-            <div style="width: 70%;margin-top:5px;overflow-y: auto;">
+            <div style="width: 70%;margin-top:5px;">
               <div style="display: flex;margin-left: 10px;">
                 <div class="topList" v-for="cell in contentConfig">{{cell.text}}</div>
               </div>
@@ -1796,6 +1796,7 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+/* 左部菜单按钮部分样式 */
 
 .stretch {
   height: 30px;

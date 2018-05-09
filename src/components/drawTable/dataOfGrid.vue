@@ -39,41 +39,44 @@ export default {
         operId: this.dataOfPeo.operId,
         visitId: this.dataOfPeo.visitId
       }
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId)
+      }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
-        // display:flex;flex-direction:column;flex-wrap:wrap;
-        res => {
-          console.log(res)
-          for (var i = 0; i < res.list.length; i++) {
-            var time = new Date(res.list[i].START_TIME).getTime();
-            if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
-              this.dataBody.push(res.list[i]);
-              this.$set(res.list[i], 'number', nber++);
-              if (res.list[i].DOSAGE !== null) {
-                if (res.list[i].ENDDATE !== null) {
-                  if (res.list[i].ADMINISTRATOR !== null) {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+          // display:flex;flex-direction:column;flex-wrap:wrap;
+          res => {
+            for (var i = 0; i < res.list.length; i++) {
+              var time = new Date(res.list[i].START_TIME).getTime();
+              if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
+                this.dataBody.push(res.list[i]);
+                this.$set(res.list[i], 'number', nber++);
+                if (res.list[i].DOSAGE !== null) {
+                  if (res.list[i].ENDDATE !== null) {
+                    if (res.list[i].ADMINISTRATOR !== null) {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    } else {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    }
                   } else {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    if (res.list[i].ADMINISTRATOR !== null) {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    } else {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    }
                   }
+                  this.title = titleData.join('\n');
+                  this.$set(res.list[i], 'titleWord', this.title);
                 } else {
-                  if (res.list[i].ADMINISTRATOR !== null) {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
-                  } else {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
-                  }
+                  var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME];
+                  this.title = titleData.join('\n');
+                  this.$set(res.list[i], 'titleWord', this.title);
                 }
-                this.title = titleData.join('\n');
-                this.$set(res.list[i], 'titleWord', this.title);
-              } else {
-                var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME];
-                this.title = titleData.join('\n');
-                this.$set(res.list[i], 'titleWord', this.title);
               }
             }
-          }
-          this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
-        });
+
+            this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+          });
     },
 
   },
@@ -99,5 +102,6 @@ export default {
 
 </script>
 <style scoped>
+
 
 </style>

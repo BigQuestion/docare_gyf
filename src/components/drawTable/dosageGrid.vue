@@ -87,6 +87,9 @@ export default {
       this.lineArray = array;
     },
     getData() {
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId)
+      }
       var svg = d3.selectAll(".dosagegrid")
       svg.remove();
       this.dataArray = [];

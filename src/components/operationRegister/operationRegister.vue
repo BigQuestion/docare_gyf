@@ -10,13 +10,13 @@
       </div>
       <div style="height: 400px;display:flex;border-bottom:3px solid #7774da;">
         <div style="width:75%;">
-          <div style="overflow-y: auto;height: 300px;width: 100%;border:1px solid #222;background-color:#fff;">
+          <div style="width: 100%;border:1px solid #222;background-color:#fff;">
             <div style="display: flex;">
               <div style="border:1px solid rgb(177,207,243);" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
                 {{cell.title}}
               </div>
             </div>
-            <div>
+            <div style="overflow-y: auto;height: 280px;" ref="eventContent">
               <div v-for="item in eventList" style="display:flex;" @click="clickItem(item)">
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
                   <div style="height:25px;" v-if="cl.timeEdit">
@@ -32,16 +32,16 @@
                       </option>
                     </select>
                   </div>
-                  <div v-else style="height:25px;">
+                  <div v-else>
                     <input style="height:25px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                 </div>
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
                   <div v-if="cl.timeEdit">
-                    <input @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                    <input @change="getChangeValue(item)" style="height:25px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div v-else-if="cl.isChixu">
-                    <select disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                    <select style="height:29px;width:42px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
                         0
                       </option>
@@ -51,7 +51,7 @@
                     </select>
                   </div>
                   <div v-else>
-                    <input readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                    <input style="height:25px;" readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                 </div>
               </div>
@@ -127,7 +127,7 @@
       <div style="height: 40px;padding-left: 15px;">
         <span style="line-height: 40px;">体征数据</span>
       </div>
-      <div style="height: 200px;overflow:auto;background-color:#fff;">
+      <div style="height: 200px;overflow:auto;background-color:#fff;" ref="signContent">
         <div style="display: flex;padding-left: 10px;">
           <div>
             <div style="width: 100px;">名称</div>
@@ -423,6 +423,10 @@ export default {
         DURATIVE_INDICATOR: 0,
       };
       this.eventList.push(obj);
+      this.$nextTick(() => {
+        var div = this.$refs.eventContent
+        div.scrollTop = div.scrollHeight
+      })
     },
     //保存按钮
     saveBtn() {
@@ -662,12 +666,17 @@ export default {
     },
     //添加生命体征项目
     addSignItem() {
-      let params = {}
-      this.api.selectAllItems(params)
-        .then(res => {
-          this.allSignItems = res.list;
-          this.signItemView = !this.signItemView;
-        })
+      if (this.allSignItems.length == 0) {
+        let params = {}
+        this.api.selectAllItems(params)
+          .then(res => {
+            this.allSignItems = res.list;
+            this.signItemView = !this.signItemView;
+          })
+      } else {
+        this.signItemView = !this.signItemView;
+      }
+
     },
     //删除体征项目
     deleteSignItem() {
@@ -696,8 +705,13 @@ export default {
           itemName: this.selected.itemName,
           itemCode: this.selected.itemCode,
         });
+        this.$nextTick(() => {
+          var div = this.refs.signContent;
+          div.scrollTop = div.scrollHeight
+        })
         this.getSignTimeData(this.itemNameList.length);
         this.selected = [];
+
       }
     },
 
