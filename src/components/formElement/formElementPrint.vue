@@ -48,7 +48,7 @@
     <div v-if="value.type=='operControlGrid'">
       <operControlGridPrint :page="isPage.isPage"></operControlGridPrint>
     </div>
-    <div v-if="value.type=='signGridPrint'">
+    <div v-if="value.type=='signGrid'">
       <signGridPrint :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></signGridPrint>
     </div>
     <div v-if="value.type=='dataOfGrid'">

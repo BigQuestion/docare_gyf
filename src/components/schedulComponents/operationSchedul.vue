@@ -27,7 +27,7 @@
                 <div class="itemChoose">
                     {{chooseData}}
                 </div>
-                <div class="itemChooseContent" @click="noneDulClick()">
+                <div class="itemChooseContent" ref="normal" @click="noneDulClick()">
                     <div v-if="chooseOneType=='list'">
                         <div class="flex head" :style="{width:totalWidth+'px'}">
                             <div v-for="(item,index) in tableConfig" class="cell resizeAble" :style="{width:item.width+'px'}" style="text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;box-sizing: border-box;">
@@ -36,12 +36,12 @@
                             </div>
                         </div>
                         <div style="position:relative;">
-                            <div v-for="(item,index) in scheduleList" :style="{width:totalWidth+'px'}" class="flex rows" @contextmenu.prevent="arrange($event,item,index)" @dblclick="edit(item)" :class="{state2:item.state==2,state3:item.state==3}">
+                            <div v-for="(item,index) in scheduleList" :style="{width:totalWidth+'px'}" class="flex rows" @contextmenu.prevent="arrange($event,item,index)" :class="{state2:item.state==2,state3:item.state==3}">
                                 <div v-for="cell in tableConfig" class="cell" :style="{width:cell.width+'px'}" style="box-sizing: border-box; ">
                                     {{item[cell.value]}}
                                 </div>
                             </div>
-                            <div @click="pushData()" v-if="showarrange" style="width:100px;height:25px;position:absolute;background-color:red;z-index:99;" :style="{top:clickTop+'px',left:clickLeft+'px'}">
+                            <div @click="pushData()" v-if="showarrange" class="pushAuto" :style="{top:clickTop+'px',left:clickLeft+'px'}">
                                 分配手术
                             </div>
                         </div>
@@ -152,20 +152,20 @@
                     <div v-for="(item,index) in tableConfig" class="flex">
                         <div class="label">{{item.text}}：</div>
                         <textarea style="outline:none;" v-if="item.text == '备注'" readonly name="" id="" v-model="handleItem[item.value]"></textarea>
-                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&item.value == 'anesthesiaDoctorName'" style="width:134px;" v-model="handleItem[item.value]">
-                            <option v-for="all in options" v-bind:value="all.userId">{{all.userName}}</option>
+                        <select @change="getNewPushData(item,index)" v-else-if="item.optin == true&&item.value == 'anesthesiaDoctorName'" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in options" v-bind:value="all.userName">{{all.userName}}</option>
                         </select>
-                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstAnesthesiaAssistantName'||item.value == 'secondAnesthesiaAssistantName')" style="width:134px;" v-model="handleItem[item.value]">
-                            <option v-for="all in MzkUsers" v-bind:value="all.userId">{{all.userName}}</option>
+                        <select @change="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstAnesthesiaAssistantName'||item.value == 'secondAnesthesiaAssistantName')" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in MzkUsers" v-bind:value="all.userName">{{all.userName}}</option>
                         </select>
-                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstAssistantName'||item.value == 'secondAssistantName')" style="width:134px;" v-model="handleItem[item.value]">
-                            <option v-for="all in assistant" v-bind:value="all.userId">{{all.userName}}</option>
+                        <select @change="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstAssistantName'||item.value == 'secondAssistantName')" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in assistant" v-bind:value="all.userName">{{all.userName}}</option>
                         </select>
-                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstOperationNurseName'||item.value == 'secondOperationNurseName')" style="width:134px;" v-model="handleItem[item.value]">
-                            <option v-for="all in wash" v-bind:value="all.userId">{{all.userName}}</option>
+                        <select @change="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstOperationNurseName'||item.value == 'secondOperationNurseName')" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in wash" v-bind:value="all.userName">{{all.userName}}</option>
                         </select>
-                        <select @click="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstSupplyNurseName'||item.value == 'secondSupplyNurseName')" style="width:134px;" v-model="handleItem[item.value]">
-                            <option v-for="all in tour" v-bind:value="all.userId">{{all.userName}}</option>
+                        <select @change="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstSupplyNurseName'||item.value == 'secondSupplyNurseName')" style="width:134px;" v-model="handleItem[item.value]">
+                            <option v-for="all in tour" v-bind:value="all.userName">{{all.userName}}</option>
                         </select>
                         <input v-else style="width:130px;outline:none;" readonly type="" name="" v-model="handleItem[item.value]">
                     </div>
@@ -191,6 +191,7 @@ export default {
             wash: [],
             tour: [],
             handleItem: {},
+            dataPpppp: {},
             tableConfig: [
                 {
                     text: "手术审核时间",
@@ -647,6 +648,15 @@ export default {
             pushDataBody: '',
             spliceIndex: '',
             newUpdata: [],
+            onchangeData: {
+                anesthesiaDoctorName: '',
+                firstAnesthesiaAssistantName: '',
+                secondAnesthesiaAssistantName: '',
+                firstOperationNurseName: '',
+                secondOperationNurseName: '',
+                firstSupplyNurseName: '',
+                secondtSupplyNurseName: '',
+            }
         }
     },
     methods: {
@@ -656,7 +666,7 @@ export default {
         submit() {
             let params = [];
             let dataInName;
-            // debugger
+
             for (var j = 0; j < this.newUpdata.length; j++) {
                 if (this.newUpdata[j].anesthesiaDoctorName != '') {
                     dataInName = true;
@@ -683,7 +693,7 @@ export default {
                 this.api.submitMedOperationScheduleList(params)
                     .then(
                     res => {
-                        // debugger
+
                         dataInName = false;
                         this.getList(this.dateValue)
                         this.newUpdata = [];
@@ -696,35 +706,107 @@ export default {
             }
 
         },
+        getNewPushData(item, index) {
+            console.log(item)
+            console.log(index)
+            console.log(this.handleItem[item.value])
+            console.log(this.tableConfig[index])
+            console.log(this.dataPpppp[item.value])
+            if (this.tableConfig[index].value == 'anesthesiaDoctorName') {
+                console.log(this.options)
+                for (var a = 0; a < this.options.length; a++) {
+                    if (this.options[a].userName == this.handleItem[item.value]) {
+                        this.onchangeData.anesthesiaDoctorName = this.options[a].userId;
+                    }
+                }
+            } else if (this.tableConfig[index].value == 'firstAnesthesiaAssistantName') {
+                console.log(this.MzkUsers)
+                for (var a = 0; a < this.MzkUsers.length; a++) {
+                    if (this.MzkUsers[a].userName == this.handleItem[item.value]) {
+                        this.onchangeData.firstAnesthesiaAssistantName = this.MzkUsers[a].userId;
+                    }
+                }
+            } else if (this.tableConfig[index].value == 'secondAnesthesiaAssistantName') {
+                console.log(this.MzkUsers)
+                for (var a = 0; a < this.MzkUsers.length; a++) {
+                    if (this.MzkUsers[a].userName == this.handleItem[item.value]) {
+                        this.onchangeData.secondAnesthesiaAssistantName = this.MzkUsers[a].userId;
+                    }
+                }
+            } else if (this.tableConfig[index].value == 'firstAssistantName') {
+                console.log(this.assistant)
+                for (var a = 0; a < this.assistant.length; a++) {
+                    if (this.assistant[a].userName == this.handleItem[item.value]) {
+                        this.onchangeData.firstAssistantName = this.assistant[a].userId;
+                    }
+                }
+            } else if (this.tableConfig[index].value == 'secondAssistantName') {
+                console.log(this.assistant)
+                for (var a = 0; a < this.assistant.length; a++) {
+                    if (this.assistant[a].userName == this.handleItem[item.value]) {
+                        this.onchangeData.secondAssistantName = this.assistant[a].userId;
+                    }
+                }
+            } else if (this.tableConfig[index].value == 'firstOperationNurseName') {
+                console.log(this.wash)
+                for (var a = 0; a < this.wash.length; a++) {
+                    if (this.wash[a].userName == this.handleItem[item.value]) {
+                        this.onchangeData.firstOperationNurseName = this.wash[a].userId;
+                    }
+                }
+            } else if (this.tableConfig[index].value == 'secondOperationNurseName') {
+                console.log(this.wash)
+                for (var a = 0; a < this.wash.length; a++) {
+                    if (this.wash[a].userName == this.handleItem[item.value]) {
+                        this.onchangeData.secondOperationNurseName = this.wash[a].userId;
+                    }
+                }
+            } else if (this.tableConfig[index].value == 'firstSupplyNurseName') {
+                console.log(this.tour)
+                for (var a = 0; a < this.tour.length; a++) {
+                    if (this.tour[a].userName == this.handleItem[item.value]) {
+                        this.onchangeData.firstSupplyNurseName = this.tour[a].userId;
+                    }
+                }
+            } else if (this.tableConfig[index].value == 'secondSupplyNurseName') {
+                console.log(this.tour)
+                for (var a = 0; a < this.tour.length; a++) {
+                    if (this.tour[a].userName == this.handleItem[item.value]) {
+                        this.onchangeData.secondSupplyNurseName = this.tour[a].userId;
+                    }
+                }
+            }
+        },
         modalSure() {
             console.log(this.handleItem)
             for (var b = 0; b < this.newUpdata.length; b++) {
                 if (this.handleItem.visitId == this.newUpdata[b].visitId && this.handleItem.patientId == this.newUpdata[b].patientId && this.handleItem.scheduleId == this.newUpdata[b].scheduleId) {
                     console.log(this.newUpdata[b])
-                    this.newUpdata[b].anesthesiaDoctorName = this.handleItem.anesthesiaDoctorName;
-                    this.newUpdata[b].firstAnesthesiaAssistantName = this.handleItem.firstAnesthesiaAssistantName;
-                    this.newUpdata[b].secondAnesthesiaAssistantName = this.handleItem.secondAnesthesiaAssistantName;
-                    this.newUpdata[b].firstOperationNurseName = this.handleItem.firstOperationNurseName;
-                    this.newUpdata[b].secondOperationNurseName = this.handleItem.secondOperationNurseName;
-                    this.newUpdata[b].firstSupplyNurseName = this.handleItem.firstSupplyNurseName;
-                    this.newUpdata[b].secondtSupplyNurseName = this.handleItem.secondtSupplyNurseName;
+                    this.newUpdata[b].anesthesiaDoctorName = this.onchangeData.anesthesiaDoctorName;
+                    this.newUpdata[b].firstAnesthesiaAssistantName = this.onchangeData.firstAnesthesiaAssistantName;
+                    this.newUpdata[b].secondAnesthesiaAssistantName = this.onchangeData.secondAnesthesiaAssistantName;
+                    this.newUpdata[b].firstOperationNurseName = this.onchangeData.firstOperationNurseName;
+                    this.newUpdata[b].secondOperationNurseName = this.onchangeData.secondOperationNurseName;
+                    this.newUpdata[b].firstSupplyNurseName = this.onchangeData.firstSupplyNurseName;
+                    this.newUpdata[b].secondtSupplyNurseName = this.onchangeData.secondtSupplyNurseName;
                 }
             }
             // let params = this.handleItem
-
 
             console.log(this.newUpdata)
             this.mask = false;
 
         },
-        getNewPushData(item, index) {
-            console.log(item)
-            console.log(index)
-        },
         modalCancel() {
+            // this.handleItem = this.dataPpppp;
+            console.log(this.dataPpppp)
             this.mask = false;
         },
         edit(item) {
+            this.handleItem = item;
+            this.dataPpppp = item;
+            console.log(this.dataPpppp)
+            console.log(this.tableConfig)
             if (item.state == 0 || item.state == 1) {
                 for (var a = 0; a < this.tableConfig.length; a++) {
                     if (this.tableConfig[a].value == 'anesthesiaDoctorName') {
@@ -762,7 +844,7 @@ export default {
                     this.tableConfig[b].optin = false;
                 }
             }
-            this.handleItem = item;
+
             console.log(this.handleItem)
             this.mask = true;
         },
@@ -775,8 +857,6 @@ export default {
         },
         test(event) {
             console.log(event.srcElement.value)
-            // var change = this.dateValue.replace(/-/g, '/')
-            // console.log(change)
             this.dateValue = event.srcElement.value;
         },
         dateChange() {
@@ -785,7 +865,7 @@ export default {
         chooseOne(item) {
             console.log(item)
             this.chooseOneType = item.type;
-            console.log(this.chooseOneType)
+            console.log(this.chooseOneType);
             if (item.dataLength !== undefined) {
                 this.chooseData = item.data + '(' + item.dataLength + ')'
             } else {
@@ -814,6 +894,11 @@ export default {
                 for (var a = 0; a < this.newUpdata.length; a++) {
                     this.newUpdata[a].anesthesiaDoctorName = item.userId;
                 }
+                for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
+                    if ((this.scheduleListRight[aa].state == 0 || this.scheduleListRight[aa].state == 1) && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
+                        this.scheduleListRight[aa].anesthesiaDoctorName = item.userName;
+                    }
+                }
             } else if (type == 'docmzkUsers') {
                 if (this.roomId[this.hasChooseIndex].docmzkUsers == '') {
                     this.roomId[this.hasChooseIndex].docmzkUsersId = item.userId;
@@ -824,6 +909,11 @@ export default {
                     for (var b = 0; b < this.newUpdata.length; b++) {
                         this.newUpdata[b].firstAnesthesiaAssistantName = item.userId;
                     }
+                    for (var bb = 0; bb < this.scheduleListRight.length; bb++) {
+                        if ((this.scheduleListRight[bb].state == 0 || this.scheduleListRight[bb].state == 1) && this.scheduleListRight[bb].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.scheduleListRight[bb].firstAnesthesiaAssistantName = item.userName;
+                        }
+                    }
                 } else {
                     this.roomId[this.hasChooseIndex].docmzkUsers2Id = item.userId;
                     this.hasChooseRoom.docmzkUsers2Id = item.userId;
@@ -832,6 +922,11 @@ export default {
                     this.pushDataBody.secondAnesthesiaAssistantName = item.userName;
                     for (var b = 0; b < this.newUpdata.length; b++) {
                         this.newUpdata[b].secondAnesthesiaAssistantName = item.userId;
+                    }
+                    for (var bb = 0; bb < this.scheduleListRight.length; bb++) {
+                        if ((this.scheduleListRight[bb].state == 0 || this.scheduleListRight[bb].state == 1) && this.scheduleListRight[bb].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.scheduleListRight[bb].secondAnesthesiaAssistantName = item.userName;
+                        }
                     }
                 }
             } else if (type == 'assistant') {
@@ -844,6 +939,11 @@ export default {
                     for (var c = 0; c < this.newUpdata.length; c++) {
                         this.newUpdata[c].firstAssistantName = item.userId;
                     }
+                    for (var cc = 0; cc < this.scheduleListRight.length; cc++) {
+                        if ((this.scheduleListRight[cc].state == 0 || this.scheduleListRight[cc].state == 1) && this.scheduleListRight[cc].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.scheduleListRight[cc].firstAssistantName = item.userName;
+                        }
+                    }
                 } else {
                     this.roomId[this.hasChooseIndex].assistant2Id = item.userId;
                     this.hasChooseRoom.assistant2Id = item.userId;
@@ -852,6 +952,11 @@ export default {
                     this.pushDataBody.secondAssistantName = item.userName;
                     for (var c = 0; c < this.newUpdata.length; c++) {
                         this.newUpdata[c].secondAssistantName = item.userId;
+                    }
+                    for (var cc = 0; cc < this.scheduleListRight.length; cc++) {
+                        if ((this.scheduleListRight[cc].state == 0 || this.scheduleListRight[cc].state == 1) && this.scheduleListRight[cc].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.scheduleListRight[cc].secondAssistantName = item.userName;
+                        }
                     }
                 }
             } else if (type == 'docwash') {
@@ -864,6 +969,11 @@ export default {
                     for (var d = 0; d < this.newUpdata.length; d++) {
                         this.newUpdata[d].firstOperationNurseName = item.userId;
                     }
+                    for (var dd = 0; dd < this.scheduleListRight.length; dd++) {
+                        if ((this.scheduleListRight[dd].state == 0 || this.scheduleListRight[dd].state == 1) && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.scheduleListRight[dd].firstOperationNurseName = item.userName;
+                        }
+                    }
                 } else {
                     this.roomId[this.hasChooseIndex].docwash2Id = item.userId;
                     this.hasChooseRoom.docwash2Id = item.userId;
@@ -872,6 +982,11 @@ export default {
                     this.pushDataBody.secondOperationNurseName = item.userName;
                     for (var d = 0; d < this.newUpdata.length; d++) {
                         this.newUpdata[d].secondOperationNurseName = item.userId;
+                    }
+                    for (var dd = 0; dd < this.scheduleListRight.length; dd++) {
+                        if ((this.scheduleListRight[dd].state == 0 || this.scheduleListRight[dd].state == 1) && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.scheduleListRight[dd].secondOperationNurseName = item.userName;
+                        }
                     }
                 }
 
@@ -885,6 +1000,11 @@ export default {
                     for (var e = 0; e < this.newUpdata.length; e++) {
                         this.newUpdata[e].firstSupplyNurseName = item.userId;
                     }
+                    for (var ee = 0; ee < this.scheduleListRight.length; ee++) {
+                        if ((this.scheduleListRight[ee].state == 0 || this.scheduleListRight[ee].state == 1) && this.scheduleListRight[ee].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.scheduleListRight[ee].firstSupplyNurseName = item.userName;
+                        }
+                    }
                 } else {
                     this.roomId[this.hasChooseIndex].doctour2Id = item.userId;
                     this.hasChooseRoom.doctour2Id = item.userId;
@@ -893,6 +1013,11 @@ export default {
                     this.pushDataBody.secondOperationNurseName = item.userName;
                     for (var e = 0; e < this.newUpdata.length; e++) {
                         this.newUpdata[e].secondSupplyNurseName = item.userId;
+                    }
+                    for (var ee = 0; ee < this.scheduleListRight.length; ee++) {
+                        if ((this.scheduleListRight[ee].state == 0 || this.scheduleListRight[ee].state == 1) && this.scheduleListRight[ee].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.scheduleListRight[ee].secondSupplyNurseName = item.userName;
+                        }
                     }
                 }
 
@@ -916,7 +1041,6 @@ export default {
                         if (res.list[j].state == 0 || res.list[j].state == 1) {
                             this.$set(res.list[j], 'clickShadowData', false)
                             this.scheduleList.push(res.list[j])
-                            console.log(res.list[j])
                         }
                     }
                     console.log(this.scheduleList.length)
@@ -929,42 +1053,38 @@ export default {
                             this.scheduleListRight2.push(res.list[a])
                         }
                     }
-                    console.log(this.scheduleList)
-                    console.log(this.scheduleListRight)
-                    // this.scheduleList = res.list;
-                    console.log(res.list);
                 });
         },
         getSupplyNurseList() {
             this.getList(this.dateValue);
             this.api.selectUserListByType({ userType: '主麻医师' })
                 .then(res => {
-                    // debugger
+
                     console.log(res)
                     this.options = res;
                     console.log(this.options)
                 })
             this.api.selectUserListByType({ userType: '副麻医师' })
                 .then(res => {
-                    // debugger
+
                     console.log(res);
                     this.MzkUsers = res;
                 })
             this.api.selectUserListByType({ userType: '麻醉助手' })
                 .then(res => {
-                    // debugger
+
                     console.log(res);
                     this.assistant = res;
                 })
             this.api.selectUserListByType({ userType: '洗手护士' })
                 .then(res => {
-                    // debugger
+
                     console.log(res);
                     this.wash = res;
                 })
             this.api.selectUserListByType({ userType: '巡回护士' })
                 .then(res => {
-                    // debugger
+
                     console.log(res);
                     this.tour = res;
                 })
@@ -1008,9 +1128,11 @@ export default {
         arrange(event, item, index) {
             console.log(event)
             console.log(item)
+            console.log(index)
+            console.log(this.$refs.normal.scrollLeft)
             this.showarrange = true;
-            this.clickTop = event.layerY;
-            this.clickLeft = event.layerX;
+            this.clickTop = event.y - 260;
+            this.clickLeft = event.x + this.$refs.normal.scrollLeft;
             this.pushDataBody = item;
             this.spliceIndex = index;
         },
@@ -1091,6 +1213,8 @@ export default {
             this.scheduleListRight.push(this.pushDataBody)
             this.newUpdata.push(subMitData)
             console.log(this.newUpdata)
+            this.chooseData = '手术(' + this.scheduleList.length + ')';
+            this.listChooseBody[0].dataLength = this.scheduleList.length;
         },
         goBackFun(cell, index) {
             console.log(cell)
@@ -1112,6 +1236,8 @@ export default {
             }
             this.scheduleListRight.splice(index, 1);
             this.scheduleList.push(cell);
+            this.chooseData = '手术(' + this.scheduleList.length + ')';
+            this.listChooseBody[0].dataLength = this.scheduleList.length;
         },
         goTaoLeft(cell, index) {
             // console.log(cell.sequence)
@@ -1186,12 +1312,8 @@ export default {
         this.getSupplyNurseList();
         this.area = window;
         let totalWidth = this.plusAll();
-        console.log(totalWidth);
         this.$set(this.$data, 'totalWidth', totalWidth)
         this.hasChooseRoom = this.roomId[0];
-        console.log(this.hasChooseRoom)
-
-        console.log(321 + 0)
     },
     components: {
         Datepicker: Datepicker,
@@ -1345,14 +1467,27 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    border: 1px solid #B3B3B3;
 }
 
 .head .cell {
     border: 1px solid #666666;
 }
 
-.cell {
-    border: 1px solid #B3B3B3;
+.pushAuto {
+    width: 100px;
+    height: 25px;
+    position: absolute;
+    border: 1px solid #BABABA;
+    box-shadow: 2px 2px 5px #888;
+    background-color: #fff;
+    z-index: 99;
+    cursor: pointer;
+    padding-left: 5px;
+}
+
+.pushAuto:hover {
+    background-color: #EBEBEB;
 }
 
 .rows:hover {
