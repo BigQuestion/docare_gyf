@@ -143,11 +143,12 @@
         <!-- <div class="patientList" :class="{animationClassNone:showData,animationClassShow:showDataTwo}"> -->
         <div class="patientList" v-show="showData">
           <div style="height:110px;">
-            <div style="padding-left: 5px;">
+            <div style="padding-left: 5px;margin-top: 5px;">
               日期
               <input v-model="getTime" type="date" name="" @keyup.enter='searchPatientList'>
             </div>
-            <div style="padding-left: 5px;">
+            <div style="padding-left: 5px;margin-top: 5px;">
+              <button @click='openJzView'>急诊登记</button>
               <button @click='searchPatientList'>搜索</button>
             </div>
             <div>
@@ -501,6 +502,10 @@
         <anestheticConstant v-if="anestheticConstant"></anestheticConstant>
       </div>
     </div>
+    <div>
+      <!-- 急诊登记 -->
+      <jzRegisterContent v-if="jzPatientView" v-on:closeJzViewChild="closeJzView"></jzRegisterContent>
+    </div>
     <cancel v-if="cancelData.dataInParent" :dataInParent="cancelData"></cancel>
   </div>
   <div v-else style="height: 100%;width: 100%;z-index: 99;position:relative;">
@@ -522,6 +527,7 @@ import aboutUs from '@/components/aboutUs/aboutUs.vue';
 import anaesthesiaEvent from '@/components/dictionaryComponents/anaesthesiaEvent.vue';
 import anestheticMethod from '@/components/dictionaryComponents/anestheticMethod.vue';
 import anestheticConstant from '@/components/dictionaryComponents/anestheticConstant.vue';
+import jzRegisterContent from '@/components/jzRegisterContent/jzRegisterContent.vue';
 import monitor from '@/components/monitor/monitor.vue';
 import cancel from '@/components/cancel/cancel.vue';
 import { getLodop } from '@/assets/js/LodopFuncs';
@@ -644,6 +650,8 @@ export default {
       currentPageNum: 1,
       timeTestVal: '',
       tempButtonView: false,
+      jzPatientView: false, //急诊登记视图
+
 
     }
   },
@@ -1287,7 +1295,6 @@ export default {
               this.searchPatientList();
               this.lockedPatientInfo.operStatus = status;
             }
-
           });
 
     },
@@ -1511,6 +1518,15 @@ export default {
     applyTemplateFun() {
       Bus.$emit('openApplyTemp', 'open');
     },
+    openJzView() {
+      this.jzPatientView = true;
+
+    },
+    closeJzView() {
+      this.jzPatientView = false;
+
+    },
+
   },
   mounted() {
     this.searchPatientList();
@@ -1541,7 +1557,8 @@ export default {
     anestheticConstant,
     monitor,
     cancel,
-    personStyle
+    personStyle,
+    jzRegisterContent
   },
 }
 
@@ -1812,6 +1829,159 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* 左部菜单按钮部分样式 */

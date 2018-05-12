@@ -634,4 +634,67 @@ export default {
   deletePatientData(params, config) {
     return fetch('medicalsystem/rest/medFormCon/deletePatientData', params)
   },
+
+
+  /**
+   * 获取急诊病人信息
+   * 
+   */
+  getJzHisPatInfo(params, config) {
+    return fetch('medicalsystem/rest/getHisDataCon/getJzHisPatInfo', params)
+  },
+
+
+  /**
+   * 获取所有手术间
+   * 
+   */
+  selectAllRoomNo(params, config) {
+    return fetch('medicalsystem/rest/medOperatingRoom/selectAllRoomNo', params)
+  },
+
+  /**
+   * 获取部分手术诊断
+   * 
+   */
+  getPartsDialog(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/getPartsDialog', params)
+  },
+  /**
+   * 获取全部手术诊断
+   * 
+   */
+  getAllDialog(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/getAllDialog', params)
+  },
+
+  /**
+   * 获取部分手术名称
+   * 
+   */
+  getPartsOperationNames(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/getPartsOperationNames', params)
+  },
+  /**
+   * 获取所有手术名称
+   * 
+   */
+  getAllOperationNames(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/getAllOperationNames', params)
+  },
+  /**
+   * 获取急诊登记需要的医生护士
+   * 
+   */
+  getAllUsers(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/getAllUsers', params)
+  },
+
+  /**
+   * 急诊登记
+   * 
+   */
+  insertEmergencyWrite(params, config) {
+    return fetch('medicalsystem/rest/medOperationMaster/insertEmergencyWrite', params)
+  },
 }
