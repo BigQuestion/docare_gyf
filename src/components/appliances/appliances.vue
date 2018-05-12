@@ -38,12 +38,12 @@
             </tr>
           </tbody>
           <!--  <tbody v-else>
-          <tr v-for="(item,index) in rows">
-            <td v-for="(de,index2) in titileList">
-              <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2].positionValue" @change="getChangeList($event,index,index2)">
-            </td>
-          </tr>
-        </tbody> -->
+                <tr v-for="(item,index) in rows">
+                  <td v-for="(de,index2) in titileList">
+                    <input v-if="testList.length" style="width: 100%;height: 20px;border:none;" :value="testList[index][index2].positionValue" @change="getChangeList($event,index,index2)">
+                  </td>
+                </tr>
+              </tbody> -->
         </table>
       </div>
     </div>
@@ -58,20 +58,25 @@
         <button @click="openSaveView">取消</button>
       </div>
     </div>
-    <div v-if="applyTemplateView" style="position:fixed;top: 20%;left: 40%;border:1px solid rgb(47, 150, 196);width: 300px;height: 400px;background-color: white;">
-      <div style="height: 30px;background-color: rgb(47, 150, 196);color: white;padding: 0px 10px;line-height: 30px;">应用模板</div>
-      <div style="height: 250px;overflow: auto;">
-        <ul>
-          <li v-for="item in tempNameList" @click="chooseTemp(item)">
-            <div style="min-height: 20px;">
-              {{item.templateName}}
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div style="position: absolute;bottom: 0px;left: 0px;height: 50px;background-color: rgb(47, 150, 196);width: 100%;vertical-align: center;">
-        <button @click="applyTemplate" style="margin-top: 15px;margin-left: 15px;">套用</button>
-        <button @click="openTempView">取消</button>
+    <div v-if="applyTemplateView" class="mask">
+      <div class="infoModal">
+        <div class="modalHead">
+          <span>应用模板</span>
+          <div @click="openTempView" class="font_active">X</div>
+        </div>
+        <div style="height: calc(100% - 90px);overflow: auto;border: 1px solid #191A1C;box-sizing: border-box;margin: 5px;padding:3px;">
+          <ul>
+            <li v-for="item in tempNameList" @click="chooseTemp(item)">
+              <div style="min-height: 20px;">
+                {{item.templateName}}
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div style="height: 50px;width: 100%;vertical-align: center;text-align:right;box-sizing:border-box;padding-right:5px;">
+          <button @click="applyTemplate" style="margin-top: 15px;margin-left: 15px;">套用</button>
+          <button @click="openTempView">取消</button>
+        </div>
       </div>
     </div>
   </div>
@@ -164,7 +169,7 @@ export default {
       if (y + 1 == this.rows) {
         this.rows = this.rows + 1
       }
-      if (typeof(this.testList[y][x].positionValue) == "undefined") {
+      if (typeof (this.testList[y][x].positionValue) == "undefined") {
         this.dataAllList.push({
           patientId: this.config.userInfo.patientId,
           visitId: this.config.userInfo.visitId,
@@ -181,7 +186,7 @@ export default {
         })
       }
       this.dataChange(this.dataAllList);
-      if (typeof(this.testList[y][x].positionValue) == "undefined" || this.testList[y][x].addFlag) {
+      if (typeof (this.testList[y][x].positionValue) == "undefined" || this.testList[y][x].addFlag) {
 
         if (this.insertDataList.length > 0) {
           //判断这条数据是否存在在集合里面
@@ -442,4 +447,60 @@ ul li.active {
   color: white;
 }
 
+.mask {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  /* background: rgba(0, 0, 0, 0.1); */
+  cursor: not-allowed;
+}
+
+.infoModal {
+  width: 300px;
+  height: 400px;
+  background: #fff;
+  background: rgb(240, 240, 240);
+  border: 1px solid rgb(24, 131, 215);
+  cursor: auto;
+  box-shadow: 1px 1px 20px #AAA;
+  position: absolute;
+  top: calc(50% - 200px);
+  left: calc(50% - 150px);
+}
+
+.modalHead {
+  width: 100%;
+  height: 30px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding-left: 5px;
+}
+
+.font_active {
+  width: 35px;
+  height: 100%;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+  color: rgb(153, 153, 153);
+  font-family: microsoft YaHei;
+}
+
+.font_active:hover {
+  animation: colorChange 0.5s infinite;
+  animation-iteration-count: 1;
+  color: #fff;
+  background-color: rgb(232, 17, 35);
+}
+
+.font_active:active {
+  background-color: rgb(241, 112, 112);
+  color: #fff;
+}
 </style>
