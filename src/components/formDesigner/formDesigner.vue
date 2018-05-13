@@ -97,6 +97,14 @@
               <option v-for="btn in chooseItems[0].cursor" :value="btn.isData">{{btn.isData}}</option>
             </select>
           </div>
+          <div v-if="chooseItems[0]" class="ediclass">
+            <!-- 字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor"> -->
+            <div class="ediChild">
+              字体大小:
+            </div>
+            <input type="" name="" style="width:150px;" v-model="chooseItems[0].fontSize">
+            <span>PT</span>
+          </div>
           <div v-if="chooseItems[0]&&chooseItems[0].type=='input'">
             <div v-if="chooseItems[0]" class="ediclass">
               <!-- 字体颜色:<input type="" name="" v-model="chooseItems[0].ForeColor"> -->
@@ -317,6 +325,7 @@ export default {
         value: '输入文字',
         selectKeyfield: 'id',
         ForeColor: '#000',
+        fontSize:'1',
       },
       {
         text: '文本控件',
@@ -325,6 +334,7 @@ export default {
         width: '80',
         ForeColor: '#000',
         height: '',
+        fontSize:'1',
       }, {
         text: '文本',
         type: 'text',
@@ -335,6 +345,7 @@ export default {
         tableName: '',
         ForeColor: '#0000FF',
         borderStyle: '1px solid #222',
+        fontSize:'1',
       }, {
         text: '输入框',
         type: 'input',
@@ -346,6 +357,7 @@ export default {
         dictShowFiled: '',
         dictField: '',
         borderStyle: '1px solid #222',
+        fontSize:'1',
         value: '',
         ForeColor: '#0000FF',
         opacity: 1,
@@ -396,13 +408,16 @@ export default {
         type: "textarea",
         height: "100",
         width: "300",
+        fontSize:'1',
         ForeColor: '#0000FF',
       }, {
         text: "麻醉量表格组件",
         type: "formDiv",
+        fontSize:'1',
       }, {
         text: "入量表格组件",
         type: "formInGrid",
+        fontSize:'1',
       }, {
         text: "监控组件",
         type: "operControlGrid",
@@ -411,11 +426,13 @@ export default {
         type: "signGrid",
         width: 600,
         height: 72,
+        fontSize:'1',
       }, {
         text: "标记详细组件",
         type: "dataOfGrid",
         width: 600,
         height: 72,
+        fontSize:'1',
       }, {
         text: "自定义控件",
         type: "checkBoxAll",
@@ -1027,6 +1044,7 @@ export default {
   background-color: #0078D7;
   color: #fff;
 }
+
 
 
 
