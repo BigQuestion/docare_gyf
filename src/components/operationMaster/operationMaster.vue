@@ -1667,6 +1667,7 @@ export default {
   width: 200px;
   height: 100%;
   background: rgb(142, 193, 238);
+  min-width: 200px;
 }
 
 .content {
@@ -1674,6 +1675,7 @@ export default {
   width: calc(100% - 200px);
   height: 100%;
   background: rgb(227, 239, 255);
+  min-width: 1287px;
 }
 
 .listBorder {
@@ -1714,6 +1716,7 @@ export default {
   width: calc(100% - 358px);
   box-sizing: border-box;
   padding-left: 5px;
+  min-width: 898px;
 }
 
 .patientContentBox {
