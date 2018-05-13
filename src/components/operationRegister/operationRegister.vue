@@ -402,6 +402,7 @@ export default {
     },
     //双击添加麻醉事件记录
     addEvent(item) {
+      debugger
       var obj = {
         TYPE_NAME: item.typeName,
         PATIENT_ID: this.objectItem.patientId,

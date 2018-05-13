@@ -112,7 +112,7 @@
         <div style="margin-left: 10px;">
           <input v-model="jzInfo.qiekouNumber" style="width: 80px;">
         </div>
-        <div style="width: 70px;margin-left: 30px;">急诊折期</div>
+        <div style="width: 70px;margin-left: 30px;">急诊择期</div>
         <div style="margin-left: 10px;">
           <input v-model="jzInfo.emergencyIndicator" style="width: 80px;">
         </div>
@@ -293,10 +293,10 @@ export default {
     //保存
     submitJzInfo() {
       let params = {
-        // patientId: this.jzInfo.patientId,
-        // visitId: this.jzInfo.visitId,
-        patientId: '123',
-        visitId: '1',
+        patientId: this.jzInfo.patientId,
+        visitId: this.jzInfo.visitId,
+        // patientId: '123',
+        // visitId: '1',
         deptStayed: this.jzInfo.deptCode,
         diagBeforeOperation: this.jzInfo.diagBeforeOperation,
         bedNo: this.jzInfo.bedNo,

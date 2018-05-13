@@ -42,6 +42,7 @@ export default {
   methods: {
     //判断是单选还是多选
     isMultiSelect() {
+
       if (this.boxValue.MultiSelectMode == 'false') {
         this.getItemValue();
       } else {
@@ -50,6 +51,7 @@ export default {
     },
 
     getItemValue() {
+
       let params = [];
       params.push({
         "patientId": this.config.userInfo.patientId,
@@ -62,6 +64,7 @@ export default {
       this.api.getFormSqlResult(params)
         .then(res => {
           this.resultValue = res[this.boxValue.SourceFieldName];
+
           if (this.boxValue.MultiSelectMode == 'false') {
             for (var i = 0; i < this.boxValue.listData.length; i++) {
               if (this.boxValue.listData[i].ItemValue == res[this.boxValue.SourceFieldName]) {

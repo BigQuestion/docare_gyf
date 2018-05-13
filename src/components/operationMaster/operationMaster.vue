@@ -338,7 +338,7 @@
                   {{patientInfo.OPERATION_SCALE}}
                 </div>
                 <div class="left15">麻醉方法</div>
-                <div class="in_con">
+                <div class="in_con" style="width: 400px;">
                   {{patientInfo.ANESTHESIA_METHOD}}
                 </div>
               </div>
@@ -389,7 +389,7 @@
         <!--单子信息-->
         <div class="information" v-if="formDetail" :class="{allWidth:widthData}">
           <div>
-            <div class="designArea" ref="normal">
+            <div class="designArea" ref="normal" :style="{height: areaheight+'px'}">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
                 <form-element ref="formElement" :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
               </div>
@@ -651,6 +651,7 @@ export default {
       timeTestVal: '',
       tempButtonView: false,
       jzPatientView: false, //急诊登记视图
+      areaheight: 300,
 
 
     }
@@ -677,6 +678,7 @@ export default {
     },
     CreateOneFormPage() {
       LODOP = getLodop();
+      LODOP.SET_PRINT_PAGESIZE(0, "176mm", "250mm", "B5")
       this.currentPageNum = 1;
       this.printPage(this.currentPageNum)
     },
@@ -1526,6 +1528,10 @@ export default {
       this.jzPatientView = false;
 
     },
+    //获取高度
+    getHeight() {
+      this.areaheight = window.innerHeight - 200;
+    }
 
   },
   mounted() {
@@ -1534,6 +1540,7 @@ export default {
     this.selectMedFormList();
 
     this.patientId = '10966589';
+    this.getHeight();
   },
   created() {
     Bus.$on('showPersonStyle', (val) => {
@@ -1684,7 +1691,7 @@ export default {
 
 .leftNoneBox {
   height: 100%;
-  min-width: 7px;
+  min-width: 8px;
   background-color: #8DB8F0;
   position: relative;
   cursor: pointer;
@@ -1829,6 +1836,16 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
