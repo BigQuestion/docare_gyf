@@ -23,12 +23,12 @@
                     <input style="height:25px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div style="height:25px;" v-else-if="cl.isChixu">
-                    <select style="height:29px;width:42px;" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                    <select style="height:29px;width:65px;" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
-                        0
+                        不持续
                       </option>
                       <option v-bind:value="1">
-                        1
+                        持续
                       </option>
                     </select>
                   </div>
@@ -41,12 +41,12 @@
                     <input @change="getChangeValue(item)" style="height:25px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div v-else-if="cl.isChixu">
-                    <select style="height:29px;width:42px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                    <select style="height:29px;width:65px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
-                        0
+                        不持续
                       </option>
                       <option v-bind:value="1">
-                        1
+                        持续
                       </option>
                     </select>
                   </div>
@@ -243,7 +243,7 @@ export default {
         {
           title: "途径",
           fieldObj: "ADMINISTRATOR",
-          width: 80
+          width: 60
         },
         {
           title: "浓度",
@@ -268,7 +268,7 @@ export default {
         {
           title: "剂量",
           fieldObj: "DOSAGE",
-          width: 60
+          width: 50
         },
         {
           title: "单位",
@@ -282,9 +282,9 @@ export default {
           width: 180
         },
         {
-          title: "",
+          title: "是否持续",
           fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
-          width: 40,
+          width: 65,
           isChixu: true,
         },
         {
@@ -435,6 +435,7 @@ export default {
         this.api.updateMedAnesthesiaEventBatch(this.changeEvent)
           .then(res => {
             this.selectMedAnesthesiaEventList();
+            this.changeEvent = [];
           })
       }
       var list = this.eventList;
@@ -531,6 +532,7 @@ export default {
     },
     //获取改变的值
     getChangeValue(item) {
+      debugger
       let params = {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
@@ -547,7 +549,7 @@ export default {
         dosageUnits: item.DOSAGE_UNITS,
         durativeIndicator: item.DURATIVE_INDICATOR,
         startTime: new Date(item.START_TIME),
-        endDate: new Date(item.ENDDATE),
+        endDate: item.ENDDATE ? new Date(item.ENDDATE) : '',
       }
       this.changeEvent.push(params);
       this.updateEvent = params;
