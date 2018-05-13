@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="value.type=='text'" :style="{width:value.width+'px',height:value.height+'px'}" style="min-width: 20px;min-height: 20px;">
+    <div v-if="value.type=='text'" :style="{width:value.width+'px',height:value.height+'px',fontSize:value.fontSize+'pt'}" style="min-width: 20px;min-height: 20px;">
       {{value.value}}
     </div>
-    <div v-if="value.type=='title'" :style="{width:value.width+'px',height:value.height+'px'}" style="min-width: 20px;min-height: 20px;">
+    <div v-if="value.type=='title'" :style="{width:value.width+'px',height:value.height+'px',fontSize:value.fontSize+'pt'}" style="min-width: 20px;min-height: 20px;">
       {{value.value}}
     </div>
     <div v-if="value.type=='input'">
