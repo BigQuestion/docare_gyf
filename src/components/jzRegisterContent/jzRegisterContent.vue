@@ -46,11 +46,11 @@
           </div>
         </div>
         <!-- <div class="flex" style="margin-top: 5px;">
-              <div style="width: 70px;">病情</div>
-              <div>
-                <input type="" name="" style="width: 555px;">
-              </div>
-            </div> -->
+                  <div style="width: 70px;">病情</div>
+                  <div>
+                    <input type="" name="" style="width: 555px;">
+                  </div>
+                </div> -->
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">手术时间</div>
           <div>
@@ -73,13 +73,13 @@
         </div>
         <div class="flex" style="margin-top: 5px;">
           <!-- <div style="width: 70px;">隔离</div>
-          <div>
-            <input type="" name="" style="width: 80px;">
-          </div>
-          <div style="width: 40px;margin-left: 70px;">等级</div>
-          <div>
-            <input type="" name="" style="width: 80px;">
-          </div> -->
+              <div>
+                <input type="" name="" style="width: 80px;">
+              </div>
+              <div style="width: 40px;margin-left: 70px;">等级</div>
+              <div>
+                <input type="" name="" style="width: 80px;">
+              </div> -->
           <div style="width: 70px;">麻醉方法</div>
           <div>
             <input v-model="jzInfo.anesthesiaMethod" style="width: 555px;" @dblclick="openMethodView">
@@ -120,31 +120,17 @@
             <input v-model="jzInfo.emergencyIndicator" style="width: 80px;">
           </div>
         </div>
-      </div>
-      <div class="flex" style="margin-top: 5px;">
-        <div style="width: 70px;">切口等级</div>
-        <div>
-          <input v-model="jzInfo.qiekouClass" style="width: 80px;">
-        </div>
-        <div style="width: 70px;margin-left: 30px;">切口个数</div>
-        <div style="margin-left: 10px;">
-          <input v-model="jzInfo.qiekouNumber" style="width: 80px;">
-        </div>
-        <div style="width: 70px;margin-left: 30px;">急诊择期</div>
-        <div style="margin-left: 10px;">
-          <input v-model="jzInfo.emergencyIndicator" style="width: 80px;">
-        </div>
-      </div>
-      <div class="flex" style="margin-top: 5px;">
-        <div style="width: 70px;">手术医师</div>
-        <div>
-          <input v-model="jzInfo.surgeon" style="width: 80px;" @dblclick="surgeonOpenView">
-          <userSelect v-if="surgeonView" methodName="surgeon" :dataInfo="jzInfo" v-on:closesurgeon="surgeonOpenView" width="120"></userSelect>
-        </div>
-        <div style="width: 70px;margin-left: 30px;">手术助手</div>
-        <div style="margin-left: 10px;">
-          <input v-model="jzInfo.firstAssistant" style="width: 80px;" @dblclick="firstAssistantOpenView">
-          <userSelect v-if="firstAssistantView" methodName="firstAssistant" :dataInfo="jzInfo" v-on:closefirstAssistant="firstAssistantOpenView" width="120"></userSelect>
+        <div class="flex" style="margin-top: 5px;">
+          <div style="width: 70px;">手术医师</div>
+          <div>
+            <input v-model="jzInfo.surgeon" style="width: 80px;" @dblclick="surgeonOpenView">
+            <userSelect v-if="surgeonView" methodName="surgeon" :dataInfo="jzInfo" v-on:closesurgeon="surgeonOpenView" width="120"></userSelect>
+          </div>
+          <div style="width: 70px;margin-left: 30px;">手术助手</div>
+          <div style="margin-left: 10px;">
+            <input v-model="jzInfo.firstAssistant" style="width: 80px;" @dblclick="firstAssistantOpenView">
+            <userSelect v-if="firstAssistantView" methodName="firstAssistant" :dataInfo="jzInfo" v-on:closefirstAssistant="firstAssistantOpenView" width="120"></userSelect>
+          </div>
         </div>
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">洗手护士</div>
@@ -180,6 +166,7 @@
           </div>
         </div>
       </div>
+
       <div style="position: absolute;bottom: 10px;right: 20px;width: 100%;text-align: right;">
         <button @click="submitJzInfo">保存</button>
         <button @click="closeJzView">取消</button>
