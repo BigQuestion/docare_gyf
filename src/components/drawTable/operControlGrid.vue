@@ -47,11 +47,11 @@
           {{item}}
         </div>
       </div>
-      <div style="position: absolute;bottom: 0px;right: -25px;text-align: left;font-size: 12px;">
+      <!-- <div style="position: absolute;bottom: 0px;right: -25px;text-align: left;font-size: 12px;">
         <div v-for="item in yValueArray" style="height: 22px;">
           {{item}}
         </div>
-      </div>
+      </div> -->
     </div>
     <div v-if="showStyleView" style="background-color: #e6e6e6;position: absolute;top: 30%;" :style="{ top:rightViewY+'px',left:rightViewX+'px'}">
       <div style="padding: 10px;" @click="tipShowPersonStyle">
@@ -239,6 +239,9 @@ export default {
       this.api.getSignTimeData(params)
         .then(
           res => {
+            if (res.length < 1) {
+              return false
+            }
             var sortArray = [];
             for (var i = 0; i < res.length; i++) {
               var item = res[i].dataValue;

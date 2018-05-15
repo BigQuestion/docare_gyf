@@ -228,7 +228,6 @@ export default {
         .then(res => {
           var list = res.list;
           this.dataOperChange(list);
-          console.log(11111)
           this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
           return false;
           // for (var i = 0; i < list.length; i++) {
@@ -481,7 +480,8 @@ export default {
             if (list[i].vStartTime) {
               sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
             } else {
-              sMin = 0;
+              // sMin = 0;
+              sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
             }
 
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间

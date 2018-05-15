@@ -8,11 +8,11 @@
       <div class="flex">
         <div style="width: 70px;">患者ID</div>
         <div>
-          <input v-model="jzInfo.patientId" name="" style="width: 100px;">
+          <input v-model="jzInfo.patientId" @keyup.enter='getJzPatient' name="" style="width: 100px;">
         </div>
         <div style="width: 60px;margin-left: 15px;">住院号</div>
         <div>
-          <input v-model="inpNo" @keyup.enter='getJzPatient' style="width: 100px;">
+          <input v-model="jzInfo.inpNo" @keyup.enter='getJzPatient' style="width: 100px;">
         </div>
         <div style="width: 40px;margin-left: 15px;">姓名</div>
         <div>
@@ -26,7 +26,13 @@
       <div class="flex" style="margin-top: 5px;">
         <div style="width: 70px;">出生日期</div>
         <div>
-          <input type="" name="" style="width: 120px;" readonly="readonly">
+          <input v-if="jzInfo.dateBirth" v-model="jzInfo.dateBirth" style="width: 120px;" readonly="readonly">
+          <!-- <div v-if="jzInfo.dateBirth" style="width: 120px;height:18px;border: 1px solid">
+            {{jzInfo.dateBirth | timeStampToDateStr}}
+          </div> -->
+          <div v-else>
+            <input readonly="" type="" name="" style="width: 120px;">
+          </div>
         </div>
         <div style="width: 40px;margin-left: 40px;">床号</div>
         <div>
@@ -217,7 +223,8 @@ export default {
     //获取急诊病人
     getJzPatient() {
       let params = {
-        inpNo: this.inpNo
+        inpNo: this.jzInfo.inpNo,
+        patientId: this.jzInfo.patientId
       }
       this.api.getJzHisPatInfo(params)
         .then(res => {

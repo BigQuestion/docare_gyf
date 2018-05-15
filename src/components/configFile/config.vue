@@ -11,7 +11,7 @@ const maxTime = "";
 const initTime = "";
 
 const OperatingData = '';
-const timeSet = 200000; //表格数据定时刷新时间 ms
+const timeSet = 20000000; //表格数据定时刷新时间 ms
 
 export default {
   userId,
