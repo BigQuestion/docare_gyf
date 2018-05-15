@@ -228,6 +228,10 @@ export default {
       }
       this.api.getJzHisPatInfo(params)
         .then(res => {
+          if (!res.patientId) {
+            alert("病人不存在")
+            return false;
+          }
           this.jzInfo = res;
         })
 

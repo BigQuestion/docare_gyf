@@ -335,6 +335,10 @@ export default {
     return fetch('medicalsystem/rest/medSignData/getSignTimeData', params)
   },
 
+  getNewTimeData(params, config) {
+    return fetch('medicalsystem/rest/medSignData/getNewTimeData', params)
+  },
+
   /**
    * 删除病人某个时间点的生命体征数据
    * 

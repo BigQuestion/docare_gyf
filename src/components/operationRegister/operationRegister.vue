@@ -535,6 +535,13 @@ export default {
         visitId: this.objectItem.visitId,
         eventNo: 0
       }
+      this.api.getNewTimeData(params)
+        .then(res => {
+          res.sort(function(a, b) {
+            return Date.parse(a.time) - Date.parse(b.time); //时间正序
+          });
+          console.log(res)
+        })
       this.api.getSignTimeData(params)
         .then(
           res => {
