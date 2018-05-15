@@ -55,10 +55,10 @@
     <div v-if="value.type=='operControlGrid'">
       <operControlGrid :page="isPage.isPage"></operControlGrid>
     </div>
-    <div v-if="value.type=='signGrid'" style="background-color:red;" :style="{width:value.width+'px',height:value.height+'px'}">
+    <div v-if="value.type=='signGrid'" style="background-color:white;" :style="{width:value.width+'px',height:value.height+'px'}">
       <signGrid :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></signGrid>
     </div>
-    <div v-if="value.type=='dataOfGrid'" style="background-color:lightBlue;" :style="{width:value.width+'px',height:value.height+'px'}">
+    <div v-if="value.type=='dataOfGrid'" style="background-color:white;" :style="{width:value.width+'px',height:value.height+'px'}">
       <dataOfGrid :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></dataOfGrid>
     </div>
     <div v-if="value.type=='div'">

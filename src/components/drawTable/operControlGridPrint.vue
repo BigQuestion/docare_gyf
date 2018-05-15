@@ -21,11 +21,11 @@
           {{item}}
         </div>
       </div>
-      <div style="position: absolute;bottom: 0px;right: -19pt;text-align: left;font-size: 12px;">
+      <!-- <div style="position: absolute;bottom: 0px;right: -19pt;text-align: left;font-size: 12px;">
         <div v-for="item in yValueArray" style="height: 22px;">
           {{item}}
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

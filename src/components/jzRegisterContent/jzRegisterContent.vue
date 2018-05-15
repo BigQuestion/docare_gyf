@@ -120,29 +120,31 @@
             <input v-model="jzInfo.emergencyIndicator" style="width: 80px;">
           </div>
         </div>
-        <div class="flex" style="margin-top: 5px;">
-          <div style="width: 70px;">手术医师</div>
-          <div>
-            <input v-model="jzInfo.surgeon" style="width: 80px;" @dblclick="surgeonOpenView">
-            <userSelect v-if="surgeonView" methodName="surgeon" :dataInfo="jzInfo" v-on:closesurgeon="surgeonOpenView" width="120"></userSelect>
-          </div>
-          <div style="width: 70px;margin-left: 30px;">手术助手</div>
-          <div style="margin-left: 10px;">
-            <input v-model="jzInfo.firstAssistant" style="width: 80px;" @dblclick="firstAssistantOpenView">
-            <userSelect v-if="firstAssistantView" methodName="firstAssistant" :dataInfo="jzInfo" v-on:closefirstAssistant="firstAssistantOpenView" width="120"></userSelect>
-          </div>
-          <div style="margin-left: 10px;">
-            <input v-model="jzInfo.secondAssistant" style="width: 80px;" @dblclick="secondAssistantOpenView">
-            <userSelect v-if="secondAssistantView" methodName="secondAssistant" :dataInfo="jzInfo" v-on:closesecondAssistant="secondAssistantOpenView" width="120"></userSelect>
-          </div>
-          <div style="margin-left: 10px;">
-            <input v-model="jzInfo.thirdAssistant" style="width: 80px;" @dblclick="thirdAssistantOpenView">
-            <userSelect v-if="thirdAssistantView" methodName="thirdAssistant" :dataInfo="jzInfo" v-on:closethirdAssistant="thirdAssistantOpenView" width="120"></userSelect>
-          </div>
-          <div style="margin-left: 10px;">
-            <input v-model="jzInfo.fourthAssistant" style="width: 80px;" @dblclick="fourthAssistantOpenView">
-            <userSelect v-if="fourthAssistantView" methodName="fourthAssistant" :dataInfo="jzInfo" v-on:closefourthAssistant="fourthAssistantOpenView" width="120"></userSelect>
-          </div>
+      </div>
+      <div class="flex" style="margin-top: 5px;">
+        <div style="width: 70px;">切口等级</div>
+        <div>
+          <input v-model="jzInfo.qiekouClass" style="width: 80px;">
+        </div>
+        <div style="width: 70px;margin-left: 30px;">切口个数</div>
+        <div style="margin-left: 10px;">
+          <input v-model="jzInfo.qiekouNumber" style="width: 80px;">
+        </div>
+        <div style="width: 70px;margin-left: 30px;">急诊择期</div>
+        <div style="margin-left: 10px;">
+          <input v-model="jzInfo.emergencyIndicator" style="width: 80px;">
+        </div>
+      </div>
+      <div class="flex" style="margin-top: 5px;">
+        <div style="width: 70px;">手术医师</div>
+        <div>
+          <input v-model="jzInfo.surgeon" style="width: 80px;" @dblclick="surgeonOpenView">
+          <userSelect v-if="surgeonView" methodName="surgeon" :dataInfo="jzInfo" v-on:closesurgeon="surgeonOpenView" width="120"></userSelect>
+        </div>
+        <div style="width: 70px;margin-left: 30px;">手术助手</div>
+        <div style="margin-left: 10px;">
+          <input v-model="jzInfo.firstAssistant" style="width: 80px;" @dblclick="firstAssistantOpenView">
+          <userSelect v-if="firstAssistantView" methodName="firstAssistant" :dataInfo="jzInfo" v-on:closefirstAssistant="firstAssistantOpenView" width="120"></userSelect>
         </div>
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">洗手护士</div>
@@ -221,7 +223,8 @@ export default {
     //获取急诊病人
     getJzPatient() {
       let params = {
-        inpNo: this.inpNo
+        inpNo: this.jzInfo.inpNo,
+        patientId: this.jzInfo.patientId
       }
       this.api.getJzHisPatInfo(params)
         .then(res => {
@@ -297,10 +300,10 @@ export default {
     //保存
     submitJzInfo() {
       let params = {
-        // patientId: this.jzInfo.patientId,
-        // visitId: this.jzInfo.visitId,
-        patientId: '123',
-        visitId: '1',
+        patientId: this.jzInfo.patientId,
+        visitId: this.jzInfo.visitId,
+        // patientId: '123',
+        // visitId: '1',
         deptStayed: this.jzInfo.deptCode,
         diagBeforeOperation: this.jzInfo.diagBeforeOperation,
         bedNo: this.jzInfo.bedNo,

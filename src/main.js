@@ -119,6 +119,12 @@ Vue.filter('discount', function(time) {
   return time.split(" ")[1];
 });
 
+//后台时间戳转换成日期string
+Vue.filter('timeStampToDateStr', function(time) {
+  let str = new Date(time).Format("yyyy/MM/dd")
+  return str;
+});
+
 
 /* eslint-disable no-new */
 new Vue({

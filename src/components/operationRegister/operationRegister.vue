@@ -23,12 +23,12 @@
                     <input style="height:25px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div style="height:25px;" v-else-if="cl.isChixu">
-                    <select style="height:29px;width:42px;" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                    <select style="height:29px;width:65px;" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
-                        0
+                        不持续
                       </option>
                       <option v-bind:value="1">
-                        1
+                        持续
                       </option>
                     </select>
                   </div>
@@ -41,12 +41,12 @@
                     <input @change="getChangeValue(item)" style="height:25px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div v-else-if="cl.isChixu">
-                    <select style="height:29px;width:42px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                    <select style="height:29px;width:65px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
-                        0
+                        不持续
                       </option>
                       <option v-bind:value="1">
-                        1
+                        持续
                       </option>
                     </select>
                   </div>
@@ -243,7 +243,7 @@ export default {
         {
           title: "途径",
           fieldObj: "ADMINISTRATOR",
-          width: 80
+          width: 60
         },
         {
           title: "浓度",
@@ -268,7 +268,7 @@ export default {
         {
           title: "剂量",
           fieldObj: "DOSAGE",
-          width: 60
+          width: 50
         },
         {
           title: "单位",
@@ -282,9 +282,9 @@ export default {
           width: 180
         },
         {
-          title: "",
+          title: "是否持续",
           fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
-          width: 40,
+          width: 65,
           isChixu: true,
         },
         {
@@ -431,9 +431,18 @@ export default {
     //保存按钮
     saveBtn() {
       if (this.changeEvent.length > 0) {
-        this.api.updateMedAnesthesiaEventBatch(this.changeEvent)
+        let arrs = []
+        for (var i = 0; i < this.changeEvent.length; i++) {
+          if (this.changeEvent[i].addFlag) {
+
+          } else {
+            arrs.push(this.changeEvent[i])
+          }
+        }
+        this.api.updateMedAnesthesiaEventBatch(arrs)
           .then(res => {
             this.selectMedAnesthesiaEventList();
+            this.changeEvent = [];
           })
       }
       var list = this.eventList;
@@ -489,11 +498,34 @@ export default {
       this.api.getSignName(params)
         .then(
           res => {
-            for (var i = 0; i < res.length; i++) {
-              res[i].itemValue = "";
+            if (res.length < 1) {
+              this.itemNameList.push({
+                itemName: "心率",
+                itemCode: 40,
+              }, {
+                itemName: "PULSE",
+                itemCode: 44,
+              }, {
+                itemName: "呼吸",
+                itemCode: 92,
+              }, {
+                itemName: "SP02",
+                itemCode: 188,
+              }, {
+                itemName: "无创收缩压",
+                itemCode: 89,
+              }, {
+                itemName: "无创舒张压",
+                itemCode: 90,
+              })
+            } else {
+              for (var i = 0; i < res.length; i++) {
+                res[i].itemValue = "";
+              }
+              this.itemNameList = res;
+              this.getSignTimeData(res.length);
             }
-            this.itemNameList = res;
-            this.getSignTimeData(res.length);
+
           })
     },
     getSignTimeData(len) {
@@ -507,6 +539,8 @@ export default {
         .then(
           res => {
             var sortArray = [];
+            if (res.length < 1)
+              return false;
             for (var i = 0; i < res.length; i++) {
               let item = res[i].dataValue;
               item = eval('(' + item + ')');
@@ -526,6 +560,7 @@ export default {
               sortArray.push(res[i]);
             }
             this.signdataList = sortArray;
+            console.log(this.signdataList)
           })
     },
     //获取改变的值
@@ -546,7 +581,7 @@ export default {
         dosageUnits: item.DOSAGE_UNITS,
         durativeIndicator: item.DURATIVE_INDICATOR,
         startTime: new Date(item.START_TIME),
-        endDate: new Date(item.ENDDATE),
+        endDate: item.ENDDATE ? new Date(item.ENDDATE) : '',
       }
       this.changeEvent.push(params);
       this.updateEvent = params;
@@ -571,18 +606,25 @@ export default {
     },
     insertView() {
       this.addView = !this.addView;
-      var lastTime = this.signdataList[this.signdataList.length - 1].time;
-      var myDate = new Date();
-      var m1 = lastTime.split(" ");
-      var m2 = myDate.toLocaleDateString() + " " + m1[1];
-      var time = new Date(m2.replace("-", "/"));
-      time.setMinutes(time.getMinutes() + 5, time.getSeconds(), 0);
-      var time2 = new Date(m2.replace("-", "/"));
-      time2.setMinutes(time2.getMinutes() + 10, time2.getSeconds(), 0);
-      var nowTime = time.Format("yyyy-MM-dd hh:mm");
-      var endTime = time2.Format("yyyy-MM-dd hh:mm");
-      this.insertStartTime = this.changeDateFormat(nowTime);
-      this.insertEndTime = this.changeDateFormat(endTime);
+      if (this.signdataList.length > 0) {
+        var lastTime = this.signdataList[this.signdataList.length - 1].time;
+        var myDate = new Date();
+        var m1 = lastTime.split(" ");
+        var m2 = myDate.toLocaleDateString() + " " + m1[1];
+        var time = new Date(m2.replace("-", "/"));
+        time.setMinutes(time.getMinutes() + 5, time.getSeconds(), 0);
+        var time2 = new Date(m2.replace("-", "/"));
+        time2.setMinutes(time2.getMinutes() + 10, time2.getSeconds(), 0);
+        var nowTime = time.Format("yyyy-MM-dd hh:mm");
+        var endTime = time2.Format("yyyy-MM-dd hh:mm");
+        this.insertStartTime = this.changeDateFormat(nowTime);
+        this.insertEndTime = this.changeDateFormat(endTime);
+      } else {
+        this.insertStartTime = this.changeDateFormat(new Date().Format("yyyy-MM-dd hh:mm"));
+        let endTimeMinute = new Date().getTime() + 5 * 60 * 1000;
+        this.insertEndTime = this.changeDateFormat(new Date(endTimeMinute).Format("yyyy-MM-dd hh:mm"));
+      }
+
     },
     //获取插入体征的数据
     getaddItem(item) {
@@ -604,6 +646,7 @@ export default {
     },
     //点击确定插入体征数据
     addItem() {
+      debugger
       //计算开始时间与结束时间差值单位是毫秒
       var k = parseInt(this.datetimeLocalToDate(this.insertEndTime) - this.datetimeLocalToDate(this.insertStartTime));
       //单位是分钟
@@ -713,6 +756,8 @@ export default {
         this.selected = [];
 
       }
+
+
     },
 
     //搜索事件
