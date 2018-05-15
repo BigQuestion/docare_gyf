@@ -93,7 +93,6 @@ export default {
     dataOfGridPrint
   },
   mounted() {
-    console.log(this.value)
   }
 }
 
