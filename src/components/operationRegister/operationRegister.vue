@@ -10,20 +10,20 @@
       </div>
       <div style="height: 400px;display:flex;border-bottom:3px solid #7774da;">
         <div style="width:75%;">
-          <div style="width: 100%;border:1px solid #222;background-color:#fff;">
+          <div style="width: 100%;border:1px solid #222;overflow-y: auto;">
             <div style="display: flex;">
-              <div style="border:1px solid rgb(177,207,243);" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
+              <div style="border:1px solid rgb(177,207,243);background-color:#fff;box-sizing:border-box;" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
                 {{cell.title}}
               </div>
             </div>
-            <div style="overflow-y: auto;height: 280px;" ref="eventContent">
-              <div v-for="item in eventList" style="display:flex;" @click="clickItem(item)">
+            <div style="height: 280px;" ref="eventContent">
+              <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @click="clickItem(item)">
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
-                  <div style="height:25px;" v-if="cl.timeEdit">
-                    <input style="height:25px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                  <div style="height:25px;border:1px solid #a9a9a9;" v-if="cl.timeEdit">
+                    <input style="height:25px;border:0;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div style="height:25px;" v-else-if="cl.isChixu">
-                    <select style="height:29px;width:65px;" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                    <select style="height:29px;width:65px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
                         不持续
                       </option>
@@ -32,16 +32,16 @@
                       </option>
                     </select>
                   </div>
-                  <div v-else>
-                    <input style="height:25px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                  <div v-else style="border:1px solid #a9a9a9;">
+                    <input style="height:25px;border:0;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                 </div>
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
-                  <div v-if="cl.timeEdit">
+                  <div v-if="cl.timeEdit" style="border:1px solid #a9a9a9;">
                     <input @change="getChangeValue(item)" style="height:25px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div v-else-if="cl.isChixu">
-                    <select style="height:29px;width:65px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                    <select style="height:29px;width:65px;border:0;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
                         不持续
                       </option>
@@ -50,8 +50,8 @@
                       </option>
                     </select>
                   </div>
-                  <div v-else>
-                    <input style="height:25px;" readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                  <div v-else style="border:1px solid #a9a9a9;">
+                    <input style="height:25px;border:0;" readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                 </div>
               </div>
@@ -226,73 +226,73 @@ export default {
     return {
       dataIn: this.parentToChild.dataInParent,
       tbconfig: [{
-          title: "",
-          fieldObj: "",
-          width: 10
-        },
-        {
-          title: "类型",
-          fieldObj: "TYPE_NAME",
-          width: 80
-        },
-        {
-          title: "事件名称",
-          fieldObj: "ITEM_NAME",
-          width: 180
-        },
-        {
-          title: "途径",
-          fieldObj: "ADMINISTRATOR",
-          width: 60
-        },
-        {
-          title: "浓度",
-          fieldObj: "CONCENTRATION",
-          width: 40
-        },
-        {
-          title: "单位",
-          fieldObj: "CONCENTRATION_UNIT",
-          width: 60
-        },
-        {
-          title: "速度",
-          fieldObj: "PERFORM_SPEED",
-          width: 50
-        },
-        {
-          title: "单位",
-          fieldObj: "SPEED_UNIT",
-          width: 60
-        },
-        {
-          title: "剂量",
-          fieldObj: "DOSAGE",
-          width: 50
-        },
-        {
-          title: "单位",
-          fieldObj: "DOSAGE_UNITS",
-          width: 60
-        },
-        {
-          title: "发生时间",
-          fieldObj: "START_TIME",
-          timeEdit: true,
-          width: 180
-        },
-        {
-          title: "是否持续",
-          fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
-          width: 65,
-          isChixu: true,
-        },
-        {
-          title: "结束时间",
-          fieldObj: "ENDDATE",
-          timeEdit: true,
-          width: 180
-        }
+        title: "",
+        fieldObj: "",
+        width: 10
+      },
+      {
+        title: "类型",
+        fieldObj: "TYPE_NAME",
+        width: 80
+      },
+      {
+        title: "事件名称",
+        fieldObj: "ITEM_NAME",
+        width: 180
+      },
+      {
+        title: "途径",
+        fieldObj: "ADMINISTRATOR",
+        width: 60
+      },
+      {
+        title: "浓度",
+        fieldObj: "CONCENTRATION",
+        width: 40
+      },
+      {
+        title: "单位",
+        fieldObj: "CONCENTRATION_UNIT",
+        width: 60
+      },
+      {
+        title: "速度",
+        fieldObj: "PERFORM_SPEED",
+        width: 50
+      },
+      {
+        title: "单位",
+        fieldObj: "SPEED_UNIT",
+        width: 60
+      },
+      {
+        title: "剂量",
+        fieldObj: "DOSAGE",
+        width: 50
+      },
+      {
+        title: "单位",
+        fieldObj: "DOSAGE_UNITS",
+        width: 60
+      },
+      {
+        title: "发生时间",
+        fieldObj: "START_TIME",
+        timeEdit: true,
+        width: 180
+      },
+      {
+        title: "是否持续",
+        fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
+        width: 75,
+        isChixu: true,
+      },
+      {
+        title: "结束时间",
+        fieldObj: "ENDDATE",
+        timeEdit: true,
+        width: 180
+      }
       ],
       eventList: [],
       eventTempList: [],
@@ -341,26 +341,31 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
-          res => {
-            for (var i = 0; i < res.list.length; i++) {
-              if (res.list[i].START_TIME) {
-                res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
-              }
-              if (res.list[i].ENDDATE) {
-                res.list[i].ENDDATE = this.changeDateFormat(res.list[i].ENDDATE);
-              }
+        res => {
+          console.log(res.list.length)
+          console.log('bbb')
+          for (var i = 0; i < res.list.length; i++) {
+            if (res.list[i].START_TIME) {
+              res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
             }
-            this.eventList = res.list;
-            this.eventTempList = res.list;
-          });
+            if (res.list[i].ENDDATE) {
+              res.list[i].ENDDATE = this.changeDateFormat(res.list[i].ENDDATE);
+            }
+          }
+          for (var a = 0; a < res.list.length; a++) {
+            this.$set(res.list[a], 'thooseItem', false);
+          }
+          this.eventList = res.list;
+          this.eventTempList = res.list;
+        });
     },
     allMedAnesthesiaEventType() {
       let params = {}
       this.api.allMedAnesthesiaEventType(params)
         .then(
-          res => {
-            this.eventTypeList = res.list;
-          });
+        res => {
+          this.eventTypeList = res.list;
+        });
     },
     //根据类别获取麻醉事件定义
     medAnesthesiaEventOpenByItemClass(item) {
@@ -370,20 +375,25 @@ export default {
       }
       this.api.medAnesthesiaEventOpenByItemClass(params)
         .then(
-          res => {
-            this.eventNameList = res.list;
-            console.log(this.eventNameList)
-            if (this.eventNameList.length >= 6) {
-              this.widthChange = false;
-            } else {
-              this.widthChange = true;
-            }
-            this.newEvenNameList = res.list;
-          });
+        res => {
+          this.eventNameList = res.list;
+          console.log(this.eventNameList)
+          if (this.eventNameList.length >= 6) {
+            this.widthChange = false;
+          } else {
+            this.widthChange = true;
+          }
+          this.newEvenNameList = res.list;
+        });
     },
     //得到选中的并集麻醉事件记录
     clickItem(item) {
       this.selectedItem = item;
+      for (var a = 0; a < this.eventList.length; a++) {
+        this.$set(this.eventList[a], 'thooseItem', false);
+      }
+      item.thooseItem = true;
+
     },
     //删除病人麻醉事件记录
     deleteMedAnesthesiaEvent() {
@@ -396,9 +406,9 @@ export default {
       }
       this.api.deleteMedAnesthesiaEvent(params)
         .then(
-          res => {
-            this.selectMedAnesthesiaEventList();
-          })
+        res => {
+          this.selectMedAnesthesiaEventList();
+        })
     },
     //双击添加麻醉事件记录
     addEvent(item) {
@@ -497,12 +507,12 @@ export default {
       }
       this.api.getSignName(params)
         .then(
-          res => {
-            if (res.length < 1) {
-              this.itemNameList.push({
-                itemName: "心率",
-                itemCode: 40,
-              }, {
+        res => {
+          if (res.length < 1) {
+            this.itemNameList.push({
+              itemName: "心率",
+              itemCode: 40,
+            }, {
                 itemName: "PULSE",
                 itemCode: 44,
               }, {
@@ -518,15 +528,15 @@ export default {
                 itemName: "无创舒张压",
                 itemCode: 90,
               })
-            } else {
-              for (var i = 0; i < res.length; i++) {
-                res[i].itemValue = "";
-              }
-              this.itemNameList = res;
-              this.getSignTimeData(res.length);
+          } else {
+            for (var i = 0; i < res.length; i++) {
+              res[i].itemValue = "";
             }
+            this.itemNameList = res;
+            this.getSignTimeData(res.length);
+          }
 
-          })
+        })
     },
     getSignTimeData(len) {
       let params = {
@@ -537,31 +547,31 @@ export default {
       }
       this.api.getSignTimeData(params)
         .then(
-          res => {
-            var sortArray = [];
-            if (res.length < 1)
-              return false;
-            for (var i = 0; i < res.length; i++) {
-              let item = res[i].dataValue;
-              item = eval('(' + item + ')');
-              //item = JSON.parse(item);
-              let xL = len - item.length
-              if (xL > 0) {
-                for (var j = 0; j < xL; j++) {
-                  item.push('');
-                }
+        res => {
+          var sortArray = [];
+          if (res.length < 1)
+            return false;
+          for (var i = 0; i < res.length; i++) {
+            let item = res[i].dataValue;
+            item = eval('(' + item + ')');
+            //item = JSON.parse(item);
+            let xL = len - item.length
+            if (xL > 0) {
+              for (var j = 0; j < xL; j++) {
+                item.push('');
               }
-              res[i].dataValue = item;
             }
-            res.sort(function(a, b) {
-              return Date.parse(a.time) - Date.parse(b.time); //时间正序
-            });
-            for (var i = 0, l = res.length; i < l; i++) {
-              sortArray.push(res[i]);
-            }
-            this.signdataList = sortArray;
-            console.log(this.signdataList)
-          })
+            res[i].dataValue = item;
+          }
+          res.sort(function(a, b) {
+            return Date.parse(a.time) - Date.parse(b.time); //时间正序
+          });
+          for (var i = 0, l = res.length; i < l; i++) {
+            sortArray.push(res[i]);
+          }
+          this.signdataList = sortArray;
+          console.log(this.signdataList)
+        })
     },
     //获取改变的值
     getChangeValue(item) {
@@ -919,4 +929,12 @@ button {
   }
 }
 
+.chooseItem {
+ 
+}
+
+.chooseItem div,.chooseItem input{
+  background-color: #CCE8FF;
+  /* border: 1px solid #A9A9A9; */
+}
 </style>
