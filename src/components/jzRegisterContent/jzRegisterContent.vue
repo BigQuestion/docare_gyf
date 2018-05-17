@@ -9,7 +9,7 @@
         <div class="flex">
           <div style="width: 70px;">患者ID</div>
           <div>
-            <input v-model="jzInfo.patientId" name="" style="width: 100px;">
+            <input v-model="jzInfo.patientId" @keyup.enter='getJzPatient' name="" style="width: 100px;">
           </div>
           <div style="width: 60px;margin-left: 15px;">住院号</div>
           <div>
@@ -166,7 +166,6 @@
           </div>
         </div>
       </div>
-
       <div style="position: absolute;bottom: 10px;right: 20px;width: 100%;text-align: right;">
         <button @click="submitJzInfo">保存</button>
         <button @click="closeJzView">取消</button>
@@ -332,8 +331,8 @@ export default {
     this.operMasterTime = this.changeDateFormat(new Date().Format('yyyy-MM-dd hh:mm'));
     this.getAllRoomNo();
   },
-  created() { },
-  beforeDestroy() { },
+  created() {},
+  beforeDestroy() {},
   components: {
     jzSelect,
     userSelect

@@ -1,6 +1,6 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'http://182.61.36.247:8080';
-// axios.defaults.baseURL = 'http://localhost:8088';
+axios.defaults.baseURL = 'http://localhost:8088';
 // axios.defaults.baseURL = 'http://111.111.111.156:8080';
 
 //返回状态判断
@@ -479,6 +479,14 @@ export default {
    */
   selectMaxTime(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/selectMaxTime', params)
+  },
+
+  /**
+   * 获取病人最早时间
+   * 
+   */
+  getBeginTime(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/getBeginTime', params)
   },
   /**
    * 获取监护仪(麻醉仪)列表

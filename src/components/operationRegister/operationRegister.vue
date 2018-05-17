@@ -133,15 +133,37 @@
             <div style="width: 100px;">名称</div>
             <div style="height: 22px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
           </div>
-          <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
-            <div style="width: 60px;" :title="sItem.time">
-              {{sItem.time | discount}}
-            </div>
-            <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
-              <input :value="secItem" style="width: 60px;" @change="signChange($event,index,sItem)">
+          <div class="flex">
+            <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
+              <div style="width: 60px;" :title="sItem.time">
+                {{sItem.time | discount}}
+              </div>
+              <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
+                <input :value="secItem" style="width: 60px;" @change="signChange($event,index,sItem)">
+              </div>
             </div>
           </div>
         </div>
+        <!-- <div class="flex">
+          <div v-for="(title,index) in titleArr">
+            <div v-if="index==0" style="width: 100px;">{{title}}</div>
+            <div v-else style="width: 60px;" :title="title">{{title | discount}}</div>
+          </div>
+        </div>
+        <div class="flex" style="overflow-y:hidden;overflow-x: auto;">
+          <div>
+            <div style="height: 22px;width: 100px;" v-for="name in itemNameList">{{name.itemName}}</div>
+          </div>
+          <div>
+            <div v-for="item in dataArr" class="flex">
+              <div v-for="data in item">
+                <input :value="data" style="width: 60px;" @change="signChange($event,index,data)">
+              </div>
+            </div>
+          </div>
+          <div>
+          </div>
+        </div> -->
       </div>
       <div v-if="signItemView">
         <select v-model="selected" v-on:change="getSeclectItem">
@@ -327,6 +349,8 @@ export default {
       saveTempletView: false,
       widthChange: false,
       clickAtherPlace: false,
+      titleArr: ["名称"],
+      dataArr: [],
     }
   },
   methods: {
@@ -372,7 +396,6 @@ export default {
         .then(
           res => {
             this.eventNameList = res.list;
-            console.log(this.eventNameList)
             if (this.eventNameList.length >= 6) {
               this.widthChange = false;
             } else {
@@ -522,7 +545,27 @@ export default {
               for (var i = 0; i < res.length; i++) {
                 res[i].itemValue = "";
               }
-              this.itemNameList = res;
+
+              let compare = function(prop) {
+                return function(obj1, obj2) {
+                  let val1 = obj1[prop]
+                  let val2 = obj2[prop]
+                  if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                    val1 = Number(val1);
+                    val2 = Number(val2);
+                  }
+                  if (val1 < val2) {
+                    return -1;
+                  } else if (val1 > val2) {
+                    return 1;
+                  } else {
+                    return 0;
+                  }
+                }
+
+              }
+              // console.log(res.sort(compare("itemCode")))
+              this.itemNameList = res.sort(compare("itemCode"));
               this.getSignTimeData(res.length);
             }
 
@@ -540,8 +583,41 @@ export default {
           res.sort(function(a, b) {
             return Date.parse(a.time) - Date.parse(b.time); //时间正序
           });
-          console.log(res)
+          let testArr = []
+          res.forEach(itemAll => {
+            this.titleArr.push(itemAll.time)
+            let arr = []
+            this.itemNameList.forEach(item => {
+              let num = 0
+              itemAll.dataValue.forEach(li => {
+                if (item.itemCode == li.ITEM_NAME) {
+                  arr.push(li.ITEM_VALUE);
+                  num++
+                }
+              })
+              if (num == 0) {
+                arr.push('')
+              }
+            })
+
+            itemAll.dataValue = arr
+            testArr.push(arr)
+          })
+
+          let a1 = []
+          for (var i = 0; i < len; i++) {
+            let a2 = []
+            testArr.forEach(item => {
+              a2.push(item[i])
+            })
+            a1.push(a2)
+          }
+          this.dataArr = a1;
+          this.signdataList = res;
+
+
         })
+      return false
       this.api.getSignTimeData(params)
         .then(
           res => {
@@ -567,7 +643,6 @@ export default {
               sortArray.push(res[i]);
             }
             this.signdataList = sortArray;
-            console.log(this.signdataList)
           })
     },
     //获取改变的值
@@ -599,6 +674,10 @@ export default {
     },
     //删除生命体征某个时间点
     deleteMedPatientMonitorData() {
+      if (this.getClickSignData == '') {
+        alert("请选择删除的时间点数据")
+        return false;
+      }
       let params = {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
@@ -608,6 +687,7 @@ export default {
       }
       this.api.deleteMedPatientMonitorData(params)
         .then(res => {
+          this.getClickSignData = "";
           this.getSignName();
         })
     },
@@ -702,7 +782,7 @@ export default {
         eventNo: 0,
         timePoint: new Date(sItem.time),
         itemValue: e.currentTarget.value,
-        operator: "mdsd"
+        operator: this.config.userId
       });
     },
     //保存修改
@@ -730,6 +810,10 @@ export default {
     },
     //删除体征项目
     deleteSignItem() {
+      if (this.deleteTzItem == '') {
+        alert("选择删除项目")
+        return false;
+      }
       let params = {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
@@ -852,11 +936,8 @@ export default {
         })
     },
     aboutNone() {
-      // console.log(this.dataIn)
       this.parentToChild.dataInParent = !this.dataIn;
-      // console.log(this.parentToChild.dataInParent)
       this.dataIn = !this.dataIn;
-      // console.log(this.dataIn)
     },
     atherPlacFuntion() {
       this.clickAtherPlace = !this.clickAtherPlace;

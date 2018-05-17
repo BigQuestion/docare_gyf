@@ -37,8 +37,8 @@ export default {
     methods: {
         selectMedAnesthesiaEventList() {
             this.forBoxBody = [],
-                this.forALL = [],
-                console.log('fff')
+                this.forALL = [], console.log('fff')
+
             var nber = 1;
             this.dataBody = [];
             this.maxTimeInPage = this.config.maxTime.getTime()
