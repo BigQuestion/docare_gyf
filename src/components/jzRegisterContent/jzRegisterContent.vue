@@ -13,7 +13,7 @@
           </div>
           <div style="width: 60px;margin-left: 15px;">住院号</div>
           <div>
-            <input v-model="inpNo" @keyup.enter='getJzPatient' style="width: 100px;">
+            <input v-model="jzInfo.inpNo" @keyup.enter='getJzPatient' style="width: 100px;">
           </div>
           <div style="width: 40px;margin-left: 15px;">姓名</div>
           <div>
@@ -27,7 +27,7 @@
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">出生日期</div>
           <div>
-            <input type="" name="" style="width: 120px;" readonly="readonly">
+            <input v-model="jzInfo.dateBirth" style="width: 120px;" readonly="readonly">
           </div>
           <div style="width: 40px;margin-left: 40px;">床号</div>
           <div>
@@ -89,20 +89,20 @@
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">麻醉医生</div>
           <div>
-            <input v-model="jzInfo.anesthesiaDoctor" style="width: 80px;" @dblclick="anesthesiaDoctorOpenView">
-            <userSelect v-if="anesthesiaDoctorView" methodName="anesthesiaDoctor" :dataInfo="jzInfo" v-on:closeanesthesiaDoctor="anesthesiaDoctorOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.anesthesiaDoctor" style="width: 80px;" @dblclick="anesthesiaDoctorOpenView" readonly="readonly">
+            <userSelect v-if="anesthesiaDoctorView" methodName="anesthesiaDoctor" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closeanesthesiaDoctor="anesthesiaDoctorOpenView" width="120"></userSelect>
           </div>
           <div style="margin-left: 15px;">
-            <input v-model="jzInfo.secondAnesthesiaDoctor" style="width: 80px;" @dblclick="secondAnesthesiaDoctorOpenView">
-            <userSelect v-if="secondAnesthesiaDoctorView" methodName="secondAnesthesiaDoctor" :dataInfo="jzInfo" v-on:closesecondAnesthesiaDoctor="secondAnesthesiaDoctorOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.secondAnesthesiaDoctor" style="width: 80px;" @dblclick="secondAnesthesiaDoctorOpenView" readonly="readonly">
+            <userSelect v-if="secondAnesthesiaDoctorView" methodName="secondAnesthesiaDoctor" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closesecondAnesthesiaDoctor="secondAnesthesiaDoctorOpenView" width="120"></userSelect>
           </div>
           <div style="width: 70px;margin-left: 60px;">麻醉助手</div>
           <div style="margin-left: 15px;">
-            <input v-model="jzInfo.anesthesiaAssistant" style="width: 80px;" @dblclick="anesthesiaAssistantOpenView">
-            <userSelect v-if="anesthesiaAssistantView" methodName="anesthesiaAssistant" :dataInfo="jzInfo" v-on:closeanesthesiaAssistant="anesthesiaAssistantOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.anesthesiaAssistant" style="width: 80px;" @dblclick="anesthesiaAssistantOpenView" readonly="readonly">
+            <userSelect v-if="anesthesiaAssistantView" methodName="anesthesiaAssistant" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closeanesthesiaAssistant="anesthesiaAssistantOpenView" width="120"></userSelect>
           </div>
           <div style="margin-left: 15px;">
-            <input v-model="jzInfo.secondAnesthesiaAssistant" style="width: 80px;" @dblclick="secondAnesthesiaAssistantOpenView">
+            <input v-model="jzInfo.secondAnesthesiaAssistant" style="width: 80px;" @dblclick="secondAnesthesiaAssistantOpenView" readonly="readonly">
             <userSelect v-if="secondAnesthesiaAssistantView" methodName="secondAnesthesiaAssistant" :dataInfo="jzInfo" v-on:closesecondAnesthesiaAssistant="secondAnesthesiaAssistantOpenView" width="120"></userSelect>
           </div>
         </div>
@@ -115,47 +115,51 @@
           <div style="margin-left: 10px;">
             <input v-model="jzInfo.qiekouNumber" style="width: 80px;">
           </div>
-          <div style="width: 70px;margin-left: 30px;">急诊折期</div>
+          <div style="width: 70px;margin-left: 30px;">急诊择期</div>
           <div style="margin-left: 10px;">
-            <input v-model="jzInfo.emergencyIndicator" style="width: 80px;">
+            <!-- <input v-model="jzInfo.emergencyIndicator" style="width: 80px;"> -->
+            <select v-model="emergencyIndicator" style="width: 80px;">
+              <option :value="1">急诊</option>
+              <option :value="0">择期</option>
+            </select>
           </div>
         </div>
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">手术医师</div>
           <div>
-            <input v-model="jzInfo.surgeon" style="width: 80px;" @dblclick="surgeonOpenView">
-            <userSelect v-if="surgeonView" methodName="surgeon" :dataInfo="jzInfo" v-on:closesurgeon="surgeonOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.surgeon" style="width: 80px;" @dblclick="surgeonOpenView" readonly="readonly">
+            <userSelect v-if="surgeonView" methodName="surgeon" userJob="医生" :dataInfo="jzInfo" v-on:closesurgeon="surgeonOpenView" width="120"></userSelect>
           </div>
           <div style="width: 70px;margin-left: 30px;">手术助手</div>
           <div style="margin-left: 10px;">
-            <input v-model="jzInfo.firstAssistant" style="width: 80px;" @dblclick="firstAssistantOpenView">
-            <userSelect v-if="firstAssistantView" methodName="firstAssistant" :dataInfo="jzInfo" v-on:closefirstAssistant="firstAssistantOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.firstAssistant" style="width: 80px;" @dblclick="firstAssistantOpenView" readonly="readonly">
+            <userSelect v-if="firstAssistantView" methodName="firstAssistant" userJob="医生" :dataInfo="jzInfo" v-on:closefirstAssistant="firstAssistantOpenView" width="120"></userSelect>
           </div>
         </div>
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">洗手护士</div>
           <div>
-            <input v-model="jzInfo.firstOperationNurse" style="width: 80px;" @dblclick="firstOperationNurseOpenView">
-            <userSelect v-if="firstOperationNurseView" methodName="firstOperationNurse" :dataInfo="jzInfo" v-on:closefirstOperationNurse="firstOperationNurseOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.firstOperationNurse" style="width: 80px;" @dblclick="firstOperationNurseOpenView" readonly="readonly">
+            <userSelect v-if="firstOperationNurseView" methodName="firstOperationNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closefirstOperationNurse="firstOperationNurseOpenView" width="120"></userSelect>
           </div>
           <div style="margin-left: 10px;">
-            <input v-model="jzInfo.secondOperationNurse" style="width: 80px;" @dblclick="secondOperationNurseOpenView">
-            <userSelect v-if="secondOperationNurseView" methodName="secondOperationNurse" :dataInfo="jzInfo" v-on:closesecondOperationNurse="secondOperationNurseOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.secondOperationNurse" style="width: 80px;" @dblclick="secondOperationNurseOpenView" readonly="readonly">
+            <userSelect v-if="secondOperationNurseView" methodName="secondOperationNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closesecondOperationNurse="secondOperationNurseOpenView" width="120"></userSelect>
           </div>
         </div>
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">巡回护士</div>
           <div>
-            <input v-model="jzInfo.firstSupplyNurse" style="width: 80px;" @dblclick="firstSupplyNurseOpenView">
-            <userSelect v-if="firstSupplyNurseView" methodName="firstSupplyNurse" :dataInfo="jzInfo" v-on:closefirstSupplyNurse="firstSupplyNurseOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.firstSupplyNurse" style="width: 80px;" @dblclick="firstSupplyNurseOpenView" readonly="readonly">
+            <userSelect v-if="firstSupplyNurseView" methodName="firstSupplyNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closefirstSupplyNurse="firstSupplyNurseOpenView" width="120"></userSelect>
           </div>
           <div style="margin-left: 10px;">
-            <input v-model="jzInfo.secondSupplyNurse" style="width: 80px;" @dblclick="secondSupplyNurseOpenView">
-            <userSelect v-if="secondSupplyNurseView" methodName="secondSupplyNurse" :dataInfo="jzInfo" v-on:closesecondSupplyNurse="secondSupplyNurseOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.secondSupplyNurse" style="width: 80px;" @dblclick="secondSupplyNurseOpenView" readonly="readonly">
+            <userSelect v-if="secondSupplyNurseView" methodName="secondSupplyNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closesecondSupplyNurse="secondSupplyNurseOpenView" width="120"></userSelect>
           </div>
           <div style="margin-left: 10px;">
-            <input v-model="jzInfo.thirdSupplyNurse" style="width: 80px;" @dblclick="thirdSupplyNurseOpenView">
-            <userSelect v-if="thirdSupplyNurseView" methodName="thirdSupplyNurse" :dataInfo="jzInfo" v-on:closethirdSupplyNurse="thirdSupplyNurseOpenView" width="120"></userSelect>
+            <input v-model="jzInfo.thirdSupplyNurse" style="width: 80px;" @dblclick="thirdSupplyNurseOpenView" readonly="readonly">
+            <userSelect v-if="thirdSupplyNurseView" methodName="thirdSupplyNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closethirdSupplyNurse="thirdSupplyNurseOpenView" width="120"></userSelect>
           </div>
         </div>
         <div class="flex" style="margin-top: 5px;">
@@ -203,6 +207,7 @@ export default {
       thirdSupplyNurseView: false,
       operMasterTime: '', //手术时间
       anesthesiaMethod: '', //麻醉方法
+      emergencyIndicator: 1,
     }
   },
   methods: {
@@ -307,7 +312,7 @@ export default {
         secondAnesthesiaAssistant: this.jzInfo.secondAnesthesiaAssistantId,
         qiekouClass: this.jzInfo.qiekouClass,
         qiekouNumber: this.jzInfo.qiekouNumber,
-        emergencyIndicator: this.jzInfo.emergencyIndicator,
+        emergencyIndicator: this.emergencyIndicator,
         surgeon: this.jzInfo.surgeonId,
         firstAssistant: this.jzInfo.firstAssistantId,
         secondAssistant: this.jzInfo.secondAssistantId,

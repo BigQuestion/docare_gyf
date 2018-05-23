@@ -549,12 +549,12 @@ export default {
               }, {
                 itemName: "无创舒张压",
                 itemCode: 90,
-              })
+              });
+              this.getSignTimeData(this.itemNameList.length);
             } else {
               for (var i = 0; i < res.length; i++) {
                 res[i].itemValue = "";
               }
-
               let compare = function(prop) {
                 return function(obj1, obj2) {
                   let val1 = obj1[prop]
@@ -571,14 +571,11 @@ export default {
                     return 0;
                   }
                 }
-
               }
-              // console.log(res.sort(compare("itemCode")))
               this.itemNameList = res.sort(compare("itemCode"));
               this.getSignTimeData(res.length);
             }
-            this.itemNameList = res;
-            this.getSignTimeData(res.length);
+
           })
     },
     getSignTimeData(len) {
