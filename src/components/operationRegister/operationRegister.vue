@@ -23,7 +23,7 @@
                     <input style="height:25px;border:0;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div style="height:25px;" v-else-if="cl.isChixu">
-                    <select style="height:29px;width:65px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
+                    <select style="height:27px;width:65px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
                         不持续
                       </option>
@@ -32,8 +32,12 @@
                       </option>
                     </select>
                   </div>
-                  <div v-else style="border:1px solid #a9a9a9;">
-                    <input style="height:25px;border:0;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                  <div v-else style="border:1px solid #a9a9a9;box-sizing:border-box;height:100%;" :style="{width:(cl.width)+'px'}">
+                    <select v-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;">
+                      <option value="">123</option>
+                      <option value="">123</option>
+                    </select>
+                    <input v-else style="height:25px;border:0;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                 </div>
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">

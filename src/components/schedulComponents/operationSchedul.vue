@@ -191,7 +191,7 @@ export default {
             wash: [],
             tour: [],
             handleItem: {},
-            dataPpppp: {},
+            handleItemTow:{},
             tableConfig: [
                 {
                     text: "手术审核时间",
@@ -711,7 +711,6 @@ export default {
             console.log(index)
             console.log(this.handleItem[item.value])
             console.log(this.tableConfig[index])
-            console.log(this.dataPpppp[item.value])
             if (this.tableConfig[index].value == 'anesthesiaDoctorName') {
                 console.log(this.options)
                 for (var a = 0; a < this.options.length; a++) {
@@ -798,14 +797,18 @@ export default {
 
         },
         modalCancel() {
-            // this.handleItem = this.dataPpppp;
-            console.log(this.dataPpppp)
+            console.log(this.handleItemTow)
+            this.handleItem = this.handleItemTow;
+            for(var a = 0;a<this.scheduleListRight.length;a++){
+                if(this.scheduleListRight[a].visitId==this.handleItem.visitId&&this.scheduleListRight[a].patientId==this.handleItem.patientId&&this.scheduleListRight[a].scheduleId==this.handleItem.scheduleId){
+                    this.scheduleListRight[a] = this.handleItemTow;
+                }
+            }
             this.mask = false;
         },
         edit(item) {
             this.handleItem = item;
-            this.dataPpppp = item;
-            console.log(this.dataPpppp)
+            this.handleItemTow = JSON.parse(JSON.stringify(item));
             console.log(this.tableConfig)
             if (item.state == 0 || item.state == 1) {
                 for (var a = 0; a < this.tableConfig.length; a++) {

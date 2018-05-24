@@ -30,7 +30,7 @@
 import operationSchedul from '@/components/schedulComponents/operationSchedul.vue';//手术排班
 import surgicalApplication from '@/components/schedulComponents/surgicalApplication.vue'//手术申请
 import surgicalRevocation from '@/components/schedulComponents/surgicalRevocation.vue'//手术撤销
-import surgicalNotice from '@/components/schedulComponents/surgicalNotice.vue'//手术通知单
+import surgicalNotice from '@/components/schedulComponents/surgicalNotice.vue'//手术安排表
 import systemConfiguration from '@/components/schedulComponents/systemConfiguration.vue'//系统配置
 import HISsynchronization from '@/components/schedulComponents/HISsynchronization.vue'//HIS同步
 export default {
