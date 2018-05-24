@@ -1,6 +1,6 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'http://182.61.36.247:8080';
-// axios.defaults.baseURL = 'http://localhost:8088';
+axios.defaults.baseURL = 'http://localhost:8088';
 // axios.defaults.baseURL = 'http://111.111.111.156:8080';
 
 //返回状态判断
@@ -75,7 +75,7 @@ export default {
     return fetch('medicalsystem/rest/medOperationSchedule/updateMedOperationSchedule', params)
   },
   /**
-   * 预备排班手术编辑
+   * 获取排班护士
    * 
    */
   getSupplyNurseList(params, config) {

@@ -682,7 +682,6 @@ export default {
 
         }
       }
-      console.log(params)
       if (dataInName) {
         this.api.submitMedOperationScheduleList(params)
           .then(
@@ -701,11 +700,6 @@ export default {
 
     },
     getNewPushData(item, index) {
-      console.log(item)
-      console.log(index)
-      console.log(this.handleItem[item.value])
-      console.log(this.tableConfig[index])
-      console.log(this.dataPpppp[item.value])
       if (this.tableConfig[index].value == 'anesthesiaDoctorName') {
         console.log(this.options)
         for (var a = 0; a < this.options.length; a++) {
@@ -1051,27 +1045,41 @@ export default {
     },
     getSupplyNurseList() {
       this.getList(this.dateValue);
-      this.api.selectUserListByType({ userType: '主麻医师' })
-        .then(res => {
-          this.options = res;
-          console.log(this.options)
+      //获取麻醉医生 副麻医师 麻醉助手
+      this.api.getMzkUsers({
         })
-      this.api.selectUserListByType({ userType: '副麻医师' })
         .then(res => {
-          this.MzkUsers = res;
+          this.options = res.list;
+          this.MzkUsers = res.list;
+          this.assistant = res.list;
         })
-      this.api.selectUserListByType({ userType: '麻醉助手' })
+        //获取洗手 巡回护士
+      this.api.getSupplyNurseList({
+        })
         .then(res => {
-          this.assistant = res;
+          this.wash = res.list;
+          this.tour = res.list;
         })
-      this.api.selectUserListByType({ userType: '洗手护士' })
-        .then(res => {
-          this.wash = res;
-        })
-      this.api.selectUserListByType({ userType: '巡回护士' })
-        .then(res => {
-          this.tour = res;
-        })
+      // this.api.selectUserListByType({ userType: '主麻医师' })
+      //   .then(res => {
+      //     this.options = res;
+      //   })
+      // this.api.selectUserListByType({ userType: '副麻医师' })
+      //   .then(res => {
+      //     this.MzkUsers = res;
+      //   })
+      // this.api.selectUserListByType({ userType: '麻醉助手' })
+      //   .then(res => {
+      //     this.assistant = res;
+      //   })
+      // this.api.selectUserListByType({ userType: '洗手护士' })
+      //   .then(res => {
+      //     this.wash = res;
+      //   })
+      // this.api.selectUserListByType({ userType: '巡回护士' })
+      //   .then(res => {
+      //     this.tour = res;
+      //   })
     },
     resizeStart(e, index, col) {
       if (index == this.tableConfig.length - 1) {
