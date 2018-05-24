@@ -188,7 +188,7 @@ export default {
             wash: [],
             tour: [],
             handleItem: {},
-            dataPpppp: {},
+            handleItemTow: {},
             tableConfig: [{
                 text: "手术审核时间",
                 type: "inSelect",
@@ -377,50 +377,6 @@ export default {
             },
             {
                 name: '04',
-                chooseClass: false,
-                docoptions: '',
-                docmzkUsers: '',
-                docmzkUsers2: '',
-                assistant: '',
-                assistant2: '',
-                docwash: '',
-                docwash2: '',
-                doctour: '',
-                doctour2: '',
-                docoptionsId: '',
-                docmzkUsersId: '',
-                docmzkUsers2Id: '',
-                assistantId: '',
-                assistant2Id: '',
-                docwashId: '',
-                docwash2Id: '',
-                doctourId: '',
-                doctour2Id: '',
-            },
-            {
-                name: '05',
-                chooseClass: false,
-                docoptions: '',
-                docmzkUsers: '',
-                docmzkUsers2: '',
-                assistant: '',
-                assistant2: '',
-                docwash: '',
-                docwash2: '',
-                doctour: '',
-                doctour2: '',
-                docoptionsId: '',
-                docmzkUsersId: '',
-                docmzkUsers2Id: '',
-                assistantId: '',
-                assistant2Id: '',
-                docwashId: '',
-                docwash2Id: '',
-                doctourId: '',
-                doctour2Id: '',
-            },
-            {
-                name: '06',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
@@ -649,7 +605,7 @@ export default {
                 firstOperationNurseName: '',
                 secondOperationNurseName: '',
                 firstSupplyNurseName: '',
-                secondtSupplyNurseName: '',
+                secondSupplyNurseName: '',
             }
         }
     },
@@ -674,7 +630,7 @@ export default {
                         firstOperationNurse: this.newUpdata[j].firstOperationNurseName,
                         secondOperationNurse: this.newUpdata[j].secondOperationNurseName,
                         firstSupplyNurse: this.newUpdata[j].firstSupplyNurseName,
-                        secondSupplyNurse: this.newUpdata[j].secondtSupplyNurseName,
+                        secondSupplyNurse: this.newUpdata[j].secondSupplyNurseName,
                         operatingRoomNo: this.newUpdata[j].operatingRoomNo,
                         sequence: this.newUpdata[j].sequence,
                     })
@@ -781,7 +737,7 @@ export default {
                     this.newUpdata[b].firstOperationNurseName = this.onchangeData.firstOperationNurseName;
                     this.newUpdata[b].secondOperationNurseName = this.onchangeData.secondOperationNurseName;
                     this.newUpdata[b].firstSupplyNurseName = this.onchangeData.firstSupplyNurseName;
-                    this.newUpdata[b].secondtSupplyNurseName = this.onchangeData.secondtSupplyNurseName;
+                    this.newUpdata[b].secondSupplyNurseName = this.onchangeData.secondSupplyNurseName;
                 }
             }
             // let params = this.handleItem
@@ -887,9 +843,15 @@ export default {
                 this.hasChooseRoom.docoptionsId = item.userId;
                 this.roomId[this.hasChooseIndex].docoptions = item.userName;
                 this.hasChooseRoom.docoptions = item.userName;
-                this.pushDataBody.anesthesiaDoctorName = item.userName;
+                if (this.pushDataBody == '') {
+
+                } else {
+                    this.pushDataBody.anesthesiaDoctorName = item.userName;
+                }
                 for (var a = 0; a < this.newUpdata.length; a++) {
-                    this.newUpdata[a].anesthesiaDoctorName = item.userId;
+                    if (this.newUpdata[a].operatingRoomNo == this.hasChooseRoom.name) {
+                        this.newUpdata[a].anesthesiaDoctorName = item.userId;
+                    }
                 }
                 for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
                     if ((this.scheduleListRight[aa].state == 0 || this.scheduleListRight[aa].state == 1) && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
@@ -902,9 +864,15 @@ export default {
                     this.hasChooseRoom.docmzkUsersId = item.userId;
                     this.roomId[this.hasChooseIndex].docmzkUsers = item.userName;
                     this.hasChooseRoom.docmzkUsers = item.userName;
-                    this.pushDataBody.firstAnesthesiaAssistantName = item.userName;
+                    if (this.pushDataBody == '') {
+
+                    } else {
+                        this.pushDataBody.firstAnesthesiaAssistantName = item.userName;
+                    }
                     for (var b = 0; b < this.newUpdata.length; b++) {
-                        this.newUpdata[b].firstAnesthesiaAssistantName = item.userId;
+                        if (this.newUpdata[b].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.newUpdata[b].firstAnesthesiaAssistantName = item.userId;
+                        }
                     }
                     for (var bb = 0; bb < this.scheduleListRight.length; bb++) {
                         if ((this.scheduleListRight[bb].state == 0 || this.scheduleListRight[bb].state == 1) && this.scheduleListRight[bb].operatingRoomNo == this.hasChooseRoom.name) {
@@ -916,13 +884,20 @@ export default {
                     this.hasChooseRoom.docmzkUsers2Id = item.userId;
                     this.roomId[this.hasChooseIndex].docmzkUsers2 = item.userName;
                     this.hasChooseRoom.docmzkUsers2 = item.userName;
-                    this.pushDataBody.secondAnesthesiaAssistantName = item.userName;
+                    if (this.pushDataBody == '') {
+
+                    } else {
+                        this.pushDataBody.secondAnesthesiaAssistantName = item.userName;
+                    }
                     for (var b = 0; b < this.newUpdata.length; b++) {
-                        this.newUpdata[b].secondAnesthesiaAssistantName = item.userId;
+                        if (this.newUpdata[b].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.newUpdata[b].secondAnesthesiaAssistantName = item.userId;
+                        }
                     }
                     for (var bb = 0; bb < this.scheduleListRight.length; bb++) {
                         if ((this.scheduleListRight[bb].state == 0 || this.scheduleListRight[bb].state == 1) && this.scheduleListRight[bb].operatingRoomNo == this.hasChooseRoom.name) {
                             this.scheduleListRight[bb].secondAnesthesiaAssistantName = item.userName;
+                            
                         }
                     }
                 }
@@ -932,9 +907,15 @@ export default {
                     this.hasChooseRoom.assistantId = item.userId;
                     this.roomId[this.hasChooseIndex].assistant = item.userName;
                     this.hasChooseRoom.assistant = item.userName;
-                    this.pushDataBody.firstAssistantName = item.userName;
+                    if (this.pushDataBody == '') {
+
+                    } else {
+                        this.pushDataBody.firstAssistantName = item.userName;
+                    }
                     for (var c = 0; c < this.newUpdata.length; c++) {
-                        this.newUpdata[c].firstAssistantName = item.userId;
+                        if (this.newUpdata[c].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.newUpdata[c].firstAssistantName = item.userId;
+                        }
                     }
                     for (var cc = 0; cc < this.scheduleListRight.length; cc++) {
                         if ((this.scheduleListRight[cc].state == 0 || this.scheduleListRight[cc].state == 1) && this.scheduleListRight[cc].operatingRoomNo == this.hasChooseRoom.name) {
@@ -946,9 +927,15 @@ export default {
                     this.hasChooseRoom.assistant2Id = item.userId;
                     this.roomId[this.hasChooseIndex].assistant2 = item.userName;
                     this.hasChooseRoom.assistant2 = item.userName;
-                    this.pushDataBody.secondAssistantName = item.userName;
+                    if (this.pushDataBody == '') {
+
+                    } else {
+                        this.pushDataBody.secondAssistantName = item.userName;
+                    }
                     for (var c = 0; c < this.newUpdata.length; c++) {
-                        this.newUpdata[c].secondAssistantName = item.userId;
+                        if (this.newUpdata[c].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.newUpdata[c].secondAssistantName = item.userId;
+                        }
                     }
                     for (var cc = 0; cc < this.scheduleListRight.length; cc++) {
                         if ((this.scheduleListRight[cc].state == 0 || this.scheduleListRight[cc].state == 1) && this.scheduleListRight[cc].operatingRoomNo == this.hasChooseRoom.name) {
@@ -962,9 +949,15 @@ export default {
                     this.hasChooseRoom.docwashId = item.userId;
                     this.roomId[this.hasChooseIndex].docwash = item.userName;
                     this.hasChooseRoom.docwash = item.userName;
-                    this.pushDataBody.firstOperationNurseName = item.userName;
+                    if (this.pushDataBody == '') {
+
+                    } else {
+                        this.pushDataBody.firstOperationNurseName = item.userName;
+                    }
                     for (var d = 0; d < this.newUpdata.length; d++) {
-                        this.newUpdata[d].firstOperationNurseName = item.userId;
+                        if (this.newUpdata[d].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.newUpdata[d].firstOperationNurseName = item.userId;
+                        }
                     }
                     for (var dd = 0; dd < this.scheduleListRight.length; dd++) {
                         if ((this.scheduleListRight[dd].state == 0 || this.scheduleListRight[dd].state == 1) && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
@@ -976,9 +969,15 @@ export default {
                     this.hasChooseRoom.docwash2Id = item.userId;
                     this.roomId[this.hasChooseIndex].docwash2 = item.userName;
                     this.hasChooseRoom.docwash2 = item.userName;
-                    this.pushDataBody.secondOperationNurseName = item.userName;
+                    if (this.pushDataBody == '') {
+
+                    } else {
+                        this.pushDataBody.secondOperationNurseName = item.userName;
+                    }
                     for (var d = 0; d < this.newUpdata.length; d++) {
-                        this.newUpdata[d].secondOperationNurseName = item.userId;
+                        if (this.newUpdata[d].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.newUpdata[d].secondOperationNurseName = item.userId;
+                        }
                     }
                     for (var dd = 0; dd < this.scheduleListRight.length; dd++) {
                         if ((this.scheduleListRight[dd].state == 0 || this.scheduleListRight[dd].state == 1) && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
@@ -993,9 +992,15 @@ export default {
                     this.hasChooseRoom.doctourId = item.userId;
                     this.roomId[this.hasChooseIndex].doctour = item.userName;
                     this.hasChooseRoom.doctour = item.userName;
-                    this.pushDataBody.firstOperationNurseName = item.userName;
+                    if (this.pushDataBody == '') {
+
+                    } else {
+                        this.pushDataBody.firstOperationNurseName = item.userName;
+                    }
                     for (var e = 0; e < this.newUpdata.length; e++) {
-                        this.newUpdata[e].firstSupplyNurseName = item.userId;
+                        if (this.newUpdata[e].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.newUpdata[e].firstSupplyNurseName = item.userId;
+                        }
                     }
                     for (var ee = 0; ee < this.scheduleListRight.length; ee++) {
                         if ((this.scheduleListRight[ee].state == 0 || this.scheduleListRight[ee].state == 1) && this.scheduleListRight[ee].operatingRoomNo == this.hasChooseRoom.name) {
@@ -1007,9 +1012,15 @@ export default {
                     this.hasChooseRoom.doctour2Id = item.userId;
                     this.roomId[this.hasChooseIndex].doctour2 = item.userName;
                     this.hasChooseRoom.doctour2 = item.userName;
-                    this.pushDataBody.secondOperationNurseName = item.userName;
+                    if (this.pushDataBody == '') {
+
+                    } else {
+                        this.pushDataBody.secondOperationNurseName = item.userName;
+                    }
                     for (var e = 0; e < this.newUpdata.length; e++) {
-                        this.newUpdata[e].secondSupplyNurseName = item.userId;
+                        if (this.newUpdata[e].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.newUpdata[e].secondSupplyNurseName = item.userId;
+                        }
                     }
                     for (var ee = 0; ee < this.scheduleListRight.length; ee++) {
                         if ((this.scheduleListRight[ee].state == 0 || this.scheduleListRight[ee].state == 1) && this.scheduleListRight[ee].operatingRoomNo == this.hasChooseRoom.name) {
@@ -1021,6 +1032,7 @@ export default {
             }
             console.log(this.hasChooseRoom)
             console.log(this.newUpdata)
+            console.log(this.pushDataBody)
         },
         getList(date) {
             this.newUpdata = [];
@@ -1141,13 +1153,13 @@ export default {
             // 麻醉助手2赋值
             this.pushDataBody.secondAssistantName = this.hasChooseRoom.assistant2;
             // 洗手护士1赋值
-            this.pushDataBody.firstOperationNurseName = this.hasChooseRoom.docwash;
+            this.pushDataBody.firstOperationNurseName = this.hasChooseRoom.docwash;            
             // 洗手护士2赋值
             this.pushDataBody.secondOperationNurseName = this.hasChooseRoom.docwash2;
             // 巡回护士1赋值
-            this.pushDataBody.firstOperationNurseName = this.hasChooseRoom.doctour;
+            this.pushDataBody.firstSupplyNurseName = this.hasChooseRoom.doctour;
             // 巡回护士2赋值
-            this.pushDataBody.secondOperationNurseName = this.hasChooseRoom.doctour2;
+            this.pushDataBody.secondSupplyNurseName = this.hasChooseRoom.doctour2;
             // 自动添加台次
             for (var a = 0; a < this.scheduleListRight.length; a++) {
                 if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
@@ -1196,6 +1208,8 @@ export default {
                 visitId: this.pushDataBody.visitId,
             }
             this.scheduleList.splice(this.spliceIndex, 1);
+            console.log('aaaaaaa')
+            console.log(this.pushDataBody)
             this.scheduleListRight.push(this.pushDataBody)
             this.newUpdata.push(subMitData)
             console.log(this.newUpdata)
@@ -1255,7 +1269,6 @@ export default {
 
             }
         },
-
         sortNumber(a, b) {
             return a.sequence - b.sequence
         },
