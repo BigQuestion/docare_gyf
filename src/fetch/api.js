@@ -710,4 +710,22 @@ export default {
   insertEmergencyWrite(params, config) {
     return fetch('medicalsystem/rest/medOperationMaster/insertEmergencyWrite', params)
   },
+
+  /**
+   * 同步his预约信息
+   * 
+   */
+  synchroSchedule(params, config) {
+    return fetch('medicalsystem/rest/synchro/synchroSchedule', params)
+  },
+
+  /**
+   * 同步his用户与部门
+   * 
+   */
+  synchroUserAndDept(params, config) {
+    return fetch('medicalsystem/rest/synchro/synchroUserAndDept', params)
+  },
+
+
 }
