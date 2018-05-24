@@ -189,6 +189,36 @@ export default {
     },
     //时间初始化显示
     xTimeInit() {
+      let params = {
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
+      }
+      this.api.getBeginTime(params)
+        .then(res => {
+          return
+          if (res.TIME) {
+            if (this.config.userInfo.inDateTime &&
+              !this.page) {
+              let time = this.config.userInfo.inDateTime
+              if (new Date(time) > new Date(res.TIME)) {
+                this.timeControl(res.TIME);
+              } else {
+                this.timeControl(this.config.userInfo.inDateTime);
+              }
+            } else {
+              this.timeControl(res.TIME);
+            }
+          } else {
+            this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
+          }
+          this.getLineXy();
+          if (this.page == false) {
+            this.selectMedAnesthesiaEventList();
+          }
+        })
+
+
       if (this.config.userInfo.inDateTime && this.config.userInfo.inDateTime != "" && this.config.userInfo.inDateTime != null &&
         !this.page) {
         this.timeControl(this.config.userInfo.inDateTime);
@@ -230,52 +260,6 @@ export default {
           this.dataOperChange(list);
           this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
           return false;
-          // for (var i = 0; i < list.length; i++) {
-
-          //   if (list[i].START_TIME) {
-          //     if (i == this.rows)
-          //       break;
-          //     else {
-          //       //开始时间间隔
-          //       let sMin = ''
-          //       //结束时间间隔
-          //       let eMin = ''
-          //       sMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME);
-          //       if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-
-          //         if (new Date(list[i].MAX_TIME) > this.maxTime) {
-          //           eMin = this.getMinuteDif(this.config.userInfo.inDateTime, this.maxTime);
-          //         } else {
-          //           eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].MAX_TIME);
-          //         }
-
-          //       } else {
-          //         eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].ENDDATE);
-          //       }
-          //       let x1 = Math.round(sMin / lMin * (w / this.columns))
-          //       let x2 = Math.round(eMin / lMin * (w / this.columns))
-          //       let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-          //       let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-          //       if (list[i].DURATIVE_INDICATOR == 1) {
-          //         this.xArray.push({
-          //           x1: x1,
-          //           y1: y1,
-          //           x2: x2,
-          //           y2: y2,
-          //           w: x2 - x1,
-          //           obj: list[i]
-          //         })
-          //         this.dataArray.push(list[i]);
-          //         // this.$set(this.dataArray, i, list[i]);
-          //         this.createLine(x1, x2, y1, y2, list[i]);
-          //         m++;
-          //       }
-          //     }
-          //   }
-          // }
-          // for (var k = 0; k < this.rows - m; k++) {
-          //   this.dataArray.push(m)
-          // }
 
         });
     },

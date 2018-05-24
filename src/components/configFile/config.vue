@@ -9,6 +9,7 @@ const pageOper = 0; //0代表点击首页  1代表点击下一页 -1代表上一
 const wardCode = 38;
 const maxTime = "";
 const initTime = "";
+const patientMinTime = ''; //病人的最早时间
 
 const OperatingData = '';
 const timeSet = 20000000; //表格数据定时刷新时间 ms
@@ -26,6 +27,7 @@ export default {
   initTime,
   OperatingData,
   timeSet,
+  patientMinTime,
 }
 
 </script>

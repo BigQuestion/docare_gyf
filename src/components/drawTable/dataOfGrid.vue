@@ -96,7 +96,7 @@ export default {
   beforeDestroy() {
     clearTimeout(this.setTimeId);
     Bus.$off('test', this.selectMedAnesthesiaEventList);
-    
+
   },
 }
 

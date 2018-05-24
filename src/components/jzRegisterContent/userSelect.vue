@@ -19,7 +19,10 @@ export default {
   },
   methods: {
     getUsers() {
-      let param = {}
+      let param = {
+        deptCode: this.deptCode,
+        userJob: this.userJob
+      }
       this.api.getAllUsers(param)
         .then(res => {
           this.dataPartsList = res;
@@ -113,7 +116,7 @@ export default {
       }
     },
   },
-  props: ['width', 'methodName', 'dataInfo'],
+  props: ['width', 'methodName', 'dataInfo', 'deptCode', 'userJob'],
   mounted() {
     this.getUsers();
   },
