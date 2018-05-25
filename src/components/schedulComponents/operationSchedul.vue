@@ -106,7 +106,7 @@
                     <span style="color:red;">{{cell.notesOnOperation}}</span>
                   </div>
                 </div>
-                <div v-else @click="showShadow(cell)" @dblclick="edit(cell)" style="border:1px solid #95DDB6;position:relative;" class="roomData" :class="{boxshadow:cell.clickShadowData}">
+                <div v-else @click="showShadow(cell)" @dblclick="edit(cell)" style="border:2px solid #F5AF93;position:relative;" class="roomData" :class="{boxshadow:cell.clickShadowData}">
                   <div @click="goBackFun(cell,index)" class="goBack">X</div>
                   <div @click="goTaoLeft(cell,index)" class="leftLost" title="台次向前排列">←</div>
                   <div @click="goTaoRight(cell,index)" class="rightAdd" title="台次向后排列">→</div>
@@ -1657,7 +1657,7 @@ export default {
 
 .roomData {
   /* border: 1px solid #95DDB6; */
-  border: 1px solid #F5AF93;
+  border: 2px solid #95DDB6;
   font-size: 12px;
   margin: 5px 10px;
   min-width: 250px;
