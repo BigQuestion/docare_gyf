@@ -9,13 +9,13 @@
             <span>手术间号：{{hasChooseRoom.name}}</span>
             <span>主麻医师：{{hasChooseRoom.docoptions}}</span>
             <span>副麻医师1：{{hasChooseRoom.docmzkUsers}}</span>
-            <span>副麻医师2：{{hasChooseRoom.docmzkUsers2}}</span>
+            <span>副麻医师2：{{hasChooseRoom.docmzkUsersTwo}}</span>
             <span>麻醉助手1：{{hasChooseRoom.assistant}}</span>
-            <span>麻醉助手2：{{hasChooseRoom.assistant2}}</span>
+            <span>麻醉助手2：{{hasChooseRoom.assistantTwo}}</span>
             <span>洗手护士1：{{hasChooseRoom.docwash}}</span>
-            <span>洗手护士2：{{hasChooseRoom.docwash2}}</span>
+            <span>洗手护士2：{{hasChooseRoom.docwashTwo}}</span>
             <span>巡回护士1：{{hasChooseRoom.doctour}}</span>
-            <span>巡回护士2：{{hasChooseRoom.doctour2}}</span>
+            <span>巡回护士2：{{hasChooseRoom.doctourTwo}}</span>
         </div>
         <div class="tableOut">
             <div class="timechose">
@@ -314,264 +314,264 @@ export default {
                 chooseClass: true,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '02',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '03',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '04',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '07',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '08',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '09',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '10',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '11',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '12',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '13',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             {
                 name: '14',
                 chooseClass: false,
                 docoptions: '',
                 docmzkUsers: '',
-                docmzkUsers2: '',
+                docmzkUsersTwo: '',
                 assistant: '',
-                assistant2: '',
+                assistantTwo: '',
                 docwash: '',
-                docwash2: '',
+                docwashTwo: '',
                 doctour: '',
-                doctour2: '',
+                doctourTwo: '',
                 docoptionsId: '',
                 docmzkUsersId: '',
-                docmzkUsers2Id: '',
+                docmzkUsersTwoId: '',
                 assistantId: '',
-                assistant2Id: '',
+                assistantTwoId: '',
                 docwashId: '',
-                docwash2Id: '',
+                docwashTwoId: '',
                 doctourId: '',
-                doctour2Id: '',
+                doctourTwoId: '',
             },
             ],
             hasChooseRoom: {},
@@ -838,6 +838,7 @@ export default {
         },
         joinData(type, item) {
             console.log(item)
+            console.log(this.pushDataBody)  
             if (type == 'docoptions') {
                 this.roomId[this.hasChooseIndex].docoptionsId = item.userId;
                 this.hasChooseRoom.docoptionsId = item.userId;
@@ -880,10 +881,10 @@ export default {
                         }
                     }
                 } else {
-                    this.roomId[this.hasChooseIndex].docmzkUsers2Id = item.userId;
-                    this.hasChooseRoom.docmzkUsers2Id = item.userId;
-                    this.roomId[this.hasChooseIndex].docmzkUsers2 = item.userName;
-                    this.hasChooseRoom.docmzkUsers2 = item.userName;
+                    this.roomId[this.hasChooseIndex].docmzkUsersTwoId = item.userId;
+                    this.hasChooseRoom.docmzkUsersTwoId = item.userId;
+                    this.roomId[this.hasChooseIndex].docmzkUsersTwo = item.userName;
+                    this.hasChooseRoom.docmzkUsersTwo = item.userName;
                     if (this.pushDataBody == '') {
 
                     } else {
@@ -923,10 +924,10 @@ export default {
                         }
                     }
                 } else {
-                    this.roomId[this.hasChooseIndex].assistant2Id = item.userId;
-                    this.hasChooseRoom.assistant2Id = item.userId;
-                    this.roomId[this.hasChooseIndex].assistant2 = item.userName;
-                    this.hasChooseRoom.assistant2 = item.userName;
+                    this.roomId[this.hasChooseIndex].assistantTwoId = item.userId;
+                    this.hasChooseRoom.assistantTwoId = item.userId;
+                    this.roomId[this.hasChooseIndex].assistantTwo = item.userName;
+                    this.hasChooseRoom.assistantTwo = item.userName;
                     if (this.pushDataBody == '') {
 
                     } else {
@@ -962,13 +963,14 @@ export default {
                     for (var dd = 0; dd < this.scheduleListRight.length; dd++) {
                         if ((this.scheduleListRight[dd].state == 0 || this.scheduleListRight[dd].state == 1) && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
                             this.scheduleListRight[dd].firstOperationNurseName = item.userName;
+                            console.log(this.scheduleListRight[dd])
                         }
                     }
                 } else {
-                    this.roomId[this.hasChooseIndex].docwash2Id = item.userId;
-                    this.hasChooseRoom.docwash2Id = item.userId;
-                    this.roomId[this.hasChooseIndex].docwash2 = item.userName;
-                    this.hasChooseRoom.docwash2 = item.userName;
+                    this.roomId[this.hasChooseIndex].docwashTwoId = item.userId;
+                    this.hasChooseRoom.docwashTwoId = item.userId;
+                    this.roomId[this.hasChooseIndex].docwashTwo = item.userName;
+                    this.hasChooseRoom.docwashTwo = item.userName;
                     if (this.pushDataBody == '') {
 
                     } else {
@@ -982,6 +984,7 @@ export default {
                     for (var dd = 0; dd < this.scheduleListRight.length; dd++) {
                         if ((this.scheduleListRight[dd].state == 0 || this.scheduleListRight[dd].state == 1) && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
                             this.scheduleListRight[dd].secondOperationNurseName = item.userName;
+                            console.log(this.scheduleListRight[dd])
                         }
                     }
                 }
@@ -995,7 +998,7 @@ export default {
                     if (this.pushDataBody == '') {
 
                     } else {
-                        this.pushDataBody.firstOperationNurseName = item.userName;
+                        this.pushDataBody.firstSupplyNurseName = item.userName;
                     }
                     for (var e = 0; e < this.newUpdata.length; e++) {
                         if (this.newUpdata[e].operatingRoomNo == this.hasChooseRoom.name) {
@@ -1008,14 +1011,14 @@ export default {
                         }
                     }
                 } else {
-                    this.roomId[this.hasChooseIndex].doctour2Id = item.userId;
-                    this.hasChooseRoom.doctour2Id = item.userId;
-                    this.roomId[this.hasChooseIndex].doctour2 = item.userName;
-                    this.hasChooseRoom.doctour2 = item.userName;
+                    this.roomId[this.hasChooseIndex].doctourTwoId = item.userId;
+                    this.hasChooseRoom.doctourTwoId = item.userId;
+                    this.roomId[this.hasChooseIndex].doctourTwo = item.userName;
+                    this.hasChooseRoom.doctourTwo = item.userName;
                     if (this.pushDataBody == '') {
 
                     } else {
-                        this.pushDataBody.secondOperationNurseName = item.userName;
+                        this.pushDataBody.secondSupplyNurseName = item.userName;
                     }
                     for (var e = 0; e < this.newUpdata.length; e++) {
                         if (this.newUpdata[e].operatingRoomNo == this.hasChooseRoom.name) {
@@ -1147,19 +1150,19 @@ export default {
             // 副麻医生1赋值
             this.pushDataBody.firstAnesthesiaAssistantName = this.hasChooseRoom.docmzkUsers;
             // 副麻医生2赋值
-            this.pushDataBody.secondAnesthesiaAssistantName = this.hasChooseRoom.docmzkUsers2;
+            this.pushDataBody.secondAnesthesiaAssistantName = this.hasChooseRoom.docmzkUsersTwo;
             // 麻醉助手1赋值
             this.pushDataBody.firstAssistantName = this.hasChooseRoom.assistant;
             // 麻醉助手2赋值
-            this.pushDataBody.secondAssistantName = this.hasChooseRoom.assistant2;
+            this.pushDataBody.secondAssistantName = this.hasChooseRoom.assistantTwo;
             // 洗手护士1赋值
             this.pushDataBody.firstOperationNurseName = this.hasChooseRoom.docwash;            
             // 洗手护士2赋值
-            this.pushDataBody.secondOperationNurseName = this.hasChooseRoom.docwash2;
+            this.pushDataBody.secondOperationNurseName = this.hasChooseRoom.docwashTwo;
             // 巡回护士1赋值
             this.pushDataBody.firstSupplyNurseName = this.hasChooseRoom.doctour;
             // 巡回护士2赋值
-            this.pushDataBody.secondSupplyNurseName = this.hasChooseRoom.doctour2;
+            this.pushDataBody.secondSupplyNurseName = this.hasChooseRoom.doctourTwo;
             // 自动添加台次
             for (var a = 0; a < this.scheduleListRight.length; a++) {
                 if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
@@ -1188,19 +1191,19 @@ export default {
                 // 副麻医生1赋值
                 firstAnesthesiaAssistantName: this.hasChooseRoom.docmzkUsersId,
                 // 副麻医生2赋值
-                secondAnesthesiaAssistantName: this.hasChooseRoom.docmzkUsers2Id,
+                secondAnesthesiaAssistantName: this.hasChooseRoom.docmzkUsersTwoId,
                 // 麻醉助手1赋值
                 firstAssistantName: this.hasChooseRoom.assistantId,
                 // 麻醉助手2赋值
-                secondAssistantName: this.hasChooseRoom.assistant2Id,
+                secondAssistantName: this.hasChooseRoom.assistantTwoId,
                 // 洗手护士1赋值
                 firstOperationNurseName: this.hasChooseRoom.docwashId,
                 // 洗手护士2赋值
-                secondOperationNurseName: this.hasChooseRoom.docwash2Id,
+                secondOperationNurseName: this.hasChooseRoom.docwashTwoId,
                 // 巡回护士1赋值
-                firstOperationNurseName: this.hasChooseRoom.doctourId,
+                firstSupplyNurseName: this.hasChooseRoom.doctourId,
                 // 巡回护士2赋值
-                secondOperationNurseName: this.hasChooseRoom.doctour2Id,
+                secondSupplyNurseName: this.hasChooseRoom.doctourTwoId,
                 // 手术台次
                 sequence: this.pushDataBody.sequence,
                 patientId: this.pushDataBody.patientId,
