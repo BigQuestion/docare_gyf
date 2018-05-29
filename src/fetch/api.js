@@ -1,7 +1,7 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'http://182.61.36.247:8080';
-axios.defaults.baseURL = 'http://localhost:8088';
-// axios.defaults.baseURL = 'http://111.111.111.156:8080';
+// axios.defaults.baseURL = 'http://localhost:8088';
+// axios.defaults.baseURL = 'http://172.31.0.159:8088';
 
 //返回状态判断
 axios.interceptors.response.use((res) => {
@@ -20,19 +20,19 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-        method: 'post',
-        url: url,
-        data: JSON.stringify(params),
-        timeout: config.timeout,
-        headers: {
-          'Content-type': 'application/json',
-          "Accept": "*/*",
-        },
-        datatype: "json",
-      })
-      .then(function(response) {
+      method: 'post',
+      url: url,
+      data: JSON.stringify(params),
+      timeout: config.timeout,
+      headers: {
+        'Content-type': 'application/json',
+        "Accept": "*/*",
+      },
+      datatype: "json",
+    })
+      .then(function (response) {
         resolve(response.data);
-      }).catch(function(error) {
+      }).catch(function (error) {
         reject(error);
       });
   })
@@ -73,6 +73,14 @@ export default {
    */
   editSchedule(params, config) {
     return fetch('medicalsystem/rest/medOperationSchedule/updateMedOperationSchedule', params)
+  },
+
+  /**
+ * 批量修改排版手术信息
+ * 
+ */
+  updateBatchMedOperationSchedule(params, config) {
+    return fetch('medicalsystem/rest/medOperationSchedule/updateBatchMedOperationSchedule', params)
   },
   /**
    * 获取排班护士
