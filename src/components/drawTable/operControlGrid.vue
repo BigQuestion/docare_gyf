@@ -19,8 +19,11 @@
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <!-- <circle class="opercontrol" v-for="(cir,index2) in item.circleData" v-if="item.flag==0" :cx="cir.x" :cy="cir.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle> -->
           <g v-for="(cir,index2) in item.circleData" v-if="item.flag==0" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-            <line stroke="blue" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_1" y2="5" x2="5" y1="-2.5" x1="-3" stroke-width="1.5" fill="none" />
-            <line stroke="blue" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="5" x2="-3" y1="-2.5" x1="5" stroke-width="1.5" fill="none" />
+            <!-- <line stroke="blue" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_1" y2="5" x2="5" y1="-2.5" x1="-3" stroke-width="1.5" fill="none" />
+            <line stroke="blue" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="5" x2="-3" y1="-2.5" x1="5" stroke-width="1.5" fill="none" /> -->
+            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+            <!-- <ellipse stroke="#000" ry="5pt" rx="5pt" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" /> -->
+            <ellipse stroke="#000" ry="3pt" rx="3pt" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
             <!-- <circle class="opercontrol" r="3" fill="blue"></circle> -->
           </g>
           <circle class="opercontrol" v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
@@ -343,7 +346,6 @@ export default {
         if (new Date(arryList[i].time) > this.config.initTime) {
           sortArray.push(arryList[i])
         }
-
       }
       if (sortArray.length < 1) {
         this.pathArray = [];
@@ -422,7 +424,7 @@ export default {
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
     }
-    this.initFun()
+    this.initFun();
     this.area = this.$refs.area;
   },
   created() {

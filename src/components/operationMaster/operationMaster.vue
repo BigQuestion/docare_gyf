@@ -436,7 +436,7 @@
     </div>
     <monitor v-if="monitorDataShow.noneData" :dataOfNoneClick="firstRoom" :parentToChild="monitorDataShow"></monitor>
     <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView" v-on:submitSave="submitPatientInfo" v-on:turnToSetting="toSetting"></patientOperationInfo>
-    <operationRegister v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
+    <operationRegister @refreshTime="setInitTime" v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
     <div v-if="dictView" class="dictionaries">
       <div class="window_load">
@@ -1141,26 +1141,50 @@ export default {
         "visitId": this.lockedPatientInfo.visitId,
         "operId": this.lockedPatientInfo.operId,
       }
-      this.api.getBeginTime(timeParam)
-        .then(res => {
-          if (res.TIME) {
-            this.config.patientMinTime = res.TIME;
-          } else {
 
-          }
-        })
 
       if (item.formName == '麻醉记录单') {
         this.tempButtonView = false;
+        //查找病人的最晚时间
         this.api.selectMaxTime(timeParam)
           .then(res => {
-            let t1 = this.coutTimes(this.config.userInfo.inDateTime, res.TOTALMAXTIME, 'minute')
-            let i = Math.ceil(t1 / 250);
-            this.config.pageTotal = i;
-            if (t1 > 250) {
-              this.pageButtonView = true
-            } else
-              this.pageButtonView = false
+            let t1 = 0
+            let i = 0
+            if (res.TIME) {
+              //获取病人在手术室里面最早时间
+              this.api.getBeginTime(timeParam)
+                .then(rest => {
+                  if (rest.TIME) {
+                    //如果存在病人的入手术时间
+                    if (this.config.userInfo.inDateTime) {
+                      if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
+                        this.config.startMinTime = this.config.userInfo.inDateTime
+                      } else {
+                        this.config.startMinTime = rest.TIME
+                      }
+                    } else {
+                      this.config.startMinTime = rest.TIME
+                    }
+                  } else {
+                    if (this.config.userInfo.inDateTime) {
+                      this.config.startMinTime = this.config.userInfo.inDateTime
+                    } else {
+                      this.config.startMinTime = new Date().Format("yyyy-MM-dd") + " 08:00:00";
+                    }
+                  }
+                  t1 = this.coutTimes(this.config.startMinTime, res.TIME, 'minute');
+                  i = Math.ceil(t1 / 250);
+                  this.config.pageTotal = i;
+                  if (t1 > 250) {
+                    this.pageButtonView = true
+                  } else {
+                    this.pageButtonView = false
+                  }
+                  this.setFormTime(this.config.startMinTime);
+                })
+            } else {
+
+            }
           })
       } else if (item.formName == '手术清点单') {
         this.tempButtonView = true;
@@ -1183,52 +1207,30 @@ export default {
         id: item.id
       }
       let arry = [];
-      this.formItems = [];
-
-      // if (item.formContent == "null" || item.formContent == null) {
-      //   return;
-      // }
-      // this.formItems = JSON.parse(item.formContent);
-      // var list = this.formItems;
-      // for (var i = 0; i < list.length; i++) {
-
-      //   if (list[i].fieldName) {
-      //     if (list[i].tableName == "") {
-      //       console.log(list[i])
-      //     }
-      //     arry.push({
-      //       "patientId": this.lockedPatientInfo.patientId,
-      //       "visitId": this.lockedPatientInfo.visitId,
-      //       "operId": this.lockedPatientInfo.operId,
-      //       "tableName": list[i].tableName,
-      //       "coluName": list[i].fieldName,
-      //     })
-      //   }
-      // }
-      // this.api.getFormSqlResult(arry)
-      //   .then(
-      //     result => {
-      //       for (var i = 0; i < list.length; i++) {
-      //         if (list[i].fieldName) {
-      //           let obj = this.formItems[i];
-      //           obj.value = result[list[i].fieldName];
-      //           this.$set(this.formItems, i, obj);
-      //         }
-      //       }
-      //     }
-
-      //   )
-
-
+      // this.formItems = [];
       this.api.selectMedFormTemp(params)
         .then(
           res => {
             if (res.formContent == "null" || res.formContent == null) {
               return;
             }
+            let tempItems = JSON.parse(res.formContent);
             this.formItems = JSON.parse(res.formContent);
             var list = this.formItems;
             for (var i = 0; i < list.length; i++) {
+              // if (list[i].fieldName) {
+              //   arry.push({
+              //     "patientId": this.lockedPatientInfo.patientId,
+              //     "visitId": this.lockedPatientInfo.visitId,
+              //     "operId": this.lockedPatientInfo.operId,
+              //     "tableName": list[i].tableName,
+              //     "coluName": list[i].fieldName,
+              //   })
+              // }
+
+              // this.formItems = JSON.parse(res.formContent);
+              // var list = this.formItems;
+              // for (var i = 0; i < list.length; i++) {
               if (list[i].fieldName) {
                 arry.push({
                   "patientId": this.lockedPatientInfo.patientId,
@@ -1236,42 +1238,27 @@ export default {
                   "operId": this.lockedPatientInfo.operId,
                   "tableName": list[i].tableName,
                   "coluName": list[i].fieldName,
+                  "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
+                  "dictTableName": list[i].dictTableName, //字典表名称
+                  "dictField": list[i].dictField, //字典字段名称
+                  "dictSelect": list[i].dictSelect,
                 })
               }
+              // }
 
-              this.formItems = JSON.parse(res.formContent);
-              var list = this.formItems;
-              for (var i = 0; i < list.length; i++) {
-                if (list[i].fieldName) {
-                  arry.push({
-                    "patientId": this.lockedPatientInfo.patientId,
-                    "visitId": this.lockedPatientInfo.visitId,
-                    "operId": this.lockedPatientInfo.operId,
-                    "tableName": list[i].tableName,
-                    "coluName": list[i].fieldName,
-                    "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
-                    "dictTableName": list[i].dictTableName, //字典表名称
-                    "dictField": list[i].dictField, //字典字段名称
-                    "dictSelect": list[i].dictSelect,
-                  })
-                }
-              }
-              this.api.getFormSqlResult(arry)
-                .then(
-                  result => {
-                    for (var i = 0; i < list.length; i++) {
-                      if (list[i].fieldName) {
-                        let obj = this.formItems[i];
-                        if (list[i].dictShowFiled == 'USER_IDA') {
-                          obj.value = result[list[i].dictShowFiled];
-                        } else {
-                          obj.value = result[list[i].fieldName];
-                        }
-                        this.$set(this.formItems, i, obj);
-                      }
-                    }
-                  });
             }
+            this.api.getFormSqlResult(arry)
+              .then(
+                result => {
+                  for (var i = 0; i < list.length; i++) {
+                    if (list[i].fieldName) {
+                      let obj = this.formItems[i];
+                      obj.value = result[list[i].fieldName];
+                      let tempObj = JSON.parse(JSON.stringify(obj));
+                      this.$set(this.formItems, i, tempObj);
+                    }
+                  }
+                });
           });
     },
     //修改病人手术状态
@@ -1482,14 +1469,19 @@ export default {
       if (num == 0) {
         this.config.pagePercentNum = 1;
         this.config.pageOper = num;
+        this.setInitTime();
       }
       if (num == -1) {
         if (this.config.pagePercentNum > 2) {
           this.config.pagePercentNum = this.config.pagePercentNum - 1;
           this.config.pageOper = num;
+          var m = new Date(this.config.initTime).getTime() - 250 * 60 * 1000;
+          this.setFormTime(m);
         } else if (this.config.pagePercentNum == 2) {
           this.config.pagePercentNum = 1;
           this.config.pageOper = 0;
+          var m = new Date(this.config.initTime).getTime() - 250 * 60 * 1000;
+          this.setFormTime(m);
         } else {
           return
         }
@@ -1498,8 +1490,12 @@ export default {
         if (this.config.pagePercentNum < this.config.pageTotal) {
           this.config.pagePercentNum = this.config.pagePercentNum + 1;
           this.config.pageOper = num;
-        } else
+          var m = new Date(this.config.maxTime).getTime();
+          this.setFormTime(m);
+        } else {
+
           return
+        }
 
       }
       Bus.$emit('test', num);
@@ -1533,15 +1529,49 @@ export default {
     //获取高度
     getHeight() {
       this.areaheight = window.innerHeight - 200;
-    }
+    },
+    //设置单子显示最小最大时间
+    setFormTime(time) {
+      var timeDate = new Date(time);
+      this.config.initTime = new Date(time);
+      this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
+      console.log(this.config.maxTime);
+    },
+    setInitTime() {
+      let timeParam = {
+        "patientId": this.lockedPatientInfo.patientId,
+        "visitId": this.lockedPatientInfo.visitId,
+        "operId": this.lockedPatientInfo.operId,
+      }
+      this.api.getBeginTime(timeParam)
+        .then(rest => {
+          if (rest.TIME) {
+            //如果存在病人的入手术时间
+            if (this.config.userInfo.inDateTime) {
+              if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
+                this.config.startMinTime = this.config.userInfo.inDateTime
+              } else {
+                this.config.startMinTime = rest.TIME
+              }
+            } else {
+              this.config.startMinTime = rest.TIME
+            }
+          } else {
+            if (this.config.userInfo.inDateTime) {
+              this.config.startMinTime = this.config.userInfo.inDateTime
+            } else {
+              this.config.startMinTime = new Date().Format("yyyy-MM-dd") + " 08:00:00";
+            }
+          }
+          this.setFormTime(this.config.startMinTime);
+        })
+    },
 
   },
   mounted() {
     this.searchPatientList();
     this.setIntervaled();
     this.selectMedFormList();
-
-    // this.patientId = '10966589';
     this.getHeight();
   },
   created() {
@@ -1841,6 +1871,149 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

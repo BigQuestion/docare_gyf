@@ -32,6 +32,7 @@ export default {
     selectMedAnesthesiaEventList() {
       var nber = 1;
       this.dataBody = [];
+      debugger
       this.maxTimeInPage = this.config.maxTime.getTime()
       this.startTimeInPage = this.config.initTime.getTime()
       let params = {
@@ -87,7 +88,6 @@ export default {
     }
     if (this.page == false) {
       this.selectMedAnesthesiaEventList();
-      // window.eventHub.$on("test", this.selectMedAnesthesiaEventList);
     }
   },
   created() {

@@ -135,16 +135,35 @@ export default {
                 break;
               else {
 
-
                 //开始时间间隔
                 let sMin = ''
                 //结束时间间隔
                 let eMin = ''
-                sMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].START_TIME);
-                if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-                  eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].MAX_TIME);
+                if (list[i].vStartTime) {
+                  sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
                 } else {
-                  eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].ENDDATE);
+                  sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+                }
+
+                //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
+                if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+                  if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
+                    eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
+                  } else {
+                    eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
+                  }
+
+
+                } else {
+
+                  if (new Date(list[i].ENDDATE) >= this.config.maxTime) {
+                    eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
+                  } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
+                    eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
+                  } else {
+                    list[i].DURATIVE_INDICATOR = 0;
+                    eMin = 0;
+                  }
                 }
                 let x1 = Math.round(sMin / lMin * (w / this.columns))
                 let x2 = Math.round(eMin / lMin * (w / this.columns))

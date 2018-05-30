@@ -215,10 +215,10 @@ export default {
           } else {
             let t1 = ''
             let t2 = ''
-            if (this.config.pagePercentNum == 1) {
-              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-            } else {
+            if (list[i].vStartTime) {
               t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            } else {
+              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
             }
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
               if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
@@ -229,8 +229,11 @@ export default {
             } else {
               if (new Date(list[i].ENDDATE) > this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
-              } else {
+              } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
+              } else {
+                list[i].DURATIVE_INDICATOR = 0;
+                t2 = 0;
               }
             }
             let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)

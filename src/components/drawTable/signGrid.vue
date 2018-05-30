@@ -62,7 +62,6 @@ export default {
         operId: this.dataOfPeo.operId,
         visitId: this.dataOfPeo.visitId
       }
-      console.log(new Date())
       this.api.selectMedAnesthesiaEventList(params)
         .then(
           res => {

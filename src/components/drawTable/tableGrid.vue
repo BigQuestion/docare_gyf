@@ -178,13 +178,11 @@ export default {
       var toMin = timeDate.getTime() + 1000 * 60 * m;
       var timeArray = [];
       for (var i = 0; i <= this.columns; i++) {
-        // if (i == 0) {
 
-        // }
-        timeArray.push(new Date(timeDate.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
       }
-      this.config.initTime = new Date(timeDate.getTime());
-      this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * m * this.columns);
+      // this.config.initTime = new Date(timeDate.getTime());
+      // this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * m * this.columns);
       this.xTimeArray = timeArray;
     },
     //时间初始化显示
@@ -194,21 +192,29 @@ export default {
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
       }
+
       this.api.getBeginTime(params)
-        .then(res => {
-          return
-          if (res.TIME) {
-            if (this.config.userInfo.inDateTime &&
-              !this.page) {
-              let time = this.config.userInfo.inDateTime
-              if (new Date(time) > new Date(res.TIME)) {
-                this.timeControl(res.TIME);
+        .then(rest => {
+          if (rest.TIME) {
+            //如果存在病人的入手术时间
+            if (this.config.userInfo.inDateTime) {
+              if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
+                this.config.startMinTime = this.config.userInfo.inDateTime
               } else {
-                this.timeControl(this.config.userInfo.inDateTime);
+                this.config.startMinTime = rest.TIME
               }
             } else {
-              this.timeControl(res.TIME);
+              this.config.startMinTime = rest.TIME
             }
+          } else {
+            if (this.config.userInfo.inDateTime) {
+              this.config.startMinTime = this.config.userInfo.inDateTime
+            } else {
+              this.config.startMinTime = new Date().Format("yyyy-MM-dd") + " 08:00";
+            }
+          }
+          if (!this.page) {
+            this.timeControl(this.config.startMinTime);
           } else {
             this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
           }
@@ -219,16 +225,40 @@ export default {
         })
 
 
-      if (this.config.userInfo.inDateTime && this.config.userInfo.inDateTime != "" && this.config.userInfo.inDateTime != null &&
-        !this.page) {
-        this.timeControl(this.config.userInfo.inDateTime);
-      } else {
-        this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
-      }
-      this.getLineXy();
-      if (this.page == false) {
-        this.selectMedAnesthesiaEventList();
-      }
+      // this.api.getBeginTime(params)
+      // .then(res => {
+      //   // return
+      //   if (res.TIME) {
+      //     //如果入手术室时间存在
+      //     if (this.config.userInfo.inDateTime &&
+      //       !this.page) {
+      //       let time = this.config.userInfo.inDateTime
+      //       if (new Date(time) > new Date(res.TIME)) {
+      //         // this.config.startMinTime 
+      //         this.timeControl(res.TIME);
+      //       } else {
+      //         this.timeControl(this.config.userInfo.inDateTime);
+      //       }
+      //     } else {
+      //       this.timeControl(res.TIME);
+      //     }
+      //   } else {
+      //     this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
+      //   }
+      //   this.getLineXy();
+      //   if (this.page == false) {
+      //     this.selectMedAnesthesiaEventList();
+      //   }
+      // }) if (this.config.userInfo.inDateTime && this.config.userInfo.inDateTime != "" && this.config.userInfo.inDateTime != null &&
+      //   !this.page) {
+      //   this.timeControl(this.config.userInfo.inDateTime);
+      // } else {
+      //   this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
+      // }
+      // this.getLineXy();
+      // if (this.page == false) {
+      //   this.selectMedAnesthesiaEventList();
+      // }
 
     },
     //加载病人麻醉事件里面麻醉用药数据
@@ -390,8 +420,9 @@ export default {
       svg.remove();
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
-        this.timeControl(this.config.userInfo.inDateTime);
-        this.selectMedAnesthesiaEventList();
+        this.xTimeInit();
+        // this.timeControl(this.config.userInfo.inDateTime);
+        // this.selectMedAnesthesiaEventList();
       }
       if (this.config.pageOper == -1) {
         this.timeControl(this.config.initTime)

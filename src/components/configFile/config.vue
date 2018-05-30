@@ -10,6 +10,7 @@ const wardCode = 38;
 const maxTime = "";
 const initTime = "";
 const patientMinTime = ''; //病人的最早时间
+const startMinTime = ''; //表格最开始时间
 
 const OperatingData = '';
 const timeSet = 20000000; //表格数据定时刷新时间 ms
@@ -28,6 +29,7 @@ export default {
   OperatingData,
   timeSet,
   patientMinTime,
+  startMinTime,
 }
 
 </script>
