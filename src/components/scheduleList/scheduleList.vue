@@ -186,7 +186,7 @@ export default {
 }
 
 .topButton {
-    height: 100%;
+    /* height: 100%; */
     cursor: pointer;
     text-align: center;
     line-height: 70px;
