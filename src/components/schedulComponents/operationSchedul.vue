@@ -89,7 +89,7 @@
             {{item.name}}
           </div>
           <div v-if="cleanData" @contextmenu.stop="noFun()" class="cleanBox" :style="{top:cleanTop+'px',left:cleanLeft+'px'}">
-            <div style="width:100%;height:100%;position:relative;" @mouseover="overShow()" @mouseout="outShow()">
+            <div style="width:100%;height:100%;position:relative;" @mouseover="overShow()">
               清空
               <div v-if="showList" style="position:absolute;left:100%;top:0;width:100%;height:auto;">
                 <div class="cleanLast" @click="cleanFunOnList('all')">全部</div>
@@ -1816,6 +1816,9 @@ export default {
 .head .cell {
   border: 1px solid #666666;
 }
+
+
+
 
 
 

@@ -115,6 +115,15 @@ Vue.prototype.coutTimes = function(startTime, endTime, diffType) {
 
 }
 
+//比较时间大小返回最小的 date date
+Vue.prototype.compareTime = function(time1, time2) {
+  if (time1 > time2) {
+    return time2
+  } else {
+    return time1
+  }
+}
+
 Vue.filter('discount', function(time) {
   return time.split(" ")[1];
 });

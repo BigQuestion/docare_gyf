@@ -172,21 +172,44 @@ export default {
     },
     //对时间进行计算操作
     timeControl(startTime) {
-
+      console.log("initTime----" + this.config.initTime)
       var m = this.tbMin; //加几分钟
       var timeDate = new Date(startTime);
       var toMin = timeDate.getTime() + 1000 * 60 * m;
       var timeArray = [];
-      for (var i = 0; i <= this.columns; i++) {
+      if (this.config.pageOper == 0) {
+        for (var i = 0; i <= this.columns; i++) {
 
-        timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+          timeArray.push(new Date(new Date(this.config.startMinTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        }
+      } else {
+        for (var i = 0; i <= this.columns; i++) {
+
+          timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        }
       }
+
       // this.config.initTime = new Date(timeDate.getTime());
       // this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * m * this.columns);
       this.xTimeArray = timeArray;
+      this.$nextTick(function() {
+        this.getLineXy();
+        if (this.page == false) {
+          this.selectMedAnesthesiaEventList();
+        }
+      })
+
     },
     //时间初始化显示
     xTimeInit() {
+      console.log("startMinTime----" + this.config.startMinTime)
+      if (!this.page) {
+        this.timeControl(this.config.startMinTime);
+      } else {
+        this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
+      }
+
+      return
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
@@ -418,6 +441,7 @@ export default {
     pageChange() {
       var svg = d3.selectAll(".test")
       svg.remove();
+      console.log(this.config.initTime + '-----')
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
         this.xTimeInit();
@@ -573,11 +597,13 @@ export default {
 
   },
   created() {
-    Bus.$on('test', this.pageChange)
+    Bus.$on('test', this.pageChange);
+    Bus.$on('timeSetChange', this.pageChange)
 
   },
   beforeDestroy() {
-    Bus.$off('test', this.pageChange);
+    Bus.$off('test', this.timeControl);
+    Bus.$off('timeSetChange', this.timeControl)
     clearTimeout(this.setTimeId);
 
   },

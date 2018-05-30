@@ -436,7 +436,7 @@
     </div>
     <monitor v-if="monitorDataShow.noneData" :dataOfNoneClick="firstRoom" :parentToChild="monitorDataShow"></monitor>
     <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView" v-on:submitSave="submitPatientInfo" v-on:turnToSetting="toSetting"></patientOperationInfo>
-    <operationRegister @refreshTime="setInitTime" v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
+    <operationRegister @refreshTime="timeChangeBus()" v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
     <div v-if="dictView" class="dictionaries">
       <div class="window_load">
@@ -1469,7 +1469,7 @@ export default {
       if (num == 0) {
         this.config.pagePercentNum = 1;
         this.config.pageOper = num;
-        this.setInitTime();
+        this.setBusInitTime();
       }
       if (num == -1) {
         if (this.config.pagePercentNum > 2) {
@@ -1485,6 +1485,9 @@ export default {
         } else {
           return
         }
+        this.$nextTick(function() {
+          Bus.$emit('test', num);
+        })
       }
       if (num == 1) {
         if (this.config.pagePercentNum < this.config.pageTotal) {
@@ -1496,9 +1499,12 @@ export default {
 
           return
         }
-
+        this.$nextTick(function() {
+          Bus.$emit('test', num);
+        })
       }
-      Bus.$emit('test', num);
+
+
 
     },
     //初始化表格配置信息
@@ -1508,7 +1514,8 @@ export default {
       this.config.maxTime = '';
       this.config.initTime = '';
       this.config.pagePercentNum = 1;
-      this.pageButtonView = false
+      this.pageButtonView = false;
+
     },
     //保存模板
     openSaveTemView() {
@@ -1535,7 +1542,6 @@ export default {
       var timeDate = new Date(time);
       this.config.initTime = new Date(time);
       this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
-      console.log(this.config.maxTime);
     },
     setInitTime() {
       let timeParam = {
@@ -1564,6 +1570,88 @@ export default {
             }
           }
           this.setFormTime(this.config.startMinTime);
+        })
+    },
+    //首页的时候重新设置时间，当DOM更新完之后再通知事件
+    setBusInitTime() {
+      let timeParam = {
+        "patientId": this.lockedPatientInfo.patientId,
+        "visitId": this.lockedPatientInfo.visitId,
+        "operId": this.lockedPatientInfo.operId,
+      }
+      this.api.getBeginTime(timeParam)
+        .then(rest => {
+          if (rest.TIME) {
+            //如果存在病人的入手术时间
+            if (this.config.userInfo.inDateTime) {
+              if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
+                this.config.startMinTime = this.config.userInfo.inDateTime
+              } else {
+                this.config.startMinTime = rest.TIME
+              }
+            } else {
+              this.config.startMinTime = rest.TIME
+            }
+          } else {
+            if (this.config.userInfo.inDateTime) {
+              this.config.startMinTime = this.config.userInfo.inDateTime
+            } else {
+              this.config.startMinTime = new Date().Format("yyyy-MM-dd") + " 08:00:00";
+            }
+          }
+          var timeDate = new Date(this.config.startMinTime);
+          this.config.initTime = new Date(this.config.startMinTime);
+          this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
+          this.$nextTick(function() {
+            Bus.$emit('test');
+          })
+        })
+    },
+    //术中登记或者其他时间发生改变时触发
+    timeChangeBus() {
+      var time = '';
+      let timeParam = {
+        "patientId": this.lockedPatientInfo.patientId,
+        "visitId": this.lockedPatientInfo.visitId,
+        "operId": this.lockedPatientInfo.operId,
+      }
+      this.api.getBeginTime(timeParam)
+        .then(rest => {
+          if (rest.TIME) {
+            //如果存在病人的入手术时间
+            if (this.config.userInfo.inDateTime) {
+              if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
+                time = this.config.userInfo.inDateTime
+              } else {
+                time = rest.TIME
+              }
+            } else {
+              time = rest.TIME
+            }
+          } else {
+            if (this.config.userInfo.inDateTime) {
+              time = this.config.userInfo.inDateTime
+            } else {
+              time = new Date().Format("yyyy-MM-dd") + " 08:00:00";
+            }
+          }
+          if (this.config.startMinTime) {
+            //判断时间差值
+            let time1 = new Date(time).getTime();
+            let time2 = new Date(this.config.startMinTime).getTime();
+            if (time1 < time2) {
+              this.config.initTime = new Date(new Date(this.config.initTime).getTime() - (time2 - time1));
+              this.config.startMinTime = new Date(time);
+              this.config.maxTime = new Date(new Date(this.config.maxTime).getTime() - (time2 - time1));
+            } else {
+              this.config.initTime = new Date(new Date(this.config.initTime).getTime() + (time1 - time2));
+              this.config.startMinTime = new Date(time);
+              this.config.maxTime = new Date(new Date(this.config.maxTime).getTime() + (time1 - time2));
+            }
+          }
+          this.$nextTick(function() {
+            Bus.$emit('timeSetChange');
+          })
         })
     },
 
@@ -1871,6 +1959,41 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

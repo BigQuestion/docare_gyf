@@ -32,7 +32,6 @@ export default {
     selectMedAnesthesiaEventList() {
       var nber = 1;
       this.dataBody = [];
-      debugger
       this.maxTimeInPage = this.config.maxTime.getTime()
       this.startTimeInPage = this.config.initTime.getTime()
       let params = {
