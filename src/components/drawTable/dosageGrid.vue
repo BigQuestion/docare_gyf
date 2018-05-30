@@ -101,12 +101,13 @@ export default {
           patientId: this.config.userInfo.patientId,
           operId: this.config.userInfo.operId,
           visitId: this.config.userInfo.visitId,
-          itemClass: 3
+          itemClass: "3B",
         }
 
         this.api.selectMedAnesthesiaEventList(params)
           .then(res => {
             var list = res.list;
+            debugger
             this.dataListOperFun(list)
             this.setTimeId = setTimeout(_ => this.getData(), this.config.timeSet)
           })
@@ -241,15 +242,10 @@ export default {
           } else {
             let t1 = ''
             let t2 = ''
-            // if (this.config.pagePercentNum == 1) {
-            //   t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-            // } else {
-            //   t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
-            // }
             if (list[i].vStartTime) {
               t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
             } else {
-              t1 = 0;
+              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
             }
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
               if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
@@ -260,7 +256,7 @@ export default {
             } else {
               if (new Date(list[i].ENDDATE) > this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
-              } else if (new Date(list[i].ENDDATE) > this.config.initTime) {
+              } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
               } else {
                 list[i].DURATIVE_INDICATOR = 0;

@@ -475,33 +475,37 @@ export default {
             arrs.push(this.changeEvent[i])
           }
         }
-        this.api.updateMedAnesthesiaEventBatch(arrs)
-          .then(res => {
-            this.selectMedAnesthesiaEventList();
-            this.changeEvent = [];
-          })
+        if (arrs.length > 0) {
+          this.api.updateMedAnesthesiaEventBatch(arrs)
+            .then(res => {
+              this.selectMedAnesthesiaEventList();
+              this.changeEvent = [];
+            })
+        }
+
       }
       var list = this.eventList;
+
       let addParams = [];
       let updateParams = [];
       var arry1 = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].addFlag) {
-          addParams.push({
-            patientId: list[i].PATIENT_ID,
-            visitId: list[i].VISIT_ID,
-            operId: list[i].OPER_ID,
-            itemClass: list[i].ITEM_CLASS,
-            itemName: list[i].ITEM_NAME,
-            itemSpec: list[i].ITEM_SPEC,
-            dosageUnits: list[i].DOSAGE_UNITS,
-            dosage: list[i].DOSAGE,
-            administrator: list[i].ADMINISTRATOR,
-            startTime: this.datetimeLocalToDate(list[i].START_TIME),
-            endDate: this.datetimeLocalToDate(list[i].ENDDATE),
-            eventNo: 0,
-            durativeIndicator: 0,
-          })
+          // addParams.push({
+          //   patientId: list[i].PATIENT_ID,
+          //   visitId: list[i].VISIT_ID,
+          //   operId: list[i].OPER_ID,
+          //   itemClass: list[i].ITEM_CLASS,
+          //   itemName: list[i].ITEM_NAME,
+          //   itemSpec: list[i].ITEM_SPEC,
+          //   dosageUnits: list[i].DOSAGE_UNITS,
+          //   dosage: list[i].DOSAGE,
+          //   administrator: list[i].ADMINISTRATOR,
+          //   startTime: this.datetimeLocalToDate(list[i].START_TIME),
+          //   endDate: this.datetimeLocalToDate(list[i].ENDDATE),
+          //   eventNo: 0,
+          //   durativeIndicator: 0,
+          // })
           let par = {
             patientId: list[i].PATIENT_ID,
             visitId: list[i].VISIT_ID,
@@ -515,7 +519,12 @@ export default {
             startTime: this.datetimeLocalToDate(list[i].START_TIME),
             endDate: this.datetimeLocalToDate(list[i].ENDDATE),
             eventNo: 0,
-            durativeIndicator: 0,
+            durativeIndicator: list[i].DURATIVE_INDICATOR,
+            concentration: list[i].CONCENTRATION,
+            concentrationUnit: list[i].CONCENTRATION_UNIT,
+            performSpeed: list[i].PERFORM_SPEED,
+            speedUnit: list[i].SPEED_UNIT,
+
           }
           this.api.insertMedAnesthesiaEvent(par)
             .then(res => {
@@ -523,6 +532,8 @@ export default {
             })
         }
       }
+
+      alert("保存成功")
     },
     getSignName() {
       let params = {
@@ -651,24 +662,48 @@ export default {
     },
     //获取改变的值
     getChangeValue(item) {
-      let params = {
-        patientId: this.objectItem.patientId,
-        operId: this.objectItem.operId,
-        visitId: this.objectItem.visitId,
-        itemNo: item.ITEM_NO,
-        eventNo: item.EVENT_NO,
-        itemName: item.ITEM_NAME,
-        administrator: item.ADMINISTRATOR,
-        concentration: item.CONCENTRATION,
-        concentrationUnit: item.CONCENTRATION_UNIT,
-        performSpeed: item.PERFORM_SPEED,
-        speedUnit: item.SPEED_UNIT,
-        dosage: item.DOSAGE,
-        dosageUnits: item.DOSAGE_UNITS,
-        durativeIndicator: item.DURATIVE_INDICATOR,
-        startTime: new Date(item.START_TIME),
-        endDate: item.ENDDATE ? new Date(item.ENDDATE) : '',
+      let params = {}
+      if (item.addFlag) {
+        params = {
+          patientId: this.objectItem.patientId,
+          operId: this.objectItem.operId,
+          visitId: this.objectItem.visitId,
+          itemNo: item.ITEM_NO,
+          eventNo: item.EVENT_NO,
+          itemName: item.ITEM_NAME,
+          administrator: item.ADMINISTRATOR,
+          concentration: item.CONCENTRATION,
+          concentrationUnit: item.CONCENTRATION_UNIT,
+          performSpeed: item.PERFORM_SPEED,
+          speedUnit: item.SPEED_UNIT,
+          dosage: item.DOSAGE,
+          dosageUnits: item.DOSAGE_UNITS,
+          durativeIndicator: item.DURATIVE_INDICATOR,
+          startTime: new Date(item.START_TIME),
+          endDate: item.ENDDATE ? new Date(item.ENDDATE) : '',
+          addFlag: item.addFlag
+        }
+      } else {
+        params = {
+          patientId: this.objectItem.patientId,
+          operId: this.objectItem.operId,
+          visitId: this.objectItem.visitId,
+          itemNo: item.ITEM_NO,
+          eventNo: item.EVENT_NO,
+          itemName: item.ITEM_NAME,
+          administrator: item.ADMINISTRATOR,
+          concentration: item.CONCENTRATION,
+          concentrationUnit: item.CONCENTRATION_UNIT,
+          performSpeed: item.PERFORM_SPEED,
+          speedUnit: item.SPEED_UNIT,
+          dosage: item.DOSAGE,
+          dosageUnits: item.DOSAGE_UNITS,
+          durativeIndicator: item.DURATIVE_INDICATOR,
+          startTime: new Date(item.START_TIME),
+          endDate: item.ENDDATE ? new Date(item.ENDDATE) : '',
+        }
       }
+
       this.changeEvent.push(params);
       this.updateEvent = params;
     },
@@ -737,7 +772,6 @@ export default {
     },
     //点击确定插入体征数据
     addItem() {
-      debugger
       //计算开始时间与结束时间差值单位是毫秒
       var k = parseInt(this.datetimeLocalToDate(this.insertEndTime) - this.datetimeLocalToDate(this.insertStartTime));
       //单位是分钟
@@ -939,9 +973,11 @@ export default {
           this.cancleSaveTemp();
         })
     },
+    //关闭
     aboutNone() {
       this.parentToChild.dataInParent = !this.dataIn;
       this.dataIn = !this.dataIn;
+      this.$emit('refreshTime')
     },
     atherPlacFuntion() {
       this.clickAtherPlace = !this.clickAtherPlace;

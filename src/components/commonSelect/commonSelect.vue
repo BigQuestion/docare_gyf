@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative;">
+  <div style="position: relative;" @click="showValue">
     <div v-if="conInfo.dictTableName">
       <div v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" @dblclick="showView" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" style="display:inline-block;border:1px solid #A9A9A9;min-height:19px;font-size:13.3333px;font-family:Arial;">{{infoData[attrName]}}</div>
       <input v-if="conInfo.isEditMode=='true'&&conInfo.readOnlyMode=='false'" @dblclick="showView" v-focus="focusState" @blur="focusState =  false,disapear(infoData[attrName])" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}">
@@ -35,13 +35,17 @@ export default {
       allList: [],
       serchZm: '',
       updateData: [],
-      infoData: this.conInfo,
+      // infoData: this.conInfo,
       changeTimes: 0,
       focusState: false,
 
     }
   },
   methods: {
+    showValue() {
+      debugger
+      console.log(this.conInfo)
+    },
     changeTest(ev) {
       console.log(ev)
     },
@@ -144,8 +148,9 @@ export default {
       }
     }
   },
-  props: ['conInfo', 'attrName', 'data'],
+  props: ['conInfo', 'attrName', 'data', 'infoData'],
   mounted() {
+    this.conInfo.modifyFiledValue = '';
 
   },
   created() {
