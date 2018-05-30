@@ -42,8 +42,8 @@
                                 </div>
                             </div>
                             <!-- <div @click="pushData()" v-if="showarrange" class="pushAuto" :style="{top:clickTop+'px',left:clickLeft+'px'}">
-                                                                                    分配手术
-                                                                                </div> -->
+                                                                                            分配手术
+                                                                                        </div> -->
                         </div>
                     </div>
                     <div v-if="chooseOneType=='docoptions'" v-for="item in options" @click="joinData('docoptions',item)" class="docList rows">
@@ -704,45 +704,69 @@ export default {
             let params = [];
             let dataInName;
 
-            for (var j = 0; j < this.newUpdata.length; j++) {
-                if (this.newUpdata[j].anesthesiaDoctorName != '') {
-                    dataInName = true;
-                    params.push({
-                        patientId: this.newUpdata[j].patientId,
-                        scheduleId: this.newUpdata[j].scheduleId,
-                        visitId: this.newUpdata[j].visitId,
-                        anesthesiaDoctor: this.newUpdata[j].anesthesiaDoctorName,
-                        anesthesiaAssistant: this.newUpdata[j].firstAnesthesiaAssistantName,
-                        secondAnesthesiaAssistant: this.newUpdata[j].secondAnesthesiaAssistantName,
-                        firstOperationNurse: this.newUpdata[j].firstOperationNurseName,
-                        secondOperationNurse: this.newUpdata[j].secondOperationNurseName,
-                        firstSupplyNurse: this.newUpdata[j].firstSupplyNurseName,
-                        secondSupplyNurse: this.newUpdata[j].secondSupplyNurseName,
-                        firstAssistantName: this.newUpdata[j].firstAssistantName,
-                        secondAssistantName: this.newUpdata[j].secondAssistantName,
-                        operatingRoomNo: this.newUpdata[j].operatingRoomNo,
-                        sequence: this.newUpdata[j].sequence,
-                    })
-                } else {
+            // for (var j = 0; j < this.newUpdata.length; j++) {
+            //     if (this.newUpdata[j].anesthesiaDoctorName != '') {
+            //         dataInName = true;
+            //         params.push({
+            //             patientId: this.newUpdata[j].patientId,
+            //             scheduleId: this.newUpdata[j].scheduleId,
+            //             visitId: this.newUpdata[j].visitId,
+            //             anesthesiaDoctor: this.newUpdata[j].anesthesiaDoctorName,
+            //             anesthesiaAssistant: this.newUpdata[j].firstAnesthesiaAssistantName,
+            //             secondAnesthesiaAssistant: this.newUpdata[j].secondAnesthesiaAssistantName,
+            //             firstOperationNurse: this.newUpdata[j].firstOperationNurseName,
+            //             secondOperationNurse: this.newUpdata[j].secondOperationNurseName,
+            //             firstSupplyNurse: this.newUpdata[j].firstSupplyNurseName,
+            //             secondSupplyNurse: this.newUpdata[j].secondSupplyNurseName,
+            //             firstAssistantName: this.newUpdata[j].firstAssistantName,
+            //             secondAssistantName: this.newUpdata[j].secondAssistantName,
+            //             operatingRoomNo: this.newUpdata[j].operatingRoomNo,
+            //             sequence: this.newUpdata[j].sequence,
+            //         })
+            //     } else {
 
+            //     }
+            // }
+            let commitData = [];
+            console.log(this.scheduleListRight)
+            for (var i = 0; i < this.scheduleListRight.length; i++) {
+                if (this.scheduleListRight[i].state == 1) {
+                    console.log(this.scheduleListRight[i])
+                    commitData.push({
+                        anesthesiaDoctor: this.roomId[this.hasChooseIndex].docoptionsId,
+                        firstAnesthesiaAssistant: this.roomId[this.hasChooseIndex].docmzkUsersId,
+                        firstAssistant: this.roomId[this.hasChooseIndex].assistantId,
+                        firstOperationNurse: this.roomId[this.hasChooseIndex].docwashId,
+                        firstSupplyNurse: this.roomId[this.hasChooseIndex].doctourId,
+                        secondAnesthesiaAssistant: this.roomId[this.hasChooseIndex].docmzkUsersTwoId,
+                        secondAssistant: this.roomId[this.hasChooseIndex].assistantTwoId,
+                        secondOperationNurse: this.roomId[this.hasChooseIndex].docwashTwoId,
+                        secondSupplyNurse: this.roomId[this.hasChooseIndex].doctourTwoId,
+                        patientId: this.scheduleListRight[i].patientId,
+                        visitId: this.scheduleListRight[i].visitId,
+                        scheduleId: this.scheduleListRight[i].scheduleId,
+                        state: this.scheduleListRight[i].state,
+                        sequence: this.scheduleListRight[i].sequence,
+                        operatingRoomNo: this.scheduleListRight[i].operatingRoomNo,
+                    })
                 }
             }
-            console.log(params)
-            if (dataInName) {
-                this.api.submitMedOperationScheduleList(params)
-                    .then(
-                    res => {
+            console.log(commitData)
+            // if (dataInName) {
+            this.api.submitMedOperationScheduleList(commitData)
+                .then(
+                res => {
 
-                        dataInName = false;
-                        this.getList(this.dateValue)
-                        this.newUpdata = [];
+                    dataInName = false;
+                    this.getList(this.dateValue)
+                    this.newUpdata = [];
+                    alert('提交成功!')
+                })
 
-                    })
-                alert('提交成功!')
 
-            } else {
-                alert('必要的选项不能为空！')
-            }
+            // } else {
+            // alert('必要的选项不能为空！')
+            // }
 
         },
         getNewPushData(item, index) {
@@ -1779,6 +1803,8 @@ export default {
 .head .cell {
     border: 1px solid #666666;
 }
+
+
 
 
 
