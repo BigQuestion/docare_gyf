@@ -654,6 +654,7 @@ export default {
       tempButtonView: false,
       jzPatientView: false, //急诊登记视图
       areaheight: 300,
+      setTimeId: '',
 
 
     }
@@ -1191,7 +1192,6 @@ export default {
                     this.pageButtonView = false
                   }
                 }
-                console.log(this.config.startMinTime + '----masterTime')
                 var timeDate = new Date(this.config.startMinTime);
                 this.config.initTime = new Date(this.config.startMinTime);
                 this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
@@ -1209,8 +1209,8 @@ export default {
                     return;
                   }
                   let tempItems = JSON.parse(res.formContent);
-                  // this.formItems = JSON.parse(res.formContent);
-                  var list = tempItems;
+                  this.formItems = JSON.parse(res.formContent);
+                  var list = this.formItems;
                   for (var i = 0; i < list.length; i++) {
                     if (list[i].fieldName) {
                       arry.push({
@@ -1234,16 +1234,13 @@ export default {
                             let obj = this.formItems[i];
                             obj.value = result[list[i].fieldName];
                             let tempObj = JSON.parse(JSON.stringify(obj));
-                            this.$set(tempItems, i, tempObj);
+                            this.$set(this.formItems, i, tempObj);
                           }
                         }
                       });
-                  this.formItems = tempItems;
+                  // this.formItems = tempItems;
                 });
           })
-
-
-
       } else if (item.formName == '手术清点单') {
         this.tempButtonView = true;
         this.initComponementConfig();
@@ -1381,6 +1378,7 @@ export default {
         modifyValue = dataValue.value;
       }
       var tempData = this.updateFormsData;
+
       if (tempData.length > 0) {
         var count = 0;
         for (var i = 0; i < this.updateFormsData.length; i++) {
@@ -1419,12 +1417,13 @@ export default {
       } else {
         let params = []
         params = this.updateFormsData;
-
+        debugger
+        // return
         if (this.updateFormsData.length > 0) {
           this.api.updateSqlBatch(params)
             .then(res => {
               this.updateFormsData = [];
-              this.selectMedFormTemp(this.selectFormItemTemp);
+              // this.selectMedFormTemp(this.selectFormItemTemp);
             })
         }
       }
@@ -1507,6 +1506,10 @@ export default {
       this.config.pagePercentNum = 1;
       this.pageButtonView = false;
       this.formItems = [];
+      this.updateFormsData = [];
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId);
+      }
 
     },
     //保存模板
@@ -1621,9 +1624,30 @@ export default {
           })
         })
     },
+    getMaxTime() {
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId);
+      }
+      let timeParam = {
+        "patientId": this.lockedPatientInfo.patientId,
+        "visitId": this.lockedPatientInfo.visitId,
+        "operId": this.lockedPatientInfo.operId,
+      }
+      //查找病人的最晚时间
+      this.api.selectMaxTime(timeParam)
+        .then(res => {
+          if (res.TIME) {
+            this.config.patientMaxTime = res.TIME
+          }
+          this.setTimeId = setTimeout(_ => this.getMaxTime(), this.config.timeSet)
+        })
+    },
 
   },
   mounted() {
+    if (this.setTimeId) {
+      clearTimeout(this.setTimeId);
+    }
     this.searchPatientList();
     this.setIntervaled();
     this.selectMedFormList();
@@ -1639,6 +1663,7 @@ export default {
     Bus.$off('showPersonStyle', (val) => {
       this.personStyleView = false
     });
+    clearTimeout(this.setTimeId);
   },
   components: {
     formElement,
@@ -1927,6 +1952,16 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

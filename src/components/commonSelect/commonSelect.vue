@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative;" @click="showValue">
+  <div style="position: relative;">
     <div v-if="conInfo.dictTableName">
       <div v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" @dblclick="showView" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" style="display:inline-block;border:1px solid #A9A9A9;min-height:19px;font-size:13.3333px;font-family:Arial;">{{infoData[attrName]}}</div>
       <input v-if="conInfo.isEditMode=='true'&&conInfo.readOnlyMode=='false'" @dblclick="showView" v-focus="focusState" @blur="focusState =  false,disapear(infoData[attrName])" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}">
@@ -42,13 +42,6 @@ export default {
     }
   },
   methods: {
-    showValue() {
-      debugger
-      console.log(this.conInfo)
-    },
-    changeTest(ev) {
-      console.log(ev)
-    },
     showView() {
       this.nameView = true;
       let params = {
@@ -61,7 +54,6 @@ export default {
         .then(res => {
           this.medAnaesthesiaDictList = res;
         })
-
       this.api.allColumContext(params)
         .then(res => {
           this.allList = res;
@@ -156,7 +148,6 @@ export default {
   created() {
     // 点击其他不在的区域触发事件
     document.addEventListener('click', (e) => {
-      //console.log(this.$el.contains(e.target));
       if (!this.$el.contains(e.target)) {
         this.nameView = false;
         this.serchZm = '';
@@ -164,7 +155,7 @@ export default {
     })
   },
   watch: {
-    "infoData.value": function() {
+    "conInfo.value": function() {
       this.changeTimes = this.changeTimes + 1;
       if (this.changeTimes > 1) {
         this.$emit('toparentevent', this.conInfo);
