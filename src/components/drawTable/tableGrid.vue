@@ -172,21 +172,51 @@ export default {
     },
     //对时间进行计算操作
     timeControl(startTime) {
-
+      console.log(this.config.startMinTime + '----tableTime')
+      var svg = d3.selectAll(".test")
+      svg.remove();
       var m = this.tbMin; //加几分钟
       var timeDate = new Date(startTime);
       var toMin = timeDate.getTime() + 1000 * 60 * m;
       var timeArray = [];
-      for (var i = 0; i <= this.columns; i++) {
+      let startMinTime = this.config.startMinTime
+      let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
+      if (this.config.pageOper == 0 && startMinTime) {
+        for (var i = 0; i <= this.columns; i++) {
 
-        timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+          timeArray.push(new Date(new Date(startMinTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        }
+      } else if (!startMinTime && this.config.pageOper == 0) {
+        for (var i = 0; i <= this.columns; i++) {
+          timeArray.push(new Date(new Date(defaultTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        }
+      } else {
+        for (var i = 0; i <= this.columns; i++) {
+
+          timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        }
       }
+
       // this.config.initTime = new Date(timeDate.getTime());
       // this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * m * this.columns);
       this.xTimeArray = timeArray;
+      this.$nextTick(function() {
+        this.getLineXy();
+        if (this.page == false) {
+          this.selectMedAnesthesiaEventList();
+        }
+      })
+
     },
     //时间初始化显示
     xTimeInit() {
+      if (!this.page) {
+        this.timeControl(this.config.startMinTime);
+      } else {
+        this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
+      }
+
+      return
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
@@ -318,12 +348,15 @@ export default {
           .attr("y2", y2 + 4)
           .attr("x1", x1)
           .attr("x2", x1)
-        svg.append("path")
-          .attr('d', this.drawLineArrow(x1, y1, x2, y2))
-          .attr('stroke-width', 1)
-          .attr("fill", "none")
-          .attr("stroke", "blue")
-          .attr("class", "test")
+        if (x2 - x1 > 0) {
+          svg.append("path")
+            .attr('d', this.drawLineArrow(x1, y1, x2, y2))
+            .attr('stroke-width', 1)
+            .attr("fill", "none")
+            .attr("stroke", "blue")
+            .attr("class", "test")
+        }
+
 
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
@@ -520,8 +553,6 @@ export default {
               } else {
                 eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
               }
-
-
             } else {
 
               if (new Date(list[i].ENDDATE) >= this.config.maxTime) {
@@ -537,7 +568,8 @@ export default {
             let x2 = Math.round(eMin / lMin * (w / this.columns))
             let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            if (list[i].DURATIVE_INDICATOR == 1 && x2 > 0) {
+            debugger
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               list[i].vStartTime = '';
               this.createLine(x1, x2, y1, y2, list[i]);
               this.xArray.push({
@@ -573,11 +605,13 @@ export default {
 
   },
   created() {
-    Bus.$on('test', this.pageChange)
+    Bus.$on('test', this.pageChange);
+    Bus.$on('timeSetChange', this.timeControl)
 
   },
   beforeDestroy() {
     Bus.$off('test', this.pageChange);
+    Bus.$off('timeSetChange', this.timeControl)
     clearTimeout(this.setTimeId);
 
   },

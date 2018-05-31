@@ -20,19 +20,19 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-      method: 'post',
-      url: url,
-      data: JSON.stringify(params),
-      timeout: config.timeout,
-      headers: {
-        'Content-type': 'application/json',
-        "Accept": "*/*",
-      },
-      datatype: "json",
-    })
-      .then(function (response) {
+        method: 'post',
+        url: url,
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype: "json",
+      })
+      .then(function(response) {
         resolve(response.data);
-      }).catch(function (error) {
+      }).catch(function(error) {
         reject(error);
       });
   })
@@ -76,9 +76,9 @@ export default {
   },
 
   /**
- * 批量修改排版手术信息
- * 
- */
+   * 批量修改排版手术信息
+   * 
+   */
   updateBatchMedOperationSchedule(params, config) {
     return fetch('medicalsystem/rest/medOperationSchedule/updateBatchMedOperationSchedule', params)
   },

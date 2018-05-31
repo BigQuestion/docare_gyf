@@ -48,8 +48,8 @@ export default {
     selectMedAnesthesiaEventList() {
       var nber = 1;
       this.pageOn = this.config.pageOper;
-      this.maxTimeInPage = this.config.maxTime.getTime()
-      this.startTimeInPage = this.config.initTime.getTime()
+      this.maxTimeInPage = new Date(this.config.maxTime).getTime()
+      this.startTimeInPage = new Date(this.config.initTime).getTime()
       var bothTimeLeft = this.maxTimeInPage - this.startTimeInPage
 
       this.thedoubelData = '';

@@ -26,7 +26,11 @@
             <ellipse stroke="#000" ry="3pt" rx="3pt" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
             <!-- <circle class="opercontrol" r="3" fill="blue"></circle> -->
           </g>
-          <circle class="opercontrol" v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle>
+          <g v-for="(cir,index2) in item.circleData" v-if="item.flag==1" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+            <circle class="opercontrol" r="8pt" fill="rgba(0,0,0,0)"></circle>
+            <circle class="opercontrol" r="2" fill="red"></circle>
+          </g>
+          <!-- <circle class="opercontrol" v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle> -->
         </g>
       </svg>
       <div v-if="tipView">
@@ -429,9 +433,11 @@ export default {
   },
   created() {
     Bus.$on('test', this.pageTurnFun)
+    Bus.$on('timeSetChange', this.initFun)
   },
   beforeDestroy() {
     Bus.$off('test', this.pageTurnFun);
+    Bus.$off('timeSetChange', this.initFun)
     clearTimeout(this.setTimeId);
   },
   components: {

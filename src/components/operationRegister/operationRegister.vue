@@ -370,8 +370,6 @@ export default {
       this.api.selectMedAnesthesiaEventList(params)
         .then(
           res => {
-            console.log(res.list.length)
-            console.log('bbb')
             for (var i = 0; i < res.list.length; i++) {
               if (res.list[i].START_TIME) {
                 res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
@@ -977,6 +975,7 @@ export default {
     aboutNone() {
       this.parentToChild.dataInParent = !this.dataIn;
       this.dataIn = !this.dataIn;
+      //触发单子的重新显示
       this.$emit('refreshTime')
     },
     atherPlacFuntion() {
