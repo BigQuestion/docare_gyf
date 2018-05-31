@@ -853,12 +853,12 @@ export default {
                 patientId: this.handleItem.patientId,
                 scheduleId: this.handleItem.scheduleId,
                 visitId: this.handleItem.visitId,
-                state: this.handleItem.state,
+                state: 1,
             }
             console.log(params)
             this.api.editSchedule(params)
                 .then(res => {
-                    this.getList(this.dateValue)
+                    // this.getList(this.dateValue)
                 });
             this.mask = false;
 
