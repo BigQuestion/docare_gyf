@@ -42,8 +42,8 @@
                                 </div>
                             </div>
                             <!-- <div @click="pushData()" v-if="showarrange" class="pushAuto" :style="{top:clickTop+'px',left:clickLeft+'px'}">
-                                                                                                        分配手术
-                                                                                                    </div> -->
+                                                                                                                                                                                                                        分配手术
+                                                                                                                                                                                                                    </div> -->
                         </div>
                     </div>
                     <div v-if="chooseOneType=='docoptions'" v-for="item in options" @click="joinData('docoptions',item)" class="docList rows">
@@ -366,6 +366,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '02',
@@ -388,6 +390,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '03',
@@ -410,6 +414,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '04',
@@ -432,6 +438,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '05',
@@ -454,6 +462,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '06',
@@ -476,6 +486,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '07',
@@ -498,6 +510,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '08',
@@ -520,6 +534,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '09',
@@ -542,6 +558,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '10',
@@ -564,6 +582,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '11',
@@ -586,6 +606,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '12',
@@ -608,6 +630,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '13',
@@ -630,6 +654,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             {
                 name: '14',
@@ -652,6 +678,8 @@ export default {
                 docwashTwoId: '',
                 doctourId: '',
                 doctourTwoId: '',
+                MaxLeftNum: '',
+                MaxRightNum: '',
             },
             ],
             hasChooseRoom: {},
@@ -662,8 +690,6 @@ export default {
             scheduleList: [],
             scheduleListRight: [],
             scheduleListRight2: [],
-            MaxLeftNum: '',
-            MaxRightNum: '',
             mask: false,
             area: '',
             startX: '',
@@ -830,7 +856,10 @@ export default {
                 state: this.handleItem.state,
             }
             console.log(params)
-            this.api.editSchedule(params);
+            this.api.editSchedule(params)
+                .then(res => {
+                    this.getList(this.dateValue)
+                });
             this.mask = false;
 
         },
@@ -902,6 +931,7 @@ export default {
         },
         dateChange() {
             this.getList(this.dateValue)
+
         },
         chooseOne(item) {
             console.log(item)
@@ -1089,6 +1119,9 @@ export default {
             }
             console.log(commitData)
             this.api.updateBatchMedOperationSchedule(commitData)
+                .then(res => {
+                    this.getList(this.dateValue)
+                });
             this.cleanData = false;
 
         },
@@ -1313,11 +1346,15 @@ export default {
                         visitId: this.scheduleListRight[i].visitId,
                         scheduleId: this.scheduleListRight[i].scheduleId,
                         state: this.scheduleListRight[i].state,
+                        sequence: this.scheduleListRight[i].sequence,
                     })
                 }
             }
             console.log(commitData)
             this.api.updateBatchMedOperationSchedule(commitData)
+                .then(res => {
+                    this.getList(this.dateValue)
+                });
             console.log(this.hasChooseRoom)
             console.log(this.pushDataBody)
         },
@@ -1350,7 +1387,7 @@ export default {
                             this.scheduleListRight2.push(res.list[a])
                         }
                     }
-
+                    this.sequenceFun();
                 });
         },
         getSupplyNurseList() {
@@ -1440,11 +1477,9 @@ export default {
             this.pushData();
         },
         pushData() {
-            let roomNum = [];
-            var dataR = false;
-            var dataNum = 0;
             console.log(this.pushDataBody)
             console.log(this.hasChooseRoom)
+            debugger
             // 手术间赋值
             this.pushDataBody.operatingRoomNo = this.hasChooseRoom.name;
             // 主麻医生赋值
@@ -1466,46 +1501,28 @@ export default {
             // 巡回护士2赋值
             this.pushDataBody.secondSupplyNurseName = this.hasChooseRoom.doctourTwo;
             // 自动添加台次
-            for (var a = 0; a < this.scheduleListRight.length; a++) {
-                if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
-                    dataR = true;
-                    roomNum.push(this.scheduleListRight[a].sequence)
-                }
-            }
-            for (var b = 0; b < this.scheduleListRight2.length; b++) {
-                if (this.scheduleListRight2[b].operatingRoomNo == this.hasChooseRoom.name) {
-                    dataR = true;
-                    this.MaxLeftNum = this.scheduleListRight2[b].sequence
-                }
-            }
-            console.log(this.MaxLeftNum)
-            this.MaxRightNum = Math.max.apply(Math, roomNum) + 1;
-            if (dataR == true) {
-                this.pushDataBody.sequence = Math.max.apply(Math, roomNum) + 1
-            } else {
-                this.pushDataBody.sequence = dataNum + 1
-            }
+            this.sequenceFun();
             let subMitData = {
                 // 手术间赋值
                 operatingRoomNo: this.hasChooseRoom.name,
                 // 主麻医生赋值
-                anesthesiaDoctorName: this.hasChooseRoom.docoptionsId,
+                anesthesiaDoctor: this.hasChooseRoom.docoptionsId,
                 // 副麻医生1赋值
-                firstAnesthesiaAssistantName: this.hasChooseRoom.docmzkUsersId,
+                anesthesiaAssistant: this.hasChooseRoom.docmzkUsersId,
                 // 副麻医生2赋值
-                secondAnesthesiaAssistantName: this.hasChooseRoom.docmzkUsersTwoId,
+                secondAnesthesiaAssistant: this.hasChooseRoom.docmzkUsersTwoId,
                 // 麻醉助手1赋值
-                firstAssistantName: this.hasChooseRoom.assistantId,
+                firstAssistant: this.hasChooseRoom.assistantId,
                 // 麻醉助手2赋值
-                secondAssistantName: this.hasChooseRoom.assistantTwoId,
+                secondAssistant: this.hasChooseRoom.assistantTwoId,
                 // 洗手护士1赋值
-                firstOperationNurseName: this.hasChooseRoom.docwashId,
+                firstOperationNurse: this.hasChooseRoom.docwashId,
                 // 洗手护士2赋值
-                secondOperationNurseName: this.hasChooseRoom.docwashTwoId,
+                secondOperationNurse: this.hasChooseRoom.docwashTwoId,
                 // 巡回护士1赋值
-                firstSupplyNurseName: this.hasChooseRoom.doctourId,
+                firstSupplyNurse: this.hasChooseRoom.doctourId,
                 // 巡回护士2赋值
-                secondSupplyNurseName: this.hasChooseRoom.doctourTwoId,
+                secondSupplyNurse: this.hasChooseRoom.doctourTwoId,
                 // 手术台次
                 sequence: this.pushDataBody.sequence,
                 patientId: this.pushDataBody.patientId,
@@ -1513,11 +1530,70 @@ export default {
                 visitId: this.pushDataBody.visitId,
                 state: 1,
             }
+
             this.scheduleList.splice(this.spliceIndex, 1);
             this.api.editSchedule(subMitData)
+                .then(res => {
+                    // this.getList(this.dateValue)
+                    // this.sequenceFun();
+                    for (var c = 0; c < this.roomId.length; c++) {
+                        if (this.roomId[c].name == this.hasChooseRoom.name) {
+                            this.roomId[c].MaxLeftNum = this.roomId[c].MaxLeftNum + 1;
+                        }
+                    }
+                });
             this.scheduleListRight.push(this.pushDataBody)
             this.chooseData = '手术(' + this.scheduleList.length + ')';
             this.listChooseBody[0].dataLength = this.scheduleList.length;
+        },
+        sequenceFun() {
+            let roomNum = [];
+            var dataNum = 0;
+            var dataR = false;
+            console.log(this.scheduleListRight)
+            console.log(this.scheduleListRight.length)
+
+            for (var a = 0; a < this.scheduleListRight.length; a++) {
+                if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
+                    dataR = true;
+                    roomNum.push(this.scheduleListRight[a].sequence)
+                }
+            }
+            console.log(this.scheduleListRight2)
+            console.log(this.hasChooseRoom)
+            for (var b = 0; b < this.scheduleListRight2.length; b++) {
+                if (this.scheduleListRight2[b].operatingRoomNo == this.hasChooseRoom.name && (this.scheduleListRight2[b].state == 2 || this.scheduleListRight2[b].state == 3 || this.scheduleListRight2[b].state == 4)) {
+                    dataR = true;
+                    for (var c = 0; c < this.roomId.length; c++) {
+                        if (this.roomId[c].name == this.hasChooseRoom.name) {
+                            this.roomId[c].MaxLeftNum = this.scheduleListRight2[b].sequence
+                        }
+                    }
+
+                } else {
+                    dataR = true;
+                    for (var c = 0; c < this.roomId.length; c++) {
+                        if (this.roomId[c].name == this.hasChooseRoom.name) {
+                            this.roomId[c].MaxLeftNum = 0
+                        }
+                    }
+                }
+            }
+            // console.log(this.MaxLeftNum)
+            for (var d = 0; d < this.roomId.length; d++) {
+                if (this.roomId[d].name == this.hasChooseRoom.name) {
+                    this.roomId[d].MaxRightNum = Math.max.apply(Math, roomNum) + 1;
+                }
+            }
+            if (dataR == true && this.pushDataBody != '') {
+                this.pushDataBody.sequence = Math.max.apply(Math, roomNum) + 1
+            } else {
+                if (this.pushDataBody != '') {
+                    this.pushDataBody.sequence = dataNum + 1
+                } else {
+
+                }
+            }
         },
         goBackFun(cell, index) {
             console.log(cell)
@@ -1538,55 +1614,110 @@ export default {
                 operatingRoomNo: '',
             };
             this.api.editSchedule(subMitData)
+                .then(res => {
+                    // this.getList(this.dateValue)
+                    for (var c = 0; c < this.roomId.length; c++) {
+                        if (this.roomId[c].name == this.hasChooseRoom.name) {
+                            this.roomId[c].MaxRightNum = this.roomId[c].MaxRightNum - 1;
+                        }
+                    }
+                });
             this.chooseData = '手术(' + this.scheduleList.length + ')';
             this.listChooseBody[0].dataLength = this.scheduleList.length;
         },
         goTaoLeft(cell, index) {
+            let submit = [];
+            var mNum = '';
             // console.log(cell.sequence)
-            console.log(this.MaxLeftNum)
-            if ((cell.sequence == this.MaxLeftNum + 1) || this.MaxLeftNum == '') {
-                alert('已经是第一台手术了。')
-            } else {
-                for (var b = 0; b < this.scheduleListRight.length; b++) {
-                    if (cell.visitId == this.scheduleListRight[b].visitId && cell.patientId == this.scheduleListRight[b].patientId && cell.scheduleId == this.scheduleListRight[b].scheduleId) {
-
-                        for (var c = 0; c < this.scheduleListRight.length; c++) {
-                            if (cell.operatingRoomNo == this.scheduleListRight[c].operatingRoomNo && cell.sequence == this.scheduleListRight[c].sequence + 1) {
-                                // console.log(this.scheduleListRight[c])
-                                this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence - 1;
-                                this.scheduleListRight[c].sequence = this.scheduleListRight[c].sequence + 1;
-                            }
-                        }
-                        this.scheduleListRight.sort(this.sortNumber);
-                    }
+            // console.log(this.MaxLeftNum)
+            for (var c = 0; c < this.roomId.length; c++) {
+                if (this.roomId[c].name == this.hasChooseRoom.name) {
+                    mNum = this.roomId[c].MaxLeftNum
                 }
-
             }
+            if (cell.operatingRoomNo == this.hasChooseRoom.name) {
+                if (cell.sequence == mNum + 1) {
+                    console.log(mNum + 1)
+                    alert('已经是第一台手术了。')
+                } else {
+                    for (var b = 0; b < this.scheduleListRight.length; b++) {
+                        if (cell.visitId == this.scheduleListRight[b].visitId && cell.patientId == this.scheduleListRight[b].patientId && cell.scheduleId == this.scheduleListRight[b].scheduleId) {
+
+                            for (var c = 0; c < this.scheduleListRight.length; c++) {
+                                if (cell.operatingRoomNo == this.scheduleListRight[c].operatingRoomNo && cell.sequence == this.scheduleListRight[c].sequence + 1) {
+                                    this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence - 1;
+                                    this.scheduleListRight[c].sequence = this.scheduleListRight[c].sequence + 1;
+                                }
+                            }
+                            this.scheduleListRight.sort(this.sortNumber);
+                        }
+                    }
+                    // 
+                    for (var i = 0; i < this.scheduleListRight.length; i++) {
+                        if (this.scheduleListRight[i].operatingRoomNo == cell.operatingRoomNo && this.scheduleListRight[i].state == 1) {
+                            submit.push({
+                                visitId: this.scheduleListRight[i].visitId,
+                                sequence: this.scheduleListRight[i].sequence,
+                                scheduleId: this.scheduleListRight[i].scheduleId,
+                                patientId: this.scheduleListRight[i].patientId,
+                            })
+                        }
+
+                    }
+                    console.log(submit)
+                    this.api.updateBatchMedOperationSchedule(submit)
+                }
+            } else {
+                alert('请选择对应手术间！')
+            }
+
+
         },
         sortNumber(a, b) {
             return a.sequence - b.sequence
         },
         goTaoRight(cell, index) {
-            console.log(cell.sequence)
-            console.log(this.pushDataBody)
-            console.log("最后" + this.MaxRightNum)
-            if (cell.sequence == this.MaxRightNum) {
-                alert('已经是最后一台手术了。')
-            } else {
-                console.log(cell)
-                for (var b = 0; b < this.scheduleListRight.length; b++) {
-                    if (cell.visitId == this.scheduleListRight[b].visitId && cell.patientId == this.scheduleListRight[b].patientId && cell.scheduleId == this.scheduleListRight[b].scheduleId) {
-                        for (var c = 0; c < this.scheduleListRight.length; c++) {
-                            if (cell.operatingRoomNo == this.scheduleListRight[c].operatingRoomNo && cell.sequence == this.scheduleListRight[c].sequence - 1) {
-                                this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence + 1;
-                                this.scheduleListRight[c].sequence = this.scheduleListRight[c].sequence - 1;
-                                // console.log(this.scheduleListRight[c])
-                            }
-                        }
-                        this.scheduleListRight.sort(this.sortNumber);
-                    }
+            var mNum = '';
+            // console.log(cell.sequence)
+            // console.log(this.pushDataBody)
+            // console.log("最后" + this.MaxRightNum)
+            for (var c = 0; c < this.roomId.length; c++) {
+                if (this.roomId[c].name == this.hasChooseRoom.name) {
+                    mNum = this.roomId[c].MaxRightNum
                 }
-
+            }
+            if (cell.operatingRoomNo == this.hasChooseRoom.name) {
+                if (cell.sequence == mNum - 1) {
+                    alert('已经是最后一台手术了。')
+                } else {
+                    console.log(cell)
+                    for (var b = 0; b < this.scheduleListRight.length; b++) {
+                        if (cell.visitId == this.scheduleListRight[b].visitId && cell.patientId == this.scheduleListRight[b].patientId && cell.scheduleId == this.scheduleListRight[b].scheduleId) {
+                            for (var c = 0; c < this.scheduleListRight.length; c++) {
+                                if (cell.operatingRoomNo == this.scheduleListRight[c].operatingRoomNo && cell.sequence == this.scheduleListRight[c].sequence - 1) {
+                                    this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence + 1;
+                                    this.scheduleListRight[c].sequence = this.scheduleListRight[c].sequence - 1;
+                                    // console.log(this.scheduleListRight[c])
+                                }
+                            }
+                            this.scheduleListRight.sort(this.sortNumber);
+                        }
+                    }
+                    // 
+                    for (var i = 0; i < this.scheduleListRight.length; i++) {
+                        if (this.scheduleListRight[i].operatingRoomNo == cell.operatingRoomNo && this.scheduleListRight[i].state == 1) {
+                            submit.push({
+                                visitId: this.scheduleListRight[i].visitId,
+                                sequence: this.scheduleListRight[i].sequence,
+                                scheduleId: this.scheduleListRight[i].scheduleId,
+                                patientId: this.scheduleListRight[i].patientId,
+                            })
+                        }
+                    }
+                    this.api.updateBatchMedOperationSchedule(submit)
+                }
+            } else {
+                alert('请选择对应手术间！')
             }
         }
     },
