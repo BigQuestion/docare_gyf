@@ -746,7 +746,7 @@ export default {
                         patientId: this.scheduleListRight[i].patientId,
                         visitId: this.scheduleListRight[i].visitId,
                         scheduleId: this.scheduleListRight[i].scheduleId,
-                        state: this.scheduleListRight[i].state,
+                        // state: this.scheduleListRight[i].state,
                         sequence: this.scheduleListRight[i].sequence,
                         operatingRoomNo: this.scheduleListRight[i].operatingRoomNo,
                     })
