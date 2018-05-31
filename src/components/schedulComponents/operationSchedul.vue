@@ -42,8 +42,8 @@
                                 </div>
                             </div>
                             <!-- <div @click="pushData()" v-if="showarrange" class="pushAuto" :style="{top:clickTop+'px',left:clickLeft+'px'}">
-                                                                                                                                                                                                                        分配手术
-                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                            分配手术
+                                                                                                                                                                                                                        </div> -->
                         </div>
                     </div>
                     <div v-if="chooseOneType=='docoptions'" v-for="item in options" @click="joinData('docoptions',item)" class="docList rows">
@@ -89,19 +89,20 @@
                         {{item.name}}
                     </div>
                     <div v-if="cleanData" @contextmenu.stop="noFun()" class="cleanBox" :style="{top:cleanTop+'px',left:cleanLeft+'px'}">
-                        <div style="width:100%;height:100%;position:relative;" @mouseover="overShow()" @mouseout="outShow()">
-                            清空
-                            <div v-if="showList" style="position:absolute;left:100%;top:0;width:100%;height:auto;z-index:9999;">
-                                <div class="cleanLast" @click="cleanFunOnList('all')">全部</div>
-                                <div class="cleanLast" @click="cleanFunOnList('anesthesiaDoctorName')">主麻医师</div>
-                                <div class="cleanLast" @click="cleanFunOnList('firstAnesthesiaAssistantName')">副麻医师1</div>
-                                <div class="cleanLast" @click="cleanFunOnList('secondAnesthesiaAssistantName')">副麻医师2</div>
-                                <div class="cleanLast" @click="cleanFunOnList('firstAssistantName')">洗手护士1</div>
-                                <div class="cleanLast" @click="cleanFunOnList('secondOperationNurseName')">洗手护士2</div>
-                                <div class="cleanLast" @click="cleanFunOnList('firstSupplyNurseName')">巡回护士1</div>
-                                <div class="cleanLast" @click="cleanFunOnList('secondSupplyNurseName')">巡回护士2</div>
-                            </div>
-                        </div>
+                        <div class="cleanLast" @click="cleanFunOnList('all')">清空全部</div>
+                        <div class="cleanLast" @click="cleanFunOnList('anesthesiaDoctorName')">清空主麻医师</div>
+                        <div class="cleanLast" @click="cleanFunOnList('firstAnesthesiaAssistantName')">清空副麻医师1</div>
+                        <div class="cleanLast" @click="cleanFunOnList('secondAnesthesiaAssistantName')">清空副麻医师2</div>
+                        <div class="cleanLast" @click="cleanFunOnList('firstAssistantName')">清空洗手护士1</div>
+                        <div class="cleanLast" @click="cleanFunOnList('secondOperationNurseName')">清空洗手护士2</div>
+                        <div class="cleanLast" @click="cleanFunOnList('firstSupplyNurseName')">清空巡回护士1</div>
+                        <div class="cleanLast" @click="cleanFunOnList('secondSupplyNurseName')">清空巡回护士2</div>
+                        <!-- <div style="width:100%;height:100%;position:relative;" @mouseover="overShow()" @mouseout="outShow()"> -->
+                        <!-- 清空 -->
+                        <!-- <div v-if="showList" style="width:100%;height:auto;z-index:9999;">
+
+                                </div> -->
+                        <!-- </div> -->
                     </div>
                 </div>
                 <!-- <div style="width:auto;height:auto;"> -->
@@ -1896,7 +1897,7 @@ export default {
 }
 
 .cleanBox {
-    width: 100px;
+    width: 130px;
     height: auto;
     position: absolute;
     border: 1px solid #BABABA;
