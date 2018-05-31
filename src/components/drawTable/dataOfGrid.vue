@@ -32,8 +32,8 @@ export default {
     selectMedAnesthesiaEventList() {
       var nber = 1;
       this.dataBody = [];
-      this.maxTimeInPage = this.config.maxTime.getTime()
-      this.startTimeInPage = this.config.initTime.getTime()
+      this.maxTimeInPage = new Date(this.config.maxTime).getTime()
+      this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
         patientId: this.dataOfPeo.patientId,
         operId: this.dataOfPeo.operId,

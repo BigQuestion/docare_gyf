@@ -89,9 +89,9 @@
             {{item.name}}
           </div>
           <div v-if="cleanData" @contextmenu.stop="noFun()" class="cleanBox" :style="{top:cleanTop+'px',left:cleanLeft+'px'}">
-            <div style="width:100%;height:100%;position:relative;" @mouseover="overShow()">
+            <div style="width:100%;height:100%;position:relative; " @mouseover="overShow()" @mouseout="outShow">
               清空
-              <div v-if="showList" style="position:absolute;left:100%;top:0;width:100%;height:auto;">
+              <div v-if="showList" style="position:absolute;left:80px;top:0;width:100%;height:auto;z-index: 9999;">
                 <div class="cleanLast" @click="cleanFunOnList('all')">全部</div>
                 <div class="cleanLast" @click="cleanFunOnList('anesthesiaDoctorName')">主麻医师</div>
                 <div class="cleanLast" @click="cleanFunOnList('firstAnesthesiaAssistantName')">副麻医师1</div>
@@ -955,9 +955,11 @@ export default {
     },
     overShow() {
       this.showList = true;
+      console.log(this.showList)
     },
     outShow() {
       this.showList = false;
+      console.log(this.showList)
     },
     cleanFunOnList(type) {
       if (type == 'all') {
@@ -1816,6 +1818,22 @@ export default {
 .head .cell {
   border: 1px solid #666666;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

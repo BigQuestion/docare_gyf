@@ -958,6 +958,7 @@ export default {
       this.endDateTime = this.changeDateFormat(item.endDateTime);
       this.anesEndTime = this.changeDateFormat(item.anesEndTime);
       this.outDateTime = this.changeDateFormat(item.outDateTime);
+      this.initComponementConfig();
 
     },
     showDoubleList(status) {
@@ -1135,63 +1136,10 @@ export default {
           });
     },
     selectMedFormTemp(item) {
-
       let timeParam = {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
         "operId": this.lockedPatientInfo.operId,
-      }
-
-
-      if (item.formName == '麻醉记录单') {
-        this.tempButtonView = false;
-        //查找病人的最晚时间
-        this.api.selectMaxTime(timeParam)
-          .then(res => {
-            let t1 = 0
-            let i = 0
-            if (res.TIME) {
-              //获取病人在手术室里面最早时间
-              this.api.getBeginTime(timeParam)
-                .then(rest => {
-                  if (rest.TIME) {
-                    //如果存在病人的入手术时间
-                    if (this.config.userInfo.inDateTime) {
-                      if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
-                        this.config.startMinTime = this.config.userInfo.inDateTime
-                      } else {
-                        this.config.startMinTime = rest.TIME
-                      }
-                    } else {
-                      this.config.startMinTime = rest.TIME
-                    }
-                  } else {
-                    if (this.config.userInfo.inDateTime) {
-                      this.config.startMinTime = this.config.userInfo.inDateTime
-                    } else {
-                      this.config.startMinTime = new Date().Format("yyyy-MM-dd") + " 08:00:00";
-                    }
-                  }
-                  t1 = this.coutTimes(this.config.startMinTime, res.TIME, 'minute');
-                  i = Math.ceil(t1 / 250);
-                  this.config.pageTotal = i;
-                  if (t1 > 250) {
-                    this.pageButtonView = true
-                  } else {
-                    this.pageButtonView = false
-                  }
-                  this.setFormTime(this.config.startMinTime);
-                })
-            } else {
-
-            }
-          })
-      } else if (item.formName == '手术清点单') {
-        this.tempButtonView = true;
-        this.initComponementConfig();
-      } else {
-        this.tempButtonView = false;
-        this.initComponementConfig();
       }
       for (var i = 0; i <= this.medBillList.length - 1; i++) {
         this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
@@ -1202,69 +1150,111 @@ export default {
       this.viewInfo = false;
       item.isPage = false;
       this.selectFormItemTemp = item;
-      let params = {
-        formName: item.formName,
-        id: item.id
-      }
-      let arry = [];
-      // this.formItems = [];
-      this.api.selectMedFormTemp(params)
-        .then(
-          res => {
-            if (res.formContent == "null" || res.formContent == null) {
-              return;
-            }
-            let tempItems = JSON.parse(res.formContent);
-            this.formItems = JSON.parse(res.formContent);
-            var list = this.formItems;
-            for (var i = 0; i < list.length; i++) {
-              // if (list[i].fieldName) {
-              //   arry.push({
-              //     "patientId": this.lockedPatientInfo.patientId,
-              //     "visitId": this.lockedPatientInfo.visitId,
-              //     "operId": this.lockedPatientInfo.operId,
-              //     "tableName": list[i].tableName,
-              //     "coluName": list[i].fieldName,
-              //   })
-              // }
 
-              // this.formItems = JSON.parse(res.formContent);
-              // var list = this.formItems;
-              // for (var i = 0; i < list.length; i++) {
-              if (list[i].fieldName) {
-                arry.push({
-                  "patientId": this.lockedPatientInfo.patientId,
-                  "visitId": this.lockedPatientInfo.visitId,
-                  "operId": this.lockedPatientInfo.operId,
-                  "tableName": list[i].tableName,
-                  "coluName": list[i].fieldName,
-                  "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
-                  "dictTableName": list[i].dictTableName, //字典表名称
-                  "dictField": list[i].dictField, //字典字段名称
-                  "dictSelect": list[i].dictSelect,
-                })
-              }
-              // }
-
+      if (item.formName == '麻醉记录单') {
+        let inDateTime = this.config.userInfo.inDateTime
+        this.tempButtonView = false;
+        //查找病人的最晚时间
+        this.api.selectMaxTime(timeParam)
+          .then(res => {
+            let t1 = 0
+            let i = 0
+            //获取病人在手术室里面最早时间
+            this.api.getBeginTime(timeParam)
+              .then(rest => {
+                if (rest.TIME) {
+                  //如果存在病人的入手术时间
+                  if (inDateTime) {
+                    if (new Date(rest.TIME) > new Date(inDateTime)) {
+                      this.config.startMinTime = inDateTime
+                    } else {
+                      this.config.startMinTime = rest.TIME
+                    }
+                  } else {
+                    this.config.startMinTime = rest.TIME
+                  }
+                } else {
+                  if (inDateTime) {
+                    this.config.startMinTime = inDateTime
+                  } else {
+                    this.config.startMinTime = new Date().Format("yyyy-MM-dd") + " 08:00:00";
+                  }
+                }
+                if (res.TIME) {
+                  this.config.patientMaxTime = res.TIME;
+                  t1 = this.coutTimes(this.config.startMinTime, res.TIME, 'minute');
+                  i = Math.ceil(t1 / 250);
+                  this.config.pageTotal = i;
+                  if (t1 > 250) {
+                    this.pageButtonView = true
+                  } else {
+                    this.pageButtonView = false
+                  }
+                }
+                console.log(this.config.startMinTime + '----masterTime')
+                var timeDate = new Date(this.config.startMinTime);
+                this.config.initTime = new Date(this.config.startMinTime);
+                this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
+              })
+            let params = {
+              formName: item.formName,
+              id: item.id
             }
-            this.api.getFormSqlResult(arry)
+            let arry = [];
+            // this.formItems = [];
+            this.api.selectMedFormTemp(params)
               .then(
-                result => {
+                res => {
+                  if (res.formContent == "null" || res.formContent == null) {
+                    return;
+                  }
+                  let tempItems = JSON.parse(res.formContent);
+                  // this.formItems = JSON.parse(res.formContent);
+                  var list = tempItems;
                   for (var i = 0; i < list.length; i++) {
                     if (list[i].fieldName) {
-                      let obj = this.formItems[i];
-                      obj.value = result[list[i].fieldName];
-                      let tempObj = JSON.parse(JSON.stringify(obj));
-                      this.$set(this.formItems, i, tempObj);
+                      arry.push({
+                        "patientId": this.lockedPatientInfo.patientId,
+                        "visitId": this.lockedPatientInfo.visitId,
+                        "operId": this.lockedPatientInfo.operId,
+                        "tableName": list[i].tableName,
+                        "coluName": list[i].fieldName,
+                        "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
+                        "dictTableName": list[i].dictTableName, //字典表名称
+                        "dictField": list[i].dictField, //字典字段名称
+                        "dictSelect": list[i].dictSelect,
+                      })
                     }
                   }
+                  this.api.getFormSqlResult(arry)
+                    .then(
+                      result => {
+                        for (var i = 0; i < list.length; i++) {
+                          if (list[i].fieldName) {
+                            let obj = this.formItems[i];
+                            obj.value = result[list[i].fieldName];
+                            let tempObj = JSON.parse(JSON.stringify(obj));
+                            this.$set(tempItems, i, tempObj);
+                          }
+                        }
+                      });
+                  this.formItems = tempItems;
                 });
-          });
+          })
+
+
+
+      } else if (item.formName == '手术清点单') {
+        this.tempButtonView = true;
+        this.initComponementConfig();
+      } else {
+        this.tempButtonView = false;
+        this.initComponementConfig();
+      }
     },
     //修改病人手术状态
     changeStatus(status, event) {
       this.nextDATA = '';
-
       if (this.lockedPatientInfo.operStatus === 0 && status == 5) {
         this.firstRoom.noneData = false;
         this.monitorDataShow.noneData = true;
@@ -1513,8 +1503,10 @@ export default {
       this.config.pageOper = 0;
       this.config.maxTime = '';
       this.config.initTime = '';
+      this.config.startMinTime = '';
       this.config.pagePercentNum = 1;
       this.pageButtonView = false;
+      this.formItems = [];
 
     },
     //保存模板
@@ -1543,37 +1535,10 @@ export default {
       this.config.initTime = new Date(time);
       this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
     },
-    setInitTime() {
-      let timeParam = {
-        "patientId": this.lockedPatientInfo.patientId,
-        "visitId": this.lockedPatientInfo.visitId,
-        "operId": this.lockedPatientInfo.operId,
-      }
-      this.api.getBeginTime(timeParam)
-        .then(rest => {
-          if (rest.TIME) {
-            //如果存在病人的入手术时间
-            if (this.config.userInfo.inDateTime) {
-              if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
-                this.config.startMinTime = this.config.userInfo.inDateTime
-              } else {
-                this.config.startMinTime = rest.TIME
-              }
-            } else {
-              this.config.startMinTime = rest.TIME
-            }
-          } else {
-            if (this.config.userInfo.inDateTime) {
-              this.config.startMinTime = this.config.userInfo.inDateTime
-            } else {
-              this.config.startMinTime = new Date().Format("yyyy-MM-dd") + " 08:00:00";
-            }
-          }
-          this.setFormTime(this.config.startMinTime);
-        })
-    },
     //首页的时候重新设置时间，当DOM更新完之后再通知事件
     setBusInitTime() {
+      let inDateTime = this.config.userInfo.inDateTime
+      let startMinTime = this.config.startMinTime
       let timeParam = {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
@@ -1583,9 +1548,9 @@ export default {
         .then(rest => {
           if (rest.TIME) {
             //如果存在病人的入手术时间
-            if (this.config.userInfo.inDateTime) {
-              if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
-                this.config.startMinTime = this.config.userInfo.inDateTime
+            if (inDateTime) {
+              if (new Date(rest.TIME) > new Date(inDateTime)) {
+                this.config.startMinTime = inDateTime
               } else {
                 this.config.startMinTime = rest.TIME
               }
@@ -1593,8 +1558,8 @@ export default {
               this.config.startMinTime = rest.TIME
             }
           } else {
-            if (this.config.userInfo.inDateTime) {
-              this.config.startMinTime = this.config.userInfo.inDateTime
+            if (inDateTime) {
+              this.config.startMinTime = inDateTime
             } else {
               this.config.startMinTime = new Date().Format("yyyy-MM-dd") + " 08:00:00";
             }
@@ -1610,6 +1575,8 @@ export default {
     //术中登记或者其他时间发生改变时触发
     timeChangeBus() {
       var time = '';
+      let inDateTime = this.config.userInfo.inDateTime
+      let startMinTime = this.config.startMinTime
       let timeParam = {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
@@ -1619,9 +1586,9 @@ export default {
         .then(rest => {
           if (rest.TIME) {
             //如果存在病人的入手术时间
-            if (this.config.userInfo.inDateTime) {
-              if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
-                time = this.config.userInfo.inDateTime
+            if (inDateTime) {
+              if (new Date(rest.TIME) > new Date(inDateTime)) {
+                time = inDateTime
               } else {
                 time = rest.TIME
               }
@@ -1629,16 +1596,16 @@ export default {
               time = rest.TIME
             }
           } else {
-            if (this.config.userInfo.inDateTime) {
-              time = this.config.userInfo.inDateTime
+            if (inDateTime) {
+              time = inDateTime
             } else {
               time = new Date().Format("yyyy-MM-dd") + " 08:00:00";
             }
           }
-          if (this.config.startMinTime) {
+          if (startMinTime) {
             //判断时间差值
             let time1 = new Date(time).getTime();
-            let time2 = new Date(this.config.startMinTime).getTime();
+            let time2 = new Date(startMinTime).getTime();
             if (time1 < time2) {
               this.config.initTime = new Date(new Date(this.config.initTime).getTime() - (time2 - time1));
               this.config.startMinTime = new Date(time);
@@ -1661,6 +1628,7 @@ export default {
     this.setIntervaled();
     this.selectMedFormList();
     this.getHeight();
+    // this.$toast("保存成功");
   },
   created() {
     Bus.$on('showPersonStyle', (val) => {
@@ -1959,6 +1927,50 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

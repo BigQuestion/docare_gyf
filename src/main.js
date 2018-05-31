@@ -9,6 +9,8 @@ import './assets/css/index.css'
 
 import config from './components/configFile/config'
 
+import Toast from './components/toast/toast'
+
 
 Vue.config.productionTip = false
 //空的全局的Vue实例,其他的组件利用这个实例emit和on自定义事件
@@ -19,6 +21,8 @@ import api from '@/fetch/api.js';
 Vue.prototype.api = api;
 
 Vue.prototype.config = config;
+
+Vue.use(Toast);
 
 //datatimelocal的格式转换为date
 Vue.prototype.datetimeLocalToDate = function(time) {

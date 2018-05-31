@@ -172,15 +172,23 @@ export default {
     },
     //对时间进行计算操作
     timeControl(startTime) {
-      console.log("initTime----" + this.config.initTime)
+      console.log(this.config.startMinTime + '----tableTime')
+      var svg = d3.selectAll(".test")
+      svg.remove();
       var m = this.tbMin; //加几分钟
       var timeDate = new Date(startTime);
       var toMin = timeDate.getTime() + 1000 * 60 * m;
       var timeArray = [];
-      if (this.config.pageOper == 0) {
+      let startMinTime = this.config.startMinTime
+      let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
+      if (this.config.pageOper == 0 && startMinTime) {
         for (var i = 0; i <= this.columns; i++) {
 
-          timeArray.push(new Date(new Date(this.config.startMinTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+          timeArray.push(new Date(new Date(startMinTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        }
+      } else if (!startMinTime && this.config.pageOper == 0) {
+        for (var i = 0; i <= this.columns; i++) {
+          timeArray.push(new Date(new Date(defaultTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
       } else {
         for (var i = 0; i <= this.columns; i++) {
@@ -202,7 +210,6 @@ export default {
     },
     //时间初始化显示
     xTimeInit() {
-      console.log("startMinTime----" + this.config.startMinTime)
       if (!this.page) {
         this.timeControl(this.config.startMinTime);
       } else {
@@ -341,12 +348,15 @@ export default {
           .attr("y2", y2 + 4)
           .attr("x1", x1)
           .attr("x2", x1)
-        svg.append("path")
-          .attr('d', this.drawLineArrow(x1, y1, x2, y2))
-          .attr('stroke-width', 1)
-          .attr("fill", "none")
-          .attr("stroke", "blue")
-          .attr("class", "test")
+        if (x2 - x1 > 0) {
+          svg.append("path")
+            .attr('d', this.drawLineArrow(x1, y1, x2, y2))
+            .attr('stroke-width', 1)
+            .attr("fill", "none")
+            .attr("stroke", "blue")
+            .attr("class", "test")
+        }
+
 
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
@@ -441,7 +451,6 @@ export default {
     pageChange() {
       var svg = d3.selectAll(".test")
       svg.remove();
-      console.log(this.config.initTime + '-----')
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
         this.xTimeInit();
@@ -544,8 +553,6 @@ export default {
               } else {
                 eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
               }
-
-
             } else {
 
               if (new Date(list[i].ENDDATE) >= this.config.maxTime) {
@@ -561,7 +568,8 @@ export default {
             let x2 = Math.round(eMin / lMin * (w / this.columns))
             let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            if (list[i].DURATIVE_INDICATOR == 1 && x2 > 0) {
+            debugger
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               list[i].vStartTime = '';
               this.createLine(x1, x2, y1, y2, list[i]);
               this.xArray.push({
@@ -598,11 +606,11 @@ export default {
   },
   created() {
     Bus.$on('test', this.pageChange);
-    Bus.$on('timeSetChange', this.pageChange)
+    Bus.$on('timeSetChange', this.timeControl)
 
   },
   beforeDestroy() {
-    Bus.$off('test', this.timeControl);
+    Bus.$off('test', this.pageChange);
     Bus.$off('timeSetChange', this.timeControl)
     clearTimeout(this.setTimeId);
 
