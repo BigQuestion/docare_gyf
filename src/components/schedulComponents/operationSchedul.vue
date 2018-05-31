@@ -1354,7 +1354,7 @@ export default {
             console.log(commitData)
             this.api.updateBatchMedOperationSchedule(commitData)
                 .then(res => {
-                    this.getList(this.dateValue)
+                    // this.getList(this.dateValue)
                 });
             console.log(this.hasChooseRoom)
             console.log(this.pushDataBody)
