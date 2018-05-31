@@ -734,19 +734,9 @@ export default {
                 if (this.scheduleListRight[i].state == 1) {
                     console.log(this.scheduleListRight[i])
                     commitData.push({
-                        anesthesiaDoctor: this.roomId[this.hasChooseIndex].docoptionsId,
-                        firstAnesthesiaAssistant: this.roomId[this.hasChooseIndex].docmzkUsersId,
-                        firstAssistant: this.roomId[this.hasChooseIndex].assistantId,
-                        firstOperationNurse: this.roomId[this.hasChooseIndex].docwashId,
-                        firstSupplyNurse: this.roomId[this.hasChooseIndex].doctourId,
-                        secondAnesthesiaAssistant: this.roomId[this.hasChooseIndex].docmzkUsersTwoId,
-                        secondAssistant: this.roomId[this.hasChooseIndex].assistantTwoId,
-                        secondOperationNurse: this.roomId[this.hasChooseIndex].docwashTwoId,
-                        secondSupplyNurse: this.roomId[this.hasChooseIndex].doctourTwoId,
                         patientId: this.scheduleListRight[i].patientId,
                         visitId: this.scheduleListRight[i].visitId,
                         scheduleId: this.scheduleListRight[i].scheduleId,
-                        // state: this.scheduleListRight[i].state,
                         sequence: this.scheduleListRight[i].sequence,
                         operatingRoomNo: this.scheduleListRight[i].operatingRoomNo,
                     })
