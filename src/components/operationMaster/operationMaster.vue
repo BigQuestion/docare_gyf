@@ -1232,7 +1232,7 @@ export default {
                         for (var i = 0; i < list.length; i++) {
                           if (list[i].fieldName) {
                             let obj = this.formItems[i];
-                            obj.value = result[list[i].fieldName];
+                            obj.value = result[list[i].tableName + list[i].fieldName];
                             let tempObj = JSON.parse(JSON.stringify(obj));
                             this.$set(this.formItems, i, tempObj);
                           }
@@ -1242,11 +1242,41 @@ export default {
                 });
           })
       } else if (item.formName == '手术清点单') {
+        let params = {
+          formName: item.formName,
+          id: item.id
+        }
+        let arry = [];
+        // this.formItems = [];
+        this.api.selectMedFormTemp(params)
+          .then(
+            res => {
+              if (res.formContent == "null" || res.formContent == null) {
+                return;
+              }
+              let tempItems = JSON.parse(res.formContent);
+              this.formItems = JSON.parse(res.formContent);
+            })
         this.tempButtonView = true;
         this.initComponementConfig();
       } else {
         this.tempButtonView = false;
         this.initComponementConfig();
+        let params = {
+          formName: item.formName,
+          id: item.id
+        }
+        let arry = [];
+        // this.formItems = [];
+        this.api.selectMedFormTemp(params)
+          .then(
+            res => {
+              if (res.formContent == "null" || res.formContent == null) {
+                return;
+              }
+              let tempItems = JSON.parse(res.formContent);
+              this.formItems = JSON.parse(res.formContent);
+            })
       }
     },
     //修改病人手术状态
@@ -1378,7 +1408,9 @@ export default {
         modifyValue = dataValue.value;
       }
       var tempData = this.updateFormsData;
-
+      if (modifyValue == null || modifyValue == 'null') {
+        return
+      }
       if (tempData.length > 0) {
         var count = 0;
         for (var i = 0; i < this.updateFormsData.length; i++) {
@@ -1423,6 +1455,11 @@ export default {
           this.api.updateSqlBatch(params)
             .then(res => {
               this.updateFormsData = [];
+              if (res.success) {
+                alert("保存成功")
+              } else {
+                alert("保存失败")
+              }
               // this.selectMedFormTemp(this.selectFormItemTemp);
             })
         }
@@ -1952,6 +1989,16 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
