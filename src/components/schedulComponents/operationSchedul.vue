@@ -116,20 +116,22 @@
                                 <div @click="showShadow(cell)" @dblclick="edit(cell)" v-if="cell.state == 2||cell.state == 3||cell.state == 4" class="roomData" :class="{boxshadow:cell.clickShadowData}">
                                     <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
                                         <span style="padding-right:10px;">{{cell.scheduledDateTime}}</span>
-                                        <span>{{cell.patientName}}</span>
+                                        <span style="padding-right:10px;">{{cell.patientName}}</span>
+                                        <span style="font-weight:bold;color:red;">第{{cell.sequence}}台</span>
                                     </div>
                                     <div style="color:#222;padding:2px 0;">
-                                        <span style="padding-right:10px;">{{cell.patientName}}</span>
+                                        <!-- <span style="padding-right:10px;">{{cell.patientName}}</span> -->
                                         <span style="padding-right:10px;">{{cell.patientId}}</span>
                                         <span style="padding-right:10px;">{{cell.patientSex}}</span>
                                         <span>{{cell.patienAge}}岁</span>
                                     </div>
-                                    <div style="color:#222;padding:2px 0;font-weight:bold;">
+                                    <div :title="cell.operationSchName" style="color:#222;padding:2px 0;font-weight:bold;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                                         {{cell.operationSchName}}
                                     </div>
                                     <div style="color:#222;padding:2px 0;width:100%;">
+                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.surgeonName}}</span>
                                         <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.anesthesiaDoctorName}}</span>
-                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">副麻</span>
+                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.firstAnesthesiaAssistantName}}</span>
                                     </div>
                                     <div style="padding:2px 0;font-weight:bold;">
                                         备注：
@@ -142,18 +144,20 @@
                                     <div @click="goTaoRight(cell,index)" class="rightAdd" title="台次向后排列">→</div>
                                     <div style="color:#5298EE;border-bottom:1px solid #E9E9ED;padding:2px 0;">
                                         <span style="padding-right:10px;">{{cell.scheduledDateTime}}</span>
-                                        <span>{{cell.patientName}}</span>
+                                        <span style="padding-right:10px;">{{cell.patientName}}</span>
+                                        <span style="font-weight:bold;color:red;">第{{cell.sequence}}台</span>
                                     </div>
                                     <div style="color:#222;padding:2px 0;">
-                                        <span style="padding-right:10px;">{{cell.patientName}}</span>
+                                        <!-- <span style="padding-right:10px;">{{cell.patientName}}</span> -->
                                         <span style="padding-right:10px;">{{cell.patientId}}</span>
                                         <span style="padding-right:10px;">{{cell.patientSex}}</span>
                                         <span>{{cell.patienAge}}岁</span>
                                     </div>
-                                    <div style="color:#222;padding:2px 0;font-weight:bold;">
+                                    <div :title="cell.operationSchName" style="color:#222;padding:2px 0;font-weight:bold;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                                         {{cell.operationSchName}}
                                     </div>
                                     <div style="color:#222;padding:2px 0;width:100%;">
+                                        <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.surgeonName}}</span>
                                         <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.anesthesiaDoctorName}}</span>
                                         <span style="padding:0px 6px;border-radius:5px;border:1px dashed #222;margin-right:5px;">{{cell.firstAnesthesiaAssistantName}}</span>
                                     </div>
@@ -2357,7 +2361,7 @@ export default {
     border: 2px solid #95DDB6;
     font-size: 12px;
     margin: 5px 10px;
-    min-width: 250px;
+    width: 250px;
     background-color: #fff;
     border-radius: 5px;
     padding: 0 24px 0 5px;
