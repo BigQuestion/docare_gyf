@@ -42,8 +42,8 @@
                                 </div>
                             </div>
                             <!-- <div @click="pushData()" v-if="showarrange" class="pushAuto" :style="{top:clickTop+'px',left:clickLeft+'px'}">
-                                                                                                                                                                                                                                        分配手术
-                                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                分配手术
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> -->
                         </div>
                     </div>
                     <div v-if="chooseOneType=='docoptions'" v-for="item in options" @click="joinData('docoptions',item)" class="docList rows">
@@ -93,7 +93,9 @@
                         <div class="cleanLast" @click="cleanFunOnList('anesthesiaDoctorName')">清空主麻医师</div>
                         <div class="cleanLast" @click="cleanFunOnList('firstAnesthesiaAssistantName')">清空副麻医师1</div>
                         <div class="cleanLast" @click="cleanFunOnList('secondAnesthesiaAssistantName')">清空副麻医师2</div>
-                        <div class="cleanLast" @click="cleanFunOnList('firstAssistantName')">清空洗手护士1</div>
+                        <div class="cleanLast" @click="cleanFunOnList('firstAssistantName')">清空副麻助手1</div>
+                        <div class="cleanLast" @click="cleanFunOnList('secondAssistantName')">清空副麻助手2</div>
+                        <div class="cleanLast" @click="cleanFunOnList('firstOperationNurseName')">清空洗手护士1</div>
                         <div class="cleanLast" @click="cleanFunOnList('secondOperationNurseName')">清空洗手护士2</div>
                         <div class="cleanLast" @click="cleanFunOnList('firstSupplyNurseName')">清空巡回护士1</div>
                         <div class="cleanLast" @click="cleanFunOnList('secondSupplyNurseName')">清空巡回护士2</div>
@@ -101,7 +103,7 @@
                         <!-- 清空 -->
                         <!-- <div v-if="showList" style="width:100%;height:auto;z-index:9999;">
 
-                                            </div> -->
+                                                                                                                                                                                                                                                                                                                    </div> -->
                         <!-- </div> -->
                     </div>
                 </div>
@@ -368,7 +370,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '02',
@@ -392,7 +394,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '03',
@@ -416,7 +418,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '04',
@@ -440,7 +442,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '05',
@@ -464,7 +466,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '06',
@@ -488,7 +490,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '07',
@@ -512,7 +514,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '08',
@@ -536,7 +538,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '09',
@@ -560,7 +562,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '10',
@@ -584,7 +586,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '11',
@@ -608,7 +610,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '12',
@@ -632,7 +634,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '13',
@@ -656,7 +658,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             {
                 name: '14',
@@ -680,7 +682,7 @@ export default {
                 doctourId: '',
                 doctourTwoId: '',
                 MaxLeftNum: '',
-                MaxRightNum: '',
+                MaxRightNum: 0,
             },
             ],
             hasChooseRoom: {},
@@ -708,6 +710,12 @@ export default {
             cleanTop: '',
             cleanLeft: '',
             showList: false,
+            dataR: false,
+            roomNum: [],
+            roomNumNext: [],
+            maxL: [],
+            dataNum: 0,
+            stateOfNum: false,
             onchangeData: {
                 // anesthesiaDoctorName: '',
                 // firstAnesthesiaAssistantName: '',
@@ -911,6 +919,7 @@ export default {
         },
         showShadow(cell) {
             console.log(cell)
+            console.log(this.scheduleListRight)
             for (var a = 0; a < this.scheduleListRight.length; a++) {
                 this.scheduleListRight[a].clickShadowData = false;
             }
@@ -955,6 +964,7 @@ export default {
             this.cleanData = false;
         },
         cleanFunOnList(type) {
+            let commitData = [];
             if (type == 'all') {
                 // 将手术间的值变为空
                 this.hasChooseRoom.assistant = '';
@@ -1008,6 +1018,25 @@ export default {
                         this.scheduleListRight[aa].secondSupplyNurseName = '';
                     }
                 }
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            anesthesiaDoctor: this.scheduleListRight[i].anesthesiaDoctorName,
+                            anesthesiaAssistant: this.scheduleListRight[i].firstAnesthesiaAssistantName,
+                            firstAssistant: this.scheduleListRight[i].firstAssistantName,
+                            firstOperationNurse: this.scheduleListRight[i].firstOperationNurseName,
+                            firstSupplyNurse: this.scheduleListRight[i].firstSupplyNurseName,
+                            secondAnesthesiaAssistant: this.scheduleListRight[i].secondAnesthesiaAssistantName,
+                            secondAssistant: this.scheduleListRight[i].secondAssistantName,
+                            secondOperationNurse: this.scheduleListRight[i].secondOperationNurseName,
+                            secondSupplyNurse: this.scheduleListRight[i].secondSupplyNurseName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
+                }
             } else if (type == 'anesthesiaDoctorName') {
                 this.roomId[this.hasChooseIndex].docoptionsId = '';
                 this.hasChooseRoom.docoptionsId = '';
@@ -1019,95 +1048,196 @@ export default {
                         this.scheduleListRight[aa].anesthesiaDoctorName = '';
                     }
                 }
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            anesthesiaDoctor: this.scheduleListRight[i].anesthesiaDoctorName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
+                }
             } else if (type == 'firstAnesthesiaAssistantName') {
-                this.roomId[this.hasChooseIndex].docoptionsId = '';
-                this.hasChooseRoom.docoptionsId = '';
-                this.roomId[this.hasChooseIndex].docoptions = '';
-                this.hasChooseRoom.docoptions = '';
+                this.roomId[this.hasChooseIndex].docmzkUsersId = '';
+                this.hasChooseRoom.docmzkUsersId = '';
+                this.roomId[this.hasChooseIndex].docmzkUsers = '';
+                this.hasChooseRoom.docmzkUsers = '';
 
                 for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
                     if (this.scheduleListRight[aa].state == 1 && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[aa].firstAnesthesiaAssistantName = '';
                     }
                 }
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            anesthesiaAssistant: this.scheduleListRight[i].firstAnesthesiaAssistantName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
+                }
             } else if (type == 'secondAnesthesiaAssistantName') {
-                this.roomId[this.hasChooseIndex].docoptionsId = '';
-                this.hasChooseRoom.docoptionsId = '';
-                this.roomId[this.hasChooseIndex].docoptions = '';
-                this.hasChooseRoom.docoptions = '';
+                this.roomId[this.hasChooseIndex].docmzkUsersTwoId = '';
+                this.hasChooseRoom.docmzkUsersTwoId = '';
+                this.roomId[this.hasChooseIndex].docmzkUsersTwo = '';
+                this.hasChooseRoom.docmzkUsersTwo = '';
 
                 for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
                     if (this.scheduleListRight[aa].state == 1 && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[aa].secondAnesthesiaAssistantName = '';
                     }
                 }
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            secondAnesthesiaAssistant: this.scheduleListRight[i].secondAnesthesiaAssistantName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
+                }
+
             } else if (type == 'firstAssistantName') {
-                this.roomId[this.hasChooseIndex].docoptionsId = '';
-                this.hasChooseRoom.docoptionsId = '';
-                this.roomId[this.hasChooseIndex].docoptions = '';
-                this.hasChooseRoom.docoptions = '';
+                this.roomId[this.hasChooseIndex].assistantId = '';
+                this.hasChooseRoom.assistantId = '';
+                this.roomId[this.hasChooseIndex].assistant = '';
+                this.hasChooseRoom.assistant = '';
 
                 for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
                     if (this.scheduleListRight[aa].state == 1 && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[aa].firstAssistantName = '';
                     }
                 }
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            firstAssistant: this.scheduleListRight[i].firstAssistantName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
+                }
+            } else if (type == 'secondAssistantName') {
+                this.roomId[this.hasChooseIndex].assistantTwoId = '';
+                this.hasChooseRoom.assistantTwoId = '';
+                this.roomId[this.hasChooseIndex].assistantTwo = '';
+                this.hasChooseRoom.assistantTwo = '';
+                for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
+                    if (this.scheduleListRight[aa].state == 1 && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
+                        this.scheduleListRight[aa].secondAssistantName = '';
+                    }
+                }
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            secondAssistant: this.scheduleListRight[i].secondAssistantName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
+                }
+            } else if (type == 'firstOperationNurseName') {
+                this.roomId[this.hasChooseIndex].docwashId = '';
+                this.hasChooseRoom.docwashId = '';
+                this.roomId[this.hasChooseIndex].docwash = '';
+                this.hasChooseRoom.docwash = '';
+
+                for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
+                    if (this.scheduleListRight[aa].state == 1 && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
+                        this.scheduleListRight[aa].firstOperationNurseName = '';
+                    }
+                }
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            firstOperationNurse: this.scheduleListRight[i].firstOperationNurseName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
+                }
             } else if (type == 'secondOperationNurseName') {
-                this.roomId[this.hasChooseIndex].docoptionsId = '';
-                this.hasChooseRoom.docoptionsId = '';
-                this.roomId[this.hasChooseIndex].docoptions = '';
-                this.hasChooseRoom.docoptions = '';
+                this.roomId[this.hasChooseIndex].docwashTwoId = '';
+                this.hasChooseRoom.docwashTwoId = '';
+                this.roomId[this.hasChooseIndex].docwashTwo = '';
+                this.hasChooseRoom.docwashTwo = '';
 
                 for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
                     if (this.scheduleListRight[aa].state == 1 && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[aa].secondOperationNurseName = '';
                     }
                 }
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            secondOperationNurse: this.scheduleListRight[i].secondOperationNurseName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
+                }
             } else if (type == 'firstSupplyNurseName') {
-                this.roomId[this.hasChooseIndex].docoptionsId = '';
-                this.hasChooseRoom.docoptionsId = '';
-                this.roomId[this.hasChooseIndex].docoptions = '';
-                this.hasChooseRoom.docoptions = '';
+                this.roomId[this.hasChooseIndex].doctourId = '';
+                this.hasChooseRoom.doctourId = '';
+                this.roomId[this.hasChooseIndex].doctour = '';
+                this.hasChooseRoom.doctour = '';
 
                 for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
                     if (this.scheduleListRight[aa].state == 1 && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[aa].firstSupplyNurseName = '';
                     }
                 }
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            firstSupplyNurse: this.scheduleListRight[i].firstSupplyNurseName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
+                }
             } else if (type == 'secondSupplyNurseName') {
-                this.roomId[this.hasChooseIndex].docoptionsId = '';
-                this.hasChooseRoom.docoptionsId = '';
-                this.roomId[this.hasChooseIndex].docoptions = '';
-                this.hasChooseRoom.docoptions = '';
+                this.roomId[this.hasChooseIndex].doctourTwoId = '';
+                this.hasChooseRoom.doctourTwoId = '';
+                this.roomId[this.hasChooseIndex].doctour = '';
+                this.hasChooseRoom.doctour = '';
 
                 for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
                     if (this.scheduleListRight[aa].state == 1 && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[aa].secondSupplyNurseName = '';
                     }
                 }
-            }
-            let commitData = [];
-            console.log(this.scheduleListRight)
-            for (var i = 0; i < this.scheduleListRight.length; i++) {
-                if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
-                    console.log(this.scheduleListRight[i])
-                    commitData.push({
-                        anesthesiaDoctor: this.scheduleListRight[i].anesthesiaDoctorName,
-                        anesthesiaAssistant: this.scheduleListRight[i].firstAnesthesiaAssistantName,
-                        firstAssistant: this.scheduleListRight[i].firstAssistantName,
-                        firstOperationNurse: this.scheduleListRight[i].firstOperationNurseName,
-                        firstSupplyNurse: this.scheduleListRight[i].firstSupplyNurseName,
-                        secondAnesthesiaAssistant: this.scheduleListRight[i].secondAnesthesiaAssistantName,
-                        secondAssistant: this.scheduleListRight[i].secondAssistantName,
-                        secondOperationNurse: this.scheduleListRight[i].secondOperationNurseName,
-                        secondSupplyNurse: this.scheduleListRight[i].secondSupplyNurseName,
-                        patientId: this.scheduleListRight[i].patientId,
-                        visitId: this.scheduleListRight[i].visitId,
-                        scheduleId: this.scheduleListRight[i].scheduleId,
-                        state: this.scheduleListRight[i].state,
-                    })
+                for (var i = 0; i < this.scheduleListRight.length; i++) {
+                    if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
+                        commitData.push({
+                            secondSupplyNurse: this.scheduleListRight[i].secondSupplyNurseName,
+                            patientId: this.scheduleListRight[i].patientId,
+                            visitId: this.scheduleListRight[i].visitId,
+                            scheduleId: this.scheduleListRight[i].scheduleId,
+                            state: this.scheduleListRight[i].state,
+                        })
+                    }
                 }
             }
+
+
             console.log(commitData)
             this.api.updateBatchMedOperationSchedule(commitData)
                 .then(res => {
@@ -1117,7 +1247,10 @@ export default {
 
         },
         chooseClassFun(item, index) {
-            console.log(this.roomId.length)
+            this.maxL = [];
+            this.roomNum = [];
+            this.stateOfNum = false;
+            console.log(item)
             for (var i = 0; i < this.roomId.length; i++) {
                 this.$set(this.roomId[i], 'chooseClass', false)
             }
@@ -1126,7 +1259,44 @@ export default {
             console.log(this.hasChooseRoom)
             this.hasChooseIndex = index;
             console.log(index)
-            this.sequenceFun();
+            // this.sequenceFun();
+            console.log(this.roomNum)
+            for (var a = 0; a < this.scheduleListRight.length; a++) {
+                if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
+                    this.roomNum.push(this.scheduleListRight[a].sequence);
+                }
+            }
+            // debugger
+            for (var d = 0; d < this.roomId.length; d++) {
+                if (this.roomId[d].name == this.hasChooseRoom.name && this.roomNum != '') {
+                    this.roomId[d].MaxRightNum = Math.max.apply(Math, this.roomNum);
+                    this.hasChooseRoom.MaxRightNum = Math.max.apply(Math, this.roomNum);
+                } else {
+                    this.roomId[d].MaxRightNum = 0;
+                }
+            }
+            for (var b = 0; b < this.scheduleListRight.length; b++) {
+                if (this.scheduleListRight[b].operatingRoomNo == this.hasChooseRoom.name && (this.scheduleListRight[b].state == 2 || this.scheduleListRight[b].state == 3 || this.scheduleListRight[b].state == 4)) {
+                    this.maxL.push(this.scheduleListRight[b].sequence);
+                } else {
+
+                }
+            }
+            console.log(this.maxL)
+            for (var c = 0; c < this.roomId.length; c++) {
+                if (this.roomId[c].name == this.hasChooseRoom.name && this.maxL.length > 0) {
+                    this.roomId[c].MaxLeftNum = Math.max.apply(Math, this.maxL);
+                    this.hasChooseRoom.MaxLeftNum = Math.max.apply(Math, this.maxL);
+                } else {
+                    // if (this.roomId[c].name == this.hasChooseRoom.name && this.maxL == []) {
+                    this.roomId[c].MaxLeftNum = 0;
+                    // this.hasChooseRoom.MaxLeftNum = 0;
+                    // }
+
+                }
+            }
+            console.log(this.roomId)
+            console.log(this.hasChooseRoom)
         },
         joinData(type, item) {
             console.log(item)
@@ -1143,7 +1313,7 @@ export default {
                     this.pushDataBody.anesthesiaDoctorName = item.userName;
                 }
                 for (var aa = 0; aa < this.scheduleListRight.length; aa++) {
-                    if ((this.scheduleListRight[aa].state == 0 || this.scheduleListRight[aa].state == 1) && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
+                    if (this.scheduleListRight[aa].state == 1 && this.scheduleListRight[aa].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[aa].anesthesiaDoctorName = item.userName;
                         this.scheduleListRight[aa].anesthesiaDoctorNameId = item.userId;
                     }
@@ -1154,7 +1324,7 @@ export default {
                 this.roomId[this.hasChooseIndex].docmzkUsers = item.userName;
                 this.hasChooseRoom.docmzkUsers = item.userName;
                 if (this.pushDataBody == '') {
-                    ``
+
                 } else {
                     this.pushDataBody.firstAnesthesiaAssistantName = item.userName;
                 }
@@ -1164,7 +1334,7 @@ export default {
                 //   }
                 // }
                 for (var bb = 0; bb < this.scheduleListRight.length; bb++) {
-                    if ((this.scheduleListRight[bb].state == 0 || this.scheduleListRight[bb].state == 1) && this.scheduleListRight[bb].operatingRoomNo == this.hasChooseRoom.name) {
+                    if (this.scheduleListRight[bb].state == 1 && this.scheduleListRight[bb].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[bb].firstAnesthesiaAssistantName = item.userName;
                         this.scheduleListRight[bb].firstAnesthesiaAssistantNameId = item.userId;
                     }
@@ -1185,7 +1355,7 @@ export default {
                 //   }
                 // }
                 for (var bb = 0; bb < this.scheduleListRight.length; bb++) {
-                    if ((this.scheduleListRight[bb].state == 0 || this.scheduleListRight[bb].state == 1) && this.scheduleListRight[bb].operatingRoomNo == this.hasChooseRoom.name) {
+                    if (this.scheduleListRight[bb].state == 1 && this.scheduleListRight[bb].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[bb].secondAnesthesiaAssistantName = item.userName;
                         this.scheduleListRight[bb].secondAnesthesiaAssistantNameId = item.userId;
                     }
@@ -1206,7 +1376,7 @@ export default {
                 //   }
                 // }
                 for (var cc = 0; cc < this.scheduleListRight.length; cc++) {
-                    if ((this.scheduleListRight[cc].state == 0 || this.scheduleListRight[cc].state == 1) && this.scheduleListRight[cc].operatingRoomNo == this.hasChooseRoom.name) {
+                    if (this.scheduleListRight[cc].state == 1 && this.scheduleListRight[cc].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[cc].firstAssistantName = item.userName;
                         this.scheduleListRight[cc].firstAssistantNameId = item.userId;
                     }
@@ -1227,7 +1397,7 @@ export default {
                 //   }
                 // }
                 for (var cc = 0; cc < this.scheduleListRight.length; cc++) {
-                    if ((this.scheduleListRight[cc].state == 0 || this.scheduleListRight[cc].state == 1) && this.scheduleListRight[cc].operatingRoomNo == this.hasChooseRoom.name) {
+                    if (this.scheduleListRight[cc].state == 1 && this.scheduleListRight[cc].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[cc].secondAssistantName = item.userName;
                         this.scheduleListRight[cc].secondAssistantNameId = item.userId;
                     }
@@ -1248,7 +1418,7 @@ export default {
                 //   }
                 // }
                 for (var dd = 0; dd < this.scheduleListRight.length; dd++) {
-                    if ((this.scheduleListRight[dd].state == 0 || this.scheduleListRight[dd].state == 1) && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
+                    if (this.scheduleListRight[dd].state == 1 && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[dd].firstOperationNurseName = item.userName;
                         this.scheduleListRight[dd].firstOperationNurseNameId = item.userId;
                     }
@@ -1269,7 +1439,7 @@ export default {
                 //   }
                 // }
                 for (var dd = 0; dd < this.scheduleListRight.length; dd++) {
-                    if ((this.scheduleListRight[dd].state == 0 || this.scheduleListRight[dd].state == 1) && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
+                    if (this.scheduleListRight[dd].state == 1 && this.scheduleListRight[dd].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[dd].secondOperationNurseName = item.userName;
                         this.scheduleListRight[dd].secondOperationNurseNameId = item.userId;
                     }
@@ -1290,7 +1460,7 @@ export default {
                 //   }
                 // }
                 for (var ee = 0; ee < this.scheduleListRight.length; ee++) {
-                    if ((this.scheduleListRight[ee].state == 0 || this.scheduleListRight[ee].state == 1) && this.scheduleListRight[ee].operatingRoomNo == this.hasChooseRoom.name) {
+                    if (this.scheduleListRight[ee].state == 1 && this.scheduleListRight[ee].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[ee].firstSupplyNurseName = item.userName;
                         this.scheduleListRight[ee].firstSupplyNurseNameId = item.userId;
                     }
@@ -1311,7 +1481,7 @@ export default {
                 //   }
                 // }
                 for (var ee = 0; ee < this.scheduleListRight.length; ee++) {
-                    if ((this.scheduleListRight[ee].state == 0 || this.scheduleListRight[ee].state == 1) && this.scheduleListRight[ee].operatingRoomNo == this.hasChooseRoom.name) {
+                    if (this.scheduleListRight[ee].state == 1 && this.scheduleListRight[ee].operatingRoomNo == this.hasChooseRoom.name) {
                         this.scheduleListRight[ee].secondSupplyNurseName = item.userName;
                         this.scheduleListRight[ee].secondSupplyNurseNameId = item.userId;
                     }
@@ -1353,6 +1523,8 @@ export default {
         getList(date) {
             this.scheduleList = [];
             this.scheduleListRight = [];
+            this.roomNum = [];
+            this.maxL = [];
             var changeData = date.replace(/-/g, '/')
             let params = {
                 "dateTime": changeData, //"2014/07/08"查询日期
@@ -1368,10 +1540,10 @@ export default {
                             this.scheduleList.push(res.list[j])
                         }
                     }
-                    console.log(this.scheduleList.length)
+                    // console.log(this.scheduleList.length)
                     this.listChooseBody[0].dataLength = this.scheduleList.length;
                     this.chooseData = '手术(' + this.scheduleList.length + ')';
-                    console.log(res.list)
+                    // console.log(res.list)
                     for (var a = 0; a < res.list.length; a++) {
                         if (res.list[a].state == 1 || res.list[a].state == 2 || res.list[a].state == 3 || res.list[a].state == 4) {
                             this.$set(res.list[a], 'clickShadowData', false)
@@ -1380,8 +1552,45 @@ export default {
                         }
                     }
                     this.scheduleListRight.sort(this.sortNumber);
+                    console.log(this.scheduleListRight)
                     this.scheduleListRight2.sort(this.sortNumber);
-                    this.sequenceFun();
+                    // this.sequenceFun();
+                    // debugger
+                    for (var a = 0; a < this.scheduleListRight.length; a++) {
+                        if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
+                            this.roomNum.push(this.scheduleListRight[a].sequence)
+                        }
+                    }
+                    for (var d = 0; d < this.roomId.length; d++) {
+                        if (this.roomId[d].name == this.hasChooseRoom.name && this.roomNum != '') {
+                            this.roomId[d].MaxRightNum = Math.max.apply(Math, this.roomNum);
+                            this.hasChooseRoom.MaxRightNum = Math.max.apply(Math, this.roomNum);
+                        } else {
+                            this.roomId[d].MaxRightNum = 0;
+                        }
+                    }
+                    for (var b = 0; b < this.scheduleListRight.length; b++) {
+                        if (this.scheduleListRight[b].operatingRoomNo == this.hasChooseRoom.name && (this.scheduleListRight[b].state == 2 || this.scheduleListRight[b].state == 3 || this.scheduleListRight[b].state == 4)) {
+                            this.maxL.push(this.scheduleListRight[b].sequence);
+                        } else {
+
+                        }
+                    }
+                    for (var c = 0; c < this.roomId.length; c++) {
+                        if (this.roomId[c].name == this.hasChooseRoom.name && this.maxL != []) {
+                            this.roomId[c].MaxLeftNum = Math.max.apply(Math, this.maxL);
+                            this.hasChooseRoom.MaxLeftNum = Math.max.apply(Math, this.maxL);
+                        } else {
+                            if (this.roomId[c].name == this.hasChooseRoom.name && this.maxL == []) {
+                                this.roomId[c].MaxLeftNum = 0;
+                                this.hasChooseRoom.MaxLeftNum = 0;
+                            }
+
+                        }
+                    }
+                    console.log(this.roomId)
+                    console.log(this.hasChooseRoom)
+
                 });
         },
         getSupplyNurseList() {
@@ -1473,7 +1682,7 @@ export default {
         pushData() {
             console.log(this.pushDataBody)
             console.log(this.hasChooseRoom)
-            debugger
+            this.roomNum = [];
             // 手术间赋值
             this.pushDataBody.operatingRoomNo = this.hasChooseRoom.name;
             // 主麻医生赋值
@@ -1495,9 +1704,53 @@ export default {
             // 巡回护士2赋值
             this.pushDataBody.secondSupplyNurseName = this.hasChooseRoom.doctourTwo;
             this.pushDataBody.state = 1;
+            // for (var a = 0; a < this.scheduleListRight.length; a++) {
+            //     if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
+            //         this.dataR = true;
+            //         this.roomNum.push(this.scheduleListRight[a].sequence)
+            //     }
+            // }
+            // debugger
+
+            for (var a = 0; a < this.scheduleListRight.length; a++) {
+                if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name && (this.scheduleListRight[a].state == 2 || this.scheduleListRight[a].state == 3 || this.scheduleListRight[a].state == 4)) {
+                    // this.dataR = true;
+                    this.stateOfNum = true;
+                    this.roomNumNext.push(this.scheduleListRight[a].sequence);
+                }
+            }
+            for (var a = 0; a < this.scheduleListRight.length; a++) {
+                if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
+                    // this.dataR = true;
+                    this.stateOfNum = true;
+                    this.roomNum.push(this.scheduleListRight[a].sequence);
+                }
+            }
+            for (var d = 0; d < this.roomId.length; d++) {
+                if (this.roomId[d].name == this.hasChooseRoom.name && this.roomNumNext > 0) {
+                    this.stateOfNum = true;
+                    this.roomId[d].MaxLeftNum = Math.max.apply(Math, this.roomNumNext);
+                    this.hasChooseRoom.MaxLeftNum = Math.max.apply(Math, this.roomNumNext);
+                } else {
+                    this.roomId[d].MaxRightNum = 0;
+                    this.roomId[d].MaxLeftNum = 0;
+                    if (this.roomId[d].name == this.hasChooseRoom.name && this.roomNumNext.length == 0) {
+                        this.stateOfNum == false;
+                        this.hasChooseRoom.MaxLeftNum = 0;
+                    }
+                }
+            }
+
+            if (this.stateOfNum == false) {
+                this.pushDataBody.sequence = this.dataNum + 1;
+            } else {
+                this.pushDataBody.sequence = Math.max.apply(Math, this.roomNum) + 1
+            }
             // 自动添加台次
-            this.scheduleListRight.push(this.pushDataBody)
-            this.sequenceFun();
+            // this.scheduleListRight2.push(this.pushDataBody)
+            this.scheduleListRight.push(this.pushDataBody);
+            // this.sequenceFun();
+
             let subMitData = {
                 // 手术间赋值
                 operatingRoomNo: this.hasChooseRoom.name,
@@ -1530,67 +1783,75 @@ export default {
             this.scheduleList.splice(this.spliceIndex, 1);
             this.api.editSchedule(subMitData)
                 .then(res => {
-                    // this.getList(this.dateValue)
-                    // this.sequenceFun();
-                    for (var c = 0; c < this.roomId.length; c++) {
-                        if (this.roomId[c].name == this.hasChooseRoom.name) {
-                            this.roomId[c].MaxLeftNum = this.roomId[c].MaxLeftNum + 1;
+                    for (var a = 0; a < this.scheduleListRight.length; a++) {
+                        if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
+                            // this.dataR = true;
+                            this.roomNum.push(this.scheduleListRight[a].sequence);
                         }
                     }
+                    for (var d = 0; d < this.roomId.length; d++) {
+                        if (this.roomId[d].name == this.hasChooseRoom.name && this.roomNum.length > 0) {
+                            this.roomId[d].MaxRightNum = Math.max.apply(Math, this.roomNum);
+                            this.hasChooseRoom.MaxRightNum = Math.max.apply(Math, this.roomNum);
+                        } else {
+                            this.roomId[d].MaxRightNum = 0;
+                            this.roomId[d].MaxLeftNum = 0;
+                            if (this.roomId[d].name == this.hasChooseRoom.name && this.roomNum.length == 0) {
+                                this.stateOfNum == false;
+                                this.hasChooseRoom.MaxRightNum = 0;
+                            }
+                        }
+                    }
+                    // this.getList(this.dateValue)
+                    // this.sequenceFun();
+                    // for (var c = 0; c < this.roomId.length; c++) {
+                    //     if (this.roomId[c].name == this.hasChooseRoom.name) {
+                    //         this.roomId[c].MaxLeftNum = this.roomId[c].MaxLeftNum + 1;
+                    //     }
+                    // }
                 });
 
             this.chooseData = '手术(' + this.scheduleList.length + ')';
             this.listChooseBody[0].dataLength = this.scheduleList.length;
         },
         sequenceFun() {
-            let roomNum = [];
-            var dataNum = 0;
-            var dataR = false;
+            console.log(this.pushDataBody)
+            // debugger
             console.log(this.scheduleListRight)
             console.log(this.scheduleListRight.length)
-
-            for (var a = 0; a < this.scheduleListRight.length; a++) {
-                if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
-                    dataR = true;
-                    roomNum.push(this.scheduleListRight[a].sequence)
-                }
-            }
-            console.log(this.scheduleListRight2)
-            console.log(this.hasChooseRoom)
+            this.maxL = [];
+            // for (var a = 0; a < this.scheduleListRight.length; a++) {
+            //     if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
+            //         // this.dataR = true;
+            //         this.stateOfNum == true
+            //         this.roomNum.push(this.scheduleListRight[a].sequence)
+            //     }
+            // }
+            // console.log(this.roomNum)
+            console.log('aaaaa')
             for (var b = 0; b < this.scheduleListRight.length; b++) {
                 if (this.scheduleListRight[b].operatingRoomNo == this.hasChooseRoom.name && (this.scheduleListRight[b].state == 2 || this.scheduleListRight[b].state == 3 || this.scheduleListRight[b].state == 4)) {
-                    dataR = true;
-                    for (var c = 0; c < this.roomId.length; c++) {
-                        if (this.roomId[c].name == this.hasChooseRoom.name) {
-                            this.roomId[c].MaxLeftNum = this.scheduleListRight[b].sequence
-                        }
-                    }
+                    // this.dataR = true;
+                    this.stateOfNum == true
+                    this.maxL.push(this.scheduleListRight[b].sequence);
                 } else {
-                    for (var c = 0; c < this.roomId.length; c++) {
-                        this.roomId[c].MaxLeftNum = 0
-                    }
-                }
-            }
-            console.log(this.roomId)
-            for (var d = 0; d < this.roomId.length; d++) {
-                if (this.roomId[d].name == this.hasChooseRoom.name) {
-                    this.roomId[d].MaxRightNum = Math.max.apply(Math, roomNum);
-                }else{
-                    
-                }
-            }
-            if (dataR == true && this.pushDataBody != '') {
-                this.pushDataBody.sequence = Math.max.apply(Math, roomNum) + 1
-            } else {
-                if (this.pushDataBody != '') {
-                    this.pushDataBody.sequence = dataNum + 1
-                } else {
+                    this.stateOfNum == false;
 
+                }
+            }
+            for (var c = 0; c < this.roomId.length; c++) {
+                if (this.roomId[c].name == this.hasChooseRoom.name && this.maxL != []) {
+                    this.roomId[c].MaxLeftNum = Math.max.apply(Math, this.maxL);
+                    this.hasChooseRoom.MaxLeftNum = Math.max.apply(Math, this.maxL);
+                } else {
+                    this.roomId[c].MaxLeftNum = 0;
+                    this.hasChooseRoom.MaxLeftNum = 0;
                 }
             }
         },
         goBackFun(cell, index) {
             console.log(cell)
+            this.roomNum = [];
             for (var b = index; b < this.scheduleListRight.length; b++) {
                 if (cell.operatingRoomNo == this.scheduleListRight[b].operatingRoomNo && cell.sequence < this.scheduleListRight[b].sequence) {
                     this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence - 1;
@@ -1612,7 +1873,14 @@ export default {
                     // this.getList(this.dateValue)
                     for (var c = 0; c < this.roomId.length; c++) {
                         if (this.roomId[c].name == this.hasChooseRoom.name) {
-                            this.roomId[c].MaxRightNum = this.roomId[c].MaxRightNum - 1;
+                            for (var g = index; g < this.scheduleListRight.length; g++) {
+                                if (this.scheduleListRight[g].operatingRoomNo == this.roomId[c].name) {
+                                    this.roomId[c].MaxRightNum = this.roomId[c].MaxRightNum - 1;
+                                } else {
+                                    this.roomId[c].MaxRightNum = 0;
+                                }
+                            }
+
                         }
                     }
                 });
@@ -1620,18 +1888,27 @@ export default {
             this.listChooseBody[0].dataLength = this.scheduleList.length;
         },
         goTaoLeft(cell, index) {
+            // debugger
             let submit = [];
             var mNum = '';
-            // console.log(cell.sequence)
-            // console.log(this.MaxLeftNum)
+            // var IfData = '';
+            console.log(this.roomId)
+            console.log(this.hasChooseRoom)
+
             for (var c = 0; c < this.roomId.length; c++) {
                 if (this.roomId[c].name == this.hasChooseRoom.name) {
-                    mNum = this.roomId[c].MaxLeftNum
+                    mNum = this.hasChooseRoom.MaxLeftNum;
                 }
             }
+            // if (mNum >= 1) {
+            //     IfData = false;
+            // } else {
+            //     IfData = true;
+            // }
+
             if (cell.operatingRoomNo == this.hasChooseRoom.name) {
-                if (cell.sequence == mNum + 1) {
-                    console.log(mNum + 1)
+                if (cell.sequence == this.hasChooseRoom.MaxLeftNum + 1) {
+                    console.log(this.hasChooseRoom.MaxLeftNum)
                     alert('已经是第一台手术了。')
                 } else {
                     for (var b = 0; b < this.scheduleListRight.length; b++) {
@@ -1661,6 +1938,8 @@ export default {
                     console.log(submit)
                     this.api.updateBatchMedOperationSchedule(submit)
                 }
+
+
             } else {
                 alert('请选择对应手术间！')
             }
@@ -1676,12 +1955,13 @@ export default {
             // console.log(cell.sequence)
             // console.log(this.pushDataBody)
             // console.log("最后" + this.MaxRightNum)
-            debugger
+            // debugger
             for (var c = 0; c < this.roomId.length; c++) {
                 if (this.roomId[c].name == this.hasChooseRoom.name) {
-                    mNum = this.roomId[c].MaxRightNum
+                    mNum = this.hasChooseRoom.MaxRightNum;
                 }
             }
+
             console.log(mNum)
             if (cell.operatingRoomNo == this.hasChooseRoom.name) {
                 if (cell.sequence == mNum) {
@@ -2081,6 +2361,7 @@ export default {
     background-color: #fff;
     border-radius: 5px;
     padding: 0 24px 0 5px;
+    height: 99px;
 }
 
 .boxshadow {
