@@ -22,7 +22,7 @@
           </g>
         </svg>
         <div v-if="tipView">
-          <div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 15" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
+          <div style="position: absolute;max-width:300px;min-width:220px;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 15" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
             <div>
               {{lineObj.ITEM_NAME}}({{lineObj.DOSAGE_UNITS}})
             </div>
@@ -419,10 +419,10 @@ export default {
     },
     showTipInfo(item, ev) {
       this.tipView = true;
-      this.tipLeft = ev.offsetX;
+      this.tipLeft = ev.offsetX + item.x1;
       this.tipTop = item.y2 + 10;
       if (item.obj.ENDDATE == null || item.obj.ENDDATE == "") {
-        item.obj.ENDDATE = (item.obj.MAX_TIME);
+        item.obj.ENDDATE = (this.config.patientMaxTime);
       }
       this.lineObj = item.obj;
     },
@@ -465,7 +465,7 @@ export default {
         list = this.percentPageData;
 
         for (var i = 0; i < list.length; i++) {
-          if (this.config.pagePercentNum != 1 && list[i].MAX_TIME) {
+          if (this.config.pagePercentNum != 1 && this.config.patientMaxTime) {
             list[i].vStartTime = new Date(m).Format("yyyy-MM-dd hh:mm:ss");
           }
         }
@@ -479,22 +479,22 @@ export default {
         var arrayList = [];
         var list = this.dataArray;
         for (var i = 0; i < list.length; i++) {
-          if (list[i].MAX_TIME) {
-            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+          // if (list[i].MAX_TIME) {
+          if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
-              if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
-                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {}
+            if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
+              list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
+              arrayList.push(list[i]);
+            } else {}
+          } else {
+            if (new Date(list[i].ENDDATE) > this.config.maxTime) {
+              list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
+              arrayList.push(list[i]);
             } else {
-              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
-                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {
 
-              }
             }
           }
+          // }
         }
         this.timeControl(this.config.maxTime)
         this.dataOperChange(arrayList);
@@ -540,10 +540,10 @@ export default {
               // } } else {   eMin =
               // this.getMinuteDif(this.config.userInfo.inDateTime,
               // list[i].MAX_TIME); }
-              if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
+              if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
                 eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
               } else {
-                eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
+                eMin = this.getMinuteDif(this.config.initTime, new Date(this.config.patientMaxTime));
               }
             } else {
 

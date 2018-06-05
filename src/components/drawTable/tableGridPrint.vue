@@ -78,8 +78,12 @@ export default {
       var timeDate = new Date(startTime);
       var toMin = timeDate.getTime() + 1000 * 60 * m;
       var timeArray = [];
-      for (var i = 0; i < this.columns; i++) {
-        timeArray.push(new Date(timeDate.getTime() + 1000 * 60 * m * i).Format("hh:mm"))
+      // for (var i = 0; i < this.columns; i++) {
+      //   timeArray.push(new Date(timeDate.getTime() + 1000 * 60 * m * i).Format("hh:mm"))
+      // }
+      for (var i = 0; i <= this.columns; i++) {
+
+        timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
       }
       this.xTimeArray = timeArray;
 
@@ -128,67 +132,6 @@ export default {
           var list = res.list;
           this.dataOperChange(list);
           return false;
-          for (var i = 0; i < list.length; i++) {
-            this.maxTime = list[i].MAX_TIME;
-            if (list[i].START_TIME) {
-              if (i == this.rows)
-                break;
-              else {
-
-                //开始时间间隔
-                let sMin = ''
-                //结束时间间隔
-                let eMin = ''
-                if (list[i].vStartTime) {
-                  sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
-                } else {
-                  sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-                }
-
-                //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
-                if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-                  if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
-                    eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
-                  } else {
-                    eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
-                  }
-
-
-                } else {
-
-                  if (new Date(list[i].ENDDATE) >= this.config.maxTime) {
-                    eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
-                  } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
-                    eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
-                  } else {
-                    list[i].DURATIVE_INDICATOR = 0;
-                    eMin = 0;
-                  }
-                }
-                let x1 = Math.round(sMin / lMin * (w / this.columns))
-                let x2 = Math.round(eMin / lMin * (w / this.columns))
-                let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-                let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-                if (list[i].DURATIVE_INDICATOR == 1) {
-                  this.xArray.push({
-                    x1: x1,
-                    y1: y1,
-                    x2: x2,
-                    y2: y2,
-                    w: x2 - x1,
-                    obj: list[i]
-                  })
-                  this.dataArray.push(list[i]);
-                  this.createLine(x1, x2, y1, y2, list[i]);
-                  m++;
-                }
-              }
-            }
-          }
-          for (var k = 0; k < this.rows - m; k++) {
-            this.dataArray.push(m)
-          }
-
         });
     },
     //计算时间差分钟
@@ -339,13 +282,14 @@ export default {
         for (var i = 0; i < list.length; i++) {
           if (list[i].MAX_TIME) {
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-              if (new Date(list[i].MAX_TIME) > this.config.initTime) {
-                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+
+              if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
+                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
                 arrayList.push(list[i]);
               } else {}
             } else {
-              if (new Date(list[i].ENDDATE) > this.config.initTime) {
-                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
+                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
                 arrayList.push(list[i]);
               } else {
 
@@ -382,19 +326,20 @@ export default {
             }
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-              if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
+              if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
                 eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
               } else {
-                eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
+                eMin = this.getMinuteDif(this.config.initTime, new Date(this.config.patientMaxTime));
               }
-
-
             } else {
 
-              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
+              if (new Date(list[i].ENDDATE) >= this.config.maxTime) {
                 eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
-              } else {
+              } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
                 eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
+              } else {
+                list[i].DURATIVE_INDICATOR = 0;
+                eMin = 0;
               }
             }
             let x1 = Math.round(sMin / lMin * (w / this.columns))

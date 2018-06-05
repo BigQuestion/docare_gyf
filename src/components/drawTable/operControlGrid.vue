@@ -34,7 +34,7 @@
         </g>
       </svg>
       <div v-if="tipView">
-        <div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10;padding: 0 2px;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
+        <div style="position: absolute;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 10;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
           <div>
             {{mouseItem.itemData.itemName}}
           </div>

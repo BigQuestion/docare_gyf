@@ -289,22 +289,22 @@ export default {
         var arrayList = [];
         var list = this.dataArray;
         for (var i = 0; i < list.length; i++) {
-          if (list[i].MAX_TIME) {
-            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+          // if (list[i].MAX_TIME) {
+          if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
-              if (new Date(list[i].MAX_TIME) > this.config.initTime) {
-                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {}
+            if (new Date(this.config.patientMaxTime) > this.config.initTime) {
+              list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+              arrayList.push(list[i]);
+            } else {}
+          } else {
+            if (new Date(list[i].ENDDATE) > this.config.initTime) {
+              list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+              arrayList.push(list[i]);
             } else {
-              if (new Date(list[i].ENDDATE) > this.config.initTime) {
-                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {
 
-              }
             }
           }
+          // }
         }
 
         this.dataListOperFun(arrayList);

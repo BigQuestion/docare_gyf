@@ -25,7 +25,7 @@
               <span style="font-size:18px;">入手术室</span>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="inRoomDateTime" @blur="changeStatus('5',$event)">
+              <input style="width:165px;" type="datetime-local" v-model="inRoomDateTime" @blur="changeStatus('5',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="inRoomDateTime">
@@ -1153,6 +1153,7 @@ export default {
       this.selectFormItemTemp = item;
 
       if (item.formName == '麻醉记录单') {
+        this.getMaxTime();
         let inDateTime = this.config.userInfo.inDateTime
         this.tempButtonView = false;
         //查找病人的最晚时间
@@ -1307,6 +1308,7 @@ export default {
           res => {
             if (res.success == true) {
               this.searchPatientList();
+              this.timeChangeBus();
               this.lockedPatientInfo.operStatus = status;
             }
           });
@@ -1656,6 +1658,7 @@ export default {
               this.config.maxTime = new Date(new Date(this.config.maxTime).getTime() + (time1 - time2));
             }
           }
+          this.getMaxTime();
           this.$nextTick(function() {
             Bus.$emit('timeSetChange');
           })
@@ -1674,9 +1677,18 @@ export default {
       this.api.selectMaxTime(timeParam)
         .then(res => {
           if (res.TIME) {
-            this.config.patientMaxTime = res.TIME
+
+            if (this.config.userInfo.outDateTime) {
+              if (new Date(this.config.userInfo.outDateTime) > new Date(res.TIME)) {
+                this.config.patientMaxTime = this.config.userInfo.outDateTime;
+              } else {
+                this.config.patientMaxTime = res.TIME
+              }
+            } else {
+              this.config.patientMaxTime = res.TIME
+            }
           }
-          this.setTimeId = setTimeout(_ => this.getMaxTime(), this.config.timeSet)
+          this.setTimeId = setTimeout(_ => this.getMaxTime(), 6000)
         })
     },
 
@@ -1989,6 +2001,14 @@ export default {
   background: url('../../assets/contentTitleBack.jpg')no-repeat;
   background-size: cover;
 }
+
+
+
+
+
+
+
+
 
 
 
