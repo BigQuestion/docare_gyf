@@ -11,7 +11,7 @@
     <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
     </div>
     <div style="height: 100px;width: 140px; position: absolute;top: 0px;left: -140px;">
-      <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;padding-left: 5px;" :style="{height:svgHeight/rows-1+'px'}">{{item.ITEM_NAME}}</div>
+      <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;padding-left: 5px;white-space:nowrap;word-break: keep-all;" :style="{height:svgHeight/rows-1+'px'}">{{item.ITEM_NAME}}</div>
     </div>
     <div style="width: 25px; position: absolute;top: 0px;left: -165px;border-right: 1px solid #8391a2;border-bottom: 1px solid #8391a2;    display: flex;align-items: center;" :style="{height:forRows*(svgHeight/rows)-1+'px'}">
       输液
@@ -289,22 +289,22 @@ export default {
         var arrayList = [];
         var list = this.dataArray;
         for (var i = 0; i < list.length; i++) {
-          // if (list[i].MAX_TIME) {
-          if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+          if (list[i].PATIENT_ID) {
+            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
-            if (new Date(this.config.patientMaxTime) > this.config.initTime) {
-              list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-              arrayList.push(list[i]);
-            } else {}
-          } else {
-            if (new Date(list[i].ENDDATE) > this.config.initTime) {
-              list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-              arrayList.push(list[i]);
+              if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
+                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {}
             } else {
+              if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
+                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {
 
+              }
             }
           }
-          // }
         }
 
         this.dataListOperFun(arrayList);

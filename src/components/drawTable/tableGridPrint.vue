@@ -7,7 +7,7 @@
         <div v-else style="width: 9pt;display: inline-block;"></div>
       </div>
       <div>
-        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 10pt;line-height: 14*0.75pt;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 9pt;position: absolute;left: -165px;"> {{item.ITEM_NAME}}
+        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 10pt;line-height: 14*0.75pt;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 9pt;position: absolute;left: -165px;white-space:nowrap;word-break: keep-all;"> {{item.ITEM_NAME}}
         </div>
       </div>
       <div id="tableGrid" style="position: relative;">
@@ -280,16 +280,15 @@ export default {
         var arrayList = [];
         var list = this.dataArray;
         for (var i = 0; i < list.length; i++) {
-          if (list[i].MAX_TIME) {
+          if (list[i].PATIENT_ID) {
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-
-              if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
-                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
+              if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
+                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
                 arrayList.push(list[i]);
               } else {}
             } else {
-              if (new Date(list[i].ENDDATE) > this.config.maxTime) {
-                list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
+              if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
+                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
                 arrayList.push(list[i]);
               } else {
 

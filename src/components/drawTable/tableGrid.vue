@@ -7,7 +7,7 @@
         <div v-else style="width: 12px;display: inline-block;"></div>
       </div>
       <div>
-        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 14px;line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;padding-left: 5px;"> {{item.ITEM_NAME}}
+        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 14px;line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;"> {{item.ITEM_NAME}}
         </div>
       </div>
       <div id="tableGrid" style="position: relative;">
@@ -449,6 +449,7 @@ export default {
 
     //翻页
     pageChange() {
+      debugger
       var svg = d3.selectAll(".test")
       svg.remove();
       if (this.config.pageOper == 0) {
@@ -478,23 +479,24 @@ export default {
         this.percentPageData = arrList;
         var arrayList = [];
         var list = this.dataArray;
+        console.log(this.config.maxTime)
         for (var i = 0; i < list.length; i++) {
-          // if (list[i].MAX_TIME) {
-          if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+          if (list[i].PATIENT_ID) {
+            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
-            if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
-              list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
-              arrayList.push(list[i]);
-            } else {}
-          } else {
-            if (new Date(list[i].ENDDATE) > this.config.maxTime) {
-              list[i].vStartTime = this.config.maxTime.Format("yyyy-MM-dd hh:mm:ss");
-              arrayList.push(list[i]);
+              if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
+                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {}
             } else {
+              if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
+                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {
 
+              }
             }
           }
-          // }
         }
         this.timeControl(this.config.maxTime)
         this.dataOperChange(arrayList);
