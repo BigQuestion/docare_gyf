@@ -460,7 +460,7 @@ export default {
       if (this.config.pageOper == -1) {
         this.timeControl(this.config.initTime)
         let m = this.config.initTime.getTime() - 250 * 60 * 1000;
-        this.timeControl(new Date(m));
+        // this.timeControl(new Date(m));
         var list = [];
         list = this.percentPageData;
 
@@ -520,34 +520,26 @@ export default {
             let sMin = ''
             //结束时间间隔
             let eMin = ''
-            // if (this.config.pagePercentNum == 1) {
-            //   sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-            // } else {
-            //   sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
-            // }
+            let maxPatTime = this.config.patientMaxTime
             if (list[i].vStartTime) {
               sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
             } else {
-              // sMin = 0;
               sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
             }
 
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
-              // if (new Date(list[i].MAX_TIME) > this.maxTime) {
-              //   if (this.config.pageOper == 0) {
-              //     eMin = this.getMinuteDif(this.initTime, this.maxTime);
-              //   }
-              //   if (this.config.pageOper == -1) {
-              //     eMin = this.getMinuteDif(new Date(this.initTime.getTime() - 250 * 60 * 1000), this.maxTime);
-              //   }
-              //   if (this.config.pageOper == 1) {
-              //     eMin = this.getMinuteDif(this.initTime, this.maxTime);
-              //   }
-              // } else {
-              //   eMin = this.getMinuteDif(this.config.userInfo.inDateTime, list[i].MAX_TIME);
-              // }
+              // if (new Date(list[i].MAX_TIME) > this.maxTime) {   if
+              // (this.config.pageOper == 0) {     eMin =
+              // this.getMinuteDif(this.initTime, this.maxTime);   }   if
+              // (this.config.pageOper == -1) {     eMin =
+              // this.getMinuteDif(new Date(this.initTime.getTime() - 250 * 60
+              // * 1000), this.maxTime);   }   if (this.config.pageOper == 1)
+              // {     eMin = this.getMinuteDif(this.initTime, this.maxTime);
+              // } } else {   eMin =
+              // this.getMinuteDif(this.config.userInfo.inDateTime,
+              // list[i].MAX_TIME); }
               if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
                 eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
               } else {
@@ -568,7 +560,6 @@ export default {
             let x2 = Math.round(eMin / lMin * (w / this.columns))
             let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            debugger
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               list[i].vStartTime = '';
               this.createLine(x1, x2, y1, y2, list[i]);
