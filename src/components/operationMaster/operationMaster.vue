@@ -1049,6 +1049,20 @@ export default {
           operStatus: sta,
           outDateTime: '',
         }
+      }else if (sta == 45) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+        }
+      }else if (sta == 60) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+        }
       }
 
       this.nextDATA = params;
