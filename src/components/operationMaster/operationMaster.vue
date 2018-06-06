@@ -1102,22 +1102,22 @@ export default {
         this.doShowDataTwo = true;
       }
     },
-    showDoubleListThree() {
+    showDoubleListThree(status) {
       if (status == 15) {
         this.doShowDataThree = true;
       }
     },
-    showDoubleListFour() {
+    showDoubleListFour(status) {
       if (status == 25) {
         this.doShowDataFour = true;
       }
     },
-    showDoubleListFive() {
+    showDoubleListFive(status) {
       if (status == 30) {
         this.doShowDataFive = true;
       }
     },
-    showDoubleListSix() {
+    showDoubleListSix(status) {
       if (status == 35) {
         this.doShowDataSix = true;
       }
