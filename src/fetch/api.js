@@ -1,7 +1,7 @@
 import axios from 'axios'
-// axios.defaults.baseURL = 'http://182.61.36.247:8080';
-// axios.defaults.baseURL = 'http://localhost:8088';
-axios.defaults.baseURL = 'http://192.168.1.127:8088';
+axios.defaults.baseURL = 'http://182.61.36.247:8080';
+axios.defaults.baseURL = 'http://localhost:8088';
+// axios.defaults.baseURL = 'http://192.168.1.127:8088';
 
 
 //返回状态判断
@@ -21,19 +21,19 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-      method: 'post',
-      url: url,
-      data: JSON.stringify(params),
-      timeout: config.timeout,
-      headers: {
-        'Content-type': 'application/json',
-        "Accept": "*/*",
-      },
-      datatype: "json",
-    })
-      .then(function (response) {
+        method: 'post',
+        url: url,
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype: "json",
+      })
+      .then(function(response) {
         resolve(response.data);
-      }).catch(function (error) {
+      }).catch(function(error) {
         reject(error);
       });
   })
@@ -139,9 +139,9 @@ export default {
 
   },
   /**
- * 获取单个病人的列表信息
- * 
- */
+   * 获取单个病人的列表信息
+   * 
+   */
   selectMedOperationMaster(params, config) {
     return fetch('medicalsystem/rest/medOperationMaster/selectMedOperationMaster', params)
 
@@ -264,7 +264,7 @@ export default {
   selectMedAnesthesiaEventList(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/selectMedAnesthesiaEventList', params)
   },
-    /**
+  /**
    * 获取标记内容
    * 
    */
