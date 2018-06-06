@@ -46,7 +46,7 @@ export default {
         operId: this.dataOfPeo.operId,
         visitId: this.dataOfPeo.visitId
       }
-      this.api.selectMedAnesthesiaEventList(params)
+      this.api.selectSignMedAnesthesiaEventList(params)
         .then(
           // display:flex;flex-direction:column;flex-wrap:wrap;
           res => {

@@ -62,7 +62,7 @@ export default {
         operId: this.dataOfPeo.operId,
         visitId: this.dataOfPeo.visitId
       }
-      this.api.selectMedAnesthesiaEventList(params)
+      this.api.selectSignMedAnesthesiaEventList(params)
         .then(
           res => {
             this.dataOfBottom = [];
@@ -98,7 +98,7 @@ export default {
               if (tmp[k] == tmp[k + 1]) {
                 // console.log(tmp[k])
                 for (var g = 0; g < this.dataBody.length; g++) {
-                  // console.log(this.dataBody)
+                  console.log(this.dataBody)
                   if (tmp[k] == this.dataBody[g].left) {
                     pei = pei + 1;
                     // console.log(this.dataBody[g])
