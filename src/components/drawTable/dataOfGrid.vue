@@ -42,7 +42,7 @@ export default {
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
-      this.api.selectMedAnesthesiaEventList(params)
+      this.api.selectSignMedAnesthesiaEventList(params)
         .then(
           // display:flex;flex-direction:column;flex-wrap:wrap;
           res => {

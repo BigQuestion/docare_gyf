@@ -229,12 +229,6 @@ export default {
             handleItem: {},
             handleItemTow: {},
             tableConfig: [{
-                text: "手术审核时间",
-                type: "inSelect",
-                value: "reqDateTime",
-                width: 120,
-                optin: false,
-            }, {
                 text: '申请时间',
                 value: 'scheduledDateTime',
                 width: 60,
@@ -337,6 +331,12 @@ export default {
                 text: '备注',
                 value: 'notesOnOperation',
                 width: 100,
+                optin: false,
+            },{
+                text: "手术审核时间",
+                type: "inSelect",
+                value: "reqDateTime",
+                width: 120,
                 optin: false,
             }],
             getLength: '0',

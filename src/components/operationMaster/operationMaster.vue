@@ -1,12 +1,12 @@
 <template>
-  <div v-if="!settingView" style="height:100%;position:relative;overflow-y:hidden;">
+  <div v-if="!settingView" style="height:100%;position:relative;overflow-y:hidden;" @click="allNone()">
     <div class="head">
       <div class="logo">
         <div :style="logo">
           <!-- <img src="../../assets/logo.jpg"> -->
         </div>
-        <div :style="logo1" style="background-color: rgb(21,111,174);color:white;line-height: 30px;">
-          <span style="margin-left: 30px;">{{nowTime}}</span>
+        <div :style="logo1" style="background-color: rgb(21,111,174);color:white;line-height: 30px;box-sizing:border-box;padding-left:5px;">
+          <span style="margin-left: 30px;font-size:13px;">{{nowTime}}</span>
         </div>
       </div>
       <div class="currentPatientInfo">
@@ -20,75 +20,83 @@
       <div class="procedure" style="position: relative;">
         <div style="display: flex;height:70px;" v-if="lockedPatientInfo.patientId">
           <div style="margin:0px 5px;">
-            <div class="lightBox">
-              <img style="display:block" src="../../assets/light.png" alt="">
+            <div class="lightBox" @contextmenu.prevent="showDoubleListOne(lockedPatientInfo.operStatus)">
+              <img v-if="lockedPatientInfo.operStatus == 0" style="display:block" src="../../assets/grayLight.png" alt="">
+              <img v-else-if="lockedPatientInfo.operStatus == 5" style="display:block" src="../../assets/redLight.png" alt="">
+              <img v-else style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">入手术室</span>
-              <!-- <div v-if="doShowData" class="inseide">
-                <div class="insideHover" @click="finalStatus('60')">转入病房</div>
-                <div class="insideHover" @click="finalStatus('45')">进复苏室</div>
-              </div> -->
+              <div v-if="doShowDataOne" class="inseide">
+                <div class="insideHover" @click="finalStatus('0')">取消状态【入手术室】</div>
+              </div>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" v-model="inRoomDateTime" @blur="changeStatus('5',$event)">
+              <input style="width:165px;" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5',$event)">
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="inRoomDateTime">
-            <div class="lightBox">
-              <img style="display:block" src="../../assets/light.png" alt="">
+          <div style="margin:0px 5px;" v-if="inDateTime">
+            <div class="lightBox" @contextmenu.prevent="showDoubleListTwo(lockedPatientInfo.operStatus)">
+              <img v-if="lockedPatientInfo.operStatus == 10" style="display:block" src="../../assets/redLight.png" alt="">
+              <img v-else-if="lockedPatientInfo.operStatus == 5" style="display:block" src="../../assets/grayLight.png" alt="">
+              <img v-else style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">麻醉开始</span>
-              <!-- <div v-if="doShowData" class="inseide">
-                <div class="insideHover" @click="finalStatus('60')">转入病房</div>
-                <div class="insideHover" @click="finalStatus('45')">进复苏室</div>
-              </div> -->
+              <div v-if="doShowDataTwo" class="inseide">
+                <div class="insideHover" @click="finalStatus('5')">转入状态【入手术室】</div>
+              </div>
             </div>
             <div>
               <input style="width:165px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="anesStartTime">
-            <div class="lightBox">
-              <img style="display:block" src="../../assets/light.png" alt="">
+            <div class="lightBox" @contextmenu.prevent="showDoubleListThree(lockedPatientInfo.operStatus)">
+              <img v-if="lockedPatientInfo.operStatus == 10" style="display:block" src="../../assets/grayLight.png" alt="">
+              <img v-else-if="lockedPatientInfo.operStatus == 15" style="display:block" src="../../assets/redLight.png" alt="">
+              <img v-else style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">手术开始</span>
-              <!-- <div v-if="doShowData" class="inseide">
-                <div class="insideHover" @click="finalStatus('60')">转入病房</div>
-                <div class="insideHover" @click="finalStatus('45')">进复苏室</div>
-              </div> -->
+              <div v-if="doShowDataThree" class="inseide">
+                <div class="insideHover" @click="finalStatus('10')">转入状态【麻醉开始】</div>
+              </div>
             </div>
             <div>
               <input style="width:165px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="startDateTime">
-            <div class="lightBox">
-              <img style="display:block" src="../../assets/light.png" alt="">
+            <div class="lightBox" @contextmenu.prevent="showDoubleListFour(lockedPatientInfo.operStatus)">
+              <img v-if="lockedPatientInfo.operStatus == 15" style="display:block" src="../../assets/grayLight.png" alt="">
+              <img v-else-if="lockedPatientInfo.operStatus == 25" style="display:block" src="../../assets/redLight.png" alt="">
+              <img v-else style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">手术结束</span>
-              <!-- <div v-if="doShowData" class="inseide">
-                <div class="insideHover" @click="finalStatus('60')">转入病房</div>
-                <div class="insideHover" @click="finalStatus('45')">进复苏室</div>
-              </div> -->
+              <div v-if="doShowDataFour" class="inseide">
+                <div class="insideHover" @click="finalStatus('15')">转入状态【手术开始】</div>
+              </div>
             </div>
             <div>
               <input style="width:165px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="endDateTime">
-            <div class="lightBox">
-              <img style="display:block" src="../../assets/light.png" alt="">
+            <div class="lightBox" @contextmenu.prevent="showDoubleListFive(lockedPatientInfo.operStatus)">
+              <img v-if="lockedPatientInfo.operStatus == 25" style="display:block" src="../../assets/grayLight.png" alt="">
+              <img v-else-if="lockedPatientInfo.operStatus == 30" style="display:block" src="../../assets/redLight.png" alt="">
+              <img v-else style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">麻醉结束</span>
-              <!-- <div v-if="doShowData" class="inseide">
-                <div class="insideHover" @click="finalStatus('60')">转入病房</div>
-                <div class="insideHover" @click="finalStatus('45')">进复苏室</div>
-              </div> -->
+              <div v-if="doShowDataFive" class="inseide">
+                <div class="insideHover" @click="finalStatus('25')">转入状态【手术结束】</div>
+              </div>
             </div>
             <div>
               <input style="width:165px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="anesEndTime">
-            <div ref="area" @contextmenu.prevent="showDoubleList(lockedPatientInfo.operStatus)" class="lightBox">
-              <img style="display:block" src="../../assets/light.png" alt="">
+            <div ref="area" @contextmenu.prevent="showDoubleListSix(lockedPatientInfo.operStatus)" class="lightBox">
+              <img v-if="lockedPatientInfo.operStatus == 30" style="display:block" src="../../assets/grayLight.png" alt="">
+              <img v-else-if="lockedPatientInfo.operStatus == 35" style="display:block" src="../../assets/redLight.png" alt="">
+              <img v-else style="display:block" src="../../assets/light.png" alt="">
               <span style="font-size:18px;">出手术室</span>
-              <div v-if="doShowData" class="inseide">
+              <div v-if="doShowDataSix" class="inseide">
+                <div class="insideHover" @click="finalStatus('30')">转入状态【麻醉结束】</div>
                 <div class="insideHover" @click="finalStatus('60')">转入病房</div>
                 <div class="insideHover" @click="finalStatus('45')">进复苏室</div>
               </div>
@@ -383,9 +391,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                  <div class="in_con">
-                    {{patientInfo.QIEKOU_NUMBER}}
-                  </div> -->
+                                                      <div class="in_con">
+                                                        {{patientInfo.QIEKOU_NUMBER}}
+                                                      </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -560,7 +568,12 @@ export default {
     return {
       printed: false,
       isPrint: false,
-      doShowData: false,
+      doShowDataOne: false,
+      doShowDataTwo: false,
+      doShowDataThree: false,
+      doShowDataFour: false,
+      doShowDataFive: false,
+      doShowDataSix: false,
       patientList: [],
       widthData: false,
       pageShowData: false,
@@ -647,6 +660,7 @@ export default {
       logo1: {
         backgroundImage: "url(" + require("../../assets/clock.jpg") + ")",
         backgroundRepeat: "no-repeat",
+        backgroundPosition: "5px 3px",
         height: "30px",
       },
       concealmentOneData: true,
@@ -974,7 +988,7 @@ export default {
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
-      this.inRoomDateTime = this.changeDateFormat(item.inDateTime);
+      this.inDateTime = this.changeDateFormat(item.inDateTime);
       this.anesStartTime = this.changeDateFormat(item.anesStartTime);
       this.startDateTime = this.changeDateFormat(item.startDateTime);
       this.endDateTime = this.changeDateFormat(item.endDateTime);
@@ -983,14 +997,130 @@ export default {
       this.initComponementConfig();
 
     },
-    showDoubleList(status) {
-
-      if (status == 35) {
-        this.doShowData = true
-      } else {
-
+    // 撤销手术室操作并修改病人状态
+    finalStatus(sta) {
+      // console.log(sta)
+      let params;
+      if (sta == 0) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+          inDateTime: '',
+        }
+      } else if (sta == 5) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+          anesStartTime: '',
+        }
+      } else if (sta == 10) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+          startDateTime: '',
+        }
+      } else if (sta == 15) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+          endDateTime: '',
+        }
+      } else if (sta == 25) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+          anesEndTime: '',
+        }
+      } else if (sta == 30) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+          outDateTime: '',
+        }
       }
 
+      this.nextDATA = params;
+      // console.log(params)
+      this.api.changeBeforeStatus(params)
+        .then(
+          res => {
+            if (res.success == true) {
+              this.api.selectMedOperationMaster({
+                patientId: this.lockedPatientInfo.patientId,
+                visitId: this.lockedPatientInfo.visitId,
+                operId: this.lockedPatientInfo.operId,
+              }).then(
+                afs => {
+                  // console.log(afs)
+                  this.lockedPatientInfo = afs;
+                  //当前病人信息存储起来
+                  this.config.userInfo = afs;
+                  this.inDateTime = this.changeDateFormat(afs.inDateTime);
+                  this.anesStartTime = this.changeDateFormat(afs.anesStartTime);
+                  this.startDateTime = this.changeDateFormat(afs.startDateTime);
+                  this.endDateTime = this.changeDateFormat(afs.endDateTime);
+                  this.anesEndTime = this.changeDateFormat(afs.anesEndTime);
+                  this.outDateTime = this.changeDateFormat(afs.outDateTime);
+                  this.searchPatientListScreen();
+                }
+              )
+              this.doShowData = false;
+            } else {
+              alert(res.msg)
+            }
+
+          });
+
+    },
+    allNone() {
+      this.doShowDataOne = false;
+      this.doShowDataTwo = false;
+      this.doShowDataThree = false;
+      this.doShowDataFour = false;
+      this.doShowDataFive = false;
+      this.doShowDataSix = false;
+    },
+    showDoubleListOne(status) {
+      if (status == 5) {
+        this.doShowDataOne = true;
+      }
+    },
+    showDoubleListTwo(status) {
+      if (status == 10) {
+        this.doShowDataTwo = true;
+      }
+    },
+    showDoubleListThree() {
+      if (status == 15) {
+        this.doShowDataThree = true;
+      }
+    },
+    showDoubleListFour() {
+      if (status == 25) {
+        this.doShowDataFour = true;
+      }
+    },
+    showDoubleListFive() {
+      if (status == 30) {
+        this.doShowDataFive = true;
+      }
+    },
+    showDoubleListSix() {
+      if (status == 35) {
+        this.doShowDataSix = true;
+      }
     },
     getComType() {
       this.isBackOne = true;
@@ -1313,7 +1443,7 @@ export default {
         patientId: this.lockedPatientInfo.patientId,
         visitId: this.lockedPatientInfo.visitId,
         operId: this.lockedPatientInfo.operId,
-        inDateTime: this.datetimeLocalToDate(this.inRoomDateTime),
+        inDateTime: this.datetimeLocalToDate(this.inDateTime),
         anesStartTime: this.datetimeLocalToDate(this.anesStartTime),
         startDateTime: this.datetimeLocalToDate(this.startDateTime),
         endDateTime: this.datetimeLocalToDate(this.endDateTime),
@@ -1335,28 +1465,7 @@ export default {
           });
 
     },
-    // 出手术室操作修改病人状态
-    finalStatus(sta) {
-      let params = {
-        patientId: this.lockedPatientInfo.patientId,
-        visitId: this.lockedPatientInfo.visitId,
-        operId: this.lockedPatientInfo.operId,
-        operStatus: sta,
-      }
-      this.nextDATA = params;
-      this.api.changeOperationStatus(params)
-        .then(
-          res => {
-            if (res.success == true) {
-              this.searchPatientList();
-              this.doShowData = false;
-            } else {
-              alert(res.msg)
-            }
 
-          });
-
-    },
     //手术信息
     getPatientOperationInfo() {
       this.patientOperationInfoView.dataInParent = !this.patientOperationInfoView.dataInParent;
