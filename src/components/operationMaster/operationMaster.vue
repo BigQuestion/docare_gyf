@@ -1049,6 +1049,20 @@ export default {
           operStatus: sta,
           outDateTime: '',
         }
+      }else if (sta == 45) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+        }
+      }else if (sta == 60) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+        }
       }
 
       this.nextDATA = params;
@@ -1102,22 +1116,22 @@ export default {
         this.doShowDataTwo = true;
       }
     },
-    showDoubleListThree() {
+    showDoubleListThree(status) {
       if (status == 15) {
         this.doShowDataThree = true;
       }
     },
-    showDoubleListFour() {
+    showDoubleListFour(status) {
       if (status == 25) {
         this.doShowDataFour = true;
       }
     },
-    showDoubleListFive() {
+    showDoubleListFive(status) {
       if (status == 30) {
         this.doShowDataFive = true;
       }
     },
-    showDoubleListSix() {
+    showDoubleListSix(status) {
       if (status == 35) {
         this.doShowDataSix = true;
       }
