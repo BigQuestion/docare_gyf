@@ -17,7 +17,7 @@
           =========
         </div>
         <div>
-          开始时间：{{dataObj.START_TIME}} 到 {{dataObj.MAX_TIME}}
+          开始时间：{{dataObj.START_TIME}} 到 {{dataObj.ENDDATE}}
         </div>
         <div>
           总量：{{dataObj.DOSAGE}}
@@ -208,7 +208,7 @@ export default {
       this.tipLeft = ev.offsetX + item.x1;
       this.tipTop = item.y2 + 10;
       if (item.obj.ENDDATE == null || item.obj.ENDDATE == "") {
-        item.obj.ENDDATE = (item.obj.MAX_TIME);
+        item.obj.ENDDATE = this.config.patientMaxTime;
       }
       this.dataObj = item.obj;
     },
@@ -241,11 +241,18 @@ export default {
           } else {
             let t1 = ''
             let t2 = ''
-            if (list[i].vStartTime) {
-              t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
-            } else {
-              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
+              break;
             }
+            t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            if (t1 < 0) {
+              t1 = 0;
+            }
+            // if (list[i].vStartTime) {
+            //   t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            // } else {
+            //   t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            // }
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
               if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
@@ -267,7 +274,7 @@ export default {
             let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
             let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
 
-            if (list[i].DURATIVE_INDICATOR == 1) {
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               list[i].vStartTime = '';
               this.createLine(x1, x2, y1, y2, list[i]);
               this.xArray.push({
@@ -299,17 +306,21 @@ export default {
         this.getData();
       }
       if (this.config.pageOper == -1) {
+        this.getData();
+        return
         let m = this.config.initTime.getTime();
         var list = [];
         list = this.percentPageData;
         for (var i = 0; i < list.length; i++) {
-          if (this.config.pagePercentNum != 1 && list[i].MAX_TIME) {
-            list[i].vStartTime = new Date(m).Format("yyyy-MM-dd hh:mm:ss");
+          if (this.config.pagePercentNum != 1 && list[i].PATIENT_ID) {
+            list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
           }
         }
         this.dataListOperFun(list);
       }
       if (this.config.pageOper == 1) {
+        this.getData();
+        return
         let arrList = this.dataArray;
         this.percentPageData = arrList;
         var arrayList = [];

@@ -268,7 +268,7 @@ export default {
         list = this.percentPageData;
 
         for (var i = 0; i < list.length; i++) {
-          if (this.config.pagePercentNum != 1 && list[i].MAX_TIME) {
+          if (this.config.pagePercentNum != 1 && list[i].PATIENT_ID) {
             list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
           }
         }
@@ -318,6 +318,9 @@ export default {
             let sMin = ''
             //结束时间间隔
             let eMin = ''
+            if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
+              break;
+            }
             if (this.config.pagePercentNum == 1) {
               sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
             } else {

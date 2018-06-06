@@ -21,6 +21,9 @@
             <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
         </svg>
+        <div style="position: absolute;left: 20px;top: 0px;">
+          <span>XX</span>
+        </div>
         <div v-if="tipView">
           <div style="position: absolute;max-width:300px;min-width:220px;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 15" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
             <div>
@@ -172,7 +175,6 @@ export default {
     },
     //对时间进行计算操作
     timeControl(startTime) {
-      console.log(this.config.startMinTime + '----tableTime')
       var svg = d3.selectAll(".test")
       svg.remove();
       var m = this.tbMin; //加几分钟
@@ -422,7 +424,7 @@ export default {
       this.tipLeft = ev.offsetX + item.x1;
       this.tipTop = item.y2 + 10;
       if (item.obj.ENDDATE == null || item.obj.ENDDATE == "") {
-        item.obj.ENDDATE = (this.config.patientMaxTime);
+        item.obj.ENDDATE = this.config.patientMaxTime;
       }
       this.lineObj = item.obj;
     },
@@ -449,7 +451,6 @@ export default {
 
     //翻页
     pageChange() {
-      debugger
       var svg = d3.selectAll(".test")
       svg.remove();
       if (this.config.pageOper == 0) {
@@ -466,11 +467,11 @@ export default {
         list = this.percentPageData;
 
         for (var i = 0; i < list.length; i++) {
-          if (this.config.pagePercentNum != 1 && this.config.patientMaxTime) {
-            list[i].vStartTime = new Date(m).Format("yyyy-MM-dd hh:mm:ss");
+          if (this.config.pagePercentNum != 1 && list[i].PATIENT_ID) {
+            list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
           }
         }
-        this.dataOperChange(list);
+        // this.dataOperChange(list);
 
 
       }
@@ -479,7 +480,6 @@ export default {
         this.percentPageData = arrList;
         var arrayList = [];
         var list = this.dataArray;
-        console.log(this.config.maxTime)
         for (var i = 0; i < list.length; i++) {
           if (list[i].PATIENT_ID) {
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
@@ -499,11 +499,12 @@ export default {
           }
         }
         this.timeControl(this.config.maxTime)
-        this.dataOperChange(arrayList);
+        // this.dataOperChange(arrayList);
       }
     },
     //处理数据进行划线
     dataOperChange(list) {
+      debugger
       var svg = d3.selectAll(".test")
       svg.remove();
       var w = this.svgWidth,
@@ -523,11 +524,19 @@ export default {
             //结束时间间隔
             let eMin = ''
             let maxPatTime = this.config.patientMaxTime
-            if (list[i].vStartTime) {
-              sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
-            } else {
-              sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            //判断是否在当前时间内
+            if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
+              break;
             }
+            sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            if (sMin < 0) {
+              sMin = 0;
+            }
+            // if (list[i].vStartTime) {
+            //   sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
+            // } else {
+            //   sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            // }
 
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
@@ -562,29 +571,43 @@ export default {
             let x2 = Math.round(eMin / lMin * (w / this.columns))
             let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
-              list[i].vStartTime = '';
-              this.createLine(x1, x2, y1, y2, list[i]);
-              this.xArray.push({
-                x1: x1,
-                y1: y1,
-                x2: x2,
-                y2: y2,
-                w: x2 - x1,
-                obj: list[i]
-              })
+            // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
+            //   list[i].vStartTime = '';
+            //   this.createLine(x1, x2, y1, y2, list[i]);
+            //   this.xArray.push({
+            //     x1: x1,
+            //     y1: y1,
+            //     x2: x2,
+            //     y2: y2,
+            //     w: x2 - x1,
+            //     obj: list[i]
+            //   })
+            //   // this.$set(this.dataArray, i, list[i]);
+            //   this.dataArray.push(list[i]);
+            //   m++;
+            // }
 
-              // this.$set(this.dataArray, i, list[i]);
-              this.dataArray.push(list[i]);
-              m++;
+            list[i].vStartTime = '';
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
+              this.createLine(x1, x2, y1, y2, list[i]);
             }
+            this.xArray.push({
+              x1: x1,
+              y1: y1,
+              x2: x2,
+              y2: y2,
+              w: x2 - x1,
+              obj: list[i]
+            })
+            this.dataArray.push(list[i]);
+            m++;
           }
         }
       }
       for (var k = 0; k < this.rows - m; k++) {
         this.dataArray.push(m)
       }
-
+      debugger
     },
 
 

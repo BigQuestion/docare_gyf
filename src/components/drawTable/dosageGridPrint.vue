@@ -278,7 +278,7 @@ export default {
         list = this.percentPageData;
         for (var i = 0; i < list.length; i++) {
           if (this.config.pagePercentNum != 1 && list[i].MAX_TIME) {
-            list[i].vStartTime = new Date(m).Format("yyyy-MM-dd hh:mm:ss");
+            list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
           }
         }
         this.dataListOperFun(list);
