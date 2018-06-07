@@ -8,6 +8,12 @@
         <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
       </g>
     </svg>
+    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:index*(svgHeight/rows)+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+      <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+    </div>
+    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:index*(svgHeight/rows)+1+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+      <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+    </div>
     <div v-if="tipView">
       <div style="position: absolute;max-width:300px;min-width:220px;width:auto;background-color: white;border: 0.5px solid;font-size: 12px;z-index: 10;padding: 3px;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
         <div>
@@ -16,13 +22,16 @@
         <div>
           =========
         </div>
-        <div>
+        <div v-if="dataObj.DURATIVE_INDICATOR=='1'">
           开始时间：{{dataObj.START_TIME}} 到 {{dataObj.ENDDATE}}
+        </div>
+        <div v-if="dataObj.DURATIVE_INDICATOR=='0'">
+          开始时间：{{dataObj.START_TIME}}
         </div>
         <div>
           总量：{{dataObj.DOSAGE}}
         </div>
-        <div>
+        <div v-if="dataObj.DURATIVE_INDICATOR=='1'">
           鼠标当前时间：{{dataObj.dataTime}}
         </div>
       </div>
@@ -30,7 +39,7 @@
     <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
     </div>
     <div style="height: 100px;width: 140px; position: absolute;top: 0px;left: -140px;">
-      <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;padding-left: 5px;white-space:nowrap;word-break: keep-all;" :style="{height:svgHeight/rows-1+'px'}">{{item.ITEM_NAME}}</div>
+      <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;padding-left: 5px;white-space:nowrap;word-break: keep-all;" :style="{height:svgHeight/rows-1+'px'}"><span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span></div>
     </div>
     <div style="width: 25px; position: absolute;top: 0px;left: -165px;border-right: 1px solid #8391a2;border-bottom: 1px solid #8391a2;    display: flex;align-items: center;" :style="{height:forRows*(svgHeight/rows)-1+'px'}">
       输液
@@ -109,6 +118,31 @@ export default {
             var list = res.list;
             this.dataListOperFun(list)
             this.setTimeId = setTimeout(_ => this.getData(), this.config.timeSet)
+          })
+      }
+    },
+    getDataNoTime() {
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId)
+      }
+      var svg = d3.selectAll(".dosagegrid")
+      svg.remove();
+      this.dataArray = [];
+      for (var i = 0; i < this.forRows; i++) {
+        this.dataArray.push(i)
+      }
+      if (this.page == false) {
+        let params = {
+          patientId: this.config.userInfo.patientId,
+          operId: this.config.userInfo.operId,
+          visitId: this.config.userInfo.visitId,
+          itemClass: "3B",
+        }
+
+        this.api.selectMedAnesthesiaEventList(params)
+          .then(res => {
+            var list = res.list;
+            this.dataListOperFun(list)
           })
       }
     },
@@ -225,6 +259,7 @@ export default {
       var m = Math.round(offX / gWidth * 5);
       var time = new Date(this.config.initTime);
       var time1 = time.getTime() + m * 60 * 1000;
+      this.tipLeft = ev.offsetX + item.x1;
       var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm");
       item.obj.dataTime = time2;
       this.dataObj = item.obj;
@@ -241,8 +276,27 @@ export default {
           } else {
             let t1 = ''
             let t2 = ''
+            //判断是否在当前时间内
             if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
-              break;
+              continue;
+            }
+            if (list[i].DURATIVE_INDICATOR == 0) {
+              if (new Date(list[i].START_TIME) < new Date(this.config.initTime)) {
+                continue;
+              }
+            }
+            //如果是持续用药
+            if (list[i].DURATIVE_INDICATOR == 1) {
+              //判断是否有结束时间
+              if (list[i].ENDDATE) {
+                if (new Date(list[i].ENDDATE) < new Date(this.config.initTime)) {
+                  continue;
+                }
+              } else {
+                if (new Date(this.config.patientMaxTime) < new Date(this.config.initTime)) {
+                  continue;
+                }
+              }
             }
             t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
             if (t1 < 0) {
@@ -274,20 +328,34 @@ export default {
             let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
             let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
 
+            // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
+            //   list[i].vStartTime = '';
+            //   this.createLine(x1, x2, y1, y2, list[i]);
+            //   this.xArray.push({
+            //     x1: x1,
+            //     y1: y1,
+            //     x2: x2,
+            //     y2: y2,
+            //     w: x2 - x1,
+            //     obj: list[i]
+            //   })
+            //   this.dataArray.push(list[i]);
+            //   m++;
+            // }
+            list[i].vStartTime = '';
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
-              list[i].vStartTime = '';
               this.createLine(x1, x2, y1, y2, list[i]);
-              this.xArray.push({
-                x1: x1,
-                y1: y1,
-                x2: x2,
-                y2: y2,
-                w: x2 - x1,
-                obj: list[i]
-              })
-              this.dataArray.push(list[i]);
-              m++;
             }
+            this.xArray.push({
+              x1: x1,
+              y1: y1,
+              x2: x2,
+              y2: y2,
+              w: x2 - x1,
+              obj: list[i]
+            })
+            this.dataArray.push(list[i]);
+            m++;
           }
         }
       }
@@ -300,7 +368,7 @@ export default {
     pageTurnFun() {
       var svg = d3.selectAll(".dosagegrid")
       svg.remove();
-
+      this.xArray = [];
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
         this.getData();
@@ -361,11 +429,11 @@ export default {
   },
   created() {
     Bus.$on('test', this.pageTurnFun)
-    Bus.$on('timeSetChange', this.getData)
+    Bus.$on('timeSetChange', this.getDataNoTime)
   },
   beforeDestroy() {
     Bus.$off('test', this.pageTurnFun);
-    Bus.$off('timeSetChange', this.getData)
+    Bus.$off('timeSetChange', this.getDataNoTime)
     clearTimeout(this.setTimeId);
   },
   components: {

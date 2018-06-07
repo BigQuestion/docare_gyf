@@ -19,6 +19,12 @@
             <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
         </svg>
+        <div v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:index*15+'px',left:item.x1-1+'px',height:svgHeight/rows+'px',lineheight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+          <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+        </div>
+        <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:index*15+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows+'px',lineheight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+          <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -318,8 +324,27 @@ export default {
             let sMin = ''
             //结束时间间隔
             let eMin = ''
+            //判断是否在当前时间内
             if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
-              break;
+              continue;
+            }
+            if (list[i].DURATIVE_INDICATOR == 0) {
+              if (new Date(list[i].START_TIME) < new Date(this.config.initTime)) {
+                continue;
+              }
+            }
+            //如果是持续用药
+            if (list[i].DURATIVE_INDICATOR == 1) {
+              //判断是否有结束时间
+              if (list[i].ENDDATE) {
+                if (new Date(list[i].ENDDATE) < new Date(this.config.initTime)) {
+                  continue;
+                }
+              } else {
+                if (new Date(this.config.patientMaxTime) < new Date(this.config.initTime)) {
+                  continue;
+                }
+              }
             }
             if (this.config.pagePercentNum == 1) {
               sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
@@ -348,22 +373,20 @@ export default {
             let x2 = Math.round(eMin / lMin * (w / this.columns))
             let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            if (list[i].DURATIVE_INDICATOR == 1) {
-              list[i].vStartTime = '';
+            list[i].vStartTime = '';
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
-              this.xArray.push({
-                x1: x1,
-                y1: y1,
-                x2: x2,
-                y2: y2,
-                w: x2 - x1,
-                obj: list[i]
-              })
-
-              // this.$set(this.dataArray, i, list[i]);
-              this.dataArray.push(list[i]);
-              m++;
             }
+            this.xArray.push({
+              x1: x1,
+              y1: y1,
+              x2: x2,
+              y2: y2,
+              w: x2 - x1,
+              obj: list[i]
+            })
+            this.dataArray.push(list[i]);
+            m++;
           }
         }
       }

@@ -8,12 +8,6 @@
         <g v-for="(item,index) in lineArray" v-if="index < rows">
           <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
         </g>
-        <!--  <g v-for="(item,index) in data">
-          <circle :cx="item.x" :cy="item.y" r="3.5" fill="green" @mousedown.stop="itemMouseDown($event,item,index)"></circle>
-        </g>
-        <g>
-          <path :d="pathData" stroke-width="1" fill="none" stroke="blue" ></path>
-        </g> -->
         <g v-for="(item,index1) in dataPathArray" style="z-index: 22">
           <!-- <path :d="item.path" stroke-width="1" fill="none" stroke="blue"></path>-->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
@@ -28,7 +22,7 @@
           </g>
           <g v-for="(cir,index2) in item.circleData" v-if="item.flag==1" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <circle class="opercontrol" r="8pt" fill="rgba(0,0,0,0)"></circle>
-            <circle class="opercontrol" r="2" fill="red"></circle>
+            <circle class="opercontrol" r="4" fill="green"></circle>
           </g>
           <!-- <circle class="opercontrol" v-for="(cir,index2) in item.circleData" :cx="cir.x" :cy="cir.y" r="2" fill="red" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" v-if="item.flag==1" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)"></circle> -->
         </g>
@@ -54,11 +48,6 @@
           {{item}}
         </div>
       </div>
-      <!-- <div style="position: absolute;bottom: 0px;right: -25px;text-align: left;font-size: 12px;">
-        <div v-for="item in yValueArray" style="height: 22px;">
-          {{item}}
-        </div>
-      </div> -->
     </div>
     <div v-if="showStyleView" style="background-color: #e6e6e6;position: absolute;top: 30%;" :style="{ top:rightViewY+'px',left:rightViewX+'px'}">
       <div style="padding: 10px;" @click="tipShowPersonStyle">
@@ -235,7 +224,27 @@ export default {
             this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
           })
     },
+    getSignNameNoTime() {
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId)
+      }
+      let params = {
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
+        eventNo: 0,
+      }
 
+      this.api.getSignName(params)
+        .then(
+          res => {
+            for (var i = 0; i < res.length; i++) {
+              res[i].itemValue = "";
+            }
+            this.getSignTimeData(res.length, res);
+            this.signNameLisg = res;
+          })
+    },
     getSignTimeData(len, list) {
       let params = {
         patientId: this.config.userInfo.patientId,
@@ -415,6 +424,14 @@ export default {
       this.getLineXy();
       if (this.page == false) {
         this.getSignName();
+      }
+
+      this.getYDataArray();
+    },
+    initFunNoTime() {
+      this.getLineXy();
+      if (this.page == false) {
+        this.getSignNameNoTime();
       }
 
       this.getYDataArray();

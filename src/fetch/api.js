@@ -1,6 +1,6 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'http://182.61.36.247:8080';
-axios.defaults.baseURL = 'http://localhost:8088';
+// axios.defaults.baseURL = 'http://localhost:8088';
 // axios.defaults.baseURL = 'http://192.168.1.127:8088';
 
 
