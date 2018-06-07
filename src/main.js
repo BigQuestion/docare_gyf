@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+
 import './assets/css/index.css'
 
 import config from './components/configFile/config'
