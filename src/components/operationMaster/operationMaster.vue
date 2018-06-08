@@ -30,8 +30,8 @@
               </div>
             </div>
             <div style="position: relative;">
-              <input type="" name="">
-              <input style="width:165px;" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5',$event)">
+              <!-- <input type="" name="" @click="testclick"> -->
+              <input ref="intest" id="intest" style="width:165px;" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="inDateTime">
@@ -992,7 +992,6 @@ export default {
       }, 1000);
     },
     lockedPatient(item) {
-      console.log(item)
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
@@ -1475,14 +1474,12 @@ export default {
         operatingRoom: this.lockedPatientInfo.operatingRoom,
         operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
       }
-      console.log(params)
       this.nextDATA = params;
       this.api.changeOperationStatus(params)
         .then(
           res => {
             if (res.success == true) {
               this.searchPatientList();
-              this.timeChangeBus();
 
               this.api.selectMedOperationMaster({
                 patientId: this.lockedPatientInfo.patientId,
@@ -1490,8 +1487,9 @@ export default {
                 operId: this.lockedPatientInfo.operId,
               }).then(
                 ref => {
-                  console.log(ref)
                   this.lockedPatientInfo = ref;
+                  this.config.userInfo = ref;
+                  this.timeChangeBus();
                 }
               )
             }
@@ -1821,8 +1819,10 @@ export default {
               this.config.maxTime = new Date(new Date(this.config.maxTime).getTime() + (time1 - time2));
             }
           }
+          debugger
           this.getMaxTime();
           this.$nextTick(function() {
+
             Bus.$emit('timeSetChange');
           })
         })
@@ -1853,6 +1853,9 @@ export default {
           }
           this.setTimeId = setTimeout(_ => this.getMaxTime(), 30000)
         })
+    },
+    testclick() {
+      this.$refs.intest.click();
     },
 
   },

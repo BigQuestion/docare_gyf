@@ -22,7 +22,7 @@
             <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
         </svg>
-        <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;" :style="{top:index*15+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+        <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:index*15+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
           <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
         </div>
         <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:index*15+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">

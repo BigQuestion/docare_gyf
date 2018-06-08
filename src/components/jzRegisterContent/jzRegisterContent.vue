@@ -100,6 +100,7 @@
           <div style="margin-left: 15px;">
             <input v-model="jzInfo.anesthesiaAssistant" style="width: 80px;" @dblclick="anesthesiaAssistantOpenView" readonly="readonly">
             <userSelect v-if="anesthesiaAssistantView" methodName="anesthesiaAssistant" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closeanesthesiaAssistant="anesthesiaAssistantOpenView" width="120"></userSelect>
+            <testSelect ref="test" width="120"></testSelect>
           </div>
           <div style="margin-left: 15px;">
             <input v-model="jzInfo.secondAnesthesiaAssistant" style="width: 80px;" @dblclick="secondAnesthesiaAssistantOpenView" readonly="readonly">
@@ -180,6 +181,7 @@
 <script type="text/javascript">
 import jzSelect from '@/components/jzRegisterContent/jzSelect.vue';
 import userSelect from '@/components/jzRegisterContent/userSelect.vue';
+import testSelect from '@/components/jzRegisterContent/testSelect.vue';
 export default {
   data() {
     return {
@@ -330,17 +332,59 @@ export default {
         .then(res => {
           this.$emit('closeJzViewChild');
         })
+    },
+    getUsers() {
+      let param = {
+        deptCode: this.deptCode,
+        userJob: this.userJob
+      }
+      this.api.getAllUsers(param)
+        .then(res => {
+          this.$refs.test.show();
+          this.$refs.test.setDataList(res);
+        })
+    },
+    chooseOperatorA(value) {
+      this.anesthesiaAssistant = value
+      console.log(value)
+    },
+    getxshs() {
+      let param = {
+        deptCode: this.deptCode,
+        userJob: this.userJob
+      }
+      this.api.getAllUsers(param)
+        .then(res => {
+          console.log('loadAction', res);
+          this.$refs.xshs.show();
+          this.$refs.xshs.setDataList(res);
+        })
+    },
+    choosexshs(value) {
+      this.anesthesiaAssistant = value
     }
   },
   mounted() {
     this.operMasterTime = this.changeDateFormat(new Date().Format('yyyy-MM-dd hh:mm'));
     this.getAllRoomNo();
+    this.$refs.test.init({
+      loadedFun: this.getUsers,
+      chooseAction: this.chooseOperatorA,
+      fieldName: 'USER_NAME'
+    })
+    // this.$refs.xshs.init({
+    //   loadedFun: this.getxshs,
+    //   chooseAction: this.choosexshs,
+    //   fieldName: 'USER_NAME'
+    // })
+    // this.$refs.areaSelect.init(this.info.jtqhdm);
   },
   created() {},
   beforeDestroy() {},
   components: {
     jzSelect,
-    userSelect
+    userSelect,
+    testSelect
   },
   computed: {
 
