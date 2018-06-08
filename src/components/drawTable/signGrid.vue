@@ -52,6 +52,109 @@ export default {
     }
   },
   methods: {
+    sortFun(a, b) {
+      return a.left - b.left;
+    },
+    topTimeFun() {
+      if (this.config.userInfo.inDateTime) {
+        var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
+        if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
+          var time6 = timeFive - this.startTimeInPage
+          var leftPlace5 = ((time6 * 3) / 60 / 1000);
+          this.dataOfBottom.push({
+            leftData: leftPlace5
+          })
+          this.dataBody.push({
+            left: leftPlace5,
+            bottom: 0,
+            name: '入手术室',
+            time: this.config.userInfo.inDateTime,
+          })
+        }
+      }
+      if (this.config.userInfo.endDateTime) {
+        var timeSix = new Date(this.config.userInfo.endDateTime).getTime();
+        if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
+          var time7 = timeSix - this.startTimeInPage
+          var leftPlace6 = ((time7 * 3) / 60 / 1000);
+          this.dataOfBottom.push({
+            leftData: leftPlace6
+          })
+          this.dataBody.push({
+            left: leftPlace6,
+            bottom: 0,
+            name: '出手术室',
+            time: this.config.userInfo.endDateTime,
+          })
+        }
+      }
+      if (this.config.userInfo.startDateTime) {
+        var timeOne = new Date(this.config.userInfo.startDateTime).getTime();
+        if (this.startTimeInPage <= timeOne && timeOne <= this.maxTimeInPage) {
+          var time2 = timeOne - this.startTimeInPage
+          var leftPlace1 = ((time2 * 3) / 60 / 1000);
+          this.dataOfBottom.push({
+            leftData: leftPlace1
+          })
+          this.dataBody.push({
+            left: leftPlace1,
+            bottom: 0,
+            name: '手术开始',
+            time: this.config.userInfo.startDateTime,
+          })
+        }
+      }
+      if (this.config.userInfo.anesStartTime) {
+        var timeTwo = new Date(this.config.userInfo.anesStartTime).getTime();
+        if (this.startTimeInPage <= timeTwo && timeTwo <= this.maxTimeInPage) {
+          var time3 = timeTwo - this.startTimeInPage
+          var leftPlace2 = ((time3 * 3) / 60 / 1000);
+          this.dataOfBottom.push({
+            leftData: leftPlace2
+          })
+          this.dataBody.push({
+            left: leftPlace2,
+            bottom: 0,
+            name: '麻醉开始',
+            time: this.config.userInfo.anesStartTime,
+          })
+        }
+      }
+      if (this.config.userInfo.anesEndTime) {
+        var timeThree = new Date(this.config.userInfo.anesEndTime).getTime();
+        if (this.startTimeInPage <= timeThree && timeThree <= this.maxTimeInPage) {
+          var time4 = timeThree - this.startTimeInPage
+          var leftPlace3 = ((time4 * 3) / 60 / 1000);
+          this.dataOfBottom.push({
+            leftData: leftPlace3
+          })
+          this.dataBody.push({
+            left: leftPlace3,
+            bottom: 0,
+            name: '麻醉结束',
+            time: this.config.userInfo.anesEndTime,
+          })
+        }
+      }
+      if (this.config.userInfo.endDateTime) {
+        var timeFour = new Date(this.config.userInfo.endDateTime).getTime();
+        // console.log(timeFour)
+        if (this.startTimeInPage <= timeFour && timeFour <= this.maxTimeInPage) {
+          var time5 = timeFour - this.startTimeInPage
+          // console.log(time5)
+          var leftPlace4 = ((time5 * 3) / 60 / 1000);
+          this.dataOfBottom.push({
+            leftData: leftPlace4
+          })
+          this.dataBody.push({
+            left: leftPlace4,
+            bottom: 0,
+            name: '手术结束',
+            time: this.config.userInfo.endDateTime,
+          })
+        }
+      }
+    },
     selectMedAnesthesiaEventList() {
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
@@ -91,134 +194,114 @@ export default {
               })
             }
           }
-          if (this.config.userInfo.inDateTime) {
-            var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
-            if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
-              var time6 = timeFive - this.startTimeInPage
-              var leftPlace5 = ((time6 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace5
-              })
-              this.dataBody.push({
-                left: leftPlace5,
-                bottom: 0,
-                name: '入手术室',
-                time: this.config.userInfo.inDateTime,
-              })
-            }
+          // 输液
+          let paramsTwo = {
+            patientId: this.config.userInfo.patientId,
+            operId: this.config.userInfo.operId,
+            visitId: this.config.userInfo.visitId,
+            itemClass: "3B",
           }
-          if (this.config.userInfo.endDateTime) {
-            var timeSix = new Date(this.config.userInfo.endDateTime).getTime();
-            if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
-              var time7 = timeSix - this.startTimeInPage
-              var leftPlace6 = ((time7 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace6
-              })
-              this.dataBody.push({
-                left: leftPlace6,
-                bottom: 0,
-                name: '出手术室',
-                time: this.config.userInfo.endDateTime,
-              })
-            }
-          }
-          var tmp = this.dataBody.sort(this.sortFun);
-          if (this.config.userInfo.startDateTime) {
-            var timeOne = new Date(this.config.userInfo.startDateTime).getTime();
-            if (this.startTimeInPage <= timeOne && timeOne <= this.maxTimeInPage) {
-              var time2 = timeOne - this.startTimeInPage
-              var leftPlace1 = ((time2 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace1
-              })
-              this.dataBody.push({
-                left: leftPlace1,
-                bottom: 0,
-                name: '手术开始',
-                time: this.config.userInfo.startDateTime,
-              })
-            }
-          }
-          if (this.config.userInfo.anesStartTime) {
-            var timeTwo = new Date(this.config.userInfo.anesStartTime).getTime();
-            if (this.startTimeInPage <= timeTwo && timeTwo <= this.maxTimeInPage) {
-              var time3 = timeTwo - this.startTimeInPage
-              var leftPlace2 = ((time3 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace2
-              })
-              this.dataBody.push({
-                left: leftPlace2,
-                bottom: 0,
-                name: '麻醉开始',
-                time: this.config.userInfo.anesStartTime,
-              })
-            }
-          }
-          if (this.config.userInfo.anesEndTime) {
-            var timeThree = new Date(this.config.userInfo.anesEndTime).getTime();
-            if (this.startTimeInPage <= timeThree && timeThree <= this.maxTimeInPage) {
-              var time4 = timeThree - this.startTimeInPage
-              var leftPlace3 = ((time4 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace3
-              })
-              this.dataBody.push({
-                left: leftPlace3,
-                bottom: 0,
-                name: '麻醉结束',
-                time: this.config.userInfo.anesEndTime,
-              })
-            }
-          }
-          if (this.config.userInfo.endDateTime) {
-            var timeFour = new Date(this.config.userInfo.endDateTime).getTime();
-            // console.log(timeFour)
-            if (this.startTimeInPage <= timeFour && timeFour <= this.maxTimeInPage) {
-              var time5 = timeFour - this.startTimeInPage
-              // console.log(time5)
-              var leftPlace4 = ((time5 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace4
-              })
-              this.dataBody.push({
-                left: leftPlace4,
-                bottom: 0,
-                name: '手术结束',
-                time: this.config.userInfo.endDateTime,
-              })
-            }
-          }
-          var pei = 0;
-          for (var k = 0; k < this.dataBody.length; k++) {
-            if (tmp[k] == tmp[k + 1]) {
-              // console.log(tmp[k])
-              for (var g = 0; g < this.dataBody.length; g++) {
-                // console.log(this.dataBody)
-                if (tmp[k] == this.dataBody[g].left) {
-                  pei = pei + 1;
-                  // console.log(this.dataBody[g])
-                  this.dataBody[g].bottom = -15 + pei * 15;
-                  // console.log(this.dataOfBottom[g].bottom)
-                } else {
-                  pei = 0;
-                  // this.dataBody[g].bottom = 0;
+          this.api.selectMedAnesthesiaEventList(paramsTwo)
+            .then(zze => {
+              if (zze.list.length > 6) {
+                for (var t = 7; t < zze.list.length; t++) {
+                  var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
+                  if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                    var time8 = timeMoreOne - this.startTimeInPage
+                    var leftPlace8 = ((time8 * 3) / 60 / 1000);
+                    this.dataOfBottom.push({
+                      leftData: leftPlace8
+                    })
+                    this.dataBody.push({
+                      left: leftPlace8,
+                      bottom: 0,
+                      name: zze.list[t].ITEM_NAME,
+                      time: zze.list[t].START_TIME,
+                    })
+                  }
                 }
-              }
-            } else {
-              pei = 0;
-            }
-          }
+              } else {
 
-          this.lineArray = res.list;
-          this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+              }
+
+              // 麻醉用药
+              let paramsThree = {
+                patientId: this.config.userInfo.patientId,
+                operId: this.config.userInfo.operId,
+                visitId: this.config.userInfo.visitId,
+                itemClass: "2C",
+              }
+              this.api.selectMedAnesthesiaEventList(paramsThree)
+                .then(aff => {
+                  if (aff.list.length > 10) {
+                    for (var h = 11; h < aff.list.length; h++) {
+                      var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
+                      if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
+                        var time9 = timeMoreTwo - this.startTimeInPage
+                        var leftPlace9 = ((time9 * 3) / 60 / 1000);
+                        this.dataOfBottom.push({
+                          leftData: leftPlace9
+                        })
+                        this.dataBody.push({
+                          left: leftPlace9,
+                          bottom: 0,
+                          name: aff.list[h].ITEM_NAME,
+                          time: aff.list[h].START_TIME,
+                        })
+                      }
+                    }
+                  } else {
+
+                  }
+
+                  var tmp = this.dataBody.sort(this.sortFun);
+                  this.topTimeFun();
+                  var pei = 0;
+                  for (var k = 0; k < this.dataBody.length; k++) {
+                    debugger
+                    if (k != this.dataBody.length - 1) {
+                      if (tmp[k].left == tmp[k + 1].left) {
+                        // console.log(tmp[k])
+                        for (var g = 0; g < this.dataBody.length; g++) {
+                          // console.log(this.dataBody)
+                          if (tmp[k].left == this.dataBody[g].left) {
+                            pei = pei + 1;
+                            // console.log(this.dataBody[g])
+                            this.dataBody[g].bottom = -15 + pei * 15;
+                            // console.log(this.dataOfBottom[g].bottom)
+                          } else {
+                            pei = 0;
+                            // this.dataBody[g].bottom = 0;
+                          }
+                        }
+                      } else {
+                        pei = 0;
+                      }
+                    } else {
+                      // for (var g = 0; g < this.dataBody.length; g++) {
+                      //   // console.log(this.dataBody)
+                      //   if (tmp[k].left == this.dataBody[g].left) {
+                      //     pei = pei + 1;
+                      //     // console.log(this.dataBody[g])
+                      //     this.dataBody[g].bottom = -15 + pei * 15;
+                      //     // console.log(this.dataOfBottom[g].bottom)
+                      //   } else {
+                      //     pei = 0;
+                      //     // this.dataBody[g].bottom = 0;
+                      //   }
+                      // }
+                    }
+                  }
+
+                  this.lineArray = res.list;
+                  this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+                })
+            })
+
         });
 
     },
-    sortFun(a, b) {
-      return a.left - b.left;
-    },
+
     noFunction() {
 
     },
@@ -284,128 +367,111 @@ export default {
               })
             }
           }
-          if (this.config.userInfo.inDateTime) {
-            var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
-            if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
-              var time6 = timeFive - this.startTimeInPage
-              var leftPlace5 = ((time6 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace5
-              })
-              this.dataBody.push({
-                left: leftPlace5,
-                bottom: 0,
-                name: '入手术室',
-                time: this.config.userInfo.inDateTime,
-              })
-            }
+          // 麻醉用药
+          let paramsTwo = {
+            patientId: this.config.userInfo.patientId,
+            operId: this.config.userInfo.operId,
+            visitId: this.config.userInfo.visitId,
+            itemClass: "3B",
           }
-          if (this.config.userInfo.endDateTime) {
-            var timeSix = new Date(this.config.userInfo.endDateTime).getTime();
-            if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
-              var time7 = timeSix - this.startTimeInPage
-              var leftPlace6 = ((time7 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace6
-              })
-              this.dataBody.push({
-                left: leftPlace6,
-                bottom: 0,
-                name: '出手术室',
-                time: this.config.userInfo.endDateTime,
-              })
-            }
-          }
-          var tmp = this.dataBody.sort(this.sortFun);
-          if (this.config.userInfo.startDateTime) {
-            var timeOne = new Date(this.config.userInfo.startDateTime).getTime();
-            if (this.startTimeInPage <= timeOne && timeOne <= this.maxTimeInPage) {
-              var time2 = timeOne - this.startTimeInPage
-              var leftPlace1 = ((time2 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace1
-              })
-              this.dataBody.push({
-                left: leftPlace1,
-                bottom: 0,
-                name: '手术开始',
-                time: this.config.userInfo.startDateTime,
-              })
-            }
-          }
-          if (this.config.userInfo.anesStartTime) {
-            var timeTwo = new Date(this.config.userInfo.anesStartTime).getTime();
-            if (this.startTimeInPage <= timeTwo && timeTwo <= this.maxTimeInPage) {
-              var time3 = timeTwo - this.startTimeInPage
-              var leftPlace2 = ((time3 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace2
-              })
-              this.dataBody.push({
-                left: leftPlace2,
-                bottom: 0,
-                name: '麻醉开始',
-                time: this.config.userInfo.anesStartTime,
-              })
-            }
-          }
-          if (this.config.userInfo.anesEndTime) {
-            var timeThree = new Date(this.config.userInfo.anesEndTime).getTime();
-            if (this.startTimeInPage <= timeThree && timeThree <= this.maxTimeInPage) {
-              var time4 = timeThree - this.startTimeInPage
-              var leftPlace3 = ((time4 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace3
-              })
-              this.dataBody.push({
-                left: leftPlace3,
-                bottom: 0,
-                name: '麻醉结束',
-                time: this.config.userInfo.anesEndTime,
-              })
-            }
-          }
-          if (this.config.userInfo.endDateTime) {
-            var timeFour = new Date(this.config.userInfo.endDateTime).getTime();
-            // console.log(timeFour)
-            if (this.startTimeInPage <= timeFour && timeFour <= this.maxTimeInPage) {
-              var time5 = timeFour - this.startTimeInPage
-              // console.log(time5)
-              var leftPlace4 = ((time5 * 3) / 60 / 1000);
-              this.dataOfBottom.push({
-                leftData: leftPlace4
-              })
-              this.dataBody.push({
-                left: leftPlace4,
-                bottom: 0,
-                name: '手术结束',
-                time: this.config.userInfo.endDateTime,
-              })
-            }
-          }
-          var pei = 0;
-          for (var k = 0; k < this.dataBody.length; k++) {
-            if (tmp[k] == tmp[k + 1]) {
-              // console.log(tmp[k])
-              for (var g = 0; g < this.dataBody.length; g++) {
-                // console.log(this.dataBody)
-                if (tmp[k] == this.dataBody[g].left) {
-                  pei = pei + 1;
-                  // console.log(this.dataBody[g])
-                  this.dataBody[g].bottom = -15 + pei * 15;
-                  // console.log(this.dataOfBottom[g].bottom)
-                } else {
-                  pei = 0;
-                  // this.dataBody[g].bottom = 0;
+          this.api.selectMedAnesthesiaEventList(paramsTwo)
+            .then(zze => {
+              // var list = zze.list;
+              console.log(zze.list)
+              if (zze.list.length > 6) {
+                for (var t = 7; t < zze.list.length; t++) {
+                  var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
+                  if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                    var time8 = timeMoreOne - this.startTimeInPage
+                    var leftPlace8 = ((time8 * 3) / 60 / 1000);
+                    this.dataOfBottom.push({
+                      leftData: leftPlace8
+                    })
+                    this.dataBody.push({
+                      left: leftPlace8,
+                      bottom: 0,
+                      name: res.list[t].ITEM_NAME,
+                      time: res.list[t].START_TIME,
+                    })
+                  }
                 }
-              }
-            } else {
-              pei = 0;
-            }
-          }
+              } else {
 
-          this.lineArray = res.list;
-          this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+              }
+              // 麻醉用药
+              let paramsThree = {
+                patientId: this.config.userInfo.patientId,
+                operId: this.config.userInfo.operId,
+                visitId: this.config.userInfo.visitId,
+                itemClass: "2C",
+              }
+              this.api.selectMedAnesthesiaEventList(paramsThree)
+                .then(aff => {
+                  // var list = aff.list;
+                  console.log(aff.list)
+                  if (aff.list.length > 10) {
+                    for (var h = 11; h < aff.list.length; h++) {
+                      var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
+                      if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
+                        var time9 = timeMoreTwo - this.startTimeInPage
+                        var leftPlace9 = ((time9 * 3) / 60 / 1000);
+                        this.dataOfBottom.push({
+                          leftData: leftPlace9
+                        })
+                        this.dataBody.push({
+                          left: leftPlace9,
+                          bottom: 0,
+                          name: aff.list[h].ITEM_NAME,
+                          time: aff.list[h].START_TIME,
+                        })
+                      }
+                    }
+                  } else {
+
+                  }
+                  var tmp = this.dataBody.sort(this.sortFun);
+                  this.topTimeFun();
+                  var pei = 0;
+                  for (var k = 0; k < this.dataBody.length; k++) {
+                    debugger
+                    if (k != this.dataBody.length - 1) {
+                      if (tmp[k].left == tmp[k + 1].left) {
+                        // console.log(tmp[k])
+                        for (var g = 0; g < this.dataBody.length; g++) {
+                          // console.log(this.dataBody)
+                          if (tmp[k].left == this.dataBody[g].left) {
+                            pei = pei + 1;
+                            // console.log(this.dataBody[g])
+                            this.dataBody[g].bottom = -15 + pei * 15;
+                            // console.log(this.dataOfBottom[g].bottom)
+                          } else {
+                            pei = 0;
+                            // this.dataBody[g].bottom = 0;
+                          }
+                        }
+                      } else {
+                        pei = 0;
+                      }
+                    } else {
+                      // for (var g = 0; g < this.dataBody.length; g++) {
+                      //   // console.log(this.dataBody)
+                      //   if (tmp[k].left == this.dataBody[g].left) {
+                      //     pei = pei + 1;
+                      //     // console.log(this.dataBody[g])
+                      //     this.dataBody[g].bottom = -15 + pei * 15;
+                      //     // console.log(this.dataOfBottom[g].bottom)
+                      //   } else {
+                      //     pei = 0;
+                      //     // this.dataBody[g].bottom = 0;
+                      //   }
+                      // }
+                    }
+                  }
+                  this.lineArray = res.list;
+                })
+
+            })
+
         });
 
     },

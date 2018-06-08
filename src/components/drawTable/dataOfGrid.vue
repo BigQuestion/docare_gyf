@@ -98,8 +98,63 @@ export default {
               sort: time2
             });
           }
-          this.dataBody.sort(this.sortFun)
-          this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+          // 输液
+          let paramsTwo = {
+            patientId: this.config.userInfo.patientId,
+            operId: this.config.userInfo.operId,
+            visitId: this.config.userInfo.visitId,
+            itemClass: "3B",
+          }
+          this.api.selectMedAnesthesiaEventList(paramsTwo)
+            .then(zze => {
+              if (zze.list.length > 6) {
+                for (var t = 7; t < zze.list.length; t++) {
+                  var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
+                  if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                    var titleDataTwo = ['出手术室', '================', '开始时间：' + zze.list[t].START_TIME];
+                    var titleTwo = titleDataTwo.join('\n');
+                    this.dataBody.push({
+                      ITEM_NAME: '出手术室',
+                      START_TIME: zze.list[t].START_TIME,
+                      titleWord: titleDataTwo,
+                      sort: timeMoreOne
+                    });
+                  }
+                }
+              } else {
+
+              }
+              // 麻醉用药
+              let paramsTwo = {
+                patientId: this.config.userInfo.patientId,
+                operId: this.config.userInfo.operId,
+                visitId: this.config.userInfo.visitId,
+                itemClass: "2C",
+              }
+              this.api.selectMedAnesthesiaEventList(paramsTwo)
+                .then(aff => {
+                  if (aff.list.length > 10) {
+                    for (var h = 11; h < aff.list.length; h++) {
+                      var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
+                      if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                        var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
+                        var titleTwo = titleDataTwo.join('\n');
+                        this.dataBody.push({
+                          ITEM_NAME: aff.list[h].ITEM_NAME,
+                          START_TIME: aff.list[h].START_TIME,
+                          titleWord: titleDataTwo,
+                          sort: timeMoreOne
+                        });
+                      }
+                    }
+                  } else {
+
+                  }
+                  this.dataBody.sort(this.sortFun)
+                  this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+                });
+            });
+
         });
     },
     sortFun(a, b) {
@@ -174,7 +229,62 @@ export default {
               sort: time2
             });
           }
-          this.dataBody.sort(this.sortFun)
+
+          // 输液
+          let paramsTwo = {
+            patientId: this.config.userInfo.patientId,
+            operId: this.config.userInfo.operId,
+            visitId: this.config.userInfo.visitId,
+            itemClass: "3B",
+          }
+          this.api.selectMedAnesthesiaEventList(paramsTwo)
+            .then(zze => {
+              if (zze.list.length > 6) {
+                for (var t = 7; t < zze.list.length; t++) {
+                  var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
+                  if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                    var titleDataTwo = ['出手术室', '================', '开始时间：' + zze.list[t].START_TIME];
+                    var titleTwo = titleDataTwo.join('\n');
+                    this.dataBody.push({
+                      ITEM_NAME: '出手术室',
+                      START_TIME: zze.list[t].START_TIME,
+                      titleWord: titleDataTwo,
+                      sort: timeMoreOne
+                    });
+                  }
+                }
+              } else {
+
+              }
+              // 麻醉用药
+              let paramsTwo = {
+                patientId: this.config.userInfo.patientId,
+                operId: this.config.userInfo.operId,
+                visitId: this.config.userInfo.visitId,
+                itemClass: "2C",
+              }
+              this.api.selectMedAnesthesiaEventList(paramsTwo)
+                .then(aff => {
+                  if (aff.list.length > 10) {
+                    for (var h = 11; h < aff.list.length; h++) {
+                      var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
+                      if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                        var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
+                        var titleTwo = titleDataTwo.join('\n');
+                        this.dataBody.push({
+                          ITEM_NAME: aff.list[h].ITEM_NAME,
+                          START_TIME: aff.list[h].START_TIME,
+                          titleWord: titleDataTwo,
+                          sort: timeMoreOne
+                        });
+                      }
+                    }
+                  } else {
+
+                  }
+                  this.dataBody.sort(this.sortFun)
+                });
+            });
         });
     },
 
