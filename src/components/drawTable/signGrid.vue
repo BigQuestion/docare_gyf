@@ -1,9 +1,9 @@
 <template>
   <div :style="{width:width+'px',height:height+'px'}" style="position: relative;margin:2px;">
     <div v-if="page==false" @mousemove="moveEvent($event)" @mouseout="outEvent()" :style="{width:width+'px',height:height+'px'}" style="position:relative;">
-      <div v-for="(item,index) in dataBody" @mousemove.stop="moveEventInItem(item)" :style="{left:item.left+'px',bottom:item.bottom+'px'}" style="position:absolute;cursor:default;">
+      <div v-for="(item,index) in dataBody" @mousemove.stop="moveEventInItem(item)" :style="{left:item.left+'px',bottom:item.bottom+'px'}" style="position:absolute;cursor:default;font-famliy:microsoft yahei;">
         <span v-if="item.name=='麻醉开始'">X</span>
-        <span v-else-if="item.name=='手术开始'">⊙</span>
+        <span style="font-size:21px;" v-else-if="item.name=='手术开始'">⊙</span>
         <span style="color:red;" v-else-if="item.name=='麻醉结束'">X</span>
         <span style="color:red;" v-else-if="item.name=='手术结束'">ⓧ</span>
         <span v-else>{{index+1}}</span>
