@@ -10,8 +10,8 @@
                 <div class="titleBox" v-for="item in machineList" :style="{width:item.width+'px',textAlign:item.textalign}">{{item.text}}</div>
             </div>
             <div class="monitorBox">
-                <div v-for="(list,index) in commonTypeList" style="display: flex;">
-                    <div v-for="cl in machineList" :style="{width:cl.width+'px',textAlign:cl.textalign}" :class="{greenClass:list.isBeChoosed}" style="border:1px solid rgb(177,207,243);box-sizing:border-box;">
+                <div v-for="(list,index) in commonTypeList" class="HoverClass" style="display: flex;">
+                    <div v-for="cl in machineList" :style="{width:cl.width+'px',textAlign:cl.textalign}" :class="{greenClass:list.isBeChoosed}" style="font-size:12px;border:1px solid rgb(177,207,243);box-sizing:border-box;">
                         <div v-if="cl.type=='raido'">
                             <input type="checkbox" :checked="list.checkedData" @change="getSingleSelect(list,index)">
                         </div>
@@ -19,12 +19,12 @@
                     </div>
                 </div>
             </div>
-            <div style="display:flex;position:absolute;top:424px;left:4px;">
+            <div style="display:flex;position:absolute;top:364px;left:4px;">
                 <div class="titleBox" v-for="item in anesthesiaList" :style="{width:item.width+'px',textAlign:item.textalign}">{{item.text}}</div>
             </div>
             <div class="anesthesia">
-                <div v-for="(list,index) in commonTypeListTwo" style="display: flex;">
-                    <div v-for="cl in anesthesiaList" :class="{greenClass:list.isBeChoosed}" :style="{width:cl.width+'px',textAlign:cl.textalign}" style="border:1px solid rgb(177,207,243);box-sizing:border-box;">
+                <div v-for="(list,index) in commonTypeListTwo" class="HoverClass" style="display: flex;">
+                    <div v-for="cl in anesthesiaList" :class="{greenClass:list.isBeChoosed}" :style="{width:cl.width+'px',textAlign:cl.textalign}" style="font-size:12px;border:1px solid rgb(177,207,243);box-sizing:border-box;">
                         <div v-if="cl.type=='raido'">
                             <input type="checkbox" :checked="list.checkedData" @change="getSingleSelectTwo(list,index)">
                         </div>
@@ -202,10 +202,10 @@ export default {
                 res => {
                     console.log(res.list)
                     this.commonTypeList = res.list
-                    if (res.list.length <= 14) {
+                    if (res.list.length <= 16) {
                         this.machineList[0].width = 191;
                     } else {
-                        this.machineList[0].width = 171;
+                        this.machineList[0].width = 175;
                     }
                     for (var a = 0; a < res.list.length; a++) {
                         if (this.commonTypeList[a].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeList[a].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeList[a].patientId == this.userInfoDataBody.userInfo.patientId) {
@@ -244,10 +244,10 @@ export default {
                 res => {
                     console.log(res.list)
                     this.commonTypeListTwo = res.list
-                    if (res.list.length <= 7) {
+                    if (res.list.length <= 8) {
                         this.anesthesiaList[0].width = 191;
                     } else {
-                        this.anesthesiaList[0].width = 171;
+                        this.anesthesiaList[0].width = 175;
                     }
                     for (var a = 0; a < res.list.length; a++) {
                         if (this.commonTypeListTwo[a].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeListTwo[a].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeListTwo[a].patientId == this.userInfoDataBody.userInfo.patientId) {
@@ -813,29 +813,31 @@ export default {
 
 .window_load {
     width: 800px;
-    height: 780px;
+    height: 600px;
     left: calc(50% - 400px);
-    top: calc(50% - 390px);
+    top: calc(50% - 300px);
 }
 
 .monitorBox {
     width: calc(100% - 4px);
-    height: 380px;
+    height: 320px;
     border: 2px solid #191A1C;
     box-sizing: border-box;
     margin: 2px;
     overflow-y: auto;
-    padding-top: 30px;
+    padding-top: 24px;
     background-color: #fff;
 }
 
 .titleBox {
     border: 1px solid #ddd;
-    height: 30px;
-    line-height: 30px;
+    height: 24px;
+    line-height: 24px;
     box-sizing: border-box;
     padding-left: 5px;
     background-color: #fff;
+    font-size: 12px;
+
 }
 
 .titleBox:last-child {
@@ -844,43 +846,51 @@ export default {
 
 .anesthesia {
     width: calc(100% - 4px);
-    height: 220px;
+    height: 145px;
     border: 2px solid #191A1C;
     box-sizing: border-box;
     margin: 10px 2px 2px;
-    padding-top: 30px;
+    padding-top: 24px;
     overflow-y: auto;
-    background-color: #fff;
+    /* background-color: #fff; */
+}
+
+.HoverClass:hover{
+    background-color: rgba(177, 207, 243, 0.7)
 }
 
 .bottomBox {
-    padding-top: 20px;
+    padding-top: 10px;
     width: 100%;
-    height: 110px;
+    height: 80px;
 }
 
 .inputBox {
     display: flex;
+    font-size: 12px;
 }
 
 .inputBox span {
     padding-left: 15px;
+    line-height: 24px;
 }
 
 .inputBox input {
     height: 20px;
+    font-size: 12px;
 }
 
 .sureBox {
     width: 100%;
-    padding-top: 30px;
+    padding-top: 20px;
     display: flex;
     flex-direction: row-reverse;
 }
 
 .sureBox button {
-    width: 110px;
-    height: 30px;
-    margin-right: 30px;
+    width: 100px;
+    height: 24px;
+    margin-right: 15px;
+    font-size: 12px;
 }
 </style>

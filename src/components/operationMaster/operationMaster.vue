@@ -174,9 +174,9 @@
         <div class="patientList" v-show="showData">
           <div style="height:110px;">
             <div>
-              <div class="container" style="padding-left: 5px;margin-bottom:10px;margin-top:5px;">
-                <img style="margin-right:10px;" src="../../assets/people.png" alt="">
-                <div style="line-height:24px;">
+              <div class="container" style="padding-left: 5px;margin-bottom:10px;margin-top:5px;align-items:center;">
+                <img style="margin-right:10px;height:20px;" src="../../assets/people.png" alt="">
+                <div style="line-height:24px;display:flex;align-items:center;">
                   <input type="radio" id="all" @click="searchPatientList" v-model="operStatus" value="">
                   <label for="all">全部</label>
                   <input type="radio" id="one" @click="searchPatientList" value="0" v-model="operStatus">
@@ -189,31 +189,31 @@
                 </div>
               </div>
               <div class="container" style="padding-left: 5px;margin-bottom:10px;">
-                <div class="left15" style="margin-left:5px;display:flex;">
+                <div class="left15" style="margin-left:5px;display:flex;height:22px;line-height:22px;">
                   <span>ID</span>
-                  <input @keyup.enter='searchPatientList' style="width: 84px;" type="text" v-model="patientId">
+                  <input @keyup.enter='searchPatientList' style="width: 84px;font-size:12px;" type="text" v-model="patientId">
                 </div>
-                <div class="left15" style="margin-left:5px;display:flex;">
+                <div class="left15" style="margin-left:5px;display:flex;height:22px;line-height:22px;">
                   <span>姓名</span>
-                  <input @keyup.enter='searchPatientList' type="text" style="width: 60px;" v-model="patientName">
+                  <input @keyup.enter='searchPatientList' type="text" style="width: 60px;font-size:12px;" v-model="patientName">
                 </div>
-                <div class="left15" style="margin-left:5px;display:flex;">
+                <div class="left15" style="margin-left:5px;display:flex;height:22px;line-height:22px;">
                   <span>日期</span>
-                  <input v-model="getTime" type="date" style="width: 120px;" @keyup.enter='searchPatientList'>
+                  <input v-model="getTime" type="date" style="width: 120px;font-size:12px;" @keyup.enter='searchPatientList'>
                 </div>
               </div>
             </div>
             <div style="padding-left: 5px;">
-              <button @click='openJzView'>急诊登记</button>
-              <button @click='searchPatientList'>搜索</button>
+              <button style="font-size:12px;" @click='openJzView'>急诊登记</button>
+              <button style="font-size:12px;" @click='searchPatientList'>搜索</button>
             </div>
           </div>
-          <div style="overflow-y: auto;height:calc(100% - 110px - 98px)">
+          <div style="overflow-y: auto;height:calc(100% - 110px - 98px);font-size:12px;">
             <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
               <div class="patientContent title_back">
                 <span>手术间 {{item.operatingRoomNo}}</span>
               </div>
-              <ul>
+              <ul style="padding-left:5px;">
                 <li>患者 {{item.patientName}} {{item.patientId}} 住院号 {{item.inpNo}}</li>
                 <li>手术 {{item.operationName}}</li>
                 <li v-if="item.inDateTime==null">时间 {{item.scheduledDateTime}}</li>
@@ -393,9 +393,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                                                        <div class="in_con">
-                                                          {{patientInfo.QIEKOU_NUMBER}}
-                                                        </div> -->
+                                                          <div class="in_con">
+                                                            {{patientInfo.QIEKOU_NUMBER}}
+                                                          </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -1480,7 +1480,6 @@ export default {
           res => {
             if (res.success == true) {
               this.searchPatientList();
-
               this.api.selectMedOperationMaster({
                 patientId: this.lockedPatientInfo.patientId,
                 visitId: this.lockedPatientInfo.visitId,
@@ -1958,10 +1957,11 @@ export default {
 }
 
 .patientContent {
-  height: 30px;
+  height: 26px;
   border-bottom: 1px solid rgb(177, 207, 243);
-  line-height: 30px;
+  line-height: 26px;
   color: rgb(23, 68, 140);
+  padding-left: 5px;
 }
 
 .procedure {
@@ -2019,7 +2019,7 @@ export default {
 .listBorder {
   border: 1px solid rgb(177, 207, 243);
   padding-bottom: 5px;
-  padding-left: 5px;
+  /* padding-left: 5px; */
 }
 
 .leftNoneBox {
@@ -2090,6 +2090,7 @@ export default {
   display: flex;
   /* Chrome 29+, Firefox 22+, IE 11+, Opera 12.1/17/18, Android 4.4+ */
   margin-bottom: 15px;
+  font-size: 12px;
 }
 
 .in_con {
