@@ -22,7 +22,7 @@
                   <div style="border:1px solid #a9a9a9;height:20px;" v-if="cl.timeEdit">
                     <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
-                  <div style="" v-else-if="cl.isChixu">
+                  <div v-else-if="cl.isChixu">
                     <select style="height:22px;width:65px;display:block;font-size:12px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
                         不持续
@@ -39,7 +39,7 @@
                           </select> -->
                     <!-- <input v-else style="height:25px;border:0;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
                     <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-
+                    <!-- <select-module :object="item" :value="item[cl.fieldObj]"></select-module> -->
                   </div>
                 </div>
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
@@ -249,78 +249,79 @@
 <script>
 import eventTemplet from '@/components/eventTemplet/eventTemplet.vue';
 import inputDiv from '@/components/patientOperationInfo/inputDiv.vue';
+import selectModule from '@/components/selectModule/selectModule.vue';
 export default {
   data() {
     return {
       dataIn: this.parentToChild.dataInParent,
       tbconfig: [{
-        title: "",
-        fieldObj: "",
-        width: 10
-      },
-      {
-        title: "类型",
-        fieldObj: "TYPE_NAME",
-        width: 45
-      },
-      {
-        title: "事件名称",
-        fieldObj: "ITEM_NAME",
-        width: 190
-      },
-      {
-        title: "途径",
-        fieldObj: "ADMINISTRATOR",
-        width: 50
-      },
-      {
-        title: "浓度",
-        fieldObj: "CONCENTRATION",
-        width: 45
-      },
-      {
-        title: "单位",
-        fieldObj: "CONCENTRATION_UNIT",
-        width: 45
-      },
-      {
-        title: "速度",
-        fieldObj: "PERFORM_SPEED",
-        width: 45
-      },
-      {
-        title: "单位",
-        fieldObj: "SPEED_UNIT",
-        width: 45
-      },
-      {
-        title: "剂量",
-        fieldObj: "DOSAGE",
-        width: 45
-      },
-      {
-        title: "单位",
-        fieldObj: "DOSAGE_UNITS",
-        width: 45
-      },
-      {
-        title: "发生时间",
-        fieldObj: "START_TIME",
-        timeEdit: true,
-        width: 155
-      },
-      {
-        title: "是否持续",
-        fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
-        width: 75,
-        isChixu: true,
-      },
-      {
-        title: "结束时间",
-        fieldObj: "ENDDATE",
-        timeEdit: true,
-        width: 155
-      }
+          title: "",
+          fieldObj: "",
+          width: 10
+        },
+        {
+          title: "类型",
+          fieldObj: "TYPE_NAME",
+          width: 45
+        },
+        {
+          title: "事件名称",
+          fieldObj: "ITEM_NAME",
+          width: 190
+        },
+        {
+          title: "途径",
+          fieldObj: "ADMINISTRATOR",
+          width: 50
+        },
+        {
+          title: "浓度",
+          fieldObj: "CONCENTRATION",
+          width: 45
+        },
+        {
+          title: "单位",
+          fieldObj: "CONCENTRATION_UNIT",
+          width: 45
+        },
+        {
+          title: "速度",
+          fieldObj: "PERFORM_SPEED",
+          width: 45
+        },
+        {
+          title: "单位",
+          fieldObj: "SPEED_UNIT",
+          width: 45
+        },
+        {
+          title: "剂量",
+          fieldObj: "DOSAGE",
+          width: 45
+        },
+        {
+          title: "单位",
+          fieldObj: "DOSAGE_UNITS",
+          width: 45
+        },
+        {
+          title: "发生时间",
+          fieldObj: "START_TIME",
+          timeEdit: true,
+          width: 155
+        },
+        {
+          title: "是否持续",
+          fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
+          width: 75,
+          isChixu: true,
+        },
+        {
+          title: "结束时间",
+          fieldObj: "ENDDATE",
+          timeEdit: true,
+          width: 155
+        }
       ],
       eventList: [],
       eventTempList: [],
@@ -371,29 +372,29 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
-        res => {
-          for (var i = 0; i < res.list.length; i++) {
-            if (res.list[i].START_TIME) {
-              res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
+          res => {
+            for (var i = 0; i < res.list.length; i++) {
+              if (res.list[i].START_TIME) {
+                res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
+              }
+              if (res.list[i].ENDDATE) {
+                res.list[i].ENDDATE = this.changeDateFormat(res.list[i].ENDDATE);
+              }
             }
-            if (res.list[i].ENDDATE) {
-              res.list[i].ENDDATE = this.changeDateFormat(res.list[i].ENDDATE);
+            for (var a = 0; a < res.list.length; a++) {
+              this.$set(res.list[a], 'thooseItem', false);
             }
-          }
-          for (var a = 0; a < res.list.length; a++) {
-            this.$set(res.list[a], 'thooseItem', false);
-          }
-          this.eventList = res.list;
-          this.eventTempList = res.list;
-        });
+            this.eventList = res.list;
+            this.eventTempList = res.list;
+          });
     },
     allMedAnesthesiaEventType() {
       let params = {}
       this.api.allMedAnesthesiaEventType(params)
         .then(
-        res => {
-          this.eventTypeList = res.list;
-        });
+          res => {
+            this.eventTypeList = res.list;
+          });
     },
     //根据类别获取麻醉事件定义
     medAnesthesiaEventOpenByItemClass(item) {
@@ -432,9 +433,9 @@ export default {
       }
       this.api.deleteMedAnesthesiaEvent(params)
         .then(
-        res => {
-          this.selectMedAnesthesiaEventList();
-        })
+          res => {
+            this.selectMedAnesthesiaEventList();
+          })
     },
     //双击添加麻醉事件记录
     addEvent(item) {
@@ -544,12 +545,12 @@ export default {
       }
       this.api.getSignName(params)
         .then(
-        res => {
-          if (res.length < 1) {
-            this.itemNameList.push({
-              itemName: "心率",
-              itemCode: 40,
-            }, {
+          res => {
+            if (res.length < 1) {
+              this.itemNameList.push({
+                itemName: "心率",
+                itemCode: 40,
+              }, {
                 itemName: "PULSE",
                 itemCode: 44,
               }, {
@@ -565,33 +566,33 @@ export default {
                 itemName: "无创舒张压",
                 itemCode: 90,
               });
-            this.getSignTimeData(this.itemNameList.length);
-          } else {
-            for (var i = 0; i < res.length; i++) {
-              res[i].itemValue = "";
-            }
-            let compare = function(prop) {
-              return function(obj1, obj2) {
-                let val1 = obj1[prop]
-                let val2 = obj2[prop]
-                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                  val1 = Number(val1);
-                  val2 = Number(val2);
-                }
-                if (val1 < val2) {
-                  return -1;
-                } else if (val1 > val2) {
-                  return 1;
-                } else {
-                  return 0;
+              this.getSignTimeData(this.itemNameList.length);
+            } else {
+              for (var i = 0; i < res.length; i++) {
+                res[i].itemValue = "";
+              }
+              let compare = function(prop) {
+                return function(obj1, obj2) {
+                  let val1 = obj1[prop]
+                  let val2 = obj2[prop]
+                  if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                    val1 = Number(val1);
+                    val2 = Number(val2);
+                  }
+                  if (val1 < val2) {
+                    return -1;
+                  } else if (val1 > val2) {
+                    return 1;
+                  } else {
+                    return 0;
+                  }
                 }
               }
+              this.itemNameList = res.sort(compare("itemCode"));
+              this.getSignTimeData(res.length);
             }
-            this.itemNameList = res.sort(compare("itemCode"));
-            this.getSignTimeData(res.length);
-          }
 
-        })
+          })
     },
     getSignTimeData(len) {
       let params = {
@@ -642,23 +643,23 @@ export default {
       return false
       this.api.getSignTimeData(params)
         .then(
-        res => {
-          var sortArray = [];
-          if (res.length < 1)
-            return false;
-          for (var i = 0; i < res.length; i++) {
-            let item = res[i].dataValue;
-            item = eval('(' + item + ')');
-            //item = JSON.parse(item);
-            let xL = len - item.length
-            if (xL > 0) {
-              for (var j = 0; j < xL; j++) {
-                item.push('');
+          res => {
+            var sortArray = [];
+            if (res.length < 1)
+              return false;
+            for (var i = 0; i < res.length; i++) {
+              let item = res[i].dataValue;
+              item = eval('(' + item + ')');
+              //item = JSON.parse(item);
+              let xL = len - item.length
+              if (xL > 0) {
+                for (var j = 0; j < xL; j++) {
+                  item.push('');
+                }
               }
+              this.signdataList = sortArray;
             }
-            this.signdataList = sortArray;
-          }
-        })
+          })
     },
     //获取改变的值
     getChangeValue(item) {
@@ -991,7 +992,8 @@ export default {
   computed: {},
   components: {
     eventTemplet,
-    inputDiv
+    inputDiv,
+    selectModule
   },
   mounted() {
     this.selectMedAnesthesiaEventList();
@@ -1055,4 +1057,5 @@ button {
   background-color: #CCE8FF;
   /* border: 1px solid #A9A9A9; */
 }
+
 </style>

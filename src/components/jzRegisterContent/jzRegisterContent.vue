@@ -97,10 +97,10 @@
             <userSelect v-if="secondAnesthesiaDoctorView" methodName="secondAnesthesiaDoctor" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closesecondAnesthesiaDoctor="secondAnesthesiaDoctorOpenView" width="120"></userSelect>
           </div>
           <div style="width: 70px;margin-left: 60px;">麻醉助手</div>
-          <div style="margin-left: 15px;">
+          <div style="margin-left: 15px;position: relative;">
             <input v-model="jzInfo.anesthesiaAssistant" style="width: 80px;" @dblclick="anesthesiaAssistantOpenView" readonly="readonly">
             <userSelect v-if="anesthesiaAssistantView" methodName="anesthesiaAssistant" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closeanesthesiaAssistant="anesthesiaAssistantOpenView" width="120"></userSelect>
-            <testSelect ref="test" width="120"></testSelect>
+            <testSelect style="position: absolute;top: 0px;" ref="test" width="120"></testSelect>
           </div>
           <div style="margin-left: 15px;">
             <input v-model="jzInfo.secondAnesthesiaAssistant" style="width: 80px;" @dblclick="secondAnesthesiaAssistantOpenView" readonly="readonly">
@@ -355,7 +355,6 @@ export default {
       }
       this.api.getAllUsers(param)
         .then(res => {
-          console.log('loadAction', res);
           this.$refs.xshs.show();
           this.$refs.xshs.setDataList(res);
         })

@@ -218,11 +218,10 @@ export default {
       var svg = d3.selectAll(".test")
       svg.remove();
       var m = this.tbMin; //加几分钟
-      var timeDate = new Date(startTime);
-      var toMin = timeDate.getTime() + 1000 * 60 * m;
       var timeArray = [];
       let startMinTime = this.config.startMinTime
-      let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
+      let defaultTime
+ = new Date().Format("yyyy-MM-dd") + " 08:00"
       if (this.config.pageOper == 0 && startMinTime) {
         for (var i = 0; i <= this.columns; i++) {
 

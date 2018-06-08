@@ -1493,9 +1493,7 @@ export default {
               )
             }
           });
-
     },
-
     //手术信息
     getPatientOperationInfo() {
       this.patientOperationInfoView.dataInParent = !this.patientOperationInfoView.dataInParent;
