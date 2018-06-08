@@ -1,29 +1,29 @@
 <template>
   <div class="dictionaries">
-    <div style="background-color: rgb(227, 239, 255);width: 80%;z-index: 11;cursor: auto;position: absolute;top: 5%;height: 90%;left: 10%;border:2px solid rgb(54,157,200);">
+    <div style="background-color: rgb(227, 239, 255);width: 1214px;z-index: 11;cursor: auto;position: absolute;top: calc(50% - 305px);height: 610px;left: calc(50% - 607px);border:2px solid rgb(54,157,200);">
       <div class="load_top" style="height: 30px;background-color: rgb(54,157,200);line-height: 30px;">
         <div>术中登记</div>
         <div @click="aboutNone" class="top_active">X</div>
       </div>
-      <div style="height: 40px;width: 100%;padding-left: 15px;">
-        <span style="font-size: 20px;">麻醉事件</span>
+      <div style="height: 20px;width: calc(100% - 15px);padding-left: 15px;">
+        <span style="font-size: 14px;">麻醉事件</span>
       </div>
-      <div style="height: 400px;display:flex;border-bottom:3px solid #7774da;">
-        <div style="width:75%;">
-          <div style="width: 100%;border:1px solid #222;overflow-y: auto;">
+      <div style="height: 329px;display:flex;border-bottom:3px solid #7774da;">
+        <div style="width:80%;">
+          <div style="width: 100%;border:1px solid #222;overflow-y: auto;height:270px;box-sizing: border-box;">
             <div style="display: flex;">
-              <div style="border:1px solid rgb(177,207,243);background-color:#fff;box-sizing:border-box;" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
+              <div style="border:1px solid rgb(177,207,243);background-color:#fff;box-sizing:border-box;font-size:12px;" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
                 {{cell.title}}
               </div>
             </div>
-            <div style="height: 280px;" ref="eventContent">
+            <div style="min-height: 280px;" ref="eventContent">
               <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @click="clickItem(item)">
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
-                  <div style="height:25px;border:1px solid #a9a9a9;" v-if="cl.timeEdit">
-                    <input style="height:25px;border:0;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                  <div style="border:1px solid #a9a9a9;height:20px;" v-if="cl.timeEdit">
+                    <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
-                  <div style="height:25px;" v-else-if="cl.isChixu">
-                    <select style="height:27px;width:65px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
+                  <div style="" v-else-if="cl.isChixu">
+                    <select style="height:22px;width:65px;display:block;font-size:12px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
                         不持续
                       </option>
@@ -33,19 +33,21 @@
                     </select>
                   </div>
                   <div v-else style="border:1px solid #a9a9a9;box-sizing:border-box;height:100%;" :style="{width:(cl.width)+'px'}">
-                    <select v-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;">
-                      <option value="">123</option>
-                      <option value="">123</option>
-                    </select>
-                    <input v-else style="height:25px;border:0;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                    <!-- <select v-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;">
+                            <option value="">mg/h</option>
+                            <option value="">次/min</option>
+                          </select> -->
+                    <!-- <input v-else style="height:25px;border:0;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
+                    <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+
                   </div>
                 </div>
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
                   <div v-if="cl.timeEdit" style="border:1px solid #a9a9a9;">
-                    <input @change="getChangeValue(item)" style="height:25px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                    <input @change="getChangeValue(item)" style="height:20px;display:block;font-size:12px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div v-else-if="cl.isChixu">
-                    <select style="height:29px;width:65px;border:0;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                    <select style="height:22px;width:65px;border:0;display:block;font-size:12px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
                         不持续
                       </option>
@@ -55,16 +57,16 @@
                     </select>
                   </div>
                   <div v-else style="border:1px solid #a9a9a9;">
-                    <input style="height:25px;border:0;" readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                    <input style="height:20px;border:0;display:block;font-size:12px;" readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div style="height: 90px;padding-top: 15px;padding-left:15px;display:flex;justify-content: space-between;box-sizing:border-box;">
-            <div>
-              <button @click="saveTempletViewFun">保存模板</button>
-              <button @click="openTempLet">套用模板</button>
+          <div style="height: 60px;padding-top: 10px;padding-left:15px;display:flex;justify-content: space-between;box-sizing:border-box;">
+            <div style="font-size:12px;">
+              <button style="width: 70px;font-size:12px;height:25px;" @click="saveTempletViewFun">保存模板</button>
+              <button style="width: 70px;font-size:12px;height:25px;" @click="openTempLet">套用模板</button>
               <span style="padding:20px;">类型筛选</span>
               <select v-model="filterType" @change="selectTypeFun">
                 <option value="">
@@ -77,44 +79,44 @@
               <div style="color:#4448ff;padding-top:5px;font-sizie:18px;">要删除某时间点，必须要选中行。</div>
             </div>
             <div>
-              <button style="margin-right: 20px;width: 80px;" @click='saveBtn'>保存</button>
-              <button style="margin-right: 20px;width: 80px;" @click="deleteMedAnesthesiaEvent">删除</button>
-              <button style="margin-right: 20px;width: 80px;" @click="selectMedAnesthesiaEventList">取消</button>
+              <button style="margin-right: 20px;width: 70px;font-size:12px;height:25px;" @click='saveBtn'>保存</button>
+              <button style="margin-right: 20px;width: 70px;font-size:12px;height:25px;" @click="deleteMedAnesthesiaEvent">删除</button>
+              <button style="margin-right: 20px;width: 70px;font-size:12px;height:25px;" @click="selectMedAnesthesiaEventList">取消</button>
             </div>
           </div>
         </div>
-        <div style="width:25%;padding: 0px 5px;">
-          <div style="border:1px solid #3a3a3a;">
-            <div style="height: 180px;flex-wrap:wrap;display: flex;overflow:auto;">
-              <button v-for="item in eventTypeList" style="width: 80px;height: 30px;line-height: 30px;text-align: center;margin:5px 5px 0 5px;display:block;" @click="medAnesthesiaEventOpenByItemClass(item)">
+        <div style="padding: 0px 5px;">
+          <div>
+            <div style="height: 120px;flex-wrap:wrap;display: flex;overflow:auto;">
+              <button v-for="item in eventTypeList" style="width: 60px;font-size:12px;height:25px;line-height: 25px;text-align: center;margin:5px 5px 0 5px;display:block;" @click="medAnesthesiaEventOpenByItemClass(item)">
                 {{item.typeName}}
               </button>
             </div>
-            <div style="background-color:#fff;">
-              <div style="display: flex;margin-top: 5px;width: calc(100% - 21px);" :class="{width1:widthChange}" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
-                <div style="width: 70%;border:1px solid black;">
+            <div style="background-color:#fff;font-size:12px;">
+              <div style="display: flex;width:100%;" :class="{width1:widthChange}" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
+                <div style="width: 170px;border:1px solid black;">
                   事件名称
                 </div>
-                <div style="width: 30%;border:1px solid black;">
+                <div style="width: calc(100% - 170px);border:1px solid black;">
                   规格
                 </div>
               </div>
-              <div v-else style="display: flex;margin-top: 5px;width: calc(100% - 21px);" :class="{width1:widthChange}">
+              <div v-else style="display: flex;width:100%;" :class="{width1:widthChange}">
                 <div style="width: 100%;border:1px solid black;">
                   事件名称
                 </div>
               </div>
-              <div style="height: 150px;overflow-y: auto;box-sizing:border-box;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
+              <div style="height: 140px;overflow-y: auto;box-sizing:border-box;" v-if="selectTypeTemp.typeId=='2' || selectTypeTemp.typeId=='C'">
                 <div v-for="item in eventNameList" style="width: 100%;display: flex" @dblclick="addEvent(item)">
-                  <div style="width: 70%;border:1px solid black;">
+                  <div style="width: 170px;border:1px solid black;">
                     {{item.itemName}}
                   </div>
-                  <div style="width: 30%;border:1px solid black;">
+                  <div style="width: calc(100% - 170px);border:1px solid black;">
                     {{item.itemSpec}}
                   </div>
                 </div>
               </div>
-              <div v-else style="height: 150px;overflow-y: auto;box-sizing:border-box;">
+              <div v-else style="height: 140px;overflow-y: auto;box-sizing:border-box;">
                 <div v-for="item in eventNameList" style="width: 100%;display: flex">
                   <div style="width: 100%;border:1px solid black;" @dblclick="addEvent(item)">
                     {{item.itemName}}
@@ -128,10 +130,10 @@
           </div>
         </div>
       </div>
-      <div style="height: 40px;padding-left: 15px;">
-        <span style="line-height: 40px;">体征数据</span>
+      <div style="height: 25px;padding-left: 15px;">
+        <span style="line-height: 25px;font-size:14px;">体征数据</span>
       </div>
-      <div style="height: 200px;overflow:auto;background-color:#fff;" ref="signContent">
+      <div style="height: 165px;overflow:auto;background-color:#fff;font-size:12px;" ref="signContent">
         <div style="display: flex;padding-left: 10px;">
           <div>
             <div style="width: 100px;">名称</div>
@@ -149,25 +151,25 @@
           </div>
         </div>
         <!-- <div class="flex">
-          <div v-for="(title,index) in titleArr">
-            <div v-if="index==0" style="width: 100px;">{{title}}</div>
-            <div v-else style="width: 60px;" :title="title">{{title | discount}}</div>
-          </div>
-        </div>
-        <div class="flex" style="overflow-y:hidden;overflow-x: auto;">
-          <div>
-            <div style="height: 22px;width: 100px;" v-for="name in itemNameList">{{name.itemName}}</div>
-          </div>
-          <div>
-            <div v-for="item in dataArr" class="flex">
-              <div v-for="data in item">
-                <input :value="data" style="width: 60px;" @change="signChange($event,index,data)">
+                <div v-for="(title,index) in titleArr">
+                  <div v-if="index==0" style="width: 100px;">{{title}}</div>
+                  <div v-else style="width: 60px;" :title="title">{{title | discount}}</div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div>
-          </div>
-        </div> -->
+              <div class="flex" style="overflow-y:hidden;overflow-x: auto;">
+                <div>
+                  <div style="height: 22px;width: 100px;" v-for="name in itemNameList">{{name.itemName}}</div>
+                </div>
+                <div>
+                  <div v-for="item in dataArr" class="flex">
+                    <div v-for="data in item">
+                      <input :value="data" style="width: 60px;" @change="signChange($event,index,data)">
+                    </div>
+                  </div>
+                </div>
+                <div>
+                </div>
+              </div> -->
       </div>
       <div v-if="signItemView">
         <select v-model="selected" v-on:change="getSeclectItem">
@@ -176,12 +178,12 @@
           </option>
         </select>
       </div>
-      <div style="margin-top: 20px;padding-left:15px;">
-        <button @click="saveSignChange" style="width: 80px;">保存</button>
-        <button style="width: 80px;" @click="deleteMedPatientMonitorData">删除</button>
-        <button style="width: 80px;" @click="insertView">插入数据</button>
-        <button style="width: 80px;" @click="addSignItem">添加项目</button>
-        <button style="width: 80px;" @click="deleteSignItem">删除项目</button>
+      <div style="margin-top: 5px;padding-left:15px;">
+        <button @click="saveSignChange" style="width: 60px;height:25px;font-size:12px;">保存</button>
+        <button style="width: 60px;height:25px;font-size:12px;" @click="deleteMedPatientMonitorData">删除</button>
+        <button style="width: 60px;height:25px;font-size:12px;" @click="insertView">插入数据</button>
+        <button style="width: 60px;height:25px;font-size:12px;" @click="addSignItem">添加项目</button>
+        <button style="width: 60px;height:25px;font-size:12px;" @click="deleteSignItem">删除项目</button>
       </div>
       <!-- 插入数据位置 -->
       <div v-if="addView" @click="atherPlacFuntion" style="width:100%;height:100%;position:fixed;z-index:14;top:0;left:0;">
@@ -252,73 +254,73 @@ export default {
     return {
       dataIn: this.parentToChild.dataInParent,
       tbconfig: [{
-          title: "",
-          fieldObj: "",
-          width: 10
-        },
-        {
-          title: "类型",
-          fieldObj: "TYPE_NAME",
-          width: 80
-        },
-        {
-          title: "事件名称",
-          fieldObj: "ITEM_NAME",
-          width: 180
-        },
-        {
-          title: "途径",
-          fieldObj: "ADMINISTRATOR",
-          width: 60
-        },
-        {
-          title: "浓度",
-          fieldObj: "CONCENTRATION",
-          width: 40
-        },
-        {
-          title: "单位",
-          fieldObj: "CONCENTRATION_UNIT",
-          width: 60
-        },
-        {
-          title: "速度",
-          fieldObj: "PERFORM_SPEED",
-          width: 50
-        },
-        {
-          title: "单位",
-          fieldObj: "SPEED_UNIT",
-          width: 60
-        },
-        {
-          title: "剂量",
-          fieldObj: "DOSAGE",
-          width: 50
-        },
-        {
-          title: "单位",
-          fieldObj: "DOSAGE_UNITS",
-          width: 60
-        },
-        {
-          title: "发生时间",
-          fieldObj: "START_TIME",
-          timeEdit: true,
-          width: 180
-        },
-        {
-          title: "是否持续",
-          fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
-          width: 75,
-          isChixu: true,
-        },
-        {
-          title: "结束时间",
-          fieldObj: "ENDDATE",
-          timeEdit: true,
-          width: 180
-        }
+        title: "",
+        fieldObj: "",
+        width: 10
+      },
+      {
+        title: "类型",
+        fieldObj: "TYPE_NAME",
+        width: 45
+      },
+      {
+        title: "事件名称",
+        fieldObj: "ITEM_NAME",
+        width: 190
+      },
+      {
+        title: "途径",
+        fieldObj: "ADMINISTRATOR",
+        width: 50
+      },
+      {
+        title: "浓度",
+        fieldObj: "CONCENTRATION",
+        width: 45
+      },
+      {
+        title: "单位",
+        fieldObj: "CONCENTRATION_UNIT",
+        width: 45
+      },
+      {
+        title: "速度",
+        fieldObj: "PERFORM_SPEED",
+        width: 45
+      },
+      {
+        title: "单位",
+        fieldObj: "SPEED_UNIT",
+        width: 45
+      },
+      {
+        title: "剂量",
+        fieldObj: "DOSAGE",
+        width: 45
+      },
+      {
+        title: "单位",
+        fieldObj: "DOSAGE_UNITS",
+        width: 45
+      },
+      {
+        title: "发生时间",
+        fieldObj: "START_TIME",
+        timeEdit: true,
+        width: 155
+      },
+      {
+        title: "是否持续",
+        fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
+        width: 75,
+        isChixu: true,
+      },
+      {
+        title: "结束时间",
+        fieldObj: "ENDDATE",
+        timeEdit: true,
+        width: 155
+      }
       ],
       eventList: [],
       eventTempList: [],
@@ -369,29 +371,29 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
-          res => {
-            for (var i = 0; i < res.list.length; i++) {
-              if (res.list[i].START_TIME) {
-                res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
-              }
-              if (res.list[i].ENDDATE) {
-                res.list[i].ENDDATE = this.changeDateFormat(res.list[i].ENDDATE);
-              }
+        res => {
+          for (var i = 0; i < res.list.length; i++) {
+            if (res.list[i].START_TIME) {
+              res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
             }
-            for (var a = 0; a < res.list.length; a++) {
-              this.$set(res.list[a], 'thooseItem', false);
+            if (res.list[i].ENDDATE) {
+              res.list[i].ENDDATE = this.changeDateFormat(res.list[i].ENDDATE);
             }
-            this.eventList = res.list;
-            this.eventTempList = res.list;
-          });
+          }
+          for (var a = 0; a < res.list.length; a++) {
+            this.$set(res.list[a], 'thooseItem', false);
+          }
+          this.eventList = res.list;
+          this.eventTempList = res.list;
+        });
     },
     allMedAnesthesiaEventType() {
       let params = {}
       this.api.allMedAnesthesiaEventType(params)
         .then(
-          res => {
-            this.eventTypeList = res.list;
-          });
+        res => {
+          this.eventTypeList = res.list;
+        });
     },
     //根据类别获取麻醉事件定义
     medAnesthesiaEventOpenByItemClass(item) {
@@ -430,9 +432,9 @@ export default {
       }
       this.api.deleteMedAnesthesiaEvent(params)
         .then(
-          res => {
-            this.selectMedAnesthesiaEventList();
-          })
+        res => {
+          this.selectMedAnesthesiaEventList();
+        })
     },
     //双击添加麻醉事件记录
     addEvent(item) {
@@ -542,12 +544,12 @@ export default {
       }
       this.api.getSignName(params)
         .then(
-          res => {
-            if (res.length < 1) {
-              this.itemNameList.push({
-                itemName: "心率",
-                itemCode: 40,
-              }, {
+        res => {
+          if (res.length < 1) {
+            this.itemNameList.push({
+              itemName: "心率",
+              itemCode: 40,
+            }, {
                 itemName: "PULSE",
                 itemCode: 44,
               }, {
@@ -563,33 +565,33 @@ export default {
                 itemName: "无创舒张压",
                 itemCode: 90,
               });
-              this.getSignTimeData(this.itemNameList.length);
-            } else {
-              for (var i = 0; i < res.length; i++) {
-                res[i].itemValue = "";
-              }
-              let compare = function(prop) {
-                return function(obj1, obj2) {
-                  let val1 = obj1[prop]
-                  let val2 = obj2[prop]
-                  if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                    val1 = Number(val1);
-                    val2 = Number(val2);
-                  }
-                  if (val1 < val2) {
-                    return -1;
-                  } else if (val1 > val2) {
-                    return 1;
-                  } else {
-                    return 0;
-                  }
+            this.getSignTimeData(this.itemNameList.length);
+          } else {
+            for (var i = 0; i < res.length; i++) {
+              res[i].itemValue = "";
+            }
+            let compare = function(prop) {
+              return function(obj1, obj2) {
+                let val1 = obj1[prop]
+                let val2 = obj2[prop]
+                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                  val1 = Number(val1);
+                  val2 = Number(val2);
+                }
+                if (val1 < val2) {
+                  return -1;
+                } else if (val1 > val2) {
+                  return 1;
+                } else {
+                  return 0;
                 }
               }
-              this.itemNameList = res.sort(compare("itemCode"));
-              this.getSignTimeData(res.length);
             }
+            this.itemNameList = res.sort(compare("itemCode"));
+            this.getSignTimeData(res.length);
+          }
 
-          })
+        })
     },
     getSignTimeData(len) {
       let params = {
@@ -640,23 +642,23 @@ export default {
       return false
       this.api.getSignTimeData(params)
         .then(
-          res => {
-            var sortArray = [];
-            if (res.length < 1)
-              return false;
-            for (var i = 0; i < res.length; i++) {
-              let item = res[i].dataValue;
-              item = eval('(' + item + ')');
-              //item = JSON.parse(item);
-              let xL = len - item.length
-              if (xL > 0) {
-                for (var j = 0; j < xL; j++) {
-                  item.push('');
-                }
+        res => {
+          var sortArray = [];
+          if (res.length < 1)
+            return false;
+          for (var i = 0; i < res.length; i++) {
+            let item = res[i].dataValue;
+            item = eval('(' + item + ')');
+            //item = JSON.parse(item);
+            let xL = len - item.length
+            if (xL > 0) {
+              for (var j = 0; j < xL; j++) {
+                item.push('');
               }
-              this.signdataList = sortArray;
             }
-          })
+            this.signdataList = sortArray;
+          }
+        })
     },
     //获取改变的值
     getChangeValue(item) {
@@ -1053,5 +1055,4 @@ button {
   background-color: #CCE8FF;
   /* border: 1px solid #A9A9A9; */
 }
-
 </style>

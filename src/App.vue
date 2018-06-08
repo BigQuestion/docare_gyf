@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height:100%;min-width:1366px;">
+  <div id="app" style="height:100%;min-width:1364px;font-family:microsoft yahei;">
     <router-view></router-view>
   </div>
 </template>
