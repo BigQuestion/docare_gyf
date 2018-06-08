@@ -7,6 +7,7 @@ import store from './store'
 
 
 import './assets/css/index.css'
+// import './assets/css/inputdate.css'
 
 import config from './components/configFile/config'
 

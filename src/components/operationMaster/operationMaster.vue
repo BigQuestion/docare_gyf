@@ -29,7 +29,8 @@
                 <div class="insideHover" @click="finalStatus('0')">取消状态【入手术室】</div>
               </div>
             </div>
-            <div>
+            <div style="position: relative;">
+              <input type="" name="">
               <input style="width:165px;" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5',$event)">
             </div>
           </div>
