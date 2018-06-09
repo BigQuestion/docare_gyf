@@ -43,64 +43,64 @@ export default {
       }
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(
-        // display:flex;flex-direction:column;flex-wrap:wrap;
-        res => {
+          // display:flex;flex-direction:column;flex-wrap:wrap;
+          res => {
 
-          for (var i = 0; i < res.list.length; i++) {
+            for (var i = 0; i < res.list.length; i++) {
 
-            var time = new Date(res.list[i].START_TIME).getTime();
-            // console.log(time)
-            if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
-              this.$set(res.list[i], 'sort', time);
-              this.dataBody.push(res.list[i]);
-              if (res.list[i].DOSAGE !== null) {
-                if (res.list[i].ENDDATE !== null) {
-                  if (res.list[i].ADMINISTRATOR !== null) {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+              var time = new Date(res.list[i].START_TIME).getTime();
+              // console.log(time)
+              if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
+                this.$set(res.list[i], 'sort', time);
+                this.dataBody.push(res.list[i]);
+                if (res.list[i].DOSAGE !== null) {
+                  if (res.list[i].ENDDATE !== null) {
+                    if (res.list[i].ADMINISTRATOR !== null) {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    } else {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    }
                   } else {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    if (res.list[i].ADMINISTRATOR !== null) {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    } else {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    }
                   }
+                  this.title = titleData.join('\n');
+                  this.$set(res.list[i], 'titleWord', this.title);
                 } else {
-                  if (res.list[i].ADMINISTRATOR !== null) {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
-                  } else {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
-                  }
+                  var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME];
+                  this.title = titleData.join('\n');
+                  this.$set(res.list[i], 'titleWord', this.title);
                 }
-                this.title = titleData.join('\n');
-                this.$set(res.list[i], 'titleWord', this.title);
-              } else {
-                var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME];
-                this.title = titleData.join('\n');
-                this.$set(res.list[i], 'titleWord', this.title);
               }
             }
-          }
-          var time1 = new Date(this.config.userInfo.inDateTime).getTime();
-          if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
-            var titleDataOne = ['入手术室', '================', '开始时间：' + this.config.userInfo.inDateTime];
-            var titleOne = titleDataOne.join('\n');
-            this.dataBody.push({
-              ITEM_NAME: '入手术室',
-              START_TIME: this.config.userInfo.inDateTime,
-              titleWord: titleOne,
-              sort: time1
-            });
-          }
-          var time2 = new Date(this.config.userInfo.endDateTime).getTime();
-          if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
-            var titleDataTwo = ['出手术室', '================', '开始时间：' + this.config.userInfo.endDateTime];
-            var titleTwo = titleDataTwo.join('\n');
-            this.dataBody.push({
-              ITEM_NAME: '出手术室',
-              START_TIME: this.config.userInfo.inDateTime,
-              titleWord: titleTwo,
-              sort: time2
-            });
-          }
-          this.dataBody.sort(this.sortFun)
-          this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
-        });
+            var time1 = new Date(this.config.userInfo.inDateTime).getTime();
+            if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
+              var titleDataOne = ['入手术室', '================', '开始时间：' + this.config.userInfo.inDateTime];
+              var titleOne = titleDataOne.join('\n');
+              this.dataBody.push({
+                ITEM_NAME: '入手术室',
+                START_TIME: this.config.userInfo.inDateTime,
+                titleWord: titleOne,
+                sort: time1
+              });
+            }
+            var time2 = new Date(this.config.userInfo.endDateTime).getTime();
+            if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
+              var titleDataTwo = ['出手术室', '================', '开始时间：' + this.config.userInfo.endDateTime];
+              var titleTwo = titleDataTwo.join('\n');
+              this.dataBody.push({
+                ITEM_NAME: '出手术室',
+                START_TIME: this.config.userInfo.inDateTime,
+                titleWord: titleTwo,
+                sort: time2
+              });
+            }
+            this.dataBody.sort(this.sortFun)
+            this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+          });
     },
     sortFun(a, b) {
       return a.sort - b.sort;
@@ -119,63 +119,63 @@ export default {
       }
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(
-        // display:flex;flex-direction:column;flex-wrap:wrap;
-        res => {
+          // display:flex;flex-direction:column;flex-wrap:wrap;
+          res => {
 
-          for (var i = 0; i < res.list.length; i++) {
+            for (var i = 0; i < res.list.length; i++) {
 
-            var time = new Date(res.list[i].START_TIME).getTime();
-            // console.log(time)
-            if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
-              this.$set(res.list[i], 'sort', time);
-              this.dataBody.push(res.list[i]);
-              if (res.list[i].DOSAGE !== null) {
-                if (res.list[i].ENDDATE !== null) {
-                  if (res.list[i].ADMINISTRATOR !== null) {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+              var time = new Date(res.list[i].START_TIME).getTime();
+              // console.log(time)
+              if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
+                this.$set(res.list[i], 'sort', time);
+                this.dataBody.push(res.list[i]);
+                if (res.list[i].DOSAGE !== null) {
+                  if (res.list[i].ENDDATE !== null) {
+                    if (res.list[i].ADMINISTRATOR !== null) {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    } else {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    }
                   } else {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '结束时间：' + res.list[i].ENDDATE, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    if (res.list[i].ADMINISTRATOR !== null) {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    } else {
+                      var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
+                    }
                   }
+                  this.title = titleData.join('\n');
+                  this.$set(res.list[i], 'titleWord', this.title);
                 } else {
-                  if (res.list[i].ADMINISTRATOR !== null) {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '途径：' + res.list[i].ADMINISTRATOR, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
-                  } else {
-                    var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME, '量：' + res.list[i].DOSAGE, '单位：' + res.list[i].DOSAGE_UNITS];
-                  }
+                  var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME];
+                  this.title = titleData.join('\n');
+                  this.$set(res.list[i], 'titleWord', this.title);
                 }
-                this.title = titleData.join('\n');
-                this.$set(res.list[i], 'titleWord', this.title);
-              } else {
-                var titleData = [res.list[i].ITEM_NAME, '================', '开始时间：' + res.list[i].START_TIME];
-                this.title = titleData.join('\n');
-                this.$set(res.list[i], 'titleWord', this.title);
               }
             }
-          }
-          var time1 = new Date(this.config.userInfo.inDateTime).getTime();
-          if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
-            var titleDataOne = ['入手术室', '================', '开始时间：' + this.config.userInfo.inDateTime];
-            var titleOne = titleDataOne.join('\n');
-            this.dataBody.push({
-              ITEM_NAME: '入手术室',
-              START_TIME: this.config.userInfo.inDateTime,
-              titleWord: titleOne,
-              sort: time1
-            });
-          }
-          var time2 = new Date(this.config.userInfo.endDateTime).getTime();
-          if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
-            var titleDataTwo = ['出手术室', '================', '开始时间：' + this.config.userInfo.endDateTime];
-            var titleTwo = titleDataTwo.join('\n');
-            this.dataBody.push({
-              ITEM_NAME: '出手术室',
-              START_TIME: this.config.userInfo.inDateTime,
-              titleWord: titleTwo,
-              sort: time2
-            });
-          }
-          this.dataBody.sort(this.sortFun)
-        });
+            var time1 = new Date(this.config.userInfo.inDateTime).getTime();
+            if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
+              var titleDataOne = ['入手术室', '================', '开始时间：' + this.config.userInfo.inDateTime];
+              var titleOne = titleDataOne.join('\n');
+              this.dataBody.push({
+                ITEM_NAME: '入手术室',
+                START_TIME: this.config.userInfo.inDateTime,
+                titleWord: titleOne,
+                sort: time1
+              });
+            }
+            var time2 = new Date(this.config.userInfo.endDateTime).getTime();
+            if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
+              var titleDataTwo = ['出手术室', '================', '开始时间：' + this.config.userInfo.endDateTime];
+              var titleTwo = titleDataTwo.join('\n');
+              this.dataBody.push({
+                ITEM_NAME: '出手术室',
+                START_TIME: this.config.userInfo.inDateTime,
+                titleWord: titleTwo,
+                sort: time2
+              });
+            }
+            this.dataBody.sort(this.sortFun)
+          });
     },
 
   },
@@ -202,5 +202,6 @@ export default {
 
 </script>
 <style scoped>
+
 
 </style>

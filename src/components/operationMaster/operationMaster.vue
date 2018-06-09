@@ -1609,7 +1609,6 @@ export default {
       } else {
         let params = []
         params = this.updateFormsData;
-        debugger
         // return
         if (this.updateFormsData.length > 0) {
           this.api.updateSqlBatch(params)

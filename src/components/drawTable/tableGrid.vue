@@ -7,7 +7,7 @@
         <div v-else style="width: 12px;display: inline-block;"></div>
       </div>
       <div>
-        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 14px;line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
+        <div v-for="(item,index) in dataArray" v-if="index < rows" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 14px;line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
           <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span>
         </div>
       </div>
@@ -209,7 +209,12 @@ export default {
       this.$nextTick(function() {
         this.getLineXy();
         if (this.page == false) {
-          this.selectMedAnesthesiaEventList();
+          if (this.setTimeId) {
+            this.selectMedAnesthesiaEventListNoTime();
+          } else {
+            this.selectMedAnesthesiaEventList();
+          }
+
         }
       })
 
@@ -220,8 +225,7 @@ export default {
       var m = this.tbMin; //加几分钟
       var timeArray = [];
       let startMinTime = this.config.startMinTime
-      let defaultTime
- = new Date().Format("yyyy-MM-dd") + " 08:00"
+      let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
       if (this.config.pageOper == 0 && startMinTime) {
         for (var i = 0; i <= this.columns; i++) {
 
@@ -345,7 +349,7 @@ export default {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
-        itemClass: 2
+        itemClass: '2C'
       }
       for (var i = 0; i < this.rows; i++) {
         this.dataArray.push(i);
@@ -365,10 +369,6 @@ export default {
     },
     //不加定时器的方法
     selectMedAnesthesiaEventListNoTime() {
-      //this.timeControl(this.maxTime);
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId)
-      }
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight;
@@ -376,7 +376,7 @@ export default {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
-        itemClass: 2
+        itemClass: '2C'
       }
       for (var i = 0; i < this.rows; i++) {
         this.dataArray.push(i);

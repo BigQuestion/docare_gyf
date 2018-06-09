@@ -122,9 +122,6 @@ export default {
       }
     },
     getDataNoTime() {
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId)
-      }
       var svg = d3.selectAll(".dosagegrid")
       svg.remove();
       this.dataArray = [];
@@ -371,10 +368,10 @@ export default {
       this.xArray = [];
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
-        this.getData();
+        this.getDataNoTime();
       }
       if (this.config.pageOper == -1) {
-        this.getData();
+        this.getDataNoTime();
         return
         let m = this.config.initTime.getTime();
         var list = [];
@@ -387,7 +384,7 @@ export default {
         this.dataListOperFun(list);
       }
       if (this.config.pageOper == 1) {
-        this.getData();
+        this.getDataNoTime();
         return
         let arrList = this.dataArray;
         this.percentPageData = arrList;
