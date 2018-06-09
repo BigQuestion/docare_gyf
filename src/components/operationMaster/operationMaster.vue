@@ -11,8 +11,8 @@
       </div>
       <div class="currentPatientInfo">
         <span style="color:#CD5C5C;font-size:2em;font-weight: bold;">{{lockedPatientInfo.operatingRoomNo}}</span>
-        <img style="margin:0 10px;" src="../../assets/people.png" alt="">
-        <div style="width:118px;">
+        <img style="margin:0 8px;" src="../../assets/people.png" alt="">
+        <div style="width:100px;">
           <div style="padding-bottom:5px;border-bottom:1px solid #8B8B8B;font-size:18px;">{{lockedPatientInfo.patientId}}</div>
           <div style="color:#001AFA;font-size:20px;">{{lockedPatientInfo.patientName}}</div>
         </div>
@@ -31,7 +31,7 @@
             </div>
             <div style="position: relative;">
               <!-- <input type="" name="" @click="testclick"> -->
-              <input ref="intest" id="intest" style="width:165px;" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5',$event)">
+              <input ref="intest" id="intest" style="width:150px;font-size:12px;" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="inDateTime">
@@ -45,7 +45,7 @@
               </div>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10',$event)">
+              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10',$event)">
               <!-- <vue-date-calendar id="demo1" :option.sync="option"></vue-date-calendar> -->
             </div>
           </div>
@@ -60,7 +60,7 @@
               </div>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15',$event)">
+              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="startDateTime">
@@ -74,7 +74,7 @@
               </div>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25',$event)">
+              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="endDateTime">
@@ -88,7 +88,7 @@
               </div>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30',$event)">
+              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30',$event)">
             </div>
           </div>
           <div style="margin:0px 5px;" v-if="anesEndTime">
@@ -104,7 +104,7 @@
               </div>
             </div>
             <div>
-              <input style="width:165px;" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35',$event)">
+              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35',$event)">
             </div>
           </div>
         </div>
@@ -172,7 +172,7 @@
       <div class="content">
         <!-- <div class="patientList" :class="{animationClassNone:showData,animationClassShow:showDataTwo}"> -->
         <div class="patientList" v-show="showData">
-          <div style="height:110px;">
+          <div style="height:105px;border-bottom:1px solid rgb(175,205,242);box-sizing:border-box;">
             <div>
               <div class="container" style="padding-left: 5px;margin-bottom:10px;margin-top:5px;align-items:center;">
                 <img style="margin-right:10px;height:20px;" src="../../assets/people.png" alt="">
@@ -208,8 +208,8 @@
               <button style="font-size:12px;" @click='searchPatientList'>搜索</button>
             </div>
           </div>
-          <div style="overflow-y: auto;height:calc(100% - 110px - 98px);font-size:12px;">
-            <div v-for="item in patientList" class="listBorder" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
+          <div style="overflow-y: auto;height:calc(100% - 105px - 80px);font-size:12px;">
+            <div v-for="item in patientList" class="listBorder" :class="{thisClickBackClass:item.thisClickBack}" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
               <div class="patientContent title_back">
                 <span>手术间 {{item.operatingRoomNo}}</span>
               </div>
@@ -232,16 +232,16 @@
                 <input style="width:50px;" type="number" min="5" max="100" @change="dataInSize($event)" v-model="size">
               </div>
               <div style="display:flex;items-align:center;padding-top:10px;">
-                <button @click="firstPage" style="width:60px;">首页</button>
-                <button @click="pageRe" style="width:60px;">上一页</button>
+                <button @click="firstPage" style="width:60px;font-size:12px;">首页</button>
+                <button @click="pageRe" style="width:60px;font-size:12px;">上一页</button>
                 <div @click="showSelect" class="pageInDiv">
                   <span>{{pageNum}}</span>
                   <div @click.stop="noClick" v-if="dataInSelect" class="pageInSelect">
                     <div @click="pageChoose(item.number)" v-for="item in dataTypeInAllSelect">{{item.number}}</div>
                   </div>
                 </div>
-                <button @click="pageAd" style="width:60px;">下一页</button>
-                <button @click="lastPage" style="width:60px;">末页</button>
+                <button @click="pageAd" style="width:60px;font-size:12px;">下一页</button>
+                <button @click="lastPage" style="width:60px;font-size:12px;">末页</button>
               </div>
             </div>
             <div>
@@ -268,37 +268,37 @@
         <div class="patientInfo" v-if="viewInfo">
           <div class="pat_title title_back">患者详情</div>
           <div style="margin-top: 5px;">
-            <div class="title_back" style="border:1px solid rgb(177,207,243);padding-left: 30px;">基本信息</div>
+            <div class="title_back" style="border:1px solid rgb(177,207,243);padding-left: 20px;">基本信息</div>
             <div class="patientContentBox">
               <div class="container">
                 <div>患者ID</div>
-                <div class="in_con">
+                <div class="in_con" style="width:100px;">
                   {{patientInfo.PATIENT_ID}}
                 </div>
                 <div class="left15">住院号</div>
-                <div class="in_con">
+                <div class="in_con" style="width:80px;">
                   {{patientInfo.INP_NO}}
                 </div>
                 <div class="left15">姓名</div>
-                <div class="in_con">
+                <div class="in_con" style="width:60px;">
                   {{patientInfo.NAME}}
                 </div>
                 <div class="left15">年龄</div>
-                <div class="in_con">
+                <div class="in_con" style="width:60px;">
                   {{patientInfo.PAT_AGE}}
                 </div>
                 <div class="left15">性别</div>
-                <div class="in_con">
+                <div class="in_con" style="width:50px;">
                   {{patientInfo.SEX}}
+                </div>
+                <div>床号</div>
+                <div class="in_con" style="width:50px;">
+                  {{patientInfo.BED_NO}}
                 </div>
               </div>
               <div class="container">
-                <div>床号</div>
-                <div class="in_con">
-                  {{patientInfo.BED_NO}}
-                </div>
-                <div class="left15">所在科室</div>
-                <div class="in_con">
+                <div>所在科室</div>
+                <div class="in_con" style="width:130px;">
                   {{patientInfo.DEPT_NAME}}
                 </div>
                 <div class="left15">付费方式</div>
@@ -331,7 +331,7 @@
             </div>
           </div>
           <div>
-            <div class="title_back" style="border:1px solid rgb(177,207,243);padding-left: 30px;">手术信息</div>
+            <div class="title_back" style="border:1px solid rgb(177,207,243);padding-left: 20px;">手术信息</div>
             <div class="patientContentBox">
               <div class="container">
                 <div>主要诊断</div>
@@ -385,7 +385,7 @@
             </div>
           </div>
           <div>
-            <div class="title_back" style="border:1px solid rgb(177,207,243);padding-left: 30px;">手术人员</div>
+            <div class="title_back" style="border:1px solid rgb(177,207,243);padding-left: 20px;">手术人员</div>
             <div class="patientContentBox">
               <div class="container">
                 <div>麻醉医师</div>
@@ -393,9 +393,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                                                          <div class="in_con">
-                                                            {{patientInfo.QIEKOU_NUMBER}}
-                                                          </div> -->
+                                                                      <div class="in_con">
+                                                                        {{patientInfo.QIEKOU_NUMBER}}
+                                                                      </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -783,6 +783,9 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
           res => {
+            for (var p = 0; p < res.list.length; p++) {
+              this.$set(res.list[p], 'thisClickBack', false);
+            }
             if (res.total > 5) {
               this.pageShowData = true;
               this.pages = res.pages;
@@ -806,6 +809,9 @@ export default {
               this.api.getMedOperationMasterList(paramsTwo)
                 .then(
                   res => {
+                    for (var p = 0; p < res.list.length; p++) {
+                      this.$set(res.list[p], 'thisClickBack', false);
+                    }
                     this.pageShowData = true;
                     this.pages = res.pages;
                     this.patientList = res.list;
@@ -841,6 +847,9 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
           res => {
+            for (var p = 0; p < res.list.length; p++) {
+              this.$set(res.list[p], 'thisClickBack', false);
+            }
             this.patientList = res.list;
           });
     },
@@ -858,6 +867,9 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
           res => {
+            for (var p = 0; p < res.list.length; p++) {
+              this.$set(res.list[p], 'thisClickBack', false);
+            }
             this.patientList = res.list;
           });
     },
@@ -887,6 +899,9 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
           res => {
+            for (var p = 0; p < res.list.length; p++) {
+              this.$set(res.list[p], 'thisClickBack', false);
+            }
             this.patientList = res.list;
           });
     },
@@ -938,6 +953,10 @@ export default {
       this.dataInSelect = false;
     },
     patientDeatilInfo(item) {
+      for (var p = 0; p < this.patientList.length; p++) {
+        this.patientList[p].thisClickBack = false;
+      }
+      item.thisClickBack = true;
       for (var i = 0; i <= this.medBillList.length - 1; i++) {
         this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
       }
@@ -2019,6 +2038,10 @@ export default {
   /* padding-left: 5px; */
 }
 
+.thisClickBackClass {
+  background-color: rgb(192, 255, 192);
+}
+
 .leftNoneBox {
   height: 100%;
   min-width: 8px;
@@ -2055,7 +2078,7 @@ export default {
 }
 
 .patientContentBox {
-  padding: 15px 5px 10px 40px;
+  padding: 15px 5px 10px 30px;
   border: 1px solid rgb(177, 207, 243);
   box-sizing: border-box;
 }
@@ -2063,8 +2086,9 @@ export default {
 .pat_title {
   height: 35px;
   line-height: 35px;
-  padding-left: 15px;
+  padding-left: 10px;
   border: 1px solid rgb(177, 207, 243);
+  font-size: 16px;
 }
 
 .title_back {
@@ -2256,8 +2280,9 @@ export default {
 }
 
 .pageClass {
-  height: 98px;
-  background-color: lightblue;
+  border-top: 1px solid rgb(172, 205, 242);
+  height: 75px;
+  /* background-color: lightblue; */
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
