@@ -397,9 +397,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                                                                            <div class="in_con">
-                                                                              {{patientInfo.QIEKOU_NUMBER}}
-                                                                            </div> -->
+                                                                              <div class="in_con">
+                                                                                {{patientInfo.QIEKOU_NUMBER}}
+                                                                              </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -473,7 +473,7 @@
     <operationRegister @refreshTime="timeChangeBus()" v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
     <div v-if="dictView" class="dictionaries">
-      <div class="window_load" >
+      <div class="window_load">
         <div class="load_top">
           <div>字典</div>
           <div @click="dictNone" class="top_active">X</div>
@@ -512,17 +512,17 @@
                 <div class="topList" v-for="cell in contentConfig">{{cell.text}}</div>
               </div>
               <div style="overflow-y: auto;height:280px;box-sizing:border-box;" :class="{paddingRight18:this.paddingRight18}">
-                  <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
-                    <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177, 207, 243);">
-                      <div style="height:calc(100% - 2px);" v-if="cl.status=='inable'">
-                        <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change" style="display:block;width:100%;border:0;height:100%;outline:none;">
-                        <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
-                      </div>
-                      <div v-if="cl.status!='inable'">
-                        {{list[cl.value]}}
-                      </div>
+                <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
+                  <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177, 207, 243);">
+                    <div style="height:calc(100% - 2px);" v-if="cl.status=='inable'">
+                      <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change" style="display:block;width:100%;border:0;height:100%;outline:none;">
+                      <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
+                    </div>
+                    <div v-if="cl.status!='inable'">
+                      {{list[cl.value]}}
                     </div>
                   </div>
+                </div>
               </div>
             </div>
           </div>
@@ -636,7 +636,7 @@ export default {
       anaesthesiaEvent: false,
       anestheticMethod: false,
       anestheticConstant: false,
-      paddingRight18:false,
+      paddingRight18: false,
       contentConfig: [{
         text: "序号",
         value: "serialNo"
@@ -1238,15 +1238,15 @@ export default {
         .then(
         res => {
           var m = res.list.length;
-          if(m>12){
+          if (m > 12) {
             this.paddingRight18 = false;
-          }else{
+          } else {
             this.paddingRight18 = true;
           }
           for (var i = 0; i < m; i++) {
             res.list[i].newItemName = res.list[i].itemName;
             res.list[i].newItemCode = res.list[i].itemCode;
-            
+
           }
           this.commonTypeList = res.list;
         });
@@ -1523,9 +1523,7 @@ export default {
               )
           }
         });
-
     },
-
     //手术信息
     getPatientOperationInfo() {
       this.patientOperationInfoView.dataInParent = !this.patientOperationInfoView.dataInParent;
@@ -1641,7 +1639,6 @@ export default {
       } else {
         let params = []
         params = this.updateFormsData;
-        debugger
         // return
         if (this.updateFormsData.length > 0) {
           this.api.updateSqlBatch(params)
@@ -1848,7 +1845,6 @@ export default {
               this.config.maxTime = new Date(new Date(this.config.maxTime).getTime() + (time1 - time2));
             }
           }
-          debugger
           this.getMaxTime();
           this.$nextTick(function() {
 
@@ -1880,7 +1876,7 @@ export default {
               this.config.patientMaxTime = res.TIME
             }
           }
-          this.setTimeId = setTimeout(_ => this.getMaxTime(), 30000)
+          this.setTimeId = setTimeout(_ => this.getMaxTime(), 300000)
         })
     },
     testclick() {
@@ -2203,7 +2199,7 @@ export default {
   box-sizing: border-box;
 }
 
-.paddingRight18{
+.paddingRight18 {
   padding-right: 18px;
 }
 

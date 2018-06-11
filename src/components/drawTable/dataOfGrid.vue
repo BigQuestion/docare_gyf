@@ -150,7 +150,7 @@ export default {
                         });
                       }
                     }
-                  } else {
+                    } else {
 
                   }
                   this.dataBody.sort(this.sortFun)

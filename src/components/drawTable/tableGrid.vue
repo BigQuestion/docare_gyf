@@ -7,7 +7,7 @@
         <div v-else style="width: 12px;display: inline-block;"></div>
       </div>
       <div>
-        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 14px;line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
+        <div v-for="(item,index) in dataArray" v-if="index < rows" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 14px;line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
           <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span>
         </div>
       </div>
@@ -22,10 +22,10 @@
             <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
         </svg>
-        <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:index*15+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+        <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
           <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
         </div>
-        <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:index*15+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+        <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1+item.w/2-10+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
           <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
         </div>
         <div v-if="tipView">
@@ -209,7 +209,12 @@ export default {
       this.$nextTick(function() {
         this.getLineXy();
         if (this.page == false) {
-          this.selectMedAnesthesiaEventList();
+          if (this.setTimeId) {
+            this.selectMedAnesthesiaEventListNoTime();
+          } else {
+            this.selectMedAnesthesiaEventList();
+          }
+
         }
       })
 
@@ -218,8 +223,6 @@ export default {
       var svg = d3.selectAll(".test")
       svg.remove();
       var m = this.tbMin; //加几分钟
-      var timeDate = new Date(startTime);
-      var toMin = timeDate.getTime() + 1000 * 60 * m;
       var timeArray = [];
       let startMinTime = this.config.startMinTime
       let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
@@ -346,7 +349,7 @@ export default {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
-        itemClass: 2
+        itemClass: '2C'
       }
       for (var i = 0; i < this.rows; i++) {
         this.dataArray.push(i);
@@ -366,10 +369,6 @@ export default {
     },
     //不加定时器的方法
     selectMedAnesthesiaEventListNoTime() {
-      //this.timeControl(this.maxTime);
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId)
-      }
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight;
@@ -377,7 +376,7 @@ export default {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
-        itemClass: 2
+        itemClass: '2C'
       }
       for (var i = 0; i < this.rows; i++) {
         this.dataArray.push(i);
@@ -490,7 +489,7 @@ export default {
     showTipInfo(item, ev) {
       this.tipView = true;
       this.tipLeft = ev.offsetX + item.x1;
-      this.tipTop = item.y2 + 10;
+      this.tipTop = item.top + 15;
       if (item.obj.ENDDATE == null || item.obj.ENDDATE == "") {
         item.obj.ENDDATE = this.config.patientMaxTime;
       }
@@ -655,8 +654,28 @@ export default {
             }
             let x1 = Math.round(sMin / lMin * (w / this.columns))
             let x2 = Math.round(eMin / lMin * (w / this.columns))
-            let y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            let y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+            let y1
+            let y2
+            let flag = true;
+            let topi
+            //判断是否同一种药品
+            if (this.dataArray.length > 0) {
+              for (var j = 0; j < this.dataArray.length; j++) {
+                if (list[i].ITEM_NAME == this.dataArray[j].ITEM_NAME && list[i].ITEM_CLASS == this.dataArray[j].ITEM_CLASS) {
+                  y1 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
+                  y2 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
+                  flag = false;
+                  topi = j;
+                } else {
+                  y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+                  y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+                }
+              }
+            } else {
+              y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+              y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+            }
+
             // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
             //   list[i].vStartTime = '';
             //   this.createLine(x1, x2, y1, y2, list[i]);
@@ -676,17 +695,36 @@ export default {
             list[i].vStartTime = '';
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
+              debugger
             }
-            this.xArray.push({
-              x1: x1,
-              y1: y1,
-              x2: x2,
-              y2: y2,
-              w: x2 - x1,
-              obj: list[i]
-            })
-            this.dataArray.push(list[i]);
-            m++;
+
+            if (flag) {
+              this.xArray.push({
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                w: x2 - x1,
+                obj: list[i],
+                top: m * 15
+
+              })
+              this.dataArray.push(list[i]);
+              m++;
+
+            } else {
+              this.xArray.push({
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                w: x2 - x1,
+                obj: list[i],
+                top: topi * 15
+              })
+
+            }
+
           }
         }
       }

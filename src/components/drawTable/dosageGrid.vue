@@ -46,6 +46,7 @@
     </div>
     <div style="width: 165px; position: absolute;top: 0px;left: -165px;font-size: 12px;" :style="{height:outRows*(svgHeight/rows)-1+'px',top:forRows*(svgHeight/rows)+'px'}">
       <div v-for="item in outRows" v-if="item!=3" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">
+        1
       </div>
       <div v-else :style="{height:svgHeight/rows-1+'px'}">
       </div>
@@ -122,9 +123,6 @@ export default {
       }
     },
     getDataNoTime() {
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId)
-      }
       var svg = d3.selectAll(".dosagegrid")
       svg.remove();
       this.dataArray = [];
@@ -371,10 +369,10 @@ export default {
       this.xArray = [];
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
-        this.getData();
+        this.getDataNoTime();
       }
       if (this.config.pageOper == -1) {
-        this.getData();
+        this.getDataNoTime();
         return
         let m = this.config.initTime.getTime();
         var list = [];
@@ -387,7 +385,7 @@ export default {
         this.dataListOperFun(list);
       }
       if (this.config.pageOper == 1) {
-        this.getData();
+        this.getDataNoTime();
         return
         let arrList = this.dataArray;
         this.percentPageData = arrList;

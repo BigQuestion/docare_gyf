@@ -87,8 +87,6 @@ export default {
       this.isCancle = false;
       console.log(list)
       this.newName = list.anaesthesiaName;
-      console.log(this.isSave + 'isSave')
-      console.log('敲了键盘');
     },
     inputBlur(list) {
       console.log('失去焦点')
@@ -113,8 +111,6 @@ export default {
       }
     },
     valueWriteAble(list) {
-      console.log('点击')
-      console.log(list)
       this.oldName = list.anaesthesiaName;
       this.obj = list;
       this.isSave = true;
@@ -138,7 +134,6 @@ export default {
           });
     },
     addMedAnesthesiaInputDict() {
-      console.log(this.commonTypeList)
       this.commonTypeList.push({
         arrayStats: 0, //0为新增
         serialNo: this.commonTypeList.length + 1,
