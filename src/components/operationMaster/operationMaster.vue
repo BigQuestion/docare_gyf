@@ -101,6 +101,7 @@
                 <div class="insideHover" @click="finalStatus('30')">转入状态【麻醉结束】</div>
                 <div class="insideHover" @click="finalStatus('60')">转入病房</div>
                 <div class="insideHover" @click="finalStatus('45')">进复苏室</div>
+                <div class="insideHover" @click="finalStatus('65')">转入ICU</div>
               </div>
             </div>
             <div>
@@ -128,6 +129,7 @@
             <button class="list_button">检查信息</button>
             <button class="list_button">检查结果</button>
             <button class="list_button">医嘱信息</button>
+            <button class="list_button">病例病程</button>
           </div>
         </div>
         <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;" v-if="lockedPatientInfo.patientId">
@@ -153,6 +155,7 @@
           </div>
           <div v-if="concealmentThreeData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button @click="dictShow" class="list_button">字典</button>
+            <button class="list_button">模板管理</button>
           </div>
         </div>
         <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
@@ -166,6 +169,7 @@
             <button class="list_button">系统配置</button>
             <button @click="getAboutUs" class="list_button">关于</button>
             <button @click="exitSystem" class="list_button">退出系统</button>
+            <button class="list_button">修改密码</button>
           </div>
         </div>
       </div>
@@ -393,9 +397,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                                                                      <div class="in_con">
-                                                                        {{patientInfo.QIEKOU_NUMBER}}
-                                                                      </div> -->
+                                                                            <div class="in_con">
+                                                                              {{patientInfo.QIEKOU_NUMBER}}
+                                                                            </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -469,7 +473,7 @@
     <operationRegister @refreshTime="timeChangeBus()" v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
     <div v-if="dictView" class="dictionaries">
-      <div class="window_load">
+      <div class="window_load" >
         <div class="load_top">
           <div>字典</div>
           <div @click="dictNone" class="top_active">X</div>
@@ -492,10 +496,10 @@
           </div>
         </div>
         <!-- 字典按钮内容 -->
-        <div v-if="commoTerms" style="height:65%;">
+        <div v-if="commoTerms" style="height:310px;">
           <div style="display: flex;height: 100%;background:white;margin:10px;">
             <!-- 显示类别 -->
-            <div style="box-sizing:border-box;height: 100%;width: 30%;overflow-x: auto;padding-top:5px;border-right: 2px solid rgb(177,207,243);">
+            <div class="dictionaryBox">
               <ul v-for="item in comTypeList">
                 <li class="hoverStyle" style="cursor:pointer;" @click="getTypeDetail(item)">
                   <div style="margin-left: 20px;">{{item.typeName}}</div>
@@ -504,29 +508,29 @@
             </div>
             <!-- 显示详细内容 -->
             <div style="width: 70%;margin-top:5px;">
-              <div style="display: flex;margin-left: 10px;">
+              <div style="display: flex;margin-left: 10px;box-sizing:border-box;padding-right:18px;">
                 <div class="topList" v-for="cell in contentConfig">{{cell.text}}</div>
               </div>
-              <div style="overflow-y: auto;">
-                <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
-                  <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177, 207, 243);">
-                    <div style="height:100%;" v-if="cl.status=='inable'">
-                      <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change" style="display:block;width:100%;border:0;height:100%;outline:none;">
-                      <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
-                    </div>
-                    <div v-if="cl.status!='inable'">
-                      {{list[cl.value]}}
+              <div style="overflow-y: auto;height:280px;box-sizing:border-box;" :class="{paddingRight18:this.paddingRight18}">
+                  <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
+                    <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177, 207, 243);">
+                      <div style="height:calc(100% - 2px);" v-if="cl.status=='inable'">
+                        <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @change="change" style="display:block;width:100%;border:0;height:100%;outline:none;">
+                        <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" readonly="readonly" @click="valueWriteAble(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
+                      </div>
+                      <div v-if="cl.status!='inable'">
+                        {{list[cl.value]}}
+                      </div>
                     </div>
                   </div>
-                </div>
               </div>
             </div>
           </div>
           <div style="text-align: right;margin-right: 30px;">
-            <button style="width: 100px;height: 30px;" @click="addMedAnesthesiaInputDict" :disabled="isAdd">新增</button>
-            <button style="width: 100px;height: 30px;" :disabled="isSave" @click="saveValue">保存</button>
-            <button style="width: 100px;height: 30px;" @click="cancleEdit" :disabled="isCancle">取消</button>
-            <button style="width: 100px;height: 30px;" :disabled="isDelete" @click="deleteByMedAnesthesiaInputDict">删除</button>
+            <button style="width: 80px;height: 25px;font-size:12px;" @click="addMedAnesthesiaInputDict" :disabled="isAdd">新增</button>
+            <button style="width: 80px;height: 25px;font-size:12px;" :disabled="isSave" @click="saveValue">保存</button>
+            <button style="width: 80px;height: 25px;font-size:12px;" @click="cancleEdit" :disabled="isCancle">取消</button>
+            <button style="width: 80px;height: 25px;font-size:12px;" :disabled="isDelete" @click="deleteByMedAnesthesiaInputDict">删除</button>
           </div>
         </div>
         <anaesthesiaEvent v-if="anaesthesiaEvent" :eventChildData="eventDataType"></anaesthesiaEvent>
@@ -632,6 +636,7 @@ export default {
       anaesthesiaEvent: false,
       anestheticMethod: false,
       anestheticConstant: false,
+      paddingRight18:false,
       contentConfig: [{
         text: "序号",
         value: "serialNo"
@@ -1233,9 +1238,15 @@ export default {
         .then(
         res => {
           var m = res.list.length;
+          if(m>12){
+            this.paddingRight18 = false;
+          }else{
+            this.paddingRight18 = true;
+          }
           for (var i = 0; i < m; i++) {
             res.list[i].newItemName = res.list[i].itemName;
             res.list[i].newItemCode = res.list[i].itemCode;
+            
           }
           this.commonTypeList = res.list;
         });
@@ -1930,10 +1941,10 @@ export default {
 
 .inseide {
   position: absolute;
-  width: 130px;
+  width: 140px;
   height: auto;
   top: 37px;
-  left: 10px;
+  left: 5px;
   padding-left: 20px;
   background-color: #D6E5F3;
   border: 1px solid #77A3DC;
@@ -2156,6 +2167,15 @@ export default {
   -15px 15px 20px #E3EFFF;
 }
 
+.dictionaryBox {
+  box-sizing: border-box;
+  height: 100%;
+  width: 30%;
+  overflow: auto;
+  padding-top: 5px;
+  border-right: 2px solid rgb(177, 207, 243);
+}
+
 .backWight {
   background-color: #E1EEFD;
   color: rgb(76, 121, 187);
@@ -2181,6 +2201,10 @@ export default {
   /*border: 1px solid black;*/
   overflow: auto;
   box-sizing: border-box;
+}
+
+.paddingRight18{
+  padding-right: 18px;
 }
 
 .hoverStyle:hover {

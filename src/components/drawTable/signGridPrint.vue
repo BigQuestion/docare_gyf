@@ -278,18 +278,18 @@ export default {
                         pei = 0;
                       }
                     } else {
-                      // for (var g = 0; g < this.dataBody.length; g++) {
-                      //   // console.log(this.dataBody)
-                      //   if (tmp[k].left == this.dataBody[g].left) {
-                      //     pei = pei + 1;
-                      //     // console.log(this.dataBody[g])
-                      //     this.dataBody[g].bottom = -15 + pei * 15;
-                      //     // console.log(this.dataOfBottom[g].bottom)
-                      //   } else {
-                      //     pei = 0;
-                      //     // this.dataBody[g].bottom = 0;
-                      //   }
-                      // }
+                      for (var g = 0; g < this.dataBody.length; g++) {
+                        // console.log(this.dataBody)
+                        if (tmp[k].left == this.dataBody[g].left) {
+                          pei = pei + 1;
+                          // console.log(this.dataBody[g])
+                          this.dataBody[g].bottom = -15 + pei * 15;
+                          // console.log(this.dataOfBottom[g].bottom)
+                        } else {
+                          pei = 0;
+                          // this.dataBody[g].bottom = 0;
+                        }
+                      }
                     }
                   }
 
@@ -433,7 +433,6 @@ export default {
                   this.topTimeFun();
                   var pei = 0;
                   for (var k = 0; k < this.dataBody.length; k++) {
-                    debugger
                     if (k != this.dataBody.length - 1) {
                       if (tmp[k].left == tmp[k + 1].left) {
                         // console.log(tmp[k])

@@ -137,13 +137,16 @@ export default {
                     for (var h = 11; h < aff.list.length; h++) {
                       var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
                       if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
-                        var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
+                        // var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
+                        var titleDataTwo = [aff.list[i].ITEM_NAME, '================', '开始时间：' + aff.list[i].START_TIME, '途径：' + aff.list[i].ADMINISTRATOR, '量：' + aff.list[i].DOSAGE, '单位：' + aff.list[i].DOSAGE_UNITS];
                         var titleTwo = titleDataTwo.join('\n');
                         this.dataBody.push({
                           ITEM_NAME: aff.list[h].ITEM_NAME,
                           START_TIME: aff.list[h].START_TIME,
-                          titleWord: titleDataTwo,
-                          sort: timeMoreOne
+                          titleWord: titleTwo,
+                          sort: timeMoreOne,
+                          DOSAGE: aff.list[h].DOSAGE,
+                          DOSAGE_UNITS: aff.list[h].DOSAGE_UNITS,
                         });
                       }
                     }
@@ -269,13 +272,16 @@ export default {
                     for (var h = 11; h < aff.list.length; h++) {
                       var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
                       if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
-                        var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
+                        // var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
+                        var titleDataTwo = [aff.list[i].ITEM_NAME, '================', '开始时间：' + aff.list[i].START_TIME, '途径：' + aff.list[i].ADMINISTRATOR, '量：' + aff.list[i].DOSAGE, '单位：' + aff.list[i].DOSAGE_UNITS];
                         var titleTwo = titleDataTwo.join('\n');
                         this.dataBody.push({
                           ITEM_NAME: aff.list[h].ITEM_NAME,
                           START_TIME: aff.list[h].START_TIME,
-                          titleWord: titleDataTwo,
-                          sort: timeMoreOne
+                          titleWord: titleTwo,
+                          sort: timeMoreOne,
+                          DOSAGE: aff.list[h].DOSAGE,
+                          DOSAGE_UNITS: aff.list[h].DOSAGE_UNITS,
                         });
                       }
                     }

@@ -42,8 +42,8 @@
                                 </div>
                             </div>
                             <!-- <div @click="pushData()" v-if="showarrange" class="pushAuto" :style="{top:clickTop+'px',left:clickLeft+'px'}">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                分配手术
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        分配手术
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                         </div>
                     </div>
                     <div v-if="chooseOneType=='docoptions'" v-for="item in options" @click="joinData('docoptions',item)" class="docList rows">
@@ -103,7 +103,7 @@
                         <!-- 清空 -->
                         <!-- <div v-if="showList" style="width:100%;height:auto;z-index:9999;">
 
-                                                                                                                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                            </div> -->
                         <!-- </div> -->
                     </div>
                 </div>
@@ -239,9 +239,14 @@ export default {
                 width: 60,
                 optin: false,
             }, {
-                text: '床号',
-                value: 'bedNo',
-                width: 60,
+                text: '手术医师',
+                value: 'surgeonName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '手术名称',
+                value: 'operationSchName',
+                width: 250,
                 optin: false,
             }, {
                 text: '台次',
@@ -263,82 +268,79 @@ export default {
                 width: 60,
                 optin: false,
             }, {
+                text: '床号',
+                value: 'bedNo',
+                width: 60,
+                optin: false,
+            }, {
                 text: '诊断',
                 value: 'diagBeforeOperation',
                 width: 200,
                 optin: false,
             }, {
-                text: '手术名称',
-                value: 'operationSchName',
-                width: 250,
-                optin: false,
-            }, {
-                text: '手术医师',
-                value: 'surgeonName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '主麻医师',
-                value: 'anesthesiaDoctorName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '副麻医师1',
-                value: 'firstAnesthesiaAssistantName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '副麻医师2',
-                value: 'secondAnesthesiaAssistantName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '手术助手1',
-                value: 'firstAssistantName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '手术助手2',
-                value: 'secondAssistantName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '洗手护士1',
-                value: 'firstOperationNurseName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '洗手护士2',
-                value: 'secondOperationNurseName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '巡回护士1',
-                value: 'firstSupplyNurseName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '巡回护士2',
-                value: 'secondSupplyNurseName',
-                width: 100,
-                optin: false,
-            }, {
-                text: '麻醉方法',
-                value: 'anesthesiaMethod',
-                width: 200,
+                text: "手术审核时间",
+                type: "inSelect",
+                value: "reqDateTime",
+                width: 120,
                 optin: false,
             }, {
                 text: '备注',
                 value: 'notesOnOperation',
                 width: 100,
                 optin: false,
-            },{
-                text: "手术审核时间",
-                type: "inSelect",
-                value: "reqDateTime",
-                width: 120,
-                optin: false,
-            }],
+            }
+                // ,{
+                //     text: '主麻医师',
+                //     value: 'anesthesiaDoctorName',
+                //     width: 100,
+                //     optin: false,
+                // }, {
+                //     text: '副麻医师1',
+                //     value: 'firstAnesthesiaAssistantName',
+                //     width: 100,
+                //     optin: false,
+                // }, {
+                //     text: '副麻医师2',
+                //     value: 'secondAnesthesiaAssistantName',
+                //     width: 100,
+                //     optin: false,
+                // }, {
+                //     text: '手术助手1',
+                //     value: 'firstAssistantName',
+                //     width: 100,
+                //     optin: false,
+                // }, {
+                //     text: '手术助手2',
+                //     value: 'secondAssistantName',
+                //     width: 100,
+                //     optin: false,
+                // }, {
+                //     text: '洗手护士1',
+                //     value: 'firstOperationNurseName',
+                //     width: 100,
+                //     optin: false,
+                // }, {
+                //     text: '洗手护士2',
+                //     value: 'secondOperationNurseName',
+                //     width: 100,
+                //     optin: false,
+                // }, {
+                //     text: '巡回护士1',
+                //     value: 'firstSupplyNurseName',
+                //     width: 100,
+                //     optin: false,
+                // }, {
+                //     text: '巡回护士2',
+                //     value: 'secondSupplyNurseName',
+                //     width: 100,
+                //     optin: false,
+                // }, {
+                //     text: '麻醉方法',
+                //     value: 'anesthesiaMethod',
+                //     width: 200,
+                //     optin: false,
+                // }, 
+            ],
             getLength: '0',
             listChooseBody: [
                 { data: '手术', dataLength: 0, type: 'list' },
