@@ -491,7 +491,7 @@
             <span>麻醉常用量</span>
           </div>
         </div>
-        <!-- 字典按钮内容 -->
+        <!-- 字典按钮内容 常用术语-->
         <div v-if="commoTerms" style="height:65%;">
           <div style="display: flex;height: 100%;background:white;margin:10px;">
             <!-- 显示类别 -->
@@ -1834,7 +1834,6 @@ export default {
               this.config.maxTime = new Date(new Date(this.config.maxTime).getTime() + (time1 - time2));
             }
           }
-          debugger
           this.getMaxTime();
           this.$nextTick(function() {
 
@@ -1866,7 +1865,7 @@ export default {
               this.config.patientMaxTime = res.TIME
             }
           }
-          this.setTimeId = setTimeout(_ => this.getMaxTime(), 30000)
+          this.setTimeId = setTimeout(_ => this.getMaxTime(), 300000)
         })
     },
     testclick() {

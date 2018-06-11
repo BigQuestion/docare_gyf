@@ -18,12 +18,13 @@
             </div>
             <div style="min-height: 280px;" ref="eventContent">
               <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @click="clickItem(item)">
+                <!-- 判断是否为事件 -->
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
                   <div style="border:1px solid #a9a9a9;height:20px;" v-if="cl.timeEdit">
                     <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div v-else-if="cl.isChixu">
-                    <select style="height:22px;width:65px;display:block;font-size:12px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
+                    <select :class="{selectchooseItem:item.thooseItem}" style="height:22px;width:65px;display:block;font-size:12px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
                       <option v-bind:value="0">
                         不持续
                       </option>
@@ -33,21 +34,29 @@
                     </select>
                   </div>
                   <div v-else style="border:1px solid #a9a9a9;box-sizing:border-box;height:100%;" :style="{width:(cl.width)+'px'}">
-                    <!-- <select v-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;">
-                            <option value="">mg/h</option>
-                            <option value="">次/min</option>
-                          </select> -->
-                    <!-- <input v-else style="height:25px;border:0;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
-                    <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                    <select :class="{selectchooseItem:item.thooseItem}" v-if="cl.fieldObj == 'ADMINISTRATOR'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                      <option v-for="(item,index) in roadList" :value="item.itemName">{{ item.itemName }}</option>
+                    </select>
+                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'CONCENTRATION_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                      <option v-for="(item,index) in concentrationList" :value="item.itemName">{{ item.itemName }}</option>
+                    </select>
+                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'SPEED_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                      <option v-for="(item,index) in speedUnitList" :value="item.itemName">{{ item.itemName }}</option>
+                    </select>
+                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                      <option v-for="(item,index) in dosageUnitsList" :value="item.itemName">{{ item.itemName }}</option>
+                    </select>
+                    <input v-else style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                     <!-- <select-module :object="item" :value="item[cl.fieldObj]"></select-module> -->
                   </div>
                 </div>
+                <!-- 判断是否为事件 -->
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
                   <div v-if="cl.timeEdit" style="border:1px solid #a9a9a9;">
-                    <input @change="getChangeValue(item)" style="height:20px;display:block;font-size:12px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                    <input @change="getChangeValue(item)" style="height:20px;border:0;display:block;font-size:12px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                   <div v-else-if="cl.isChixu">
-                    <select style="height:22px;width:65px;border:0;display:block;font-size:12px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)">
+                    <select style="height:22px;width:65px;border:0;display:block;font-size:12px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)" :style="{width:(cl.width)+'px'}">
                       <option v-bind:value="0">
                         不持续
                       </option>
@@ -272,7 +281,7 @@ export default {
         {
           title: "途径",
           fieldObj: "ADMINISTRATOR",
-          width: 50
+          width: 80
         },
         {
           title: "浓度",
@@ -358,6 +367,11 @@ export default {
       clickAtherPlace: false,
       titleArr: ["名称"],
       dataArr: [],
+      roadList: [], //途径列表
+      concentrationList: [], //用药浓度列表,
+      speedUnitList: [], //速度单位列表
+      dosageUnitsList: [], //用药单位列表
+
     }
   },
   methods: {
@@ -459,6 +473,7 @@ export default {
         addFlag: true,
         DURATIVE_INDICATOR: 0,
       };
+      debugger
       this.eventList.push(obj);
       this.$nextTick(() => {
         var div = this.$refs.eventContent
@@ -571,6 +586,7 @@ export default {
               for (var i = 0; i < res.length; i++) {
                 res[i].itemValue = "";
               }
+              //定义一个排序方法
               let compare = function(prop) {
                 return function(obj1, obj2) {
                   let val1 = obj1[prop]
@@ -588,6 +604,7 @@ export default {
                   }
                 }
               }
+              //根据itemcode排序
               this.itemNameList = res.sort(compare("itemCode"));
               this.getSignTimeData(res.length);
             }
@@ -987,6 +1004,37 @@ export default {
         this.clickAtherPlace = !this.clickAtherPlace;
       }, 1000);
     },
+    //获取途径列表
+    getRoadList() {
+      this.api.getMedAnesthesiaCommDictByItemClass({
+          itemClass: '用药途径'
+        })
+        .then(
+          res => {
+            this.roadList = res.list;
+          });
+      this.api.getMedAnesthesiaCommDictByItemClass({
+          itemClass: '用药浓度单位'
+        })
+        .then(
+          rest => {
+            this.concentrationList = rest.list
+          });
+      this.api.getMedAnesthesiaCommDictByItemClass({
+          itemClass: '用药速度单位'
+        })
+        .then(
+          rs => {
+            this.speedUnitList = rs.list
+          });
+      this.api.getMedAnesthesiaCommDictByItemClass({
+          itemClass: '用药单位'
+        })
+        .then(
+          rt => {
+            this.dosageUnitsList = rt.list
+          });
+    },
   },
   props: ['objectItem', 'parentToChild'],
   computed: {},
@@ -999,6 +1047,7 @@ export default {
     this.selectMedAnesthesiaEventList();
     this.allMedAnesthesiaEventType();
     this.getSignName();
+    this.getRoadList();
   }
 }
 
@@ -1056,6 +1105,22 @@ button {
 .chooseItem input {
   background-color: #CCE8FF;
   /* border: 1px solid #A9A9A9; */
+}
+
+.selectchooseItem {
+  background-color: #CCE8FF;
+  /* border: 1px solid #A9A9A9; */
+}
+
+select {
+  /*清除select的边框样式*/
+  /*border: none;*/
+  /*清除select聚焦时候的边框颜色*/
+  /*outline: none;*/
+  /*隐藏select的下拉图标*/
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 </style>

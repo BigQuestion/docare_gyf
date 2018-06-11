@@ -46,6 +46,7 @@
     </div>
     <div style="width: 165px; position: absolute;top: 0px;left: -165px;font-size: 12px;" :style="{height:outRows*(svgHeight/rows)-1+'px',top:forRows*(svgHeight/rows)+'px'}">
       <div v-for="item in outRows" v-if="item!=3" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">
+        1
       </div>
       <div v-else :style="{height:svgHeight/rows-1+'px'}">
       </div>

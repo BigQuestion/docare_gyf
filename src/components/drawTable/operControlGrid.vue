@@ -318,7 +318,6 @@ export default {
         itemValue: moveValue,
         operator: "mdsd"
       })
-
       let params = this.updateDataArray;
       this.api.updateMedPatientMonitorDatas(params)
         .then(res => {
@@ -344,8 +343,27 @@ export default {
             for (var i = 0; i < res.length; i++) {
               res[i].itemValue = "";
             }
+            //定义一个排序方法
+            let compare = function(prop) {
+              return function(obj1, obj2) {
+                let val1 = obj1[prop]
+                let val2 = obj2[prop]
+                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                  val1 = Number(val1);
+                  val2 = Number(val2);
+                }
+                if (val1 < val2) {
+                  return -1;
+                } else if (val1 > val2) {
+                  return 1;
+                } else {
+                  return 0;
+                }
+              }
+            }
+            //根据itemcode排序
+            this.signNameLisg = res.sort(compare("itemCode"));
             this.getSignTimeData(res.length, res);
-            this.signNameLisg = res;
             this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
           })
     },
@@ -366,8 +384,27 @@ export default {
             for (var i = 0; i < res.length; i++) {
               res[i].itemValue = "";
             }
+            //定义一个排序方法
+            let compare = function(prop) {
+              return function(obj1, obj2) {
+                let val1 = obj1[prop]
+                let val2 = obj2[prop]
+                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                  val1 = Number(val1);
+                  val2 = Number(val2);
+                }
+                if (val1 < val2) {
+                  return -1;
+                } else if (val1 > val2) {
+                  return 1;
+                } else {
+                  return 0;
+                }
+              }
+            }
+            //根据itemcode排序
+            this.signNameLisg = res.sort(compare("itemCode"));
             this.getSignTimeData(res.length, res);
-            this.signNameLisg = res;
           })
     },
     getSignTimeData(len, list) {
@@ -425,8 +462,6 @@ export default {
 
               }
               newArray.push(arr1)
-
-
             }
             for (var i = 0; i < newArray.length; i++) {
               for (var j = 0; j < newArray[i].length; j++) {
@@ -442,9 +477,6 @@ export default {
                 newArray[i][j].y = y;
               }
             }
-
-
-
             this.pathArray = newArray;
             this.calculatePath();
           })

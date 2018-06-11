@@ -16,7 +16,7 @@
           </div>
           <div style="margin-top:5px;height:24px;">
             <span style="display:inline-block;width:65px;height:100%;color:#fff;">密 码：</span>
-            <input type="password" name="" style="width: 180px;height:22px;box-sizing:border-box;" v-model="loginPwd">
+            <input @keyup.enter='login' type="password" name="" style="width: 180px;height:22px;box-sizing:border-box;" v-model="loginPwd">
           </div>
           <div style="padding-right:50px;box-sizing:border-box;display:flex;flex-direction:row-reverse;margin-top:20px;height:30px;">
             <button style="width:100px;height:30px;" class="btn">取消</button>

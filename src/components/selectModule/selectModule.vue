@@ -4,8 +4,10 @@
       <div>
         <input @dblclick="show" v-model="value" style="height:20px;border:0;display:block;font-size:12px;width: 100%;" type="" name="">
       </div>
-      <div style="position: absolute;width: 100%;top: 20px;height: 50px;overflow: auto;border:1px solid;z-index: 20;background-color:white;" @blur="hide" v-if="showDataList" v-for="item in dataList">
-        {{item}}
+      <div style="position: absolute;width: 100%;top: 20px;height: 50px;overflow: auto;border:1px solid;z-index: 20;background-color:white;" @blur="hide" v-if="showDataList">
+        <div v-for="item in dataList">
+          {{item}}
+        </div>
       </div>
     </div>
   </div>

@@ -100,7 +100,7 @@
           <div style="margin-left: 15px;position: relative;">
             <input v-model="jzInfo.anesthesiaAssistant" style="width: 80px;" @dblclick="anesthesiaAssistantOpenView" readonly="readonly">
             <userSelect v-if="anesthesiaAssistantView" methodName="anesthesiaAssistant" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closeanesthesiaAssistant="anesthesiaAssistantOpenView" width="120"></userSelect>
-            <testSelect style="position: absolute;top: 0px;" ref="test" width="120"></testSelect>
+            <!-- <testSelect style="position: absolute;top: 0px;" ref="test" width="120"></testSelect> -->
           </div>
           <div style="margin-left: 15px;">
             <input v-model="jzInfo.secondAnesthesiaAssistant" style="width: 80px;" @dblclick="secondAnesthesiaAssistantOpenView" readonly="readonly">
@@ -346,7 +346,6 @@ export default {
     },
     chooseOperatorA(value) {
       this.anesthesiaAssistant = value
-      console.log(value)
     },
     getxshs() {
       let param = {
