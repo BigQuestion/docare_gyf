@@ -15,9 +15,6 @@ import Toast from './components/toast/toast'
 Vue.config.productionTip = false
 //空的全局的Vue实例,其他的组件利用这个实例emit和on自定义事件
 window.eventHub = new Vue();
-window.ipc = ipc;
-
-
 import api from '@/fetch/api.js';
 Vue.prototype.api = api;
 // Vue.prototype.ipc = ipc;
