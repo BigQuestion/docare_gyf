@@ -276,7 +276,6 @@ export default {
 
 
       }
-      console.log(this.dataPathArray)
     },
     itemMouseDown(e, currentItem, index1, index2) {
       this.area.addEventListener('mousemove', this.areaMouseMove);

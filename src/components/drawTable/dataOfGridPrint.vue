@@ -127,7 +127,6 @@ export default {
 
                   }
                   this.dataBody.sort(this.sortFun)
-                  console.log(this.dataBody)
                   this.addFun();
                 });
             });
@@ -139,9 +138,9 @@ export default {
     },
     addFun() {
       this.lengthType = this.dataBody.length;
-      console.log(this.lengthType)
       if (this.lengthType / 7 > 1) {
-        // console.log(this.lengthType)
+        // conso
+le.log(this.lengthType)
         this.outBoxLength = Math.round(this.lengthType / 7);
         // console.log(this.outBoxLength)
         for (var a = 0; a < this.outBoxLength; a++) {
@@ -227,7 +226,6 @@ export default {
           }
         }
       } else {
-        console.log(this.lengthType)
         this.outBoxLength = Math.ceil(this.lengthType / 7);
         for (var a = 0; a < this.outBoxLength; a++) {
           this.forALL.push([])
@@ -271,7 +269,6 @@ export default {
             }
           }
           this.forALL[a] = this.forBoxBody
-          console.log(this.forALL)
 
         }
       }

@@ -4,8 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-
-
 import './assets/css/index.css'
 // import './assets/css/inputdate.css'
 
@@ -17,11 +15,12 @@ import Toast from './components/toast/toast'
 Vue.config.productionTip = false
 //空的全局的Vue实例,其他的组件利用这个实例emit和on自定义事件
 window.eventHub = new Vue();
+window.ipc = ipc;
 
 
 import api from '@/fetch/api.js';
 Vue.prototype.api = api;
-
+// Vue.prototype.ipc = ipc;
 Vue.prototype.config = config;
 
 Vue.use(Toast);
