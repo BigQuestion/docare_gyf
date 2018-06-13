@@ -204,7 +204,8 @@
                 <div class="left15" style="margin-left:5px;display:flex;height:22px;line-height:22px;">
                   <span>日期</span>
                   <input v-model="getTime" type="date" style="width: 120px;font-size:12px;" @keyup.enter='searchPatientList'>
-                  <!-- <myDatepicker :date="startTime" :option="option" :limit="limit"></myDatepicker> -->
+                  <myDatepicker
+ :date="startTime" :option="option" :limit="limit"></myDatepicker>
                 </div>
               </div>
             </div>

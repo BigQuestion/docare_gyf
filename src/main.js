@@ -17,7 +17,6 @@ Vue.config.productionTip = false
 window.eventHub = new Vue();
 import api from '@/fetch/api.js';
 Vue.prototype.api = api;
-// Vue.prototype.ipc = ipc;
 Vue.prototype.config = config;
 
 Vue.use(Toast);
