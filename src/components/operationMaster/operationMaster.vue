@@ -19,7 +19,7 @@
       </div>
       <div class="procedure" style="position: relative;">
         <div style="display: flex;height:70px;" v-if="lockedPatientInfo.patientId">
-          <div style="margin:0px 5px;">
+          <div style="margin:0px 4px;">
             <div class="lightBox" @contextmenu.prevent="showDoubleListOne(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 0" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 5" style="display:block" src="../../assets/redLight.png" alt="">
@@ -31,10 +31,10 @@
             </div>
             <div style="position: relative;">
               <!-- <input type="" name="" @click="testclick"> -->
-              <input ref="intest" id="intest" style="width:150px;font-size:12px;" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5',$event)">
+              <input ref="intest" id="intest" style="width:152px;font-size:12px;" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5',$event)">
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="inDateTime">
+          <div style="margin:0px 4px;" v-if="inDateTime">
             <div class="lightBox" @contextmenu.prevent="showDoubleListTwo(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 10" style="display:block" src="../../assets/redLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 5" style="display:block" src="../../assets/grayLight.png" alt="">
@@ -45,11 +45,11 @@
               </div>
             </div>
             <div>
-              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10',$event)">
+              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10',$event)">
               <!-- <vue-date-calendar id="demo1" :option.sync="option"></vue-date-calendar> -->
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="anesStartTime">
+          <div style="margin:0px 4px;" v-if="anesStartTime">
             <div class="lightBox" @contextmenu.prevent="showDoubleListThree(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 10" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 15" style="display:block" src="../../assets/redLight.png" alt="">
@@ -60,10 +60,10 @@
               </div>
             </div>
             <div>
-              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15',$event)">
+              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15',$event)">
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="startDateTime">
+          <div style="margin:0px 4px;" v-if="startDateTime">
             <div class="lightBox" @contextmenu.prevent="showDoubleListFour(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 15" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 25" style="display:block" src="../../assets/redLight.png" alt="">
@@ -74,10 +74,10 @@
               </div>
             </div>
             <div>
-              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25',$event)">
+              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25',$event)">
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="endDateTime">
+          <div style="margin:0px 4px;" v-if="endDateTime">
             <div class="lightBox" @contextmenu.prevent="showDoubleListFive(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 25" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 30" style="display:block" src="../../assets/redLight.png" alt="">
@@ -88,10 +88,10 @@
               </div>
             </div>
             <div>
-              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30',$event)">
+              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30',$event)">
             </div>
           </div>
-          <div style="margin:0px 5px;" v-if="anesEndTime">
+          <div style="margin:0px 4px;" v-if="anesEndTime">
             <div ref="area" @contextmenu.prevent="showDoubleListSix(lockedPatientInfo.operStatus)" class="lightBox">
               <img v-if="lockedPatientInfo.operStatus == 30" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 35" style="display:block" src="../../assets/redLight.png" alt="">
@@ -105,7 +105,7 @@
               </div>
             </div>
             <div>
-              <input style="width:150px;font-size:12px;" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35',$event)">
+              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35',$event)">
             </div>
           </div>
         </div>
@@ -203,7 +203,7 @@
                 </div>
                 <div class="left15" style="margin-left:5px;display:flex;height:22px;line-height:22px;">
                   <span>日期</span>
-                  <input v-model="getTime" type="date" style="width: 120px;font-size:12px;" @keyup.enter='searchPatientList'>
+                  <input v-model="getTime" type="date" style="width: 125px;font-size:12px;" @keyup.enter='searchPatientList'>
                 </div>
               </div>
             </div>
@@ -295,15 +295,15 @@
                 <div class="in_con" style="width:50px;">
                   {{patientInfo.SEX}}
                 </div>
-                <div>床号</div>
-                <div class="in_con" style="width:50px;">
-                  {{patientInfo.BED_NO}}
-                </div>
               </div>
               <div class="container">
                 <div>所在科室</div>
                 <div class="in_con" style="width:130px;">
                   {{patientInfo.DEPT_NAME}}
+                </div>
+                <div>床号</div>
+                <div class="in_con" style="width:50px;">
+                  {{patientInfo.BED_NO}}
                 </div>
                 <div class="left15">付费方式</div>
                 <div class="in_con">
@@ -312,7 +312,9 @@
               </div>
               <div class="container">
                 <div>住址</div>
-                <div class="in_con" style="width: 600px;">{{patientInfo.MAILING_ADDRESS}}</div>
+                <div class="in_con" style="width: 400px;">{{patientInfo.MAILING_ADDRESS}}</div>
+                <div class="left15">职业</div>
+                <div class="in_con" style="width: 200px;"> </div>
               </div>
               <div class="container">
                 <div>身份证号</div>
@@ -327,10 +329,6 @@
                 <div class="in_con">
                   {{patientInfo.NEXT_OF_KIN}}
                 </div>
-              </div>
-              <div class="container">
-                <div>职业</div>
-                <div class="in_con" style="width: 300px;"> </div>
               </div>
             </div>
           </div>
@@ -347,42 +345,40 @@
               </div>
               <div class="container">
                 <div>手术名称</div>
-                <div class="in_con" style="width: 600px;">{{patientInfo.OPERATION_NAME}}</div>
+                <div class="in_con" style="width: 450px;max-height:42px;">{{patientInfo.OPERATION_NAME}}</div>
                 <div class="left15">急诊择期</div>
-                <div class="in_con">
+                <div class="in_con" style="width:100px;">
                   <span v-if="patientInfo.EMERGENCY_INDICATOR=='1'">急诊</span>
                   <span v-if="patientInfo.EMERGENCY_INDICATOR=='0'">急诊</span>
                 </div>
               </div>
               <div class="container">
                 <div>手术时间</div>
-                <div class="in_con" style="width: 200px;">{{patientInfo.SCHEDULED_DATE_TIME}}</div>
+                <div class="in_con" style="width: 160px;">{{patientInfo.SCHEDULED_DATE_TIME}}</div>
                 <div class="left15">台次</div>
-                <div class="in_con">
+                <div class="in_con" style="width: 60px;">
                   {{patientInfo.SEQUENCE}}
                 </div>
                 <div class="left15">手术间</div>
-                <div class="in_con">
+                <div class="in_con" style="width: 45px;">
                   {{patientInfo.OPERATING_ROOM_NO}}
                 </div>
-              </div>
-              <div class="container">
-                <div>隔离</div>
-                <div class="in_con">{{patientInfo.ISOLATION_INDICATOR}}</div>
+                <div class="left15">隔离</div>
+                <div class="in_con" style="width:60px;">{{patientInfo.ISOLATION_INDICATOR}}</div>
                 <div class="left15">手术等级</div>
-                <div class="in_con">
+                <div class="in_con" style="width:60px;">
                   {{patientInfo.OPERATION_SCALE}}
                 </div>
-                <div class="left15">麻醉方法</div>
-                <div class="in_con" style="width: 400px;">
-                  {{patientInfo.ANESTHESIA_METHOD}}
-                </div>
               </div>
               <div class="container">
-                <div>切口等级</div>
-                <div class="in_con">{{patientInfo.QIEKOU_CLASS}}</div>
+                <div>麻醉方法</div>
+                <div class="in_con" style="width: 300px;">
+                  {{patientInfo.ANESTHESIA_METHOD}}
+                </div>
+                <div class="left15">切口等级</div>
+                <div class="in_con" style="width: 90px;">{{patientInfo.QIEKOU_CLASS}}</div>
                 <div class="left15">切口个数</div>
-                <div class="in_con">
+                <div class="in_con" style="width: 90px;">
                   {{patientInfo.QIEKOU_NUMBER}}
                 </div>
               </div>
@@ -397,9 +393,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                                                                              <div class="in_con">
-                                                                                {{patientInfo.QIEKOU_NUMBER}}
-                                                                              </div> -->
+                                                                                        <div class="in_con">
+                                                                                          {{patientInfo.QIEKOU_NUMBER}}
+                                                                                        </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -2039,7 +2035,7 @@ export default {
   width: calc(100% - 185px);
   height: 100%;
   background: rgb(227, 239, 255);
-  min-width: 1287px;
+  min-width: 1178px;
 }
 
 .listBorder {
@@ -2081,10 +2077,10 @@ export default {
 }
 
 .patientInfo {
-  width: calc(100% - 358px);
+  width: calc(100% - 395px);
   box-sizing: border-box;
   padding-left: 5px;
-  min-width: 898px;
+  /* min-width: 898px; */
 }
 
 .patientContentBox {
@@ -2120,7 +2116,7 @@ export default {
   /* IE 10 */
   display: flex;
   /* Chrome 29+, Firefox 22+, IE 11+, Opera 12.1/17/18, Android 4.4+ */
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-size: 12px;
 }
 
