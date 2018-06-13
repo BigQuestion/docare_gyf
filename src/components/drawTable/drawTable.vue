@@ -28,7 +28,8 @@
 </template>
 <script type="text/javascript">
 import * as d3 from 'd3';
-export default {
+export default
+ {
   data() {
     return {
       data: [
@@ -48,7 +49,6 @@ export default {
   },
   methods: {
     itemMouseDown(e, currentItem, index) {
-      console.log(index);
       this.handleIndex = index;
       this.handleItem = currentItem;
       this.dragX = e.clientX;
@@ -69,7 +69,6 @@ export default {
       this.calculatePath();
     },
     areaMouseUp(e) {
-      console.log('up');
       this.area.removeEventListener('mousemove', this.areaMouseMove);
       this.area.removeEventListener('mouseup', this.areaMouseUp);
 
