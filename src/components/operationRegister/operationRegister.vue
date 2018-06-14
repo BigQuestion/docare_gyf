@@ -613,13 +613,16 @@ export default {
     },
     getSignTimeData(len) {
       let params = {
-        patientId: this.objectItem.patientId,
-        operId: this.objectItem.operId,
-        visitId: this.objectItem.visitId,
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
         eventNo: 0
       }
       this.api.getNewTimeData(params)
         .then(res => {
+          if (res.length < 1) {
+            return false
+          }
           res.sort(function(a, b) {
             return Date.parse(a.time) - Date.parse(b.time); //时间正序
           });
@@ -895,10 +898,10 @@ export default {
           itemName: this.selected.itemName,
           itemCode: this.selected.itemCode,
         });
-        this.$nextTick(() => {
-          var div = this.refs.signContent;
-          div.scrollTop = div.scrollHeight
-        })
+        // this.$nextTick(() => {
+        //   var div = this.refs.signContent;
+        //   div.scrollTop = div.scrollHeight
+        // })
         this.getSignTimeData(this.itemNameList.length);
         this.selected = [];
 

@@ -151,6 +151,9 @@
           </g>
         </g>
       </svg>
+      <div style="position: absolute;top: 10px;">
+        100
+      </div>
       <div v-if="tipView">
         <div style="position: absolute;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 10;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
           <div>
@@ -261,20 +264,10 @@ export default {
           }
         );
       for (var i = 0; i < this.pathArray.length; i++) {
-        if (i % 2 == 0)
-          this.dataPathArray.push({
-            path: dataone(this.pathArray[i]),
-            circleData: this.pathArray[i],
-            flag: 0
-          })
-        else
-          this.dataPathArray.push({
-            path: dataone(this.pathArray[i]),
-            circleData: this.pathArray[i],
-            flag: 1
-          })
-
-
+        this.dataPathArray.push({
+          path: dataone(this.pathArray[i]),
+          circleData: this.pathArray[i]
+        })
       }
     },
     itemMouseDown(e, currentItem, index1, index2) {
@@ -361,7 +354,8 @@ export default {
               }
             }
             //根据itemcode排序
-            this.signNameLisg = res.sort(compare("itemCode"));
+            // this.signNameLisg = res.sort(compare("itemCode"));
+            this.signNameLisg = res;
             this.getSignTimeData(res.length, res);
             this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
           })
@@ -402,11 +396,13 @@ export default {
               }
             }
             //根据itemcode排序
-            this.signNameLisg = res.sort(compare("itemCode"));
+            // this.signNameLisg = res.sort(compare("itemCode"));
+            this.signNameLisg = res;
             this.getSignTimeData(res.length, res);
           })
     },
     getSignTimeData(len, list) {
+      debugger
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
