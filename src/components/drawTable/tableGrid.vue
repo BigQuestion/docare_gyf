@@ -190,7 +190,7 @@ export default {
       if (this.config.pageOper == 0 && startMinTime) {
         for (var i = 0; i <= this.columns; i++) {
 
-          timeArray.push(new Date(new Date(startMinTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+          timeArray.push(new Date(new Date(this.config.initTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
       } else if (!startMinTime && this.config.pageOper == 0) {
         for (var i = 0; i <= this.columns; i++) {
@@ -695,7 +695,6 @@ export default {
             list[i].vStartTime = '';
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
-              debugger
             }
 
             if (flag) {

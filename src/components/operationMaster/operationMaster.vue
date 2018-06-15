@@ -1452,6 +1452,24 @@ export default {
                 }
                 var timeDate = new Date(this.config.startMinTime);
                 this.config.initTime = new Date(this.config.startMinTime);
+                this.config.initTime = new Date(this.timeSetOper(this.config.initTime));
+                // let time = this.config.initTime
+                // let getMinute = time.getMinutes()
+                // debugger
+                // if (getMinute < 5) {
+                //   time = time.setMinutes(0)
+                // } else if (getMinute > 4 && getMinute < 10) {
+                //   time = time.setMinutes(5)
+                // } else {
+                //   let i1 = getMinute.toString().substring(0, 1)
+                //   let i2 = getMinute.toString().substring(1, 2)
+                //   if (i2 < 5) {
+                //     time = time.setMinutes(Number(i1 + '0'))
+                //   } else {
+                //     time = time.setMinutes(Number(i1 + '5'))
+                //   }
+                // }
+                // this.config.initTime = new Date(time)
                 this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
               })
             let params = {
@@ -1817,6 +1835,7 @@ export default {
     setFormTime(time) {
       var timeDate = new Date(time);
       this.config.initTime = new Date(time);
+      this.config.initTime = new Date(this.timeSetOper(this.config.initTime));
       this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
     },
     //首页的时候重新设置时间，当DOM更新完之后再通知事件
@@ -1850,6 +1869,7 @@ export default {
           }
           var timeDate = new Date(this.config.startMinTime);
           this.config.initTime = new Date(this.config.startMinTime);
+          this.config.initTime = new Date(this.timeSetOper(this.config.initTime));
           this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
           this.$nextTick(function() {
             Bus.$emit('test');
@@ -1892,10 +1912,12 @@ export default {
             let time2 = new Date(startMinTime).getTime();
             if (time1 < time2) {
               this.config.initTime = new Date(new Date(this.config.initTime).getTime() - (time2 - time1));
+              this.config.initTime = new Date(this.timeSetOper(this.config.initTime));
               this.config.startMinTime = new Date(time);
               this.config.maxTime = new Date(new Date(this.config.maxTime).getTime() - (time2 - time1));
             } else {
               this.config.initTime = new Date(new Date(this.config.initTime).getTime() + (time1 - time2));
+              this.config.initTime = new Date(this.timeSetOper(this.config.initTime));
               this.config.startMinTime = new Date(time);
               this.config.maxTime = new Date(new Date(this.config.maxTime).getTime() + (time1 - time2));
             }
@@ -1936,6 +1958,26 @@ export default {
     },
     testclick() {
       this.$refs.intest.click();
+    },
+    //处理格子时间5的倍数
+    timeSetOper(time) {
+      let returnTime
+      let getMinute = time.getMinutes()
+      if (getMinute < 5) {
+        time = time.setMinutes(0)
+      } else if (getMinute > 4 && getMinute < 10) {
+        time = time.setMinutes(5)
+      } else {
+        let i1 = getMinute.toString().substring(0, 1)
+        let i2 = getMinute.toString().substring(1, 2)
+        if (i2 < 5) {
+          time = time.setMinutes(Number(i1 + '0'))
+        } else {
+          time = time.setMinutes(Number(i1 + '5'))
+        }
+      }
+      returnTime = time;
+      return returnTime
     },
 
   },

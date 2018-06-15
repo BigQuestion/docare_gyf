@@ -21,7 +21,7 @@
           <div style="padding-right:50px;box-sizing:border-box;display:flex;flex-direction:row-reverse;margin-top:20px;height:30px;">
             <button style="width:100px;height:30px;" class="btn">取消</button>
             <button style="width:100px;height:30px;margin-right:5px;" class="btn" @click="login">登录</button>
-            <button @click="runexe()">click</button>
+            <!-- <button @click="runexe()">click</button> -->
           </div>
         </div>
       </div>
@@ -145,6 +145,7 @@ export default {
     },
     runexe() {
       window.ipc.send('runexe')
+
     }
   },
   mounted() {
