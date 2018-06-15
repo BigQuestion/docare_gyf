@@ -168,8 +168,8 @@ export default {
             bothClick2: '',
             changeFirstData: '',
             changeSecendData: '',
-            firstTimeChangeData:'',
-            secendTimeChangeData:'',
+            firstTimeChangeData: '',
+            secendTimeChangeData: '',
         }
     },
     props: [
@@ -269,7 +269,7 @@ export default {
             this.changeFirstData = false;
             this.changeSecendData = false;
             this.thisOnchange = true;
-            if ((this.thisAdata == true && this.thisBdata == false)||(this.firstTimeChangeData == true&&this.secendTimeChangeData == false)) {
+            if ((this.thisAdata == true && this.thisBdata == false) || (this.firstTimeChangeData == true && this.secendTimeChangeData == false)) {
                 this.changeFirstData = true;
                 // alert('11')
                 if (index == '1') {
@@ -286,7 +286,7 @@ export default {
                     console.log(event.srcElement.value)
                     this.binding.currentRecvtimesUplimit = event.srcElement.value;
                 }
-            } else if ((this.thisBdata == true && this.thisAdata == false)||(this.secendTimeChangeData == true&&this.firstTimeChangeData == false)) {
+            } else if ((this.thisBdata == true && this.thisAdata == false) || (this.secendTimeChangeData == true && this.firstTimeChangeData == false)) {
                 this.changeSecendData = true;
                 // alert('12')
                 console.log(this.bindingTwo)
@@ -507,6 +507,7 @@ export default {
                                     this.firstmonitor();
                                     this.thisOnchange = false;
                                     this.bothClick1 = false;
+                                    window.ipc.send('runexe');
                                 }
                             }
                         )
@@ -521,6 +522,7 @@ export default {
                                 this.firstmonitor();
                                 this.thisOnchange = false;
                                 this.bothClick1 = false;
+                                window.ipc.send('runexe');
                             }
                         }
                     )
@@ -539,6 +541,7 @@ export default {
                                         this.dataInAnesthesia();
                                         this.thisOnchange = false;
                                         this.bothClick2 = false;
+                                        window.ipc.send('runexe');
                                     }
                                 }
                             )
@@ -553,6 +556,7 @@ export default {
                                     this.dataInAnesthesia();
                                     this.thisOnchange = false;
                                     this.bothClick2 = false;
+                                    window.ipc.send('runexe');
                                 }
                             }
                         )
@@ -572,6 +576,7 @@ export default {
                                     this.firstmonitor();
                                     this.cancelData = '';
                                     this.thisOnchange = false;
+                                    window.ipc.send('runexe');
                                 }
                             }
                             )
@@ -589,6 +594,7 @@ export default {
                                         this.dataInAnesthesia();
                                         this.cancelDataTwo = '';
                                         this.thisOnchange = false;
+                                        window.ipc.send('runexe');
                                     }
                                 }
                                 )
@@ -599,17 +605,19 @@ export default {
                                     res => {
                                         if (res.success == true) {
                                             this.firstmonitor();
+                                            this.api.bindPatientMonitor(this.bindingTwo).then(
+                                                res => {
+                                                    if (res.success == true) {
+                                                        this.dataInAnesthesia();
+                                                        window.ipc.send('runexe');
+                                                        this.thisOnchange = false;
+                                                    }
+                                                }
+                                            )
                                         }
                                     }
                                 )
-                                this.api.bindPatientMonitor(this.bindingTwo).then(
-                                    res => {
-                                        if (res.success == true) {
-                                            this.dataInAnesthesia();
-                                        }
-                                    }
-                                )
-                                this.thisOnchange = false;
+
                             } else if (this.binding !== '' && this.bindingTwo !== '' && this.cancelData == false && this.bothClick1 == true && this.bothClick2 == true) {
                                 // alert('6')
                                 if (this.hasDataFirst && this.hasDataSecend) {
@@ -620,6 +628,7 @@ export default {
                                                 if (res.success == true) {
                                                     this.firstmonitor();
                                                     this.thisOnchange = false;
+                                                    window.ipc.send('runexe');
                                                 }
                                             }
                                         )
@@ -633,6 +642,7 @@ export default {
                                                 if (res.success == true) {
                                                     this.dataInAnesthesia();
                                                     this.thisOnchange = false;
+                                                    window.ipc.send('runexe');
                                                 }
                                             }
                                         )
@@ -645,17 +655,19 @@ export default {
                                             if (res.success == true) {
                                                 this.firstmonitor();
                                                 this.thisOnchange = false;
+                                                this.api.bindPatientMonitor(this.bindingTwo).then(
+                                                    res => {
+                                                        if (res.success == true) {
+                                                            this.dataInAnesthesia();
+                                                            this.thisOnchange = false;
+                                                            window.ipc.send('runexe');
+                                                        }
+                                                    }
+                                                )
                                             }
                                         }
                                     )
-                                    this.api.bindPatientMonitor(this.bindingTwo).then(
-                                        res => {
-                                            if (res.success == true) {
-                                                this.dataInAnesthesia();
-                                                this.thisOnchange = false;
-                                            }
-                                        }
-                                    )
+
                                 }
 
                             }
@@ -675,20 +687,22 @@ export default {
                                             this.firstmonitor();
                                             this.cancelDataTwo = '';
                                             this.thisOnchange = false;
+                                            this.api.cancleBindPatientMonitor(cancelQuesB2)
+                                                .then(
+                                                res => {
+                                                    console.log(res.success)
+                                                    if (res.success == true) {
+                                                        this.dataInAnesthesia();
+                                                        this.cancelDataTwo = '';
+                                                        this.thisOnchange = false;
+                                                        window.ipc.send('runexe');
+                                                    }
+                                                }
+                                                )
                                         }
                                     }
                                     )
-                                this.api.cancleBindPatientMonitor(cancelQuesB2)
-                                    .then(
-                                    res => {
-                                        console.log(res.success)
-                                        if (res.success == true) {
-                                            this.dataInAnesthesia();
-                                            this.cancelDataTwo = '';
-                                            this.thisOnchange = false;
-                                        }
-                                    }
-                                    )
+
                             } else if (this.changeFirstData == true && this.changeSecendData == false) {
                                 // alert('8')
                                 this.api.bindPatientMonitor(this.binding).then(
@@ -696,6 +710,7 @@ export default {
                                         if (res.success == true) {
                                             this.firstmonitor();
                                             this.thisOnchange = false;
+                                            window.ipc.send('runexe');
                                         }
                                     }
                                 )
@@ -706,6 +721,7 @@ export default {
                                         if (res.success == true) {
                                             this.dataInAnesthesia();
                                             this.thisOnchange = false;
+                                            window.ipc.send('runexe');
                                         }
                                     }
                                 )
@@ -717,7 +733,7 @@ export default {
             //         if (this.thisAdata == true || this.thisBdata == true) {
             //             if (this.thisOnchange == true) {
             //                 if (this.thisAdata == true) {
-                                // alert('1')
+            // alert('1')
             //                     // 修改接口
             //                 } else if (this.thisBdata == true) {
             //                     alert('2')
@@ -837,7 +853,6 @@ export default {
     padding-left: 5px;
     background-color: #fff;
     font-size: 12px;
-
 }
 
 .titleBox:last-child {
@@ -855,7 +870,7 @@ export default {
     /* background-color: #fff; */
 }
 
-.HoverClass:hover{
+.HoverClass:hover {
     background-color: rgba(177, 207, 243, 0.7)
 }
 
