@@ -151,9 +151,9 @@
           </g>
         </g>
       </svg>
-      <div style="position: absolute;top: 10px;">
+      <!-- <div style="position: absolute;top: 10px;">
         100
-      </div>
+      </div> -->
       <div v-if="tipView">
         <div style="position: absolute;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 10;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
           <div>
@@ -402,7 +402,6 @@ export default {
           })
     },
     getSignTimeData(len, list) {
-      debugger
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,

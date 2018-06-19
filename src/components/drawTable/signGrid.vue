@@ -432,7 +432,6 @@ export default {
                     this.topTimeFun();
                     var pei = 0;
                     for (var k = 0; k < this.dataBody.length; k++) {
-                      debugger
                       if (k != this.dataBody.length - 1) {
                         if (tmp[k].left == tmp[k + 1].left) {
                           // console.log(tmp[k])
