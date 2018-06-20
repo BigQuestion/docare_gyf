@@ -816,8 +816,8 @@ export default {
         // console.log(this.dataOfNoneClick)
         this.dataOfStart = this.changeDateFormat(new Date().Format('yyyy-MM-dd hh:mm'));
         this.dataOfStartSql = new Date().Format('yyyy-MM-dd hh:mm');
-        console.log(this.binding)
-        console.log(this.bindingTwo)
+        // console.log(this.binding)
+        // console.log(this.bindingTwo)
 
     },
 }

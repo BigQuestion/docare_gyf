@@ -60,7 +60,7 @@ export default {
         var timeOne = new Date(this.config.userInfo.startDateTime).getTime();
         if (this.startTimeInPage <= timeOne && timeOne <= this.maxTimeInPage) {
           var time2 = timeOne - this.startTimeInPage
-          var leftPlace1 = ((time2 * 3) / 60 / 1000);
+          var leftPlace1 = ((time2 * 2.78) / 60 / 1000);
           this.dataOfBottom.push({
             leftData: leftPlace1
           })
@@ -76,7 +76,7 @@ export default {
         var timeTwo = new Date(this.config.userInfo.anesStartTime).getTime();
         if (this.startTimeInPage <= timeTwo && timeTwo <= this.maxTimeInPage) {
           var time3 = timeTwo - this.startTimeInPage
-          var leftPlace2 = ((time3 * 3) / 60 / 1000);
+          var leftPlace2 = ((time3 * 2.78) / 60 / 1000);
           this.dataOfBottom.push({
             leftData: leftPlace2
           })
@@ -92,7 +92,7 @@ export default {
         var timeThree = new Date(this.config.userInfo.anesEndTime).getTime();
         if (this.startTimeInPage <= timeThree && timeThree <= this.maxTimeInPage) {
           var time4 = timeThree - this.startTimeInPage
-          var leftPlace3 = ((time4 * 3) / 60 / 1000);
+          var leftPlace3 = ((time4 * 2.78) / 60 / 1000);
           this.dataOfBottom.push({
             leftData: leftPlace3
           })
@@ -110,7 +110,7 @@ export default {
         if (this.startTimeInPage <= timeFour && timeFour <= this.maxTimeInPage) {
           var time5 = timeFour - this.startTimeInPage
           // console.log(time5)
-          var leftPlace4 = ((time5 * 3) / 60 / 1000);
+          var leftPlace4 = ((time5 * 2.78) / 60 / 1000);
           this.dataOfBottom.push({
             leftData: leftPlace4
           })
@@ -151,7 +151,7 @@ export default {
             var time = new Date(res.list[i].START_TIME).getTime();
             if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
               var time1 = time - this.startTimeInPage
-              var leftPlace = ((time1 * 3) / 60 / 1000);
+              var leftPlace = ((time1 * 2.78) / 60 / 1000);
               this.dataOfBottom.push({
                 leftData: leftPlace
               })
@@ -177,7 +177,7 @@ export default {
                   var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
                   if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
                     var time8 = timeMoreOne - this.startTimeInPage
-                    var leftPlace8 = ((time8 * 3) / 60 / 1000);
+                    var leftPlace8 = ((time8 * 2.78) / 60 / 1000);
                     this.dataOfBottom.push({
                       leftData: leftPlace8
                     })
@@ -207,7 +207,7 @@ export default {
                       var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
                       if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
                         var time9 = timeMoreTwo - this.startTimeInPage
-                        var leftPlace9 = ((time9 * 3) / 60 / 1000);
+                        var leftPlace9 = ((time9 * 2.78) / 60 / 1000);
                         this.dataOfBottom.push({
                           leftData: leftPlace9
                         })
@@ -226,7 +226,7 @@ export default {
                     var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
                     if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
                       var time6 = timeFive - this.startTimeInPage
-                      var leftPlace5 = ((time6 * 3) / 60 / 1000);
+                      var leftPlace5 = ((time6 * 2.78) / 60 / 1000);
                       this.dataOfBottom.push({
                         leftData: leftPlace5
                       })
@@ -242,7 +242,7 @@ export default {
                     var timeSix = new Date(this.config.userInfo.endDateTime).getTime();
                     if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
                       var time7 = timeSix - this.startTimeInPage
-                      var leftPlace6 = ((time7 * 3) / 60 / 1000);
+                      var leftPlace6 = ((time7 * 2.78) / 60 / 1000);
                       this.dataOfBottom.push({
                         leftData: leftPlace6
                       })
@@ -298,7 +298,7 @@ export default {
       this.tipLeft = event.offsetX;
       this.tipView = true;
       this.showDataMore = false;
-      var offX = event.offsetX / 3; //横坐标值
+      var offX = event.offsetX / 2.78; //横坐标值
       var m = Math.round(offX);
       this.dataOfXlength = m;
       var time = new Date(this.config.initTime);
@@ -477,8 +477,8 @@ export default {
     if (this.page == false) {
       this.selectMedAnesthesiaEventList();
       // window.eventHub.$on("test", this.selectMedAnesthesiaEventList);
-
     }
+    console.log(this.config.maxTime)
 
 
   },
