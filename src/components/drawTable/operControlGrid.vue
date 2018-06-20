@@ -10,27 +10,27 @@
         </g>
         <g v-for="(item,index1) in dataPathArray" style="z-index: 22">
           <!-- <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
-                                            <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '89'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-                                              <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-                                              <ellipse stroke="#000" ry="3pt" rx="3pt" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
-                                            </g> -->
+                                              <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '89'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+                                                <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+                                                <ellipse stroke="#000" ry="3pt" rx="3pt" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
+                                              </g> -->
           <!-- 中心静脉压 CODE:71 △ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '71'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="SpringGreen" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '71'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="SpringGreen" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            <path stroke="SpringGreen" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none"/>
           </g>
           <!-- 无创收缩压 CODE:89 ∨ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '89'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '89'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path d="m-1.750002,4.233869l1.682028,-7.48387c0.484881,2.499095 1.144196,4.995871 1.629071,7.494967" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" stroke="blue" stroke-width="1.5" fill="none" />
+            <path d="m-3.3,2.532892c0,0 3.2484,-5.53107 3.1606,-5.53107c-0.078586,-0.117878 3.24841,5.53107 3.2484,5.53106" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" stroke="blue"  stroke-width="1.5" fill="none"/>
           </g>
           <!-- 无创舒张压 CODE:90 ∧ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '90'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '90'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path d="m-1.750002,4.233869l1.682028,-7.48387c0.484881,2.499095 1.144196,4.995871 1.629071,7.494967" fill-opacity="null" stroke-opacity="null" stroke="blue" stroke-width="1.5" fill="none" />
+            <path d="m-3.3,2.532892c0,0 3.2484,-5.53107 3.1606,-5.53107c-0.078586,-0.117878 3.24841,5.53107 3.2484,5.53106" fill-opacity="null" stroke-opacity="null" stroke="blue"  stroke-width="1.5" fill="none"/>
           </g>
           <!-- 呼吸 CODE:92 ○ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '92'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
@@ -60,7 +60,7 @@
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '112'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '112'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="blue" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            <path stroke="blue" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none"/>
           </g>
           <!-- Sp02 CODE:188 ● -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '188'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
@@ -72,31 +72,31 @@
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '202'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '202'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="#000" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none"/>
           </g>
           <!-- Ppeak CODE:208 △ 暂无此代码颜色-->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '208'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '208'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="#000" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none"/>
           </g>
           <!-- Pplat CODE:209 △ 暂无此代码颜色-->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '209'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '209'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="#000" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none"/>
           </g>
           <!-- Pmean CODE:210 △ 暂无此代码颜色-->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '210'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '210'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="#000" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none"/>
           </g>
           <!-- TVE CODE:212 △ 暂无此代码颜色-->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '212'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '212'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="#000" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none"/>
           </g>
           <!-- 心率 CODE:40 ● -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '40'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="SeaGreen" stroke-width="1.5"></line>
@@ -114,46 +114,46 @@
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '65'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="red" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '65'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path d="m-1.750002,4.233869l1.682028,-7.48387c0.484881,2.499095 1.144196,4.995871 1.629071,7.494967" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" stroke="red" stroke-width="1.5" fill="none" />
+            <path d="m-3.3,2.532892c0,0 3.2484,-5.53107 3.1606,-5.53107c-0.078586,-0.117878 3.24841,5.53107 3.2484,5.53106" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" stroke="red"  stroke-width="1.5" fill="none"/>
           </g>
           <!-- 动脉舒张压 CODE:66 ∧ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '66'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="red" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '66'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path d="m-1.750002,4.233869l1.682028,-7.48387c0.484881,2.499095 1.144196,4.995871 1.629071,7.494967" fill-opacity="null" stroke-opacity="null" stroke="red" stroke-width="1.5" fill="none" />
+            <path d="m-3.3,2.532892c0,0 3.2484,-5.53107 3.1606,-5.53107c-0.078586,-0.117878 3.24841,5.53107 3.2484,5.53106" fill-opacity="null" stroke-opacity="null" stroke="red"  stroke-width="1.5" fill="none"/>
           </g>
           <!-- 动脉平均压 CODE:67 △ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '66'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="red" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '66'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="red" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            <path stroke="red" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none"/>
           </g>
           <g v-for="(cir,index2) in item.circleData" v-if="item.flag==1" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <!-- <circle class="opercontrol" r="8pt" fill="rgba(0,0,0,0)"></circle> -->
             <!-- ○ -->
             <!-- <ellipse stroke="#000" ry="3pt" rx="3pt" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" /> -->
             <!-- ● -->
-            <!-- <circle class="opercontrol" r="4" fill="green"></circle> -->
+            <!-- <circle class="opercontrol" r="3" fill="green"></circle> -->
             <!-- ∧ -->
-            <!-- <path d="m-1.750002,4.233869l1.682028,-7.48387c0.484881,2.499095 1.144196,4.995871 1.629071,7.494967" fill-opacity="null" stroke-opacity="null" stroke="#000"  stroke-width="1.5" fill="none"/> -->
+            <!-- <path d="m-3.3,2.532892c0,0 3.2484,-5.53107 3.1606,-5.53107c-0.078586,-0.117878 3.24841,5.53107 3.2484,5.53106" fill-opacity="null" stroke-opacity="null" stroke="#000"  stroke-width="1.5" fill="none"/> -->
             <!-- ∨ -->
-            <!-- <path d="m-1.750002,4.233869l1.682028,-7.48387c0.484881,2.499095 1.144196,4.995871 1.629071,7.494967" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" stroke="#000"  stroke-width="1.5" fill="none"/> -->
+            <!-- <path d="m-3.3,2.532892c0,0 3.2484,-5.53107 3.1606,-5.53107c-0.078586,-0.117878 3.24841,5.53107 3.2484,5.53106" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" stroke="#000"  stroke-width="1.5" fill="none"/> -->
             <!-- △ -->
-            <!-- <path stroke="#000" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="none"/> -->
+            <!-- <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none"/> -->
             <!-- ▽ -->
-            <!-- <path stroke="#000" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" fill="none"/> -->
+            <!-- <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" fill="none"/> -->
             <!-- ▲ -->
-            <!-- <path stroke="#000" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" fill-opacity="null" stroke-opacity="null" fill="#000"/> -->
+            <!-- <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="#000"/> -->
             <!-- ▼ -->
-            <!-- <path stroke="#000" d="m-2.500003,2.377828l2.258824,-6.377832l2.258824,6.377832l-4.517648,0z" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" fill="#000"/> -->
+            <!-- <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" fill="#000"/> -->
             <!-- X -->
             <!-- <text stroke="null" transform="matrix(0.44269931316375727,0,0,0.44269931316375727,164.78615606576204,120.13502615876496) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_34" y="-260.674143" x="-380.226641" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#000000">X</text> -->
           </g>
         </g>
       </svg>
-      <!-- <div style="position: absolute;top: 10px;">
+      <div style="position: absolute;top: 10px;">
         100
-      </div> -->
+      </div>
       <div v-if="tipView">
         <div style="position: absolute;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 10;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
           <div>
@@ -254,14 +254,14 @@ export default {
       //构造器会将数据集中的每一个数据传入访问器函数，并使用其返回值作为 x坐标或y坐标：
       const dataone = d3.line()
         .x(
-          (data) => {
-            return data.x
-          }
+        (data) => {
+          return data.x
+        }
         )
         .y(
-          (data) => {
-            return data.y
-          }
+        (data) => {
+          return data.y
+        }
         );
       for (var i = 0; i < this.pathArray.length; i++) {
         this.dataPathArray.push({
@@ -331,34 +331,34 @@ export default {
 
       this.api.getSignName(params)
         .then(
-          res => {
-            for (var i = 0; i < res.length; i++) {
-              res[i].itemValue = "";
-            }
-            //定义一个排序方法
-            let compare = function(prop) {
-              return function(obj1, obj2) {
-                let val1 = obj1[prop]
-                let val2 = obj2[prop]
-                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                  val1 = Number(val1);
-                  val2 = Number(val2);
-                }
-                if (val1 < val2) {
-                  return -1;
-                } else if (val1 > val2) {
-                  return 1;
-                } else {
-                  return 0;
-                }
+        res => {
+          for (var i = 0; i < res.length; i++) {
+            res[i].itemValue = "";
+          }
+          //定义一个排序方法
+          let compare = function(prop) {
+            return function(obj1, obj2) {
+              let val1 = obj1[prop]
+              let val2 = obj2[prop]
+              if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                val1 = Number(val1);
+                val2 = Number(val2);
+              }
+              if (val1 < val2) {
+                return -1;
+              } else if (val1 > val2) {
+                return 1;
+              } else {
+                return 0;
               }
             }
-            //根据itemcode排序
-            this.signNameLisg = res.sort(compare("itemCode"));
-            // this.signNameLisg = res;
-            this.getSignTimeData(res.length, res);
-            this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
-          })
+          }
+          //根据itemcode排序
+          // this.signNameLisg = res.sort(compare("itemCode"));
+          this.signNameLisg = res;
+          this.getSignTimeData(res.length, res);
+          this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
+        })
     },
     getSignNameNoTime() {
       if (this.setTimeId) {
@@ -373,73 +373,68 @@ export default {
 
       this.api.getSignName(params)
         .then(
-          res => {
-            for (var i = 0; i < res.length; i++) {
-              res[i].itemValue = "";
-            }
-            //定义一个排序方法
-            let compare = function(prop) {
-              return function(obj1, obj2) {
-                let val1 = obj1[prop]
-                let val2 = obj2[prop]
-                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                  val1 = Number(val1);
-                  val2 = Number(val2);
-                }
-                if (val1 < val2) {
-                  return -1;
-                } else if (val1 > val2) {
-                  return 1;
-                } else {
-                  return 0;
-                }
+        res => {
+          for (var i = 0; i < res.length; i++) {
+            res[i].itemValue = "";
+          }
+          //定义一个排序方法
+          let compare = function(prop) {
+            return function(obj1, obj2) {
+              let val1 = obj1[prop]
+              let val2 = obj2[prop]
+              if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                val1 = Number(val1);
+                val2 = Number(val2);
+              }
+              if (val1 < val2) {
+                return -1;
+              } else if (val1 > val2) {
+                return 1;
+              } else {
+                return 0;
               }
             }
-            //根据itemcode排序
-            this.signNameLisg = res.sort(compare("itemCode"));
-            // this.signNameLisg = res;
-            this.getSignTimeData(res.length, res);
-          })
+          }
+          //根据itemcode排序
+          // this.signNameLisg = res.sort(compare("itemCode"));
+          this.signNameLisg = res;
+          this.getSignTimeData(res.length, res);
+        })
     },
     getSignTimeData(len, list) {
-
-      let params1 = {
+      debugger
+      let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
         eventNo: 0
       }
-      this.api.getNewTimeData(params1)
-        .then(res => {
+      this.api.getSignTimeData(params)
+        .then(
+        res => {
           if (res.length < 1) {
             return false
           }
-          //对时间进行排序
+          var sortArray = [];
+          for (var i = 0; i < res.length; i++) {
+            var item = res[i].dataValue;
+            item = eval('(' + item + ')');
+            let xL = len - item.length
+
+            if (xL > 0) {
+              for (var j = 0; j < xL; j++) {
+                item.push('');
+              }
+            }
+            res[i].dataValue = item;
+          }
           res.sort(function(a, b) {
             return Date.parse(a.time) - Date.parse(b.time); //时间正序
           });
-          let nameList = this.signNameLisg
-          let testArr = []
-          res.forEach(itemAll => {
-            let arr = []
-            nameList.forEach(item => {
-              let num = 0
-              itemAll.dataValue.forEach(li => {
-                if (item.itemCode == li.ITEM_NAME) {
-                  arr.push(li.ITEM_VALUE);
-                  num++
-                }
-              })
-              if (num == 0) {
-                arr.push('')
-              }
-            })
-            itemAll.dataValue = arr
-          })
-
-          // this.signdataList = res;
-          let sortArray = res
-          this.signdataList = res;
+          for (var i = 0, l = res.length; i < l; i++) {
+            sortArray.push(res[i]);
+          }
+          this.signdataList = sortArray;
           var newArray = [];
           for (var i = 0; i < len; i++) {
             var arr1 = [];
@@ -480,80 +475,6 @@ export default {
           this.pathArray = newArray;
           this.calculatePath();
         })
-
-      let params = {
-        patientId: this.config.userInfo.patientId,
-        operId: this.config.userInfo.operId,
-        visitId: this.config.userInfo.visitId,
-        eventNo: 0
-      }
-      return
-      this.api.getSignTimeData(params)
-        .then(
-          res => {
-            if (res.length < 1) {
-              return false
-            }
-            var sortArray = [];
-            for (var i = 0; i < res.length; i++) {
-              var item = res[i].dataValue;
-              item = eval('(' + item + ')');
-              let xL = len - item.length
-
-              if (xL > 0) {
-                for (var j = 0; j < xL; j++) {
-                  item.push('');
-                }
-              }
-              res[i].dataValue = item;
-            }
-            res.sort(function(a, b) {
-              return Date.parse(a.time) - Date.parse(b.time); //时间正序
-            });
-            for (var i = 0, l = res.length; i < l; i++) {
-              sortArray.push(res[i]);
-            }
-            this.signdataList = sortArray;
-            var newArray = [];
-            for (var i = 0; i < len; i++) {
-              var arr1 = [];
-              for (var j = 0; j < sortArray.length; j++) {
-                if (sortArray[j].dataValue[i]) {
-                  arr1.push({
-                    value: sortArray[j].dataValue[i],
-                    time: sortArray[j].time,
-                    itemData: list[i]
-
-                  })
-                } else {
-                  arr1.push({
-                    value: "",
-                    time: sortArray[j].time,
-                    itemData: list[i]
-
-                  })
-                }
-
-              }
-              newArray.push(arr1)
-            }
-            for (var i = 0; i < newArray.length; i++) {
-              for (var j = 0; j < newArray[i].length; j++) {
-                let min = '';
-                if (new Date(newArray[i][j].time) > this.config.maxTime) {
-                  min = this.getMinuteDif(this.config.initTime, this.config.maxTime) + 1;
-                } else {
-                  min = this.getMinuteDif(this.config.initTime, newArray[i][j].time);
-                }
-                let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
-                let y = this.svgHeight - Math.round(newArray[i][j].value / 10 * (this.svgHeight / this.rows))
-                newArray[i][j].x = x;
-                newArray[i][j].y = y;
-              }
-            }
-            this.pathArray = newArray;
-            this.calculatePath();
-          })
     },
 
     //计算时间差分钟
@@ -699,6 +620,5 @@ export default {
 
 </script>
 <style scoped>
-
 
 </style>
