@@ -617,11 +617,6 @@ export default {
             if (sMin < 0) {
               sMin = 0;
             }
-            // if (list[i].vStartTime) {
-            //   sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
-            // } else {
-            //   sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-            // }
 
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
@@ -658,6 +653,8 @@ export default {
             let y2
             let flag = true;
             let topi
+            y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+            y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             //判断是否同一种药品
             if (this.dataArray.length > 0) {
               for (var j = 0; j < this.dataArray.length; j++) {
@@ -666,14 +663,9 @@ export default {
                   y2 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
                   flag = false;
                   topi = j;
-                } else {
-                  y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-                  y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+                  break;
                 }
               }
-            } else {
-              y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-              y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             }
 
             // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {

@@ -8,18 +8,27 @@
         <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
       </g>
     </svg>
-    <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-for="item in xArray" @mousemove.stop="mouseMoveInfo(item,$event)">
+    <!-- 显示出量的数据 -->
+    <div style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{left: item.obj.toleft-5+'px',top:index*20+120+'px'}" v-for="(item,index) in outputList">
+      <span style="padding: 0 2px 0 0px;" v-if="item.obj.DOSAGE">{{item.obj.DOSAGE}}</span>
+    </div>
+    <div v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+      <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+    </div>
+    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+      <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+    </div>
+    <div style="position: absolute;z-index: 5;" :style="{top:item.y1-svgHeight/rows/8+'px',left:item.x1+'px',width:item.w+'px',height:svgHeight/rows/4+'px'}" v-for="item in xArray">
     </div>
     <div style="height: 100px;width: 140px; position: absolute;top: 0px;left: -140px;">
-      <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;padding-left: 5px;white-space:nowrap;word-break: keep-all;" :style="{height:svgHeight/rows-1+'px'}">{{item.ITEM_NAME}}</div>
+      <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 12px;padding-left: 5px;white-space:nowrap;word-break: keep-all;" :style="{height:svgHeight/rows-1+'px'}"><span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span></div>
     </div>
     <div style="width: 25px; position: absolute;top: 0px;left: -165px;border-right: 1px solid #8391a2;border-bottom: 1px solid #8391a2;    display: flex;align-items: center;" :style="{height:forRows*(svgHeight/rows)-1+'px'}">
       输液
     </div>
     <div style="width: 165px; position: absolute;top: 0px;left: -165px;font-size: 12px;" :style="{height:outRows*(svgHeight/rows)-1+'px',top:forRows*(svgHeight/rows)+'px'}">
-      <div v-for="item in outRows" v-if="item!=3" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">
-      </div>
-      <div v-else :style="{height:svgHeight/rows-1+'px'}">
+      <div v-for="(item,index) in outputList" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">
+        <span v-if="item.obj.ITEM_NAME">{{item.obj.ITEM_NAME}}({{item.obj.DOSAGE_UNITS}})</span>
       </div>
     </div>
   </div>
@@ -47,6 +56,7 @@ export default {
       dataObj: {},
       xArray: [],
       percentPageData: [],
+      outputList: [], //出量数据
     }
   },
   methods: {
@@ -82,9 +92,47 @@ export default {
         this.api.selectMedAnesthesiaEventList(params)
           .then(res => {
             var list = res.list;
+            this.getOutList()
             this.dataListOperFun(list)
           })
       }
+    },
+    //获取出量
+    getOutList() {
+      let params1 = {
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
+        itemClass: "D",
+      }
+
+      this.api.selectMedAnesthesiaEventList(params1)
+        .then(res => {
+          let list = res.list;
+          this.outputList = res.list;
+          let temparr = this.outputList
+          let arr = []
+          for (let i = 0; i < temparr.length; i++) {
+            if (temparr[i].START_TIME) {
+              if (new Date(temparr[i].START_TIME) <= new Date(this.config.maxTime) && new Date(temparr[i].START_TIME) >= new Date(this.config.initTime)) {
+                let x = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+                let x2 = x / this.tbMin * (this.svgWidth / this.columns)
+                temparr[i].toleft = x2
+                arr.push({ obj: temparr[i], y2: i * 20 + 120, x1: x2 })
+              }
+            }
+          }
+
+          for (var i = 0; i < 3; i++) {
+            if (arr.length < 3) {
+              arr.push({ obj: '' })
+            }
+            if (arr.length == 3) {
+              break
+            }
+          }
+          this.outputList = arr
+        })
     },
 
     //计算时间差分钟
@@ -215,16 +263,37 @@ export default {
           } else {
             let t1 = ''
             let t2 = ''
-            if (list[i].vStartTime) {
-              t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
-            } else {
-              t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            //判断是否在当前时间内
+            if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
+              continue;
+            }
+            if (list[i].DURATIVE_INDICATOR == 0) {
+              if (new Date(list[i].START_TIME) < new Date(this.config.initTime)) {
+                continue;
+              }
+            }
+            //如果是持续用药
+            if (list[i].DURATIVE_INDICATOR == 1) {
+              //判断是否有结束时间
+              if (list[i].ENDDATE) {
+                if (new Date(list[i].ENDDATE) < new Date(this.config.initTime)) {
+                  continue;
+                }
+              } else {
+                if (new Date(this.config.patientMaxTime) < new Date(this.config.initTime)) {
+                  continue;
+                }
+              }
+            }
+            t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+            if (t1 < 0) {
+              t1 = 0;
             }
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-              if (new Date(list[i].MAX_TIME) > this.config.maxTime) {
+              if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
               } else {
-                t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].MAX_TIME));
+                t2 = this.getMinuteDif(this.config.initTime, new Date(this.config.patientMaxTime));
               }
             } else {
               if (new Date(list[i].ENDDATE) > this.config.maxTime) {
@@ -238,27 +307,58 @@ export default {
             }
             let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)
             let x2 = t2 / this.tbMin * (this.svgWidth / this.columns)
-            let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
-            let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
-
-            if (list[i].DURATIVE_INDICATOR == 1) {
-              list[i].vStartTime = '';
+            let y1
+            let y2
+            let flag = true;
+            let topi
+            y1 = Math.round(this.svgHeight / this.rows / 2 * (m + 1) + this.svgHeight / this.rows * m / 2)
+            y2 = y1
+            //判断是否同一种药品
+            if (this.dataArray.length > 0) {
+              for (var j = 0; j < this.dataArray.length; j++) {
+                if (list[i].ITEM_NAME == this.dataArray[j].ITEM_NAME && list[i].ITEM_CLASS == this.dataArray[j].ITEM_CLASS) {
+                  y1 = Math.round(this.svgHeight / this.rows / 2 * (j + 1) + this.svgHeight / this.rows * j / 2)
+                  y2 = y1
+                  flag = false;
+                  topi = j;
+                  break;
+                }
+              }
+            }
+            list[i].vStartTime = '';
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
+            }
+
+            if (flag) {
               this.xArray.push({
                 x1: x1,
                 y1: y1,
                 x2: x2,
                 y2: y2,
                 w: x2 - x1,
-                obj: list[i]
+                obj: list[i],
+                top: m * this.svgHeight / this.rows
+
               })
               this.dataArray.push(list[i]);
               m++;
+
+            } else {
+              this.xArray.push({
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                w: x2 - x1,
+                obj: list[i],
+                top: topi * this.svgHeight / this.rows
+              })
             }
           }
         }
       }
-
+      console.log(this.dataArray)
       for (var k = 0; k < this.forRows - m; k++) {
         this.dataArray.push(m)
       }
@@ -273,6 +373,8 @@ export default {
         this.getData();
       }
       if (this.config.pageOper == -1) {
+        this.getData();
+        return
         let m = this.config.initTime.getTime();
         var list = [];
         list = this.percentPageData;
@@ -284,6 +386,8 @@ export default {
         this.dataListOperFun(list);
       }
       if (this.config.pageOper == 1) {
+        this.getData();
+        return
         let arrList = this.dataArray;
         this.percentPageData = arrList;
         var arrayList = [];

@@ -8,10 +8,14 @@
         <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
       </g>
     </svg>
-    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:index*(svgHeight/rows)+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+    <!-- 显示出量的数据 -->
+    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{left: item.obj.toleft-5+'px',top:index*20+120+'px'}" v-for="(item,index) in outputList">
+      <span style="padding: 0 2px 0 0px;" v-if="item.obj.DOSAGE">{{item.obj.DOSAGE}}</span>
+    </div>
+    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
       <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
     </div>
-    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:index*(svgHeight/rows)+1+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
       <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
     </div>
     <div v-if="tipView">
@@ -49,7 +53,8 @@
       </div>
       <div v-else :style="{height:svgHeight/rows-1+'px'}">
       </div> -->
-      <div v-for="item in outRows" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">
+      <div v-for="(item,index) in outputList" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">
+        <span v-if="item.obj.ITEM_NAME">{{item.obj.ITEM_NAME}}({{item.obj.DOSAGE_UNITS}})</span>
       </div>
     </div>
   </div>
@@ -78,6 +83,7 @@ export default {
       xArray: [],
       percentPageData: [],
       setTimeId: '',
+      outputList: [], //出量数据
     }
   },
   methods: {
@@ -119,22 +125,48 @@ export default {
           .then(res => {
             var list = res.list;
             this.dataListOperFun(list)
+            this.getOutList()
             this.setTimeId = setTimeout(_ => this.getData(), this.config.timeSet)
           })
-        //获取出量的数据
-        let params1 = {
-          patientId: this.config.userInfo.patientId,
-          operId: this.config.userInfo.operId,
-          visitId: this.config.userInfo.visitId,
-          itemClass: "D",
-        }
 
-        this.api.selectMedAnesthesiaEventList(params1)
-          .then(res => {
-            var list = res.list;
-            // debugger
-          })
       }
+    },
+    //获取出量
+    getOutList() {
+      let params1 = {
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
+        itemClass: "D",
+      }
+
+      this.api.selectMedAnesthesiaEventList(params1)
+        .then(res => {
+          let list = res.list;
+          this.outputList = res.list;
+          let temparr = this.outputList
+          let arr = []
+          for (let i = 0; i < temparr.length; i++) {
+            if (temparr[i].START_TIME) {
+              if (new Date(temparr[i].START_TIME) <= new Date(this.config.maxTime) && new Date(temparr[i].START_TIME) >= new Date(this.config.initTime)) {
+                let x = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+                let x2 = x / this.tbMin * (this.svgWidth / this.columns)
+                temparr[i].toleft = x2
+                arr.push({ obj: temparr[i], y2: i * 20 + 120, x1: x2 })
+              }
+            }
+          }
+
+          for (var i = 0; i < 3; i++) {
+            if (arr.length < 3) {
+              arr.push({ obj: '' })
+            }
+            if (arr.length == 3) {
+              break
+            }
+          }
+          this.outputList = arr
+        })
     },
     getDataNoTime() {
       var svg = d3.selectAll(".dosagegrid")
@@ -155,6 +187,7 @@ export default {
           .then(res => {
             var list = res.list;
             this.dataListOperFun(list)
+            this.getOutList()
           })
       }
     },
@@ -314,11 +347,6 @@ export default {
             if (t1 < 0) {
               t1 = 0;
             }
-            // if (list[i].vStartTime) {
-            //   t1 = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
-            // } else {
-            //   t1 = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-            // }
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
               if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, this.config.maxTime);
@@ -337,41 +365,72 @@ export default {
             }
             let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)
             let x2 = t2 / this.tbMin * (this.svgWidth / this.columns)
-            let y1 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
-            let y2 = this.svgHeight / this.rows / 2 + i * this.svgHeight / this.rows
+            // let y1 = this.svgHeight / this.rows / 2 + this.xArray.length * this.svgHeight / this.rows
+            // let y2 = this.svgHeight / this.rows / 2 + this.xArray.length * this.svgHeight / this.rows
 
-            // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
-            //   list[i].vStartTime = '';
-            //   this.createLine(x1, x2, y1, y2, list[i]);
-            //   this.xArray.push({
-            //     x1: x1,
-            //     y1: y1,
-            //     x2: x2,
-            //     y2: y2,
-            //     w: x2 - x1,
-            //     obj: list[i]
-            //   })
-            //   this.dataArray.push(list[i]);
-            //   m++;
-            // }
+            let y1
+            let y2
+            let flag = true;
+            let topi
+            y1 = Math.round(this.svgHeight / this.rows / 2 * (m + 1) + this.svgHeight / this.rows * m / 2)
+            y2 = y1
+            //判断是否同一种药品
+            if (this.dataArray.length > 0) {
+              for (var j = 0; j < this.dataArray.length; j++) {
+                if (list[i].ITEM_NAME == this.dataArray[j].ITEM_NAME && list[i].ITEM_CLASS == this.dataArray[j].ITEM_CLASS) {
+                  y1 = Math.round(this.svgHeight / this.rows / 2 * (j + 1) + this.svgHeight / this.rows * j / 2)
+                  y2 = y1
+                  flag = false;
+                  topi = j;
+                  break;
+                }
+              }
+            }
             list[i].vStartTime = '';
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
             }
-            this.xArray.push({
-              x1: x1,
-              y1: y1,
-              x2: x2,
-              y2: y2,
-              w: x2 - x1,
-              obj: list[i]
-            })
-            this.dataArray.push(list[i]);
-            m++;
+
+            if (flag) {
+              this.xArray.push({
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                w: x2 - x1,
+                obj: list[i],
+                top: m * this.svgHeight / this.rows
+
+              })
+              this.dataArray.push(list[i]);
+              m++;
+
+            } else {
+              this.xArray.push({
+                x1: x1,
+                y1: y1,
+                x2: x2,
+                y2: y2,
+                w: x2 - x1,
+                obj: list[i],
+                top: topi * this.svgHeight / this.rows
+              })
+
+            }
+            // this.xArray.push({
+            //   x1: x1,
+            //   y1: y1,
+            //   x2: x2,
+            //   y2: y2,
+            //   w: x2 - x1,
+            //   obj: list[i]
+            // })
+            // this.dataArray.push(list[i]);
+            // m++;
           }
         }
       }
-
+      console.log(this.dataArray)
       for (var k = 0; k < this.forRows - m; k++) {
         this.dataArray.push(m)
       }
