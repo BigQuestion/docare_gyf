@@ -45,9 +45,11 @@
       输液
     </div>
     <div style="width: 165px; position: absolute;top: 0px;left: -165px;font-size: 12px;" :style="{height:outRows*(svgHeight/rows)-1+'px',top:forRows*(svgHeight/rows)+'px'}">
-      <div v-for="item in outRows" v-if="item!=3" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">
+      <!-- <div v-for="item in outRows" v-if="item!=3" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">
       </div>
       <div v-else :style="{height:svgHeight/rows-1+'px'}">
+      </div> -->
+      <div v-for="item in outRows" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">
       </div>
     </div>
   </div>
@@ -118,6 +120,19 @@ export default {
             var list = res.list;
             this.dataListOperFun(list)
             this.setTimeId = setTimeout(_ => this.getData(), this.config.timeSet)
+          })
+        //获取出量的数据
+        let params1 = {
+          patientId: this.config.userInfo.patientId,
+          operId: this.config.userInfo.operId,
+          visitId: this.config.userInfo.visitId,
+          itemClass: "D",
+        }
+
+        this.api.selectMedAnesthesiaEventList(params1)
+          .then(res => {
+            var list = res.list;
+            // debugger
           })
       }
     },

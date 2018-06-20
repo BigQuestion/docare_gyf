@@ -5,7 +5,7 @@
         <span v-if="item.name=='麻醉开始'">X</span>
         <span style="font-size:21px;" v-else-if="item.name=='手术开始'">⊙</span>
         <span style="color:red;" v-else-if="item.name=='麻醉结束'">X</span>
-        <span style="color:red;" v-else-if="item.name=='手术结束'">ⓧ</span>
+        <span style="color:red;" v-else-if="item.name=='手术结束'">?</span>
         <span v-else>{{item.hasNum}}</span>
       </div>
     </div>
