@@ -348,29 +348,38 @@ export default {
         visitId: this.config.userInfo.visitId,
         eventNo: 0
       }
-      this.api.getSignTimeData(params)
+      this.api.getNewTimeData(params)
         .then(
           res => {
-            var sortArray = [];
-            for (var i = 0; i < res.length; i++) {
-              var item = res[i].dataValue;
-              item = eval('(' + item + ')');
-              let xL = len - item.length
-
-              if (xL > 0) {
-                for (var j = 0; j < xL; j++) {
-                  item.push('');
-                }
-              }
-              res[i].dataValue = item;
+            if (res.length < 1) {
+              return false
             }
+            //对时间进行排序
             res.sort(function(a, b) {
               return Date.parse(a.time) - Date.parse(b.time); //时间正序
             });
-            for (var i = 0, l = res.length; i < l; i++) {
-              sortArray.push(res[i]);
-            }
-            this.signdataList = sortArray;
+            let nameList = this.signNameLisg
+            let testArr = []
+            res.forEach(itemAll => {
+              let arr = []
+              nameList.forEach(item => {
+                let num = 0
+                itemAll.dataValue.forEach(li => {
+                  if (item.itemCode == li.ITEM_NAME) {
+                    arr.push(li.ITEM_VALUE);
+                    num++
+                  }
+                })
+                if (num == 0) {
+                  arr.push('')
+                }
+              })
+              itemAll.dataValue = arr
+            })
+
+            // this.signdataList = res;
+            let sortArray = res
+            this.signdataList = res;
             var newArray = [];
             for (var i = 0; i < len; i++) {
               var arr1 = [];

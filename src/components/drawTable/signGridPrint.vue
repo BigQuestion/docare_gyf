@@ -56,38 +56,6 @@ export default {
       return a.left - b.left;
     },
     topTimeFun() {
-      if (this.config.userInfo.inDateTime) {
-        var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
-        if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
-          var time6 = timeFive - this.startTimeInPage
-          var leftPlace5 = ((time6 * 3) / 60 / 1000);
-          this.dataOfBottom.push({
-            leftData: leftPlace5
-          })
-          this.dataBody.push({
-            left: leftPlace5,
-            bottom: 0,
-            name: '入手术室',
-            time: this.config.userInfo.inDateTime,
-          })
-        }
-      }
-      if (this.config.userInfo.endDateTime) {
-        var timeSix = new Date(this.config.userInfo.endDateTime).getTime();
-        if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
-          var time7 = timeSix - this.startTimeInPage
-          var leftPlace6 = ((time7 * 3) / 60 / 1000);
-          this.dataOfBottom.push({
-            leftData: leftPlace6
-          })
-          this.dataBody.push({
-            left: leftPlace6,
-            bottom: 0,
-            name: '出手术室',
-            time: this.config.userInfo.endDateTime,
-          })
-        }
-      }
       if (this.config.userInfo.startDateTime) {
         var timeOne = new Date(this.config.userInfo.startDateTime).getTime();
         if (this.startTimeInPage <= timeOne && timeOne <= this.maxTimeInPage) {
@@ -253,44 +221,56 @@ export default {
                   } else {
 
                   }
-
-                  var tmp = this.dataBody.sort(this.sortFun);
+                  if (this.config.userInfo.inDateTime) {
+                    var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
+                    if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
+                      var time6 = timeFive - this.startTimeInPage
+                      var leftPlace5 = ((time6 * 3) / 60 / 1000);
+                      this.dataOfBottom.push({
+                        leftData: leftPlace5
+                      })
+                      this.dataBody.push({
+                        left: leftPlace5,
+                        bottom: 0,
+                        name: '入手术室',
+                        time: this.config.userInfo.inDateTime,
+                      })
+                    }
+                  }
+                  if (this.config.userInfo.endDateTime) {
+                    var timeSix = new Date(this.config.userInfo.endDateTime).getTime();
+                    if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
+                      var time7 = timeSix - this.startTimeInPage
+                      var leftPlace6 = ((time7 * 3) / 60 / 1000);
+                      this.dataOfBottom.push({
+                        leftData: leftPlace6
+                      })
+                      this.dataBody.push({
+                        left: leftPlace6,
+                        bottom: 0,
+                        name: '出手术室',
+                        time: this.config.userInfo.endDateTime,
+                      })
+                    }
+                  }
+                  this.dataBody.sort(this.sortFun);
+                  for (var t = 0; t < this.dataBody.length; t++) {
+                    this.$set(this.dataBody[t], 'hasNum', t + 1);
+                  }
                   this.topTimeFun();
+                  this.dataBody.sort(this.sortFun);
                   var pei = 0;
+                  console.log(this.dataBody)
                   for (var k = 0; k < this.dataBody.length; k++) {
-                    if (k != this.dataBody.length - 1) {
-                      if (tmp[k].left == tmp[k + 1].left) {
-                        // console.log(tmp[k])
-                        for (var g = 0; g < this.dataBody.length; g++) {
-                          // console.log(this.dataBody)
-                          if (tmp[k].left == this.dataBody[g].left) {
-                            pei = pei + 1;
-                            // console.log(this.dataBody[g])
-                            this.dataBody[g].bottom = -15 + pei * 15;
-                            // console.log(this.dataOfBottom[g].bottom)
-                          } else {
-                            pei = 0;
-                            // this.dataBody[g].bottom = 0;
-                          }
-                        }
+                    if (this.dataBody[k - 1]) {
+                      if (this.dataBody[k].left == this.dataBody[k - 1].left) {
+                        this.dataBody[k].bottom = this.dataBody[k - 1].bottom + 15;
                       } else {
-                        pei = 0;
+                        this.dataBody[k].bottom = 0;
                       }
                     } else {
-                      // for (var g = 0; g < this.dataBody.length; g++) {
-                      //   // console.log(this.dataBody)
-                      //   if (tmp[k].left == this.dataBody[g].left) {
-                      //     pei = pei + 1;
-                      //     // console.log(this.dataBody[g])
-                      //     this.dataBody[g].bottom = -15 + pei * 15;
-                      //     // console.log(this.dataOfBottom[g].bottom)
-                      //   } else {
-                      //     pei = 0;
-                      //     // this.dataBody[g].bottom = 0;
-                      //   }
-                      // }
-                    }
 
+                    }
                   }
                   this.lineArray = res.list;
                   this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
@@ -427,43 +407,56 @@ export default {
                     }
                   } else {
 
+                  }
+                  if (this.config.userInfo.inDateTime) {
+                    var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
+                    if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
+                      var time6 = timeFive - this.startTimeInPage
+                      var leftPlace5 = ((time6 * 3) / 60 / 1000);
+                      this.dataOfBottom.push({
+                        leftData: leftPlace5
+                      })
+                      this.dataBody.push({
+                        left: leftPlace5,
+                        bottom: 0,
+                        name: '入手术室',
+                        time: this.config.userInfo.inDateTime,
+                      })
                     }
-                    var tmp = this.dataBody.sort(this.sortFun);
-                    this.topTimeFun();
-                    var pei = 0;
-                    for (var k = 0; k < this.dataBody.length; k++) {
-                      debugger
-                      if (k != this.dataBody.length - 1) {
-                        if (tmp[k].left == tmp[k + 1].left) {
-                          // console.log(tmp[k])
-                          for (var g = 0; g < this.dataBody.length; g++) {
-                            // console.log(this.dataBody)
-                            if (tmp[k].left == this.dataBody[g].left) {
-                              pei = pei + 1;
-                              // console.log(this.dataBody[g])
-                              this.dataBody[g].bottom = -15 + pei * 15;
-                              // console.log(this.dataOfBottom[g].bottom)
-                            } else {
-                              pei = 0;
-                              // this.dataBody[g].bottom = 0;
-                            }
-                          }
-                        } else {
-                        pei = 0;
+                  }
+                  if (this.config.userInfo.endDateTime) {
+                    var timeSix = new Date(this.config.userInfo.endDateTime).getTime();
+                    if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
+                      var time7 = timeSix - this.startTimeInPage
+                      var leftPlace6 = ((time7 * 3) / 60 / 1000);
+                      this.dataOfBottom.push({
+                        leftData: leftPlace6
+                      })
+                      this.dataBody.push({
+                        left: leftPlace6,
+                        bottom: 0,
+                        name: '出手术室',
+                        time: this.config.userInfo.endDateTime,
+                      })
+                    }
+                  }
+                  this.dataBody.sort(this.sortFun);
+                  for (var t = 0; t < this.dataBody.length; t++) {
+                    this.$set(this.dataBody[t], 'hasNum', t + 1);
+                  }
+                  this.topTimeFun();
+                  this.dataBody.sort(this.sortFun);
+                  var pei = 0;
+                  console.log(this.dataBody)
+                  for (var k = 0; k < this.dataBody.length; k++) {
+                    if (this.dataBody[k - 1]) {
+                      if (this.dataBody[k].left == this.dataBody[k - 1].left) {
+                        this.dataBody[k].bottom = this.dataBody[k - 1].bottom + 15;
+                      } else {
+                        this.dataBody[k].bottom = 0;
                       }
                     } else {
-                      // for (var g = 0; g < this.dataBody.length; g++) {
-                      //   // console.log(this.dataBody)
-                      //   if (tmp[k].left == this.dataBody[g].left) {
-                      //     pei = pei + 1;
-                      //     // console.log(this.dataBody[g])
-                      //     this.dataBody[g].bottom = -15 + pei * 15;
-                      //     // console.log(this.dataOfBottom[g].bottom)
-                      //   } else {
-                      //     pei = 0;
-                      //     // this.dataBody[g].bottom = 0;
-                      //   }
-                      // }
+
                     }
                   }
                   this.lineArray = res.list;

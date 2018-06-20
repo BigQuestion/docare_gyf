@@ -623,6 +623,7 @@ export default {
           if (res.length < 1) {
             return false
           }
+          //对时间进行排序
           res.sort(function(a, b) {
             return Date.parse(a.time) - Date.parse(b.time); //时间正序
           });

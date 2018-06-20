@@ -132,7 +132,7 @@ export default {
         this.api.selectMedAnesthesiaEventList(params1)
           .then(res => {
             var list = res.list;
-            debugger
+            // debugger
           })
       }
     },

@@ -1070,6 +1070,7 @@ export default {
       }, 1000);
     },
     lockedPatient(item) {
+      console.log(item)
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
