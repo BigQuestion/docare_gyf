@@ -737,16 +737,16 @@ export default {
     },
     methods: {
         nameDataType(item) {
-            console.log(item)
+            // console.log(item)
         },
         submit() {
             let params = [];
             let dataInName;
             let commitData = [];
-            console.log(this.scheduleListRight)
+            // console.log(this.scheduleListRight)
             for (var i = 0; i < this.scheduleListRight.length; i++) {
                 if (this.scheduleListRight[i].state == 1) {
-                    console.log(this.scheduleListRight[i])
+                    // console.log(this.scheduleListRight[i])
                     commitData.push({
                         patientId: this.scheduleListRight[i].patientId,
                         visitId: this.scheduleListRight[i].visitId,
@@ -756,7 +756,7 @@ export default {
                     })
                 }
             }
-            console.log(commitData)
+            // console.log(commitData)
             // if (dataInName) {
             this.api.submitMedOperationScheduleList(commitData)
                 .then(
@@ -773,68 +773,68 @@ export default {
 
         },
         getNewPushData(item, index) {
-            console.log(item)
-            console.log(index)
-            console.log(this.handleItem[item.value])
-            console.log(this.tableConfig[index])
+            // console.log(item)
+            // console.log(index)
+            // console.log(this.handleItem[item.value])
+            // console.log(this.tableConfig[index])
             if (this.tableConfig[index].value == 'anesthesiaDoctorName') {
-                console.log(this.options)
+                // console.log(this.options)
                 for (var a = 0; a < this.options.length; a++) {
                     if (this.options[a].userName == this.handleItem[item.value]) {
                         this.onchangeData.anesthesiaDoctorName = this.options[a].userId;
                     }
                 }
             } else if (this.tableConfig[index].value == 'firstAnesthesiaAssistantName') {
-                console.log(this.MzkUsers)
+                // console.log(this.MzkUsers)
                 for (var a = 0; a < this.MzkUsers.length; a++) {
                     if (this.MzkUsers[a].userName == this.handleItem[item.value]) {
                         this.onchangeData.firstAnesthesiaAssistantName = this.MzkUsers[a].userId;
                     }
                 }
             } else if (this.tableConfig[index].value == 'secondAnesthesiaAssistantName') {
-                console.log(this.MzkUsers)
+                // console.log(this.MzkUsers)
                 for (var a = 0; a < this.MzkUsers.length; a++) {
                     if (this.MzkUsers[a].userName == this.handleItem[item.value]) {
                         this.onchangeData.secondAnesthesiaAssistantName = this.MzkUsers[a].userId;
                     }
                 }
             } else if (this.tableConfig[index].value == 'firstAssistantName') {
-                console.log(this.assistant)
+                // console.log(this.assistant)
                 for (var a = 0; a < this.assistant.length; a++) {
                     if (this.assistant[a].userName == this.handleItem[item.value]) {
                         this.onchangeData.firstAssistantName = this.assistant[a].userId;
                     }
                 }
             } else if (this.tableConfig[index].value == 'secondAssistantName') {
-                console.log(this.assistant)
+                // console.log(this.assistant)
                 for (var a = 0; a < this.assistant.length; a++) {
                     if (this.assistant[a].userName == this.handleItem[item.value]) {
                         this.onchangeData.secondAssistantName = this.assistant[a].userId;
                     }
                 }
             } else if (this.tableConfig[index].value == 'firstOperationNurseName') {
-                console.log(this.wash)
+                // console.log(this.wash)
                 for (var a = 0; a < this.wash.length; a++) {
                     if (this.wash[a].userName == this.handleItem[item.value]) {
                         this.onchangeData.firstOperationNurseName = this.wash[a].userId;
                     }
                 }
             } else if (this.tableConfig[index].value == 'secondOperationNurseName') {
-                console.log(this.wash)
+                // console.log(this.wash)
                 for (var a = 0; a < this.wash.length; a++) {
                     if (this.wash[a].userName == this.handleItem[item.value]) {
                         this.onchangeData.secondOperationNurseName = this.wash[a].userId;
                     }
                 }
             } else if (this.tableConfig[index].value == 'firstSupplyNurseName') {
-                console.log(this.tour)
+                // console.log(this.tour)
                 for (var a = 0; a < this.tour.length; a++) {
                     if (this.tour[a].userName == this.handleItem[item.value]) {
                         this.onchangeData.firstSupplyNurseName = this.tour[a].userId;
                     }
                 }
             } else if (this.tableConfig[index].value == 'secondSupplyNurseName') {
-                console.log(this.tour)
+                // console.log(this.tour)
                 for (var a = 0; a < this.tour.length; a++) {
                     if (this.tour[a].userName == this.handleItem[item.value]) {
                         this.onchangeData.secondSupplyNurseName = this.tour[a].userId;
@@ -843,8 +843,8 @@ export default {
             }
         },
         modalSure() {
-            console.log(this.handleItem)
-            console.log(this.onchangeData)
+            // console.log(this.handleItem)
+            // console.log(this.onchangeData)
             let params = {
                 anesthesiaDoctor: this.onchangeData.anesthesiaDoctorName,
                 anesthesiaAssistant: this.onchangeData.firstAnesthesiaAssistantName,
@@ -860,7 +860,7 @@ export default {
                 visitId: this.handleItem.visitId,
                 state: 1,
             }
-            console.log(params)
+            // console.log(params)
             this.api.editSchedule(params)
                 .then(res => {
                     // this.getList(this.dateValue)
@@ -869,7 +869,7 @@ export default {
 
         },
         modalCancel() {
-            console.log(this.handleItemTow)
+            // console.log(this.handleItemTow)
             this.handleItem = this.handleItemTow;
             for (var a = 0; a < this.scheduleListRight.length; a++) {
                 if (this.scheduleListRight[a].visitId == this.handleItem.visitId && this.scheduleListRight[a].patientId == this.handleItem.patientId && this.scheduleListRight[a].scheduleId == this.handleItem.scheduleId) {
@@ -881,35 +881,35 @@ export default {
         edit(item) {
             this.handleItem = item;
             this.handleItemTow = JSON.parse(JSON.stringify(item));
-            console.log(this.tableConfig)
+            // console.log(this.tableConfig)
             if (item.state == 0 || item.state == 1) {
                 for (var a = 0; a < this.tableConfig.length; a++) {
                     if (this.tableConfig[a].value == 'anesthesiaDoctorName') {
-                        console.log('主治医生')
+                        // console.log('主治医生')
                         this.tableConfig[a].optin = true;
                     } else if (this.tableConfig[a].value == 'firstAnesthesiaAssistantName') {
-                        console.log('副麻医生1')
+                        // console.log('副麻医生1')
                         this.tableConfig[a].optin = true;
                     } else if (this.tableConfig[a].value == 'secondAnesthesiaAssistantName') {
-                        console.log('副麻医生2')
+                        // console.log('副麻医生2')
                         this.tableConfig[a].optin = true;
                     } else if (this.tableConfig[a].value == 'firstAssistantName') {
-                        console.log('手术助手1')
+                        // console.log('手术助手1')
                         this.tableConfig[a].optin = true;
                     } else if (this.tableConfig[a].value == 'secondAssistantName') {
-                        console.log('手术助手2')
+                        // console.log('手术助手2')
                         this.tableConfig[a].optin = true;
                     } else if (this.tableConfig[a].value == 'firstOperationNurseName') {
-                        console.log('洗手护士1')
+                        // console.log('洗手护士1')
                         this.tableConfig[a].optin = true;
                     } else if (this.tableConfig[a].value == 'secondOperationNurseName') {
-                        console.log('洗手护士2')
+                        // console.log('洗手护士2')
                         this.tableConfig[a].optin = true;
                     } else if (this.tableConfig[a].value == 'firstSupplyNurseName') {
-                        console.log('主治医生')
+                        // console.log('主治医生')
                         this.tableConfig[a].optin = true;
                     } else if (this.tableConfig[a].value == 'secondSupplyNurseName') {
-                        console.log('主治医生')
+                        // console.log('主治医生')
                         this.tableConfig[a].optin = true;
                     }
 
@@ -920,19 +920,19 @@ export default {
                 }
             }
 
-            console.log(this.handleItem)
+            // console.log(this.handleItem)
             this.mask = true;
         },
         showShadow(cell) {
-            console.log(cell)
-            console.log(this.scheduleListRight)
+            // console.log(cell)
+            // console.log(this.scheduleListRight)
             for (var a = 0; a < this.scheduleListRight.length; a++) {
                 this.scheduleListRight[a].clickShadowData = false;
             }
             cell.clickShadowData = true;
         },
         test(event) {
-            console.log(event.srcElement.value)
+            // console.log(event.srcElement.value)
             this.dateValue = event.srcElement.value;
         },
         dateChange() {
@@ -940,9 +940,9 @@ export default {
 
         },
         chooseOne(item) {
-            console.log(item)
+            // console.log(item)
             this.chooseOneType = item.type;
-            console.log(this.chooseOneType);
+            // console.log(this.chooseOneType);
             if (item.dataLength !== undefined) {
                 this.chooseData = item.data + '(' + item.dataLength + ')'
             } else {
@@ -954,7 +954,7 @@ export default {
         },
         // 清除点击函数
         cleanFun(event) {
-            console.log(event)
+            // console.log(event)
             // 目前手动调整，如果顶部导航栏的高度有所修改，请修改这个值
             this.cleanTop = event.clientY - 186;
             this.cleanLeft = event.clientX - this.$refs.timeChose.offsetWidth;
@@ -1244,7 +1244,7 @@ export default {
             }
 
 
-            console.log(commitData)
+            // console.log(commitData)
             this.api.updateBatchMedOperationSchedule(commitData)
                 .then(res => {
                     this.getList(this.dateValue)
@@ -1256,17 +1256,17 @@ export default {
             this.maxL = [];
             this.roomNum = [];
             this.stateOfNum = false;
-            console.log(item)
+            // console.log(item)
             for (var i = 0; i < this.roomId.length; i++) {
                 this.$set(this.roomId[i], 'chooseClass', false)
             }
             item.chooseClass = true;
             this.hasChooseRoom = item;
-            console.log(this.hasChooseRoom)
+            // console.log(this.hasChooseRoom)
             this.hasChooseIndex = index;
-            console.log(index)
+            // console.log(index)
             // this.sequenceFun();
-            console.log(this.roomNum)
+            // console.log(this.roomNum)
             for (var a = 0; a < this.scheduleListRight.length; a++) {
                 if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
                     this.roomNum.push(this.scheduleListRight[a].sequence);
@@ -1288,7 +1288,7 @@ export default {
 
                 }
             }
-            console.log(this.maxL)
+            // console.log(this.maxL)
             for (var c = 0; c < this.roomId.length; c++) {
                 if (this.roomId[c].name == this.hasChooseRoom.name && this.maxL.length > 0) {
                     this.roomId[c].MaxLeftNum = Math.max.apply(Math, this.maxL);
@@ -1301,13 +1301,13 @@ export default {
 
                 }
             }
-            console.log(this.roomId)
-            console.log(this.hasChooseRoom)
+            // console.log(this.roomId)
+            // console.log(this.hasChooseRoom)
         },
         joinData(type, item) {
-            console.log(item)
-            console.log(this.pushDataBody)
-            console.log(this.roomId[this.hasChooseIndex])
+            // console.log(item)
+            // console.log(this.pushDataBody)
+            // console.log(this.roomId[this.hasChooseIndex])
             if (type == 'docoptions') {
                 this.roomId[this.hasChooseIndex].docoptionsId = item.userId;
                 this.hasChooseRoom.docoptionsId = item.userId;
@@ -1495,11 +1495,11 @@ export default {
             }
 
             let commitData = [];
-            console.log(this.scheduleListRight)
+            // console.log(this.scheduleListRight)
             //   console.log(this.newUpdata)
             for (var i = 0; i < this.scheduleListRight.length; i++) {
                 if (this.scheduleListRight[i].state == 1 && this.scheduleListRight[i].operatingRoomNo == this.hasChooseRoom.name) {
-                    console.log(this.scheduleListRight[i])
+                    // console.log(this.scheduleListRight[i])
                     commitData.push({
                         anesthesiaDoctor: this.scheduleListRight[i].anesthesiaDoctorNameId,
                         anesthesiaAssistant: this.scheduleListRight[i].firstAnesthesiaAssistantNameId,
@@ -1518,13 +1518,13 @@ export default {
                     })
                 }
             }
-            console.log(commitData)
+            // console.log(commitData)
             this.api.updateBatchMedOperationSchedule(commitData)
                 .then(res => {
                     // this.getList(this.dateValue)
                 });
-            console.log(this.hasChooseRoom)
-            console.log(this.pushDataBody)
+            // console.log(this.hasChooseRoom)
+            // console.log(this.pushDataBody)
         },
         getList(date) {
             this.scheduleList = [];
@@ -1558,7 +1558,7 @@ export default {
                         }
                     }
                     this.scheduleListRight.sort(this.sortNumber);
-                    console.log(this.scheduleListRight)
+                    // console.log(this.scheduleListRight)
                     this.scheduleListRight2.sort(this.sortNumber);
                     // this.sequenceFun();
                     // debugger
@@ -1594,8 +1594,8 @@ export default {
 
                         }
                     }
-                    console.log(this.roomId)
-                    console.log(this.hasChooseRoom)
+                    // console.log(this.roomId)
+                    // console.log(this.hasChooseRoom)
 
                 });
         },
@@ -1681,13 +1681,13 @@ export default {
             // this.clickTop = event.y - 260;
             // this.clickLeft = event.x + this.$refs.normal.scrollLeft;
             this.pushDataBody = item;
-            console.log(item)
+            // console.log(item)
             this.spliceIndex = index;
             this.pushData();
         },
         pushData() {
-            console.log(this.pushDataBody)
-            console.log(this.hasChooseRoom)
+            // console.log(this.pushDataBody)
+            // console.log(this.hasChooseRoom)
             this.roomNum = [];
             // 手术间赋值
             this.pushDataBody.operatingRoomNo = this.hasChooseRoom.name;
@@ -1821,10 +1821,10 @@ export default {
             this.listChooseBody[0].dataLength = this.scheduleList.length;
         },
         sequenceFun() {
-            console.log(this.pushDataBody)
+            // console.log(this.pushDataBody)
             // debugger
-            console.log(this.scheduleListRight)
-            console.log(this.scheduleListRight.length)
+            // console.log(this.scheduleListRight)
+            // console.log(this.scheduleListRight.length)
             this.maxL = [];
             // for (var a = 0; a < this.scheduleListRight.length; a++) {
             //     if (this.scheduleListRight[a].operatingRoomNo == this.hasChooseRoom.name) {
@@ -1834,7 +1834,7 @@ export default {
             //     }
             // }
             // console.log(this.roomNum)
-            console.log('aaaaa')
+            // console.log('aaaaa')
             for (var b = 0; b < this.scheduleListRight.length; b++) {
                 if (this.scheduleListRight[b].operatingRoomNo == this.hasChooseRoom.name && (this.scheduleListRight[b].state == 2 || this.scheduleListRight[b].state == 3 || this.scheduleListRight[b].state == 4)) {
                     // this.dataR = true;
@@ -1856,12 +1856,12 @@ export default {
             }
         },
         goBackFun(cell, index) {
-            console.log(cell)
+            // console.log(cell)
             this.roomNum = [];
             for (var b = index; b < this.scheduleListRight.length; b++) {
                 if (cell.operatingRoomNo == this.scheduleListRight[b].operatingRoomNo && cell.sequence < this.scheduleListRight[b].sequence) {
                     this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence - 1;
-                    console.log(this.scheduleListRight)
+                    // console.log(this.scheduleListRight)
                 }
             }
             this.scheduleListRight.splice(index, 1);
@@ -1898,8 +1898,8 @@ export default {
             let submit = [];
             var mNum = '';
             // var IfData = '';
-            console.log(this.roomId)
-            console.log(this.hasChooseRoom)
+            // console.log(this.roomId)
+            // console.log(this.hasChooseRoom)
 
             for (var c = 0; c < this.roomId.length; c++) {
                 if (this.roomId[c].name == this.hasChooseRoom.name) {
@@ -1914,7 +1914,7 @@ export default {
 
             if (cell.operatingRoomNo == this.hasChooseRoom.name) {
                 if (cell.sequence == this.hasChooseRoom.MaxLeftNum + 1) {
-                    console.log(this.hasChooseRoom.MaxLeftNum)
+                    // console.log(this.hasChooseRoom.MaxLeftNum)
                     alert('已经是第一台手术了。')
                 } else {
                     for (var b = 0; b < this.scheduleListRight.length; b++) {
@@ -1941,7 +1941,7 @@ export default {
                         }
 
                     }
-                    console.log(submit)
+                    // console.log(submit)
                     this.api.updateBatchMedOperationSchedule(submit)
                 }
 
@@ -1968,12 +1968,12 @@ export default {
                 }
             }
 
-            console.log(mNum)
+            // console.log(mNum)
             if (cell.operatingRoomNo == this.hasChooseRoom.name) {
                 if (cell.sequence == mNum) {
                     alert('已经是最后一台手术了。')
                 } else {
-                    console.log(cell)
+                    // console.log(cell)
                     for (var b = 0; b < this.scheduleListRight.length; b++) {
                         if (cell.visitId == this.scheduleListRight[b].visitId && cell.patientId == this.scheduleListRight[b].patientId && cell.scheduleId == this.scheduleListRight[b].scheduleId) {
                             for (var c = 0; c < this.scheduleListRight.length; c++) {

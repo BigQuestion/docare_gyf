@@ -200,7 +200,7 @@ export default {
             this.api.selectMonitorList(params)
                 .then(
                 res => {
-                    console.log(res.list)
+                    // console.log(res.list)
                     this.commonTypeList = res.list
                     if (res.list.length <= 16) {
                         this.machineList[0].width = 191;
@@ -242,7 +242,7 @@ export default {
             this.api.selectMonitorList(params)
                 .then(
                 res => {
-                    console.log(res.list)
+                    // console.log(res.list)
                     this.commonTypeListTwo = res.list
                     if (res.list.length <= 8) {
                         this.anesthesiaList[0].width = 191;
@@ -273,36 +273,36 @@ export default {
                 this.changeFirstData = true;
                 // alert('11')
                 if (index == '1') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.binding.datalogStartTime = event.srcElement.value.replace('T', ' ');
                 } else if (index == '2') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.binding.defaultRecvFrequency = event.srcElement.value;
-                    console.log(this.binding)
+                    // console.log(this.binding)
                 } else if (index == '3') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.binding.currentRecvFrequency = event.srcElement.value;
                 } else if (index == '4') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.binding.currentRecvtimesUplimit = event.srcElement.value;
                 }
             } else if ((this.thisBdata == true && this.thisAdata == false) || (this.secendTimeChangeData == true && this.firstTimeChangeData == false)) {
                 this.changeSecendData = true;
                 // alert('12')
-                console.log(this.bindingTwo)
+                // console.log(this.bindingTwo)
                 if (index == '1') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.bindingTwo.datalogStartTime = event.srcElement.value.replace('T', ' ');
                 } else if (index == '2') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.bindingTwo.defaultRecvFrequency = event.srcElement.value;
                     // alert('22')
-                    console.log(this.bindingTwo)
+                    // console.log(this.bindingTwo)
                 } else if (index == '3') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.bindingTwo.currentRecvFrequency = event.srcElement.value;
                 } else if (index == '4') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.bindingTwo.currentRecvtimesUplimit = event.srcElement.value;
                 }
             } else if (this.thisAdata == true && this.thisBdata == true) {
@@ -310,19 +310,19 @@ export default {
                 this.changeSecendData = true;
                 alert('13')
                 if (index == '1') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.binding.datalogStartTime = event.srcElement.value.replace('T', ' ');
                     this.bindingTwo.datalogStartTime = event.srcElement.value.replace('T', ' ');
                 } else if (index == '2') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.binding.defaultRecvFrequency = event.srcElement.value;
                     this.bindingTwo.defaultRecvFrequency = event.srcElement.value;
                 } else if (index == '3') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.bindin.currentRecvFrequency = event.srcElement.value;
                     this.bindingTwo.currentRecvFrequency = event.srcElement.value;
                 } else if (index == '4') {
-                    console.log(event.srcElement.value)
+                    // console.log(event.srcElement.value)
                     this.binding.currentRecvtimesUplimit = event.srcElement.value;
                     this.bindingTwo.currentRecvtimesUplimit = event.srcElement.value;
                 }
@@ -334,10 +334,10 @@ export default {
             this.clickMonitor = true;
             this.firstTimeChangeData = false;
             let inputData;
-            console.log(item)
-            console.log(index)
+            // console.log(item)
+            // console.log(index)
             this.chooseIndex = index;
-            console.log(this.config.userInfo)
+            // console.log(this.config.userInfo)
             var timeStart = new Date().Format('yyyy-MM-dd hh:mm');
             this.dataOfStartSql = timeStart;
 
@@ -357,8 +357,8 @@ export default {
                 defaultRecvFrequency: item.defaultRecvFrequency,
                 monitorLabel: item.monitorLabel,
             }
-            console.log(this.binding)
-            console.log(this.thisAdata)
+            // console.log(this.binding)
+            // console.log(this.thisAdata)
             if (this.thisAdata == true) {
                 for (var i = 0; i <= this.commonTypeList.length - 1; i++) {
                     if (index == i && this.commonTypeList[index].checkedData == true) {
@@ -487,22 +487,15 @@ export default {
 
         },
         bindingFunction() {
-            // debugger
-            console.log(this.bothClick1)
-            console.log(this.bothClick2)
-            console.log(this.thisAdata)
-            console.log(this.thisBdata)
-            console.log(this.cancelData)
-            console.log(this.cancelDataTwo)
             // 监护仪
             if (this.binding !== '' && this.cancelData == false && this.bothClick1 == true && this.bothClick2 == false) {
                 // alert('1')
-                console.log(this.hasDataFirst)
+                // console.log(this.hasDataFirst)
                 if (this.hasDataFirst) {
                     if (confirm("你选择的监护仪正在被" + this.thisNowId + "使用，是否强制启用此监护仪？")) {
                         this.api.bindPatientMonitor(this.binding).then(
                             res => {
-                                console.log(res.success)
+                                // console.log(res.success)
                                 if (res.success == true) {
                                     this.firstmonitor();
                                     this.thisOnchange = false;
@@ -517,7 +510,7 @@ export default {
                 } else {
                     this.api.bindPatientMonitor(this.binding).then(
                         res => {
-                            console.log(res.success)
+                            // console.log(res.success)
                             if (res.success == true) {
                                 this.firstmonitor();
                                 this.thisOnchange = false;
@@ -536,7 +529,7 @@ export default {
                         if (confirm("你选择的麻醉机正在被" + this.thisNowIdTwo + "使用，是否强制启用此监护仪？")) {
                             this.api.bindPatientMonitor(this.bindingTwo).then(
                                 res => {
-                                    console.log(res.success)
+                                    // console.log(res.success)
                                     if (res.success == true) {
                                         this.dataInAnesthesia();
                                         this.thisOnchange = false;
@@ -551,7 +544,7 @@ export default {
                     } else {
                         this.api.bindPatientMonitor(this.bindingTwo).then(
                             res => {
-                                console.log(res.success)
+                                // console.log(res.success)
                                 if (res.success == true) {
                                     this.dataInAnesthesia();
                                     this.thisOnchange = false;
@@ -571,7 +564,7 @@ export default {
                         this.api.cancleBindPatientMonitor(cancelQues)
                             .then(
                             res => {
-                                console.log(res.success)
+                                // console.log(res.success)
                                 if (res.success == true) {
                                     this.firstmonitor();
                                     this.cancelData = '';
@@ -589,7 +582,7 @@ export default {
                             this.api.cancleBindPatientMonitor(cancelQuesT)
                                 .then(
                                 res => {
-                                    console.log(res.success)
+                                    // console.log(res.success)
                                     if (res.success == true) {
                                         this.dataInAnesthesia();
                                         this.cancelDataTwo = '';
@@ -624,7 +617,7 @@ export default {
                                     if (confirm("你选择的监护仪正在被" + this.thisNowId + "使用，是否强制启用此监护仪？")) {
                                         this.api.bindPatientMonitor(this.binding).then(
                                             res => {
-                                                console.log(res.success)
+                                                // console.log(res.success)
                                                 if (res.success == true) {
                                                     this.firstmonitor();
                                                     this.thisOnchange = false;
@@ -638,7 +631,7 @@ export default {
                                     if (confirm("你选择的麻醉机正在被" + this.thisNowIdTwo + "使用，是否强制启用此监护仪？")) {
                                         this.api.bindPatientMonitor(this.bindingTwo).then(
                                             res => {
-                                                console.log(res.success)
+                                                // console.log(res.success)
                                                 if (res.success == true) {
                                                     this.dataInAnesthesia();
                                                     this.thisOnchange = false;
@@ -682,7 +675,7 @@ export default {
                                 this.api.cancleBindPatientMonitor(cancelQuesB1)
                                     .then(
                                     res => {
-                                        console.log(res.success)
+                                        // console.log(res.success)
                                         if (res.success == true) {
                                             this.firstmonitor();
                                             this.cancelDataTwo = '';
@@ -690,7 +683,7 @@ export default {
                                             this.api.cancleBindPatientMonitor(cancelQuesB2)
                                                 .then(
                                                 res => {
-                                                    console.log(res.success)
+                                                    // console.log(res.success)
                                                     if (res.success == true) {
                                                         this.dataInAnesthesia();
                                                         this.cancelDataTwo = '';
@@ -782,7 +775,7 @@ export default {
         },
         secendFun() {
             this.thisBdata = false;
-            console.log(this.commonTypeListTwo)
+            // console.log(this.commonTypeListTwo)
             for (var j = 0; j < this.commonTypeListTwo.length; j++) {
                 if (this.commonTypeListTwo[j].operId !== null && this.commonTypeListTwo[j].visitId !== null && this.commonTypeListTwo[j].patientId !== null) {
                     if (this.commonTypeListTwo[j].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeListTwo[j].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeListTwo[j].patientId == this.userInfoDataBody.userInfo.patientId) {
