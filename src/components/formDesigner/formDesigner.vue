@@ -458,12 +458,17 @@ export default {
         ],
         cursorMode: 'auto',
         opacity: 1,
-      }, {
+      },{
         text: "器械清单显示",
         type: "qixieList",
         width: "850",
         height: "800",
-      }
+      },{
+        text: "特殊符号标识",
+        type: "specialSymbol",
+        width: "140",
+        height: "400",
+      },
       ],
       handleItem: {},
       offsetX: '',

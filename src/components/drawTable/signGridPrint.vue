@@ -483,11 +483,11 @@ export default {
 
   },
   created() {
-    Bus.$on('test', this.selectMedAnesthesiaEventList)
+    // Bus.$on('test', this.selectMedAnesthesiaEventList)
     Bus.$on('timeSetChange', this.closing)
   },
   beforeDestroy() {
-    Bus.$off('test', this.selectMedAnesthesiaEventList);
+    // Bus.$off('test', this.selectMedAnesthesiaEventList);
     Bus.$on('timeSetChange', this.closing)
     clearTimeout(this.setTimeId);
   },

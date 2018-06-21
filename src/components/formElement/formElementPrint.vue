@@ -57,6 +57,12 @@
     <div v-if="value.type=='div'">
       <div style="box-sizing:border-box;" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt',border:value.borderStyle}"></div>
     </div>
+    <div v-if="value.type=='qixieList'">
+      <appliances :page="isPage.isPage" :object="value"></appliances>
+    </div>
+    <div v-if="value.type=='specialSymbol'">
+      <specialSymbol :page="isPage.isPage" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt'}"></specialSymbol>
+    </div>
   </div>
 </template>
 <script>
@@ -68,6 +74,7 @@ import dosageGridPrint from '@/components/drawTable/dosageGridPrint.vue';
 import operControlGridPrint from '@/components/drawTable/operControlGridPrint.vue';
 import signGridPrint from '@/components/drawTable/signGridPrint.vue';
 import dataOfGridPrint from '@/components/drawTable/dataOfGridPrint.vue';
+import specialSymbol from '@/components/drawTable/specialSymbol.vue';
 export default {
   data() {
     return {
@@ -90,7 +97,8 @@ export default {
     dosageGridPrint,
     operControlGridPrint,
     signGridPrint,
-    dataOfGridPrint
+    dataOfGridPrint,
+    specialSymbol,
   },
   mounted() {
   }
