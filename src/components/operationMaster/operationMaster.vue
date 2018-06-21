@@ -10,11 +10,11 @@
         </div>
       </div>
       <div class="currentPatientInfo">
-        <span style="color:#CD5C5C;font-size:2em;font-weight: bold;">{{lockedPatientInfo.operatingRoomNo}}</span>
-        <img style="margin:0 8px;" src="../../assets/people.png" alt="">
-        <div style="width:100px;">
-          <div style="padding-bottom:5px;border-bottom:1px solid #8B8B8B;font-size:18px;">{{lockedPatientInfo.patientId}}</div>
-          <div style="color:#001AFA;font-size:20px;">{{lockedPatientInfo.patientName}}</div>
+        <span style="color:#CD5C5C;font-size:24px;font-weight: bold;">{{lockedPatientInfo.operatingRoomNo}}</span>
+        <img style="margin:0 6px;" src="../../assets/people.png" alt="">
+        <div style="width:90px;">
+          <div style="padding-bottom:5px;border-bottom:1px solid #8B8B8B;font-size:16px;">{{lockedPatientInfo.patientId}}</div>
+          <div style="color:#001AFA;font-size:18px;">{{lockedPatientInfo.patientName}}</div>
         </div>
       </div>
       <div class="procedure" style="position: relative;">
@@ -31,7 +31,7 @@
             </div>
             <div style="position: relative;">
               <!-- <input type="" name="" @click="testclick"> -->
-              <input ref="intest" id="intest" style="width:152px;font-size:12px;" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5','inDateTime',$event)">
+              <input ref="intest" id="intest" class="timePicker" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5','inDateTime',$event)">
             </div>
           </div>
           <div style="margin:0px 4px;" v-if="inDateTime">
@@ -45,7 +45,7 @@
               </div>
             </div>
             <div>
-              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10','anesStartTime',$event)">
+              <input class="timePicker" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10','anesStartTime',$event)">
               <!-- <vue-date-calendar id="demo1" :option.sync="option"></vue-date-calendar> -->
             </div>
           </div>
@@ -60,7 +60,7 @@
               </div>
             </div>
             <div>
-              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15','startDateTime',$event)">
+              <input class="timePicker" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15','startDateTime',$event)">
             </div>
           </div>
           <div style="margin:0px 4px;" v-if="startDateTime">
@@ -74,7 +74,7 @@
               </div>
             </div>
             <div>
-              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25','endDateTime',$event)">
+              <input class="timePicker" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25','endDateTime',$event)">
             </div>
           </div>
           <div style="margin:0px 4px;" v-if="endDateTime">
@@ -88,7 +88,7 @@
               </div>
             </div>
             <div>
-              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30','anesEndTime',$event)">
+              <input class="timePicker" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30','anesEndTime',$event)">
             </div>
           </div>
           <div style="margin:0px 4px;" v-if="anesEndTime">
@@ -105,7 +105,7 @@
               </div>
             </div>
             <div>
-              <input style="width:152px;font-size:12px;" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35','outDateTime',$event)">
+              <input class="timePicker" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35','outDateTime',$event)">
             </div>
           </div>
         </div>
@@ -1070,7 +1070,6 @@ export default {
       }, 1000);
     },
     lockedPatient(item) {
-      console.log(item)
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
@@ -1085,7 +1084,6 @@ export default {
     },
     // 撤销手术室操作并修改病人状态
     finalStatus(sta) {
-      // console.log(sta)
       let params;
       if (sta == 0) {
         params = {
@@ -1143,6 +1141,13 @@ export default {
           operStatus: sta,
         }
       } else if (sta == 60) {
+        params = {
+          patientId: this.lockedPatientInfo.patientId,
+          visitId: this.lockedPatientInfo.visitId,
+          operId: this.lockedPatientInfo.operId,
+          operStatus: sta,
+        }
+      }else if (sta == 65) {
         params = {
           patientId: this.lockedPatientInfo.patientId,
           visitId: this.lockedPatientInfo.visitId,
@@ -2106,7 +2111,14 @@ export default {
   background: url('../../assets/hoverBac.jpg');
 }
 
+.timePicker{
+  width: 155px;
+  font-size: 12px;
+}
 
+.timePicker::-webkit-inner-spin-button{
+  display: none;
+}
 
 .mask {
   position: absolute;
@@ -2138,13 +2150,13 @@ export default {
 }
 
 .logo {
-  min-width: 185px;
+  min-width: 175px;
   /*background: #0080FF;*/
 }
 
 .currentPatientInfo {
   box-sizing: border-box;
-  padding-left: 10px;
+  padding-left: 5px;
   width: 220px;
   background: url('../../assets/msgBack.jpg') no-repeat;
   background-size: cover;
@@ -2169,10 +2181,10 @@ export default {
 }
 
 .left {
-  width: 185px;
+  width: 175px;
   height: 100%;
   background: rgb(142, 193, 238);
-  min-width: 185px;
+  min-width: 175px;
 }
 
 .content {
@@ -2397,7 +2409,7 @@ export default {
 }
 
 .list_button {
-  width: 80px;
+  width: 74px;
   margin: 0 0 5px 5px;
   font-size: 12px;
 }

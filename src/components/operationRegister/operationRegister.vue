@@ -281,7 +281,7 @@ export default {
         {
           title: "途径",
           fieldObj: "ADMINISTRATOR",
-          width: 80
+          width: 60
         },
         {
           title: "浓度",
@@ -317,7 +317,7 @@ export default {
           title: "发生时间",
           fieldObj: "START_TIME",
           timeEdit: true,
-          width: 155
+          width: 175
         },
         {
           title: "是否持续",
@@ -329,7 +329,7 @@ export default {
           title: "结束时间",
           fieldObj: "ENDDATE",
           timeEdit: true,
-          width: 155
+          width: 175
         }
       ],
       eventList: [],

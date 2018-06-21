@@ -362,7 +362,7 @@ export default {
         .then(res => {
           this.saveTempView = false;
         })
-      console.log(arr)
+      // console.log(arr)
     },
     openTempView() {
       this.applyTemplateView = !this.applyTemplateView;

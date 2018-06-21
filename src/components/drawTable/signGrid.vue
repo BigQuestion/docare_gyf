@@ -5,7 +5,7 @@
         <span v-if="item.name=='麻醉开始'">X</span>
         <span style="font-size:21px;" v-else-if="item.name=='手术开始'">⊙</span>
         <span style="color:red;" v-else-if="item.name=='麻醉结束'">X</span>
-        <span style="color:red;" v-else-if="item.name=='手术结束'">?</span>
+        <span style="color:red;" v-else-if="item.name=='手术结束'">ⓧ</span>
         <span v-else>{{item.hasNum}}</span>
       </div>
     </div>
@@ -336,7 +336,7 @@ export default {
             var time = new Date(res.list[i].START_TIME).getTime();
             if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
               var time1 = time - this.startTimeInPage
-              var leftPlace = ((time1 * 3) / 60 / 1000);
+              var leftPlace = ((time1 * 2.78) / 60 / 1000);
               this.dataOfBottom.push({
                 leftData: leftPlace
               })
@@ -364,7 +364,7 @@ export default {
                   var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
                   if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
                     var time8 = timeMoreOne - this.startTimeInPage
-                    var leftPlace8 = ((time8 * 3) / 60 / 1000);
+                    var leftPlace8 = ((time8 * 2.78) / 60 / 1000);
                     this.dataOfBottom.push({
                       leftData: leftPlace8
                     })
@@ -395,7 +395,7 @@ export default {
                       var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
                       if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
                         var time9 = timeMoreTwo - this.startTimeInPage
-                        var leftPlace9 = ((time9 * 3) / 60 / 1000);
+                        var leftPlace9 = ((time9 * 2.78) / 60 / 1000);
                         this.dataOfBottom.push({
                           leftData: leftPlace9
                         })
@@ -414,7 +414,7 @@ export default {
                     var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
                     if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
                       var time6 = timeFive - this.startTimeInPage
-                      var leftPlace5 = ((time6 * 3) / 60 / 1000);
+                      var leftPlace5 = ((time6 * 2.78) / 60 / 1000);
                       this.dataOfBottom.push({
                         leftData: leftPlace5
                       })
@@ -430,7 +430,7 @@ export default {
                     var timeSix = new Date(this.config.userInfo.endDateTime).getTime();
                     if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
                       var time7 = timeSix - this.startTimeInPage
-                      var leftPlace6 = ((time7 * 3) / 60 / 1000);
+                      var leftPlace6 = ((time7 * 2.78) / 60 / 1000);
                       this.dataOfBottom.push({
                         leftData: leftPlace6
                       })
