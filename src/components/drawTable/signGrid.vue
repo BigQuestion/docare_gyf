@@ -124,6 +124,7 @@ export default {
       }
     },
     selectMedAnesthesiaEventList() {
+      this.dataBody = [];
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
@@ -310,6 +311,7 @@ export default {
       this.tipView = false;
     },
     closing() {
+      this.dataBody = [];
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
@@ -483,12 +485,14 @@ export default {
 
   },
   created() {
-    Bus.$on('test', this.selectMedAnesthesiaEventList)
+    // Bus.$on('test', this.selectMedAnesthesiaEventList)
     Bus.$on('timeSetChange', this.closing)
+    this.dataBody = [];
   },
   beforeDestroy() {
-    Bus.$off('test', this.selectMedAnesthesiaEventList);
+    // Bus.$off('test', this.selectMedAnesthesiaEventList);
     Bus.$on('timeSetChange', this.closing)
+    this.dataBody = [];
     clearTimeout(this.setTimeId);
   },
   props: ['page', 'width', 'height', 'dataOfPeo'],

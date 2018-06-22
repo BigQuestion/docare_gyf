@@ -41,9 +41,9 @@ export default {
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
-        patientId: this.dataOfPeo.patientId,
-        operId: this.dataOfPeo.operId,
-        visitId: this.dataOfPeo.visitId
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
       }
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(

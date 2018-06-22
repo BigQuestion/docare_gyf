@@ -34,9 +34,9 @@ export default {
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
-        patientId: this.dataOfPeo.patientId,
-        operId: this.dataOfPeo.operId,
-        visitId: this.dataOfPeo.visitId
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
       }
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
@@ -150,7 +150,7 @@ export default {
                         });
                       }
                     }
-                    } else {
+                  } else {
 
                   }
                   this.dataBody.sort(this.sortFun)
@@ -168,9 +168,9 @@ export default {
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
-        patientId: this.dataOfPeo.patientId,
-        operId: this.dataOfPeo.operId,
-        visitId: this.dataOfPeo.visitId
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
       }
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
@@ -305,14 +305,15 @@ export default {
     }
   },
   created() {
-    Bus.$on('test', this.selectMedAnesthesiaEventList)
+    // Bus.$on('test', this.closing)
     Bus.$on('timeSetChange', this.closing)
+    this.dataBody = [];
   },
   beforeDestroy() {
     clearTimeout(this.setTimeId);
-    Bus.$on('timeSetChange', this.closing)
-    Bus.$off('test', this.selectMedAnesthesiaEventList);
-
+    // Bus.$on('timeSetChange', this.closing)
+    Bus.$off('test', this.closing);
+    this.dataBody = [];
   },
 }
 
