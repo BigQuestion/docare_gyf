@@ -522,7 +522,6 @@ export default {
       this.xArray = [];
       this.dataArray = [];
       var svg = d3.selectAll(".test")
-      debugger
       svg.remove();
       var w = this.svgWidth,
         lMin = this.tbMin,
@@ -607,7 +606,7 @@ export default {
             list[i].nowTime = '';
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
-              debugger
+              // debugger
             }
             // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
             //   list[i].vStartTime = '';
