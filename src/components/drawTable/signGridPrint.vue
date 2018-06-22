@@ -145,7 +145,7 @@ export default {
         res => {
           this.dataOfBottom = [];
           this.dataBody = [];
-          this.config.OperatingData = res.list;
+          // this.config.OperatingData = res.list;
 
           for (var i = 0; i < res.list.length; i++) {
             var time = new Date(res.list[i].START_TIME).getTime();
@@ -310,9 +310,6 @@ export default {
       this.tipView = false;
     },
     closing() {
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId)
-      }
       var nber = 1;
       this.pageOn = this.config.pageOper;
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
@@ -330,7 +327,7 @@ export default {
         res => {
           this.dataOfBottom = [];
           this.dataBody = [];
-          this.config.OperatingData = res.list;
+          // this.config.OperatingData = res.list;
 
           for (var i = 0; i < res.list.length; i++) {
             var time = new Date(res.list[i].START_TIME).getTime();
@@ -348,7 +345,7 @@ export default {
               })
             }
           }
-          // 麻醉用药
+          // 输液
           let paramsTwo = {
             patientId: this.config.userInfo.patientId,
             operId: this.config.userInfo.operId,

@@ -124,10 +124,7 @@ export default {
       }
     },
     selectMedAnesthesiaEventList() {
-      debugger
-      console.log(this.dataBody)
-      this.dataBody = [];
-      console.log(this.dataBody)
+      alert('1')
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
@@ -136,6 +133,7 @@ export default {
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       var bothTimeLeft = this.maxTimeInPage - this.startTimeInPage
+
       // console.log(this.config.maxTime)
       // console.log(this.config.userInfo.inDateTime)
       this.thedoubelData = '';
@@ -144,6 +142,7 @@ export default {
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
       }
+
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(
           res => {
@@ -314,13 +313,7 @@ export default {
       this.tipView = false;
     },
     closing() {
-      debugger
-      console.log(this.dataBody)
-      this.dataBody = [];
-      console.log(this.dataBody)
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId)
-      }
+      alert('2')
       var nber = 1;
       this.pageOn = this.config.pageOper;
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
@@ -491,15 +484,17 @@ export default {
 
   },
   created() {
-    this.dataBody = [];
+    // alert('112')
+    // this.dataBody = [];
     Bus.$on('test', this.selectMedAnesthesiaEventList)
     Bus.$on('timeSetChange', this.closing)
+    console.log(this.dataBody)
   },
   beforeDestroy() {
-    this.dataBody = [];
     Bus.$off('test', this.selectMedAnesthesiaEventList);
-    Bus.$on('timeSetChange', this.closing)
+    Bus.$off('timeSetChange', this.closing)
     clearTimeout(this.setTimeId);
+    console.log(this.dataBody)
   },
   props: ['page', 'width', 'height', 'dataOfPeo'],
 }
