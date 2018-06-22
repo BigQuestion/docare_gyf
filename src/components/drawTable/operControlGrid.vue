@@ -361,9 +361,6 @@ export default {
           })
     },
     getSignNameNoTime() {
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId)
-      }
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,

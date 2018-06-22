@@ -136,12 +136,14 @@ export default {
       var timeArray = [];
       let startMinTime = this.config.startMinTime
       let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
-      if (this.config.pageOper == 0 && startMinTime) {
+      let pageOper = this.config.pageOper
+      debugger
+      if (pageOper == 0 && startMinTime) {
         for (var i = 0; i <= this.columns; i++) {
 
           timeArray.push(new Date(new Date(this.config.initTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
-      } else if (!startMinTime && this.config.pageOper == 0) {
+      } else if (!startMinTime && pageOper == 0) {
         for (var i = 0; i <= this.columns; i++) {
           timeArray.push(new Date(new Date(defaultTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
@@ -169,7 +171,6 @@ export default {
 
     },
     timeControlNoTime(startTime) {
-
       var m = this.tbMin; //加几分钟
       var timeArray = [];
       let startMinTime = this.config.startMinTime
@@ -177,7 +178,7 @@ export default {
       if (this.config.pageOper == 0 && startMinTime) {
         for (var i = 0; i <= this.columns; i++) {
 
-          timeArray.push(new Date(new Date(startMinTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+          timeArray.push(new Date(new Date(this.config.initTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
       } else if (!startMinTime && this.config.pageOper == 0) {
         for (var i = 0; i <= this.columns; i++) {
@@ -348,6 +349,7 @@ export default {
 
     },
     createLine(x1, x2, y1, y2, obj) {
+      debugger
       var svg = d3.select("#tableSvg");
       var _this = this;
       var gWidth = this.svgWidth / this.columns;
