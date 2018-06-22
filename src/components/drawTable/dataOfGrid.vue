@@ -305,15 +305,17 @@ export default {
     }
   },
   created() {
+    this.dataBody = [];
     Bus.$on('test', this.selectMedAnesthesiaEventList)
     Bus.$on('timeSetChange', this.closing)
-    this.dataBody = [];
+    
   },
   beforeDestroy() {
     clearTimeout(this.setTimeId);
-    Bus.$on('timeSetChange', this.selectMedAnesthesiaEventList)
-    Bus.$off('test', this.closing);
     this.dataBody = [];
+    Bus.$on('timeSetChange', this.closing)
+    Bus.$off('test', this.selectMedAnesthesiaEventList);
+    
   },
 }
 

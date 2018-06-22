@@ -136,9 +136,9 @@ export default {
       // console.log(this.config.userInfo.inDateTime)
       this.thedoubelData = '';
       let params = {
-        patientId: this.dataOfPeo.patientId,
-        operId: this.dataOfPeo.operId,
-        visitId: this.dataOfPeo.visitId
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
       }
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(
@@ -321,9 +321,9 @@ export default {
 
       this.thedoubelData = '';
       let params = {
-        patientId: this.dataOfPeo.patientId,
-        operId: this.dataOfPeo.operId,
-        visitId: this.dataOfPeo.visitId
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
       }
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(
@@ -483,11 +483,14 @@ export default {
 
   },
   created() {
-    // Bus.$on('test', this.selectMedAnesthesiaEventList)
+    this.dataBody = [];
+    Bus.$on('test', this.selectMedAnesthesiaEventList)
     Bus.$on('timeSetChange', this.closing)
+
   },
   beforeDestroy() {
-    // Bus.$off('test', this.selectMedAnesthesiaEventList);
+    this.dataBody = [];
+    Bus.$off('test', this.selectMedAnesthesiaEventList);
     Bus.$on('timeSetChange', this.closing)
     clearTimeout(this.setTimeId);
   },

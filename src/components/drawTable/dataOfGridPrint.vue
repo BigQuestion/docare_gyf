@@ -47,91 +47,91 @@ export default {
       }
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(
-        // display:flex;flex-direction:column;flex-wrap:wrap;
-        res => {
-          for (var i = 0; i < res.list.length; i++) {
-            var time = new Date(res.list[i].START_TIME).getTime();
-            if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
-              this.$set(res.list[i], 'sort', time);
-              this.dataBody.push(res.list[i]);
-              this.$set(res.list[i], 'number', nber++);
+          // display:flex;flex-direction:column;flex-wrap:wrap;
+          res => {
+            for (var i = 0; i < res.list.length; i++) {
+              var time = new Date(res.list[i].START_TIME).getTime();
+              if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
+                this.$set(res.list[i], 'sort', time);
+                this.dataBody.push(res.list[i]);
+                this.$set(res.list[i], 'number', nber++);
 
+              }
             }
-          }
-          var time1 = new Date(this.config.userInfo.inDateTime).getTime();
-          if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
-            this.dataBody.push({
-              ITEM_NAME: '入手术室',
-              START_TIME: this.config.userInfo.inDateTime,
-              sort: time1
-            });
-          }
-          var time2 = new Date(this.config.userInfo.endDateTime).getTime();
-          if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
-            this.dataBody.push({
-              ITEM_NAME: '出手术室',
-              START_TIME: this.config.userInfo.inDateTime,
-              sort: time2
-            });
-          }
+            var time1 = new Date(this.config.userInfo.inDateTime).getTime();
+            if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
+              this.dataBody.push({
+                ITEM_NAME: '入手术室',
+                START_TIME: this.config.userInfo.inDateTime,
+                sort: time1
+              });
+            }
+            var time2 = new Date(this.config.userInfo.endDateTime).getTime();
+            if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
+              this.dataBody.push({
+                ITEM_NAME: '出手术室',
+                START_TIME: this.config.userInfo.inDateTime,
+                sort: time2
+              });
+            }
 
-          // 输液
-          let paramsTwo = {
-            patientId: this.config.userInfo.patientId,
-            operId: this.config.userInfo.operId,
-            visitId: this.config.userInfo.visitId,
-            itemClass: "3B",
-          }
-          this.api.selectMedAnesthesiaEventList(paramsTwo)
-            .then(zze => {
-              if (zze.list.length > 6) {
-                for (var t = 7; t < zze.list.length; t++) {
-                  var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
-                  if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+            // 输液
+            let paramsTwo = {
+              patientId: this.config.userInfo.patientId,
+              operId: this.config.userInfo.operId,
+              visitId: this.config.userInfo.visitId,
+              itemClass: "3B",
+            }
+            this.api.selectMedAnesthesiaEventList(paramsTwo)
+              .then(zze => {
+                if (zze.list.length > 6) {
+                  for (var t = 7; t < zze.list.length; t++) {
+                    var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
+                    if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
 
-                    var time8 = timeMoreOne - this.startTimeInPage
-                    var leftPlace8 = ((time8 * 3) / 60 / 1000);
-                    this.dataBody.push({
-                      ITEM_NAME: '出手术室',
-                      START_TIME: zze.list[t].START_TIME,
-                      sort: timeMoreOne
-                    });
-                  }
-                }
-              } else {
-
-              }
-              // 麻醉用药
-              let paramsTwo = {
-                patientId: this.config.userInfo.patientId,
-                operId: this.config.userInfo.operId,
-                visitId: this.config.userInfo.visitId,
-                itemClass: "2C",
-              }
-              this.api.selectMedAnesthesiaEventList(paramsTwo)
-                .then(aff => {
-                  if (aff.list.length > 10) {
-                    for (var h = 11; h < aff.list.length; h++) {
-                      var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
-                      if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
-                        var time8 = timeMoreOne - this.startTimeInPage
-                        var leftPlace8 = ((time8 * 3) / 60 / 1000);
-                        this.dataBody.push({
-                          ITEM_NAME: aff.list[h].ITEM_NAME,
-                          START_TIME: aff.list[h].START_TIME,
-                          sort: timeMoreOne
-                        });
-                      }
+                      var time8 = timeMoreOne - this.startTimeInPage
+                      var leftPlace8 = ((time8 * 3) / 60 / 1000);
+                      this.dataBody.push({
+                        ITEM_NAME: '出手术室',
+                        START_TIME: zze.list[t].START_TIME,
+                        sort: timeMoreOne
+                      });
                     }
-                  } else {
-
                   }
-                  this.dataBody.sort(this.sortFun)
-                  this.addFun();
-                });
-            });
+                } else {
 
-        });
+                }
+                // 麻醉用药
+                let paramsTwo = {
+                  patientId: this.config.userInfo.patientId,
+                  operId: this.config.userInfo.operId,
+                  visitId: this.config.userInfo.visitId,
+                  itemClass: "2C",
+                }
+                this.api.selectMedAnesthesiaEventList(paramsTwo)
+                  .then(aff => {
+                    if (aff.list.length > 10) {
+                      for (var h = 11; h < aff.list.length; h++) {
+                        var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
+                        if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                          var time8 = timeMoreOne - this.startTimeInPage
+                          var leftPlace8 = ((time8 * 3) / 60 / 1000);
+                          this.dataBody.push({
+                            ITEM_NAME: aff.list[h].ITEM_NAME,
+                            START_TIME: aff.list[h].START_TIME,
+                            sort: timeMoreOne
+                          });
+                        }
+                      }
+                    } else {
+
+                    }
+                    this.dataBody.sort(this.sortFun)
+                    this.addFun();
+                  });
+              });
+
+          });
     },
     sortFun(a, b) {
       return a.sort - b.sort;
@@ -139,9 +139,7 @@ export default {
     addFun() {
       this.lengthType = this.dataBody.length;
       if (this.lengthType / 7 > 1) {
-        // console.log(this.lengthType)
         this.outBoxLength = Math.round(this.lengthType / 7);
-        // console.log(this.outBoxLength)
         for (var a = 0; a < this.outBoxLength; a++) {
           this.forALL.push([])
           if (a === 0) {
@@ -282,14 +280,21 @@ export default {
 
   },
   created() {
+    this.dataBody = [];
     Bus.$on('test', this.selectMedAnesthesiaEventList)
+    Bus.$on('timeSetChange', this.closing)
   },
   beforeDestroy() {
+    clearTimeout(this.setTimeId);
+    this.dataBody = [];
+    Bus.$on('timeSetChange', this.closing)
     Bus.$off('test', this.selectMedAnesthesiaEventList);
+    
   },
 }
 
 </script>
 <style scoped>
+
 
 </style>

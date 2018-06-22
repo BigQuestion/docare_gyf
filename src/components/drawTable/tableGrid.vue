@@ -1,6 +1,5 @@
 <template>
   <div style="position: relative;margin:2px;">
-    <!-- <div style="height: 2px;width: 700px;background-color: red;margin-bottom: 20px;"></div> -->
     <div v-if="!page">
       <div style="max-height: 20px;">
         <div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 30px;margin-left: -9pt;font-size: 12px;display: inline-block;" :title="item">{{item}}</div>
@@ -12,8 +11,6 @@
         </div>
       </div>
       <div id="tableGrid" style="position: relative;">
-        <!-- <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
-        </svg> -->
         <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
           <g v-for="item in lineArray">
             <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
@@ -22,7 +19,7 @@
             <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
         </svg>
-        <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+        <div @mousemove.stop="mouseMoveInfo(item,$event)" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
           <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
         </div>
         <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1+item.w/2-10+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
@@ -39,16 +36,16 @@
             <div>
               开始时间：{{lineObj.START_TIME}}
             </div>
-            <div v-if="lineObj.DURATIVE_INDICATOR=='1'">
+            <div v-if="lineObj.DURATIVE_INDICATOR=='1'&&lineObj.ENDDATE">
               结束时间：{{lineObj.ENDDATE}}
             </div>
-            <div v-if="lineObj.DURATIVE_INDICATOR=='1'">
+            <div v-if="lineObj.DURATIVE_INDICATOR=='1'&&lineObj.PERFORM_SPEED">
               流速：{{lineObj.PERFORM_SPEED}}
             </div>
-            <div>
+            <div v-if="lineObj.DOSAGE">
               总量：{{lineObj.DOSAGE}}
             </div>
-            <div v-if="lineObj.DURATIVE_INDICATOR=='1'">
+            <div v-if="lineObj.nowTime">
               鼠标当前时间：{{lineObj.nowTime}}
             </div>
           </div>
@@ -109,7 +106,6 @@ export default {
       xArray: [],
       lineArray: [],
       percentPageData: [],
-      timeRequestSec: 10000, //多久请求一次
       setTimeId: '', //定时器返回的一个ID
 
     }
@@ -131,56 +127,9 @@ export default {
       }
       this.lineArray = array;
     },
-    init() {
-      var w = this.svgWidth,
-        h = this.svgHeight,
-        p = this.svgPadding, //内边距  
-        x = d3.scaleLinear().domain([0, 1]).range([0, w - p]), //(2) 定义x和y比例尺  
-        y = d3.scaleLinear().domain([0, 1]).range([0, h - p]);
-      this.wd = w;
-      this.ht = h;
 
-      //(3) 绘制SVG  
-      var svg = d3.select("#tableSvg")
-      //(4) 给SVG添加分组，并设置样式类，样式见<style>标签中的设置  
-      // console.log(x(0.51))
-      var grid = svg.selectAll(".grid")
-        .data(x.ticks(this.columns))
-        .enter()
-        .append("g")
-        .attr("class", "grid");
-      //(5) 添加线条，设置起始坐标(x1,y1)和结束坐标(x2,y2)的值即可  
-      //竖线  
-      grid.append("line")
-        .attr("x1", x)
-        .attr("x2", x)
-        .attr("y1", 0)
-        .attr("y2", h - p);
-
-      //横线  
-      grid.data(y.ticks(this.rows))
-        .append("line")
-        .attr("y1", y)
-        .attr("y2", y)
-        .attr("x1", 0)
-        .attr("x2", w - p);
-
-      const line = d3.line()
-        .x(
-          (d) => {
-            return d.x
-          }
-        )
-        .y(
-          (d) => {
-            return d.y
-          }
-        );
-    },
     //对时间进行计算操作
     timeControl(startTime) {
-      var svg = d3.selectAll(".test")
-      svg.remove();
       var m = this.tbMin; //加几分钟
       var timeDate = new Date(startTime);
       var toMin = timeDate.getTime() + 1000 * 60 * m;
@@ -220,8 +169,7 @@ export default {
 
     },
     timeControlNoTime(startTime) {
-      var svg = d3.selectAll(".test")
-      svg.remove();
+
       var m = this.tbMin; //加几分钟
       var timeArray = [];
       let startMinTime = this.config.startMinTime
@@ -241,9 +189,6 @@ export default {
           timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
       }
-
-      // this.config.initTime = new Date(timeDate.getTime());
-      // this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * m * this.columns);
       this.xTimeArray = timeArray;
       this.$nextTick(function() {
         this.getLineXy();
@@ -338,7 +283,6 @@ export default {
     },
     //加载病人麻醉事件里面麻醉用药数据
     selectMedAnesthesiaEventList() {
-      //this.timeControl(this.maxTime);
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
@@ -357,18 +301,21 @@ export default {
       if (this.page) {
         return;
       }
-      // var m = 0; // this.dataArray = []; // this.xArray = [];
-
       this.api.selectMedAnesthesiaEventList(params)
         .then(res => {
-          var list = res.list;
-          this.dataOperChange(list);
+          if (res.list.length > 0) {
+            this.dataOperChange(res.list);
+          }
           this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
-          return false;
+
         });
     },
     //不加定时器的方法
     selectMedAnesthesiaEventListNoTime() {
+      var svg = d3.selectAll(".test")
+      svg.remove();
+      this.dataArray = [];
+      this.xArray = [];
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight;
@@ -384,7 +331,6 @@ export default {
       if (this.page) {
         return;
       }
-      // var m = 0; // this.dataArray = []; // this.xArray = [];
 
       this.api.selectMedAnesthesiaEventList(params)
         .then(res => {
@@ -404,8 +350,6 @@ export default {
     createLine(x1, x2, y1, y2, obj) {
       var svg = d3.select("#tableSvg");
       var _this = this;
-      var t;
-      obj.nowTime = '';
       var gWidth = this.svgWidth / this.columns;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
         svg.append("line")
@@ -425,8 +369,6 @@ export default {
             .attr("stroke", "blue")
             .attr("class", "test")
         }
-
-
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
         svg.append("line")
@@ -520,67 +462,72 @@ export default {
     //翻页
     pageChange() {
       var svg = d3.selectAll(".test")
-      svg.remove();
+
+      if (svg) {
+        svg.remove();
+      }
       this.xArray = [];
-      if (this.config.pageOper == 0) {
-        this.config.pageNum = 1;
-        this.xTimeInit();
-        // this.timeControl(this.config.userInfo.inDateTime);
-        // this.selectMedAnesthesiaEventList();
-      }
-      if (this.config.pageOper == -1) {
-        this.timeControl(this.config.initTime)
-        let m = this.config.initTime.getTime() - 250 * 60 * 1000;
-        // this.timeControl(new Date(m));
-        var list = [];
-        list = this.percentPageData;
-
-        for (var i = 0; i < list.length; i++) {
-          if (this.config.pagePercentNum != 1 && list[i].PATIENT_ID) {
-            list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-          }
+      this.$nextTick(function() {
+        if (this.config.pageOper == 0) {
+          this.config.pageNum = 1;
+          this.xTimeInit();
         }
-        // this.dataOperChange(list);
+        if (this.config.pageOper == -1) {
+          this.timeControl(this.config.initTime)
+          return
 
+          let m = this.config.initTime.getTime() - 250 * 60 * 1000;
+          // this.timeControl(new Date(m));
+          var list = [];
+          list = this.percentPageData;
 
-      }
-      if (this.config.pageOper == 1) {
-        let arrList = this.dataArray;
-        this.percentPageData = arrList;
-        var arrayList = [];
-        var list = this.dataArray;
-        for (var i = 0; i < list.length; i++) {
-          if (list[i].PATIENT_ID) {
-            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-
-              if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
-                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {}
-            } else {
-              if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
-                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {
-
-              }
+          for (var i = 0; i < list.length; i++) {
+            if (this.config.pagePercentNum != 1 && list[i].PATIENT_ID) {
+              list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
             }
           }
         }
-        this.timeControl(this.config.maxTime)
-        // this.dataOperChange(arrayList);
-      }
+        if (this.config.pageOper == 1) {
+          let arrList = this.dataArray;
+          this.percentPageData = arrList;
+          var arrayList = [];
+          var list = this.dataArray;
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].PATIENT_ID) {
+              if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+
+                if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
+                  list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
+                  arrayList.push(list[i]);
+                } else {}
+              } else {
+                if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
+                  list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
+                  arrayList.push(list[i]);
+                } else {
+
+                }
+              }
+            }
+          }
+          this.timeControl(this.config.maxTime)
+          // this.dataOperChange(arrayList);
+        }
+      })
+
+
     },
     //处理数据进行划线
     dataOperChange(list) {
+      this.xArray = [];
+      this.dataArray = [];
       var svg = d3.selectAll(".test")
+      debugger
       svg.remove();
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight,
         m = 0;
-      this.xArray = [];
-      this.dataArray = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].START_TIME) {
           if (i == this.rows)
@@ -617,25 +564,9 @@ export default {
             if (sMin < 0) {
               sMin = 0;
             }
-            // if (list[i].vStartTime) {
-            //   sMin = this.getMinuteDif(this.config.initTime, list[i].vStartTime);
-            // } else {
-            //   sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-            // }
 
             //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-
-              // if (new Date(list[i].MAX_TIME) > this.maxTime) {   if
-              // (this.config.pageOper == 0) {     eMin =
-              // this.getMinuteDif(this.initTime, this.maxTime);   }   if
-              // (this.config.pageOper == -1) {     eMin =
-              // this.getMinuteDif(new Date(this.initTime.getTime() - 250 * 60
-              // * 1000), this.maxTime);   }   if (this.config.pageOper == 1)
-              // {     eMin = this.getMinuteDif(this.initTime, this.maxTime);
-              // } } else {   eMin =
-              // this.getMinuteDif(this.config.userInfo.inDateTime,
-              // list[i].MAX_TIME); }
               if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
                 eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
               } else {
@@ -658,6 +589,8 @@ export default {
             let y2
             let flag = true;
             let topi
+            y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+            y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             //判断是否同一种药品
             if (this.dataArray.length > 0) {
               for (var j = 0; j < this.dataArray.length; j++) {
@@ -666,16 +599,16 @@ export default {
                   y2 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
                   flag = false;
                   topi = j;
-                } else {
-                  y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-                  y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+                  break;
                 }
               }
-            } else {
-              y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-              y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
             }
-
+            list[i].vStartTime = '';
+            list[i].nowTime = '';
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
+              this.createLine(x1, x2, y1, y2, list[i]);
+              debugger
+            }
             // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
             //   list[i].vStartTime = '';
             //   this.createLine(x1, x2, y1, y2, list[i]);
@@ -692,10 +625,7 @@ export default {
             //   m++;
             // }
 
-            list[i].vStartTime = '';
-            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
-              this.createLine(x1, x2, y1, y2, list[i]);
-            }
+
 
             if (flag) {
               this.xArray.push({
@@ -735,7 +665,6 @@ export default {
 
   },
   mounted() {
-    this.area = this.$refs.area;
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
     }

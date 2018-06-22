@@ -124,25 +124,6 @@
             <path d="m-4,2.870487l4.497421,-7.870487l4.497421,7.870487l-8.994843,0z" fill-opacity="null" stroke-opacity="null" stroke="red" stroke-width="null" fill="none" />
           </g>
           <g v-for="(cir,index2) in item.circleData" v-if="item.flag==1" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-            <!-- <circle class="opercontrol" r="8pt" fill="rgba(0,0,0,0)"></circle> -->
-            <!-- ○ -->
-            <!-- <ellipse stroke="#000" ry="3pt" rx="3pt" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" /> -->
-            <!-- ● -->
-            <!-- <circle class="opercontrol" r="4" fill="green"></circle> -->
-            <!-- ∧ -->
-            <!-- <path d="m-4,4.5c0,0 3.950336,-8 3.950336,-7.5c0,0 2.93852,8 2.93852,8" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" stroke="blue" fill="none" /> -->
-            <!-- ∨ -->
-            <!-- <path d="m-4,4.5c0,0 3.950336,-8 3.950336,-7.5c0,0 2.93852,8 2.93852,8" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" stroke="blue" fill="none" /> -->
-            <!-- △ -->
-            <!-- <path d="m-4,2.870487l4.497421,-7.870487l4.497421,7.870487l-8.994843,0z" fill-opacity="null" stroke-opacity="null" stroke="#000" stroke-width="null" fill="none"/> -->
-            <!-- ▽ -->
-            <!-- <path d="m-4,2.870487l4.497421,-7.870487l4.497421,7.870487l-8.994843,0z" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" stroke="#000" stroke-width="null" fill="none"/> -->
-            <!-- ▲ -->
-            <!-- <path d="m-4,2.870493l4.497421,-7.870487l4.497421,7.870487l-8.994843,0z" stroke-width="NaN"  fill="#000"/> -->
-            <!-- ▼ -->
-            <!-- <path d="m-4,2.870493l4.497421,-7.870487l4.497421,7.870487l-8.994843,0z" transform="rotate(-180)" stroke-width="NaN"  fill="#000"/> -->
-            <!-- X -->
-            <!-- <text stroke="null" transform="matrix(0.44269931316375727,0,0,0.44269931316375727,164.78615606576204,120.13502615876496) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_34" y="-260.674143" x="-380.226641" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#000000">X</text> -->
           </g>
         </g>
       </svg>
@@ -348,38 +329,32 @@ export default {
         visitId: this.config.userInfo.visitId,
         eventNo: 0
       }
-      this.api.getNewTimeData(params)
+      this.api.getSignTimeData(params)
         .then(
           res => {
             if (res.length < 1) {
               return false
             }
-            //对时间进行排序
+            var sortArray = [];
+            for (var i = 0; i < res.length; i++) {
+              var item = res[i].dataValue;
+              item = eval('(' + item + ')');
+              let xL = len - item.length
+
+              if (xL > 0) {
+                for (var j = 0; j < xL; j++) {
+                  item.push('');
+                }
+              }
+              res[i].dataValue = item;
+            }
             res.sort(function(a, b) {
               return Date.parse(a.time) - Date.parse(b.time); //时间正序
             });
-            let nameList = this.signNameLisg
-            let testArr = []
-            res.forEach(itemAll => {
-              let arr = []
-              nameList.forEach(item => {
-                let num = 0
-                itemAll.dataValue.forEach(li => {
-                  if (item.itemCode == li.ITEM_NAME) {
-                    arr.push(li.ITEM_VALUE);
-                    num++
-                  }
-                })
-                if (num == 0) {
-                  arr.push('')
-                }
-              })
-              itemAll.dataValue = arr
-            })
-
-            // this.signdataList = res;
-            let sortArray = res
-            this.signdataList = res;
+            for (var i = 0, l = res.length; i < l; i++) {
+              sortArray.push(res[i]);
+            }
+            this.signdataList = sortArray;
             var newArray = [];
             for (var i = 0; i < len; i++) {
               var arr1 = [];
@@ -417,7 +392,6 @@ export default {
                 newArray[i][j].y = y;
               }
             }
-
             this.pathArray = newArray;
             this.calculatePath();
           })
