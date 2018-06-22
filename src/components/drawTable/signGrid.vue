@@ -133,8 +133,8 @@ export default {
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       var bothTimeLeft = this.maxTimeInPage - this.startTimeInPage
-      console.log(this.config.maxTime)
-      console.log(this.config.userInfo.inDateTime)
+      // console.log(this.config.maxTime)
+      // console.log(this.config.userInfo.inDateTime)
       this.thedoubelData = '';
       let params = {
         patientId: this.dataOfPeo.patientId,
@@ -262,7 +262,7 @@ export default {
                   this.topTimeFun();
                   this.dataBody.sort(this.sortFun);
                   var pei = 0;
-                  console.log(this.dataBody)
+                  // console.log(this.dataBody)
                   for (var k = 0; k < this.dataBody.length; k++) {
                     if (this.dataBody[k - 1]) {
                       if (this.dataBody[k].left == this.dataBody[k - 1].left) {
@@ -274,7 +274,7 @@ export default {
 
                     }
                   }
-                  console.log(this.dataBody)
+                  // console.log(this.dataBody)
                   this.lineArray = res.list;
                   this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
                 })
@@ -360,7 +360,7 @@ export default {
           this.api.selectMedAnesthesiaEventList(paramsTwo)
             .then(zze => {
               // var list = zze.list;
-              console.log(zze.list)
+              // console.log(zze.list)
               if (zze.list.length > 6) {
                 for (var t = 7; t < zze.list.length; t++) {
                   var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
@@ -391,7 +391,7 @@ export default {
               this.api.selectMedAnesthesiaEventList(paramsThree)
                 .then(aff => {
                   // var list = aff.list;
-                  console.log(aff.list)
+                  // console.log(aff.list)
                   if (aff.list.length > 10) {
                     for (var h = 11; h < aff.list.length; h++) {
                       var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
@@ -451,7 +451,7 @@ export default {
                   this.topTimeFun();
                   this.dataBody.sort(this.sortFun);
                   var pei = 0;
-                  console.log(this.dataBody)
+                  // console.log(this.dataBody)
                   for (var k = 0; k < this.dataBody.length; k++) {
                     if (this.dataBody[k - 1]) {
                       if (this.dataBody[k].left == this.dataBody[k - 1].left) {
@@ -480,7 +480,7 @@ export default {
       this.selectMedAnesthesiaEventList();
       // window.eventHub.$on("test", this.selectMedAnesthesiaEventList);
     }
-    console.log(this.config.maxTime)
+    // console.log(this.config.maxTime)
 
 
   },
