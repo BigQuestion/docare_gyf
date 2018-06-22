@@ -30,7 +30,10 @@ export default {
   },
   methods: {
     selectMedAnesthesiaEventList() {
+      debugger
+      console.log(this.dataBody)
       this.dataBody = [];
+      console.log(this.dataBody)
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
@@ -164,7 +167,10 @@ export default {
       return a.sort - b.sort;
     },
     closing() {
+      debugger
+      console.log(this.dataBody)
       this.dataBody = [];
+      console.log(this.dataBody)
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {

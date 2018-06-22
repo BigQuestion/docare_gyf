@@ -484,14 +484,12 @@ export default {
   },
   created() {
     this.dataBody = [];
-    Bus.$on('test', this.selectMedAnesthesiaEventList)
-    Bus.$on('timeSetChange', this.closing)
+    Bus.$on('test', this.closing)
 
   },
   beforeDestroy() {
     this.dataBody = [];
-    Bus.$off('test', this.selectMedAnesthesiaEventList);
-    Bus.$on('timeSetChange', this.closing)
+    Bus.$off('test', this.closing);
     clearTimeout(this.setTimeId);
   },
   props: ['page', 'width', 'height', 'dataOfPeo'],

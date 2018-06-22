@@ -1809,7 +1809,7 @@ export default {
       // Bus.$emit('timeSetChange');
     },
     //单子首页
-    toChangePage(num) {
+    toChangePage(num) {      
       if (num == 0) {
         this.config.pagePercentNum = 1;
         this.config.pageOper = num;

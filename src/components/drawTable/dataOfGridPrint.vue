@@ -282,12 +282,10 @@ export default {
   created() {
     this.dataBody = [];
     Bus.$on('test', this.selectMedAnesthesiaEventList)
-    Bus.$on('timeSetChange', this.closing)
   },
   beforeDestroy() {
     clearTimeout(this.setTimeId);
     this.dataBody = [];
-    Bus.$on('timeSetChange', this.closing)
     Bus.$off('test', this.selectMedAnesthesiaEventList);
     
   },

@@ -124,7 +124,10 @@ export default {
       }
     },
     selectMedAnesthesiaEventList() {
+      debugger
+      console.log(this.dataBody)
       this.dataBody = [];
+      console.log(this.dataBody)
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
@@ -311,7 +314,10 @@ export default {
       this.tipView = false;
     },
     closing() {
+      debugger
+      console.log(this.dataBody)
       this.dataBody = [];
+      console.log(this.dataBody)
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
