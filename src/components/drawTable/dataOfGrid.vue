@@ -172,10 +172,12 @@ export default {
       }
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(
+
         // display:flex;flex-direction:column;flex-wrap:wrap;
         res => {
           this.dataBody = [];
           for (var i = 0; i < res.list.length; i++) {
+
             var time = new Date(res.list[i].START_TIME).getTime();
             // console.log(time)
             if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
