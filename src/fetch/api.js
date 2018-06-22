@@ -595,7 +595,7 @@ export default {
   getPatientQiXieList(params, config) {
     return fetch('medicalsystem/rest/medFormCon/getPatientQiXieList', params)
   },
-    /**
+  /**
    * 获取病人已存在体征
    * 
    */
