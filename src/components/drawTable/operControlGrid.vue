@@ -326,7 +326,7 @@ export default {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
-        eventNo: 0,
+        eventNo: 0, //代表在麻醉室
       }
 
       this.api.getSignName(params)

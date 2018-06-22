@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative;" class="cov-vue-date" :class="option.wrapperClass ? option.wrapperClass : {}">
     <div class="datepickbox" style="position: relative">
-      <!-- <input type="text" title="input date" class="cov-datepicker" :placeholder="option.placeholder" v-model="date.time" :required="required" @click="showCheck" @focus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" :class="option.inputClass ? option.inputClass : {}" /> -->
+      <input type="text" title="input date" class="cov-datepicker" :placeholder="option.placeholder" v-model="date.time" :required="required" @click="showCheck" @focus="showCheck" :style="option.inputStyle ? option.inputStyle : {}" :class="option.inputClass ? option.inputClass : {}" />
       <!-- <i><span>△</span></i>
       <input type="time" name="">
       <input v-model="date.time" type="hidden"> -->
@@ -586,6 +586,7 @@ export default {
 
 
 
+
 /* Firefox < 16 */
 
 @-moz-keyframes fadein {
@@ -596,6 +597,7 @@ export default {
     opacity: 1;
   }
 }
+
 
 
 
@@ -648,6 +650,7 @@ export default {
 
 
 
+
 /* Internet Explorer */
 
 @-ms-keyframes fadein {
@@ -658,6 +661,7 @@ export default {
     opacity: 1;
   }
 }
+
 
 
 

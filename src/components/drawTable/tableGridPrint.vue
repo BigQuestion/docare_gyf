@@ -80,6 +80,39 @@ export default {
     },
     //对时间进行计算操作
     timeControl(startTime) {
+
+      var svg = d3.selectAll(".testprint")
+      svg.remove();
+      var m = this.tbMin; //加几分钟
+      var timeDate = new Date(startTime);
+      var toMin = timeDate.getTime() + 1000 * 60 * m;
+      var timeArray = [];
+      let startMinTime = this.config.startMinTime
+      let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
+      if (this.config.pageOper == 0 && startMinTime) {
+        for (var i = 0; i <= this.columns; i++) {
+
+          timeArray.push(new Date(new Date(this.config.initTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        }
+      } else if (!startMinTime && this.config.pageOper == 0) {
+        for (var i = 0; i <= this.columns; i++) {
+          timeArray.push(new Date(new Date(defaultTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        }
+      } else {
+        for (var i = 0; i <= this.columns; i++) {
+
+          timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
+        }
+      }
+      this.xTimeArray = timeArray;
+      this.$nextTick(function() {
+        this.getLineXy();
+        if (this.page == false) {
+          this.selectMedAnesthesiaEventList();
+        }
+      })
+
+      return
       var m = this.tbMin; //加几分钟
       var timeDate = new Date(startTime);
       var toMin = timeDate.getTime() + 1000 * 60 * m;
@@ -100,6 +133,12 @@ export default {
     },
     //时间初始化显示
     xTimeInit() {
+      if (!this.page) {
+        this.timeControl(this.config.startMinTime);
+      } else {
+        this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
+      }
+      return
       if (this.config.userInfo.inDateTime && this.config.userInfo.inDateTime != "" && this.config.userInfo.inDateTime != null &&
         !this.page) {
         this.timeControl(this.config.userInfo.inDateTime);
@@ -171,8 +210,6 @@ export default {
           .attr("fill", "none")
           .attr("stroke", "blue")
           .attr("class", "testprint")
-        // .on("mouseenter", function() { // //clearTimeout(t) // _this.tipView = true; // _this.tipLeft = x1; // _this.tipTop = y2 + 10; // _this.lineObj = obj; // }) // .on("mouseleave", function() { // //t = setTimeout(function (){ // _this.tipView = false; // //}, 1000); // }) // .on("mousemove", function(ev) { // //_this.lineObj.nowTime = new Date(); // _this.$set(_this.lineObj, "nowTime", _this.getTime()); // var ev = ev || event; // var offX = ev.offsetX; //横坐标值 // var m = Math.round(offX / gWidth * 5); // var time = new Date(_this.config.userInfo.inDateTime); // var time1 = time.getTime() + m * 60 * 1000; // var time2 = new Date(time1).Format("yyyy-MM-dd hh:mm"); // obj.nowTime = time2; // _this.lineObj = obj; // })
-
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
         svg.append("line")
@@ -260,11 +297,9 @@ export default {
       var svg = d3.selectAll(".testprint")
       svg.remove();
       this.xTimeArray = [];
-
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
-        this.timeControl(this.config.userInfo.inDateTime);
-        this.selectMedAnesthesiaEventList();
+        this.xTimeInit();
       }
       if (this.config.pageOper == -1) {
         this.timeControl(this.config.initTime)
@@ -278,7 +313,6 @@ export default {
             list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
           }
         }
-        this.dataOperChange(list);
       }
       if (this.config.pageOper == 1) {
         let arrList = this.dataArray;
@@ -288,6 +322,7 @@ export default {
         for (var i = 0; i < list.length; i++) {
           if (list[i].PATIENT_ID) {
             if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+
               if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
                 list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
                 arrayList.push(list[i]);
@@ -302,9 +337,9 @@ export default {
             }
           }
         }
-        this.timeControl(this.config.initTime)
-        this.dataOperChange(arrayList);
+        this.timeControl(this.config.maxTime)
       }
+
     },
     //处理数据进行划线
     dataOperChange(list) {

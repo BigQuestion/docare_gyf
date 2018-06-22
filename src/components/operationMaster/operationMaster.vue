@@ -1147,7 +1147,7 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
         }
-      }else if (sta == 65) {
+      } else if (sta == 65) {
         params = {
           patientId: this.lockedPatientInfo.patientId,
           visitId: this.lockedPatientInfo.visitId,
@@ -1416,6 +1416,7 @@ export default {
 
       if (item.formName == '麻醉记录单') {
         this.getMaxTime();
+
         let inDateTime = this.config.userInfo.inDateTime
         this.tempButtonView = false;
         //查找病人的最晚时间
@@ -1521,6 +1522,12 @@ export default {
                       });
                   // this.formItems = tempItems;
                 });
+            if (this.setTimeId) {
+              this.$nextTick(function() {
+
+                Bus.$emit('timeSetChange');
+              })
+            }
           })
       } else if (item.formName == '手术清点单') {
         let params = {
@@ -1980,7 +1987,7 @@ export default {
     },
     getMaxTime() {
       if (this.setTimeId) {
-        clearTimeout(this.setTimeId);
+        this.getMaxTimeNoset();
       }
       let timeParam = {
         "patientId": this.lockedPatientInfo.patientId,
@@ -2003,6 +2010,32 @@ export default {
             }
           }
           this.setTimeId = setTimeout(_ => this.getMaxTime(), 300000)
+        })
+    },
+    getMaxTimeNoset() {
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId);
+      }
+      let timeParam = {
+        "patientId": this.lockedPatientInfo.patientId,
+        "visitId": this.lockedPatientInfo.visitId,
+        "operId": this.lockedPatientInfo.operId,
+      }
+      //查找病人的最晚时间
+      this.api.selectMaxTime(timeParam)
+        .then(res => {
+          if (res.TIME) {
+
+            if (this.config.userInfo.outDateTime) {
+              if (new Date(this.config.userInfo.outDateTime) > new Date(res.TIME)) {
+                this.config.patientMaxTime = this.config.userInfo.outDateTime;
+              } else {
+                this.config.patientMaxTime = res.TIME
+              }
+            } else {
+              this.config.patientMaxTime = res.TIME
+            }
+          }
         })
     },
     testclick() {
@@ -2112,12 +2145,12 @@ export default {
   background: url('../../assets/hoverBac.jpg');
 }
 
-.timePicker{
+.timePicker {
   width: 155px;
   font-size: 12px;
 }
 
-.timePicker::-webkit-inner-spin-button{
+.timePicker::-webkit-inner-spin-button {
   display: none;
 }
 
@@ -2492,5 +2525,13 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+/*::-webkit-datetime-edit-year-field {
+  display: none;
+}*/
 
 </style>
