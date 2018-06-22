@@ -53,11 +53,11 @@ export default {
                 });
         }
     },
+    props: [ 'page'],
     mounted() {
         if (this.page == false) {
             this.getList();
         }
-
     },
 
 }

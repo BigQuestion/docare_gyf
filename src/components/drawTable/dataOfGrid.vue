@@ -305,13 +305,13 @@ export default {
     }
   },
   created() {
-    // Bus.$on('test', this.closing)
+    Bus.$on('test', this.selectMedAnesthesiaEventList)
     Bus.$on('timeSetChange', this.closing)
     this.dataBody = [];
   },
   beforeDestroy() {
     clearTimeout(this.setTimeId);
-    // Bus.$on('timeSetChange', this.closing)
+    Bus.$on('timeSetChange', this.selectMedAnesthesiaEventList)
     Bus.$off('test', this.closing);
     this.dataBody = [];
   },

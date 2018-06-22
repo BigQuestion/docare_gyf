@@ -485,12 +485,12 @@ export default {
 
   },
   created() {
-    // Bus.$on('test', this.selectMedAnesthesiaEventList)
+    Bus.$on('test', this.selectMedAnesthesiaEventList)
     Bus.$on('timeSetChange', this.closing)
     this.dataBody = [];
   },
   beforeDestroy() {
-    // Bus.$off('test', this.selectMedAnesthesiaEventList);
+    Bus.$off('test', this.selectMedAnesthesiaEventList);
     Bus.$on('timeSetChange', this.closing)
     this.dataBody = [];
     clearTimeout(this.setTimeId);
