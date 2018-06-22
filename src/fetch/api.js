@@ -595,6 +595,13 @@ export default {
   getPatientQiXieList(params, config) {
     return fetch('medicalsystem/rest/medFormCon/getPatientQiXieList', params)
   },
+    /**
+   * 获取病人已存在体征
+   * 
+   */
+  getPatientAllCode(params, config) {
+    return fetch('medicalsystem/rest/medSignData/getPatientAllCode', params)
+  },
   /**
    * 批量插入病人器械清单数据
    * 

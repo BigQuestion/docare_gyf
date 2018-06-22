@@ -745,7 +745,6 @@ export default {
         },
         firstFun() {
             this.thisAdata = false;
-
             for (var a = 0; a < this.commonTypeList.length; a++) {
                 if (this.commonTypeList[a].operId !== null && this.commonTypeList[a].visitId !== null && this.commonTypeList[a].patientId !== null) {
                     if (this.commonTypeList[a].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeList[a].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeList[a].patientId == this.userInfoDataBody.userInfo.patientId) {
