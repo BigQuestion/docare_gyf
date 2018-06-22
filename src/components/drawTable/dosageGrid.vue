@@ -32,10 +32,10 @@
         <div v-if="dataObj.DURATIVE_INDICATOR=='0'">
           开始时间：{{dataObj.START_TIME}}
         </div>
-        <div>
+        <div v-if="dataObj.DOSAGE">
           总量：{{dataObj.DOSAGE}}
         </div>
-        <div v-if="dataObj.DURATIVE_INDICATOR=='1'">
+        <div v-if="dataObj.dataTime">
           鼠标当前时间：{{dataObj.dataTime}}
         </div>
       </div>
@@ -107,8 +107,8 @@ export default {
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
-      var svg = d3.selectAll(".dosagegrid")
-      svg.remove();
+      // var svg = d3.selectAll(".dosagegrid")
+      // svg.remove();
       this.dataArray = [];
       for (var i = 0; i < this.forRows; i++) {
         this.dataArray.push(i)
@@ -169,8 +169,9 @@ export default {
         })
     },
     getDataNoTime() {
-      var svg = d3.selectAll(".dosagegrid")
-      svg.remove();
+      // var svg = d3.selectAll(".dosagegrid")
+      // svg.remove();
+      this.xArray = [];
       this.dataArray = [];
       for (var i = 0; i < this.forRows; i++) {
         this.dataArray.push(i)
@@ -206,8 +207,6 @@ export default {
       var svg = d3.select("#dosage");
       var _this = this;
       var gWidth = this.svgWidth / this.columns;
-      obj.dataTime = _this.getTime();
-      var t;
       obj.nowTime = '';
       var gWidth = this.svgWidth / this.columns;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
@@ -311,6 +310,8 @@ export default {
     },
     //数据处理
     dataListOperFun(list) {
+      var svg = d3.selectAll(".dosagegrid")
+      svg.remove();
       var m = 0;
       this.xArray = [];
       this.dataArray = [];
@@ -387,6 +388,7 @@ export default {
               }
             }
             list[i].vStartTime = '';
+            list[i].dataTime = this.getTime();
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
             }
@@ -430,7 +432,6 @@ export default {
           }
         }
       }
-      console.log(this.dataArray)
       for (var k = 0; k < this.forRows - m; k++) {
         this.dataArray.push(m)
       }

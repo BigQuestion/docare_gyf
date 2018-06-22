@@ -74,6 +74,7 @@ import dosageGridPrint from '@/components/drawTable/dosageGridPrint.vue';
 import operControlGridPrint from '@/components/drawTable/operControlGridPrint.vue';
 import signGridPrint from '@/components/drawTable/signGridPrint.vue';
 import dataOfGridPrint from '@/components/drawTable/dataOfGridPrint.vue';
+import appliances from '@/components/appliances/appliances.vue';
 import specialSymbol from '@/components/drawTable/specialSymbol.vue';
 export default {
   data() {
@@ -98,13 +99,14 @@ export default {
     operControlGridPrint,
     signGridPrint,
     dataOfGridPrint,
+    appliances,
     specialSymbol,
   },
-  mounted() {
-  }
+  mounted() {}
 }
 
 </script>
 <style type="text/css" scoped>
+
 
 </style>

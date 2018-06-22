@@ -19,7 +19,7 @@
             <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
         </svg>
-        <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+        <div @mousemove.stop="mouseMoveInfo(item,$event)" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
           <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
         </div>
         <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1+item.w/2-10+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
@@ -36,16 +36,16 @@
             <div>
               开始时间：{{lineObj.START_TIME}}
             </div>
-            <div v-if="lineObj.DURATIVE_INDICATOR=='1'">
+            <div v-if="lineObj.DURATIVE_INDICATOR=='1'&&lineObj.ENDDATE">
               结束时间：{{lineObj.ENDDATE}}
             </div>
-            <div v-if="lineObj.DURATIVE_INDICATOR=='1'">
+            <div v-if="lineObj.DURATIVE_INDICATOR=='1'&&lineObj.PERFORM_SPEED">
               流速：{{lineObj.PERFORM_SPEED}}
             </div>
-            <div>
+            <div v-if="lineObj.DOSAGE">
               总量：{{lineObj.DOSAGE}}
             </div>
-            <div v-if="lineObj.DURATIVE_INDICATOR=='1'">
+            <div v-if="lineObj.nowTime">
               鼠标当前时间：{{lineObj.nowTime}}
             </div>
           </div>
@@ -130,10 +130,6 @@ export default {
 
     //对时间进行计算操作
     timeControl(startTime) {
-      var svg = d3.selectAll(".test")
-      // if (svg) {
-      //   svg.remove();
-      // }
       var m = this.tbMin; //加几分钟
       var timeDate = new Date(startTime);
       var toMin = timeDate.getTime() + 1000 * 60 * m;
@@ -173,8 +169,7 @@ export default {
 
     },
     timeControlNoTime(startTime) {
-      var svg = d3.selectAll(".test")
-      // svg.remove();
+
       var m = this.tbMin; //加几分钟
       var timeArray = [];
       let startMinTime = this.config.startMinTime
@@ -288,7 +283,6 @@ export default {
     },
     //加载病人麻醉事件里面麻醉用药数据
     selectMedAnesthesiaEventList() {
-      //this.timeControl(this.maxTime);
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
@@ -309,14 +303,19 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(res => {
-          var list = res.list;
-          this.dataOperChange(list);
+          if (res.list.length > 0) {
+            this.dataOperChange(res.list);
+          }
           this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
-          return false;
+
         });
     },
     //不加定时器的方法
     selectMedAnesthesiaEventListNoTime() {
+      var svg = d3.selectAll(".test")
+      svg.remove();
+      this.dataArray = [];
+      this.xArray = [];
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight;
@@ -351,7 +350,6 @@ export default {
     createLine(x1, x2, y1, y2, obj) {
       var svg = d3.select("#tableSvg");
       var _this = this;
-      obj.nowTime = '';
       var gWidth = this.svgWidth / this.columns;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
         svg.append("line")
@@ -476,6 +474,8 @@ export default {
         }
         if (this.config.pageOper == -1) {
           this.timeControl(this.config.initTime)
+          return
+
           let m = this.config.initTime.getTime() - 250 * 60 * 1000;
           // this.timeControl(new Date(m));
           var list = [];
@@ -522,6 +522,7 @@ export default {
       this.xArray = [];
       this.dataArray = [];
       var svg = d3.selectAll(".test")
+      debugger
       svg.remove();
       var w = this.svgWidth,
         lMin = this.tbMin,
@@ -602,7 +603,12 @@ export default {
                 }
               }
             }
-
+            list[i].vStartTime = '';
+            list[i].nowTime = '';
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
+              this.createLine(x1, x2, y1, y2, list[i]);
+              debugger
+            }
             // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
             //   list[i].vStartTime = '';
             //   this.createLine(x1, x2, y1, y2, list[i]);
@@ -619,13 +625,7 @@ export default {
             //   m++;
             // }
 
-            list[i].vStartTime = '';
-            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
-              // this.$nextTick(function() {
-              this.createLine(x1, x2, y1, y2, list[i]);
-              // })
 
-            }
 
             if (flag) {
               this.xArray.push({
@@ -665,10 +665,6 @@ export default {
 
   },
   mounted() {
-    var svg = d3.selectAll(".test")
-    if (svg) {
-      svg.remove();
-    }
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
     }
