@@ -30,10 +30,6 @@ export default {
   },
   methods: {
     selectMedAnesthesiaEventList() {
-      debugger
-      console.log(this.dataBody)
-      this.dataBody = [];
-      console.log(this.dataBody)
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
@@ -48,7 +44,7 @@ export default {
         .then(
         // display:flex;flex-direction:column;flex-wrap:wrap;
         res => {
-
+          this.dataBody = [];
           for (var i = 0; i < res.list.length; i++) {
 
             var time = new Date(res.list[i].START_TIME).getTime();
@@ -167,10 +163,6 @@ export default {
       return a.sort - b.sort;
     },
     closing() {
-      debugger
-      console.log(this.dataBody)
-      this.dataBody = [];
-      console.log(this.dataBody)
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
@@ -178,16 +170,12 @@ export default {
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
       }
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId)
-      }
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(
         // display:flex;flex-direction:column;flex-wrap:wrap;
         res => {
-
+          this.dataBody = [];
           for (var i = 0; i < res.list.length; i++) {
-
             var time = new Date(res.list[i].START_TIME).getTime();
             // console.log(time)
             if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
@@ -314,14 +302,14 @@ export default {
     this.dataBody = [];
     Bus.$on('test', this.selectMedAnesthesiaEventList)
     Bus.$on('timeSetChange', this.closing)
-    
+    console.log(this.dataBody)
   },
   beforeDestroy() {
-    clearTimeout(this.setTimeId);
     this.dataBody = [];
-    Bus.$on('timeSetChange', this.closing)
     Bus.$off('test', this.selectMedAnesthesiaEventList);
-    
+    Bus.$off('timeSetChange', this.closing)
+    clearTimeout(this.setTimeId);
+    console.log(this.dataBody)
   },
 }
 
