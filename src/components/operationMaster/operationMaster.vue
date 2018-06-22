@@ -1806,10 +1806,10 @@ export default {
     //单子刷新按钮
     refreshForm() {
       this.selectMedFormTemp(this.selectFormItemTemp);
-      Bus.$emit('timeSetChange');
+      // Bus.$emit('timeSetChange');
     },
     //单子首页
-    toChangePage(num) {
+    toChangePage(num) {      
       if (num == 0) {
         this.config.pagePercentNum = 1;
         this.config.pageOper = num;

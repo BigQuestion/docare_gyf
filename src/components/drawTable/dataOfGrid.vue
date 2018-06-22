@@ -30,7 +30,10 @@ export default {
   },
   methods: {
     selectMedAnesthesiaEventList() {
+      debugger
+      console.log(this.dataBody)
       this.dataBody = [];
+      console.log(this.dataBody)
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
@@ -164,7 +167,10 @@ export default {
       return a.sort - b.sort;
     },
     closing() {
+      debugger
+      console.log(this.dataBody)
       this.dataBody = [];
+      console.log(this.dataBody)
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
@@ -305,15 +311,17 @@ export default {
     }
   },
   created() {
-    // Bus.$on('test', this.closing)
-    Bus.$on('timeSetChange', this.closing)
     this.dataBody = [];
+    Bus.$on('test', this.selectMedAnesthesiaEventList)
+    Bus.$on('timeSetChange', this.closing)
+    
   },
   beforeDestroy() {
     clearTimeout(this.setTimeId);
-    // Bus.$on('timeSetChange', this.closing)
-    Bus.$off('test', this.closing);
     this.dataBody = [];
+    Bus.$on('timeSetChange', this.closing)
+    Bus.$off('test', this.selectMedAnesthesiaEventList);
+    
   },
 }
 

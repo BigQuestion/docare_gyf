@@ -280,10 +280,14 @@ export default {
 
   },
   created() {
+    this.dataBody = [];
     Bus.$on('test', this.selectMedAnesthesiaEventList)
   },
   beforeDestroy() {
+    clearTimeout(this.setTimeId);
+    this.dataBody = [];
     Bus.$off('test', this.selectMedAnesthesiaEventList);
+    
   },
 }
 
