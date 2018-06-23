@@ -304,14 +304,12 @@ export default {
     this.dataBody = [];
     Bus.$on('test', this.selectMedAnesthesiaEventList)
     Bus.$on('timeSetChange', this.closing)
-    console.log(this.dataBody)
   },
   beforeDestroy() {
     this.dataBody = [];
     Bus.$off('test', this.selectMedAnesthesiaEventList);
     Bus.$off('timeSetChange', this.closing)
     clearTimeout(this.setTimeId);
-    console.log(this.dataBody)
   },
 }
 
