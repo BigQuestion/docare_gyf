@@ -66,7 +66,7 @@ export default {
     }
   },
   methods: {
-    showItem(){
+    showItem() {
       debugger
       console.log(this.arr);
       // console.log(this.item.Format('yyyy-MM-dd hh:mm'))
@@ -146,7 +146,12 @@ export default {
     }
   },
   mounted() {
-    this.arr.push({data:new Date()})
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
 
     this.w = 100;
     // this.api.Regist()

@@ -527,54 +527,13 @@ export default {
             }
             list[i].vStartTime = '';
             list[i].nowTime = '';
+            let _this = this
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
+              // setTimeout(() => {
+              this.createLine(x1, x2, y1, y2, list[i]);
+              // }, 1000)
 
-              // this.createLine(x1, x2, y1, y2, list[i]);
-              var _this = this;
-              if (list[i].DURATIVE_INDICATOR == 1 && (list[i].ENDDATE == null || list[i].ENDDATE == "")) {
-                this.svgObj.append("line")
-                  .attr('stroke-width', 1)
-                  .attr("stroke", "blue")
-                  .attr("class", "test")
-                  .attr("y1", y1 - 4)
-                  .attr("y2", y2 + 4)
-                  .attr("x1", x1)
-                  .attr("x2", x1)
-                if (x2 - x1 > 0) {
-                  this.svgObj.append("path")
-                    .attr('d', this.drawLineArrow(x1, y1, x2, y2))
-                    .attr('stroke-width', 1)
-                    .attr("stroke", "blue")
-                    .attr("class", "test")
-                }
-              }
-              if (list[i].DURATIVE_INDICATOR == 1 && list[i].ENDDATE != null && list[i].ENDDATE != "") {
-                _this.svgObj.append("line")
-                  .attr('stroke-width', 1)
-                  .attr("stroke", "blue")
-                  .attr("class", "test")
-                  .attr("y1", y1 - 4)
-                  .attr("y2", y2 + 4)
-                  .attr("x1", x1)
-                  .attr("x2", x1)
-                _this.svgObj.append("line")
-                  .attr("stroke", "blue")
-                  .attr("stroke-width", 1)
-                  .attr("class", "test")
-                  .attr("y1", y1)
-                  .attr("y2", y2)
-                  .attr("x1", x1)
-                  .attr("x2", x2)
-                _this.svgObj.append("line")
-                  .attr('stroke-width', 1)
-                  .attr("stroke", "blue")
-                  .attr("class", "test")
-                  .attr("y1", y1 - 4)
-                  .attr("y2", y2 + 4)
-                  .attr("x1", x2)
-                  .attr("x2", x2)
 
-              }
             }
             // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
             //   list[i].vStartTime = '';
