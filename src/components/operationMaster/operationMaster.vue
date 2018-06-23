@@ -2022,7 +2022,6 @@ export default {
     },
     //处理格子时间5的倍数
     timeSetOper(time) {
-      debugger
       let returnTime
       let getMinute = time.getMinutes()
       if (getMinute < 5) {
@@ -2505,6 +2504,9 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
 
 
 

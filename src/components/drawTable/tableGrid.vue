@@ -107,6 +107,7 @@ export default {
       lineArray: [],
       percentPageData: [],
       setTimeId: '', //定时器返回的一个ID
+      svgObj: '',
 
     }
   },
@@ -126,6 +127,7 @@ export default {
         })
       }
       this.lineArray = array;
+      this.svgObj = d3.select("#tableSvg")
     },
 
     //对时间进行计算操作
@@ -137,7 +139,7 @@ export default {
       let startMinTime = this.config.startMinTime
       let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
       let pageOper = this.config.pageOper
-      debugger
+
       if (pageOper == 0 && startMinTime) {
         for (var i = 0; i <= this.columns; i++) {
 
@@ -207,80 +209,6 @@ export default {
         this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
       }
 
-      return
-      let params = {
-        patientId: this.config.userInfo.patientId,
-        operId: this.config.userInfo.operId,
-        visitId: this.config.userInfo.visitId,
-      }
-
-      this.api.getBeginTime(params)
-        .then(rest => {
-          if (rest.TIME) {
-            //如果存在病人的入手术时间
-            if (this.config.userInfo.inDateTime) {
-              if (new Date(rest.TIME) > this.config.userInfo.inDateTime) {
-                this.config.startMinTime = this.config.userInfo.inDateTime
-              } else {
-                this.config.startMinTime = rest.TIME
-              }
-            } else {
-              this.config.startMinTime = rest.TIME
-            }
-          } else {
-            if (this.config.userInfo.inDateTime) {
-              this.config.startMinTime = this.config.userInfo.inDateTime
-            } else {
-              this.config.startMinTime = new Date().Format("yyyy-MM-dd") + " 08:00";
-            }
-          }
-          if (!this.page) {
-            this.timeControl(this.config.startMinTime);
-          } else {
-            this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
-          }
-          // this.getLineXy();
-          // if (this.page == false) {
-          //   this.selectMedAnesthesiaEventList();
-          // }
-        })
-
-
-      // this.api.getBeginTime(params)
-      // .then(res => {
-      //   // return
-      //   if (res.TIME) {
-      //     //如果入手术室时间存在
-      //     if (this.config.userInfo.inDateTime &&
-      //       !this.page) {
-      //       let time = this.config.userInfo.inDateTime
-      //       if (new Date(time) > new Date(res.TIME)) {
-      //         // this.config.startMinTime 
-      //         this.timeControl(res.TIME);
-      //       } else {
-      //         this.timeControl(this.config.userInfo.inDateTime);
-      //       }
-      //     } else {
-      //       this.timeControl(res.TIME);
-      //     }
-      //   } else {
-      //     this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
-      //   }
-      //   this.getLineXy();
-      //   if (this.page == false) {
-      //     this.selectMedAnesthesiaEventList();
-      //   }
-      // }) if (this.config.userInfo.inDateTime && this.config.userInfo.inDateTime != "" && this.config.userInfo.inDateTime != null &&
-      //   !this.page) {
-      //   this.timeControl(this.config.userInfo.inDateTime);
-      // } else {
-      //   this.timeControl(new Date().Format("yyyy-MM-dd") + " 08:00");
-      // }
-      // this.getLineXy();
-      // if (this.page == false) {
-      //   this.selectMedAnesthesiaEventList();
-      // }
-
     },
     //加载病人麻醉事件里面麻醉用药数据
     selectMedAnesthesiaEventList() {
@@ -349,14 +277,13 @@ export default {
 
     },
     createLine(x1, x2, y1, y2, obj) {
-      debugger
-      var svg = d3.select("#tableSvg");
+
       var _this = this;
-      var gWidth = this.svgWidth / this.columns;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
-        svg.append("line")
+        console.log("----------------noendtime")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
-          .attr("fill", "none")
+          // .attr("fill", "red")
           .attr("stroke", "blue")
           .attr("class", "test")
           .attr("y1", y1 - 4)
@@ -364,36 +291,37 @@ export default {
           .attr("x1", x1)
           .attr("x2", x1)
         if (x2 - x1 > 0) {
-          svg.append("path")
+          this.svgObj.append("path")
             .attr('d', this.drawLineArrow(x1, y1, x2, y2))
             .attr('stroke-width', 1)
-            .attr("fill", "none")
+            // .attr("fill", "red")
             .attr("stroke", "blue")
             .attr("class", "test")
         }
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
-        svg.append("line")
+        console.log("----------------isendtime")
+        _this.svgObj.append("line")
           .attr('stroke-width', 1)
-          .attr("fill", "none")
+          // .attr("fill", "red")
           .attr("stroke", "blue")
           .attr("class", "test")
           .attr("y1", y1 - 4)
           .attr("y2", y2 + 4)
           .attr("x1", x1)
           .attr("x2", x1)
-        svg.append("line")
+        _this.svgObj.append("line")
           .attr("stroke", "blue")
-          .attr("fill", "none")
+          // .attr("fill", "red")
           .attr("stroke-width", 1)
           .attr("class", "test")
           .attr("y1", y1)
           .attr("y2", y2)
           .attr("x1", x1)
           .attr("x2", x2)
-        svg.append("line")
+        _this.svgObj.append("line")
           .attr('stroke-width', 1)
-          .attr("fill", "none")
+          // .attr("fill", "red")
           .attr("stroke", "blue")
           .attr("class", "test")
           .attr("y1", y1 - 4)
@@ -608,7 +536,8 @@ export default {
             list[i].nowTime = '';
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
-              // debugger
+              console.log("----------------")
+
             }
             // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
             //   list[i].vStartTime = '';
@@ -666,6 +595,7 @@ export default {
 
   },
   mounted() {
+
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
     }

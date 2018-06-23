@@ -1,6 +1,9 @@
 <template>
   <div :style="note" style="background-color: rgb(0,0,0);position: relative;">
     <div class="loginBox">
+      <div v-for="(item,index) in arr" style="height: 50px;">
+        <dateTime :value="item" :index='index' @changeValue="getValue"></dateTime>
+      </div>
       <div style="display:flex;flex-direction:row-reverse;height:75px;box-sizing:border-box;padding:10px 20px 0 0;">
         <img style="width:auto;height:100%;" src="../../assets/logo.png">
       </div>
@@ -25,36 +28,25 @@
           </div>
         </div>
       </div>
+      <!-- <div style="position:relative;width: 120px;">
+        <div style="z-index: 0;position: absolute;left:0px;top:0px;">
+          <input type="date" v-model="date" name="" style="width: 120px;border: none;" @focus="showDateTime">
+        </div>
+        <div style="position: absolute;left:0px;top:0px;z-index: 1;" v-if="dateTimeShow">
+          <input type="text" name="" v-model="dateTime" style="width:100px;border: none;" @focus="showDateTime">
+        </div>
+        <div style="position: absolute;right:0px;top:0px;z-index: 3;pointer-events:none;">
+          △
+        </div>
+        <div style="position: absolute;left:0px;top:0px;z-index: 2;" v-if="timeShow">
+          <input ref="timeClick" type="time" name="" style="width:100px;border: none;" v-model="time" class="timePicker" @blur="hideDateTime">
+        </div>
+      </div> -->
     </div>
-    <!-- <div>
-                                            Docare登录
-                                        </div>
-                                        <div>
-                                            用户：<input type="" name="" v-model="loginName">
-                                        </div>
-                                        <div>
-                                            密码：<input type="" name="" v-model="loginPwd">
-                                        </div>
-                                        <div>
-                                            <button @click="login">login</button>
-                                        </div> -->
-    <!-- <div class="flex" style="height:40px;" ref="row" >
-                                            <div ref="block" id="block" style="width:100px;">1</div>
-                                            <div class="line" @mousedown="dragstart"></div>
-                                            <div style="width:100px;background: #FF6666">2</div>
-                                        </div>
-                                        <div>
-                                            <textarea  v-model="sql"></textarea>
-                                        </div>
-                                        <div>
-                                            <button @click="doSql">查询</button>
-                                        </div>
-                                        <div>
-                                            <textarea v-model="result"></textarea>
-                                        </div> -->
   </div>
 </template>
 <script>
+import dateTime from '@/components/plugins/dateTime.vue';
 let target;
 let block;
 
@@ -66,6 +58,8 @@ export default {
   name: 'login',
   data() {
     return {
+      arr: [],
+      timeTest: '',
       msg: '欢迎登陆！',
       loginName: '',
       loginPwd: '',
@@ -83,6 +77,15 @@ export default {
     }
   },
   methods: {
+    getValue(obj) {
+      this.$set(this.arr, obj.index, obj.value)
+      console.log(this.timeTest + "---1")
+    },
+    getValue2(value) {
+      debugger
+      console.log(value)
+      console.log(this.timeTest + "---2")
+    },
     doSql() {
       let params = {
         sql: this.sql
@@ -149,13 +152,20 @@ export default {
     }
   },
   mounted() {
+    for (var i = 0; i < 4; i++) {
+      this.arr.push(new Date())
+    }
+
     this.w = 100;
     // this.api.Regist()
     // .then(res=>{
     //      debugger
     //      console.log(res);
     //  });
-  }
+  },
+  components: {
+    dateTime
+  },
 }
 
 </script>
@@ -180,6 +190,10 @@ export default {
   height: 340px;
   margin-left: -325px;
   margin-top: -170px;
+}
+
+.timePicker::-webkit-inner-spin-button {
+  display: none;
 }
 
 </style>

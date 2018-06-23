@@ -124,7 +124,6 @@ export default {
       }
     },
     selectMedAnesthesiaEventList() {
-      alert('1')
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
@@ -313,7 +312,6 @@ export default {
       this.tipView = false;
     },
     closing() {
-      alert('2')
       var nber = 1;
       this.pageOn = this.config.pageOper;
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
