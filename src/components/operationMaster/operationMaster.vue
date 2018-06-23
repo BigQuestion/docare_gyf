@@ -1457,25 +1457,8 @@ export default {
                   }
                 }
                 var timeDate = new Date(this.config.startMinTime);
-                this.config.initTime = new Date(this.config.startMinTime);
-                this.config.initTime = new Date(this.timeSetOper(this.config.initTime));
-                // let time = this.config.initTime
-                // let getMinute = time.getMinutes()
-                // debugger
-                // if (getMinute < 5) {
-                //   time = time.setMinutes(0)
-                // } else if (getMinute > 4 && getMinute < 10) {
-                //   time = time.setMinutes(5)
-                // } else {
-                //   let i1 = getMinute.toString().substring(0, 1)
-                //   let i2 = getMinute.toString().substring(1, 2)
-                //   if (i2 < 5) {
-                //     time = time.setMinutes(Number(i1 + '0'))
-                //   } else {
-                //     time = time.setMinutes(Number(i1 + '5'))
-                //   }
-                // }
-                // this.config.initTime = new Date(time)
+                let init_Time = new Date(this.config.startMinTime);
+                this.config.initTime = new Date(this.timeSetOper(init_Time));
                 this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
               })
             let params = {
@@ -1483,7 +1466,6 @@ export default {
               id: item.id
             }
             let arry = [];
-            // this.formItems = [];
             this.api.selectMedFormTemp(params)
               .then(
                 res => {
@@ -1524,7 +1506,6 @@ export default {
                 });
             if (this.setTimeId) {
               this.$nextTick(function() {
-
                 Bus.$emit('timeSetChange');
               })
             }
@@ -1809,7 +1790,7 @@ export default {
       // Bus.$emit('timeSetChange');
     },
     //单子首页
-    toChangePage(num) {      
+    toChangePage(num) {
       if (num == 0) {
         this.config.pagePercentNum = 1;
         this.config.pageOper = num;
@@ -1988,6 +1969,7 @@ export default {
     getMaxTime() {
       if (this.setTimeId) {
         this.getMaxTimeNoset();
+        return
       }
       let timeParam = {
         "patientId": this.lockedPatientInfo.patientId,
@@ -2013,9 +1995,6 @@ export default {
         })
     },
     getMaxTimeNoset() {
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId);
-      }
       let timeParam = {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
@@ -2525,6 +2504,22 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
