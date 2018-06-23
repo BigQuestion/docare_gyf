@@ -278,47 +278,54 @@ export default {
     createLine(x1, x2, y1, y2, obj) {
       var _this = this;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
-        this.svgObj.append("line")
-          .attr('stroke-width', 1)
-          .attr("stroke", "blue")
-          .attr("class", "test")
-          .attr("y1", y1 - 4)
-          .attr("y2", y2 + 4)
-          .attr("x1", x1)
-          .attr("x2", x1)
-        if (x2 - x1 > 0) {
-          this.svgObj.append("path")
-            .attr('d', this.drawLineArrow(x1, y1, x2, y2))
+        debugger
+        setTimeout(() => {
+          this.svgObj.append("line")
             .attr('stroke-width', 1)
             .attr("stroke", "blue")
             .attr("class", "test")
-        }
+            .attr("y1", y1 - 4)
+            .attr("y2", y2 + 4)
+            .attr("x1", x1)
+            .attr("x2", x1)
+          if (x2 - x1 > 0) {
+            this.svgObj.append("path")
+              .attr('d', this.drawLineArrow(x1, y1, x2, y2))
+              .attr('stroke-width', 1)
+              .attr("stroke", "blue")
+              .attr("class", "test")
+          }
+        }, 1000)
+
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
-        _this.svgObj.append("line")
-          .attr('stroke-width', 1)
-          .attr("stroke", "blue")
-          .attr("class", "test")
-          .attr("y1", y1 - 4)
-          .attr("y2", y2 + 4)
-          .attr("x1", x1)
-          .attr("x2", x1)
-        _this.svgObj.append("line")
-          .attr("stroke", "blue")
-          .attr("stroke-width", 1)
-          .attr("class", "test")
-          .attr("y1", y1)
-          .attr("y2", y2)
-          .attr("x1", x1)
-          .attr("x2", x2)
-        _this.svgObj.append("line")
-          .attr('stroke-width', 1)
-          .attr("stroke", "blue")
-          .attr("class", "test")
-          .attr("y1", y1 - 4)
-          .attr("y2", y2 + 4)
-          .attr("x1", x2)
-          .attr("x2", x2)
+        debugger
+        setTimeout(() => {
+          _this.svgObj.append("line")
+            .attr('stroke-width', 1)
+            .attr("stroke", "blue")
+            .attr("class", "test")
+            .attr("y1", y1 - 4)
+            .attr("y2", y2 + 4)
+            .attr("x1", x1)
+            .attr("x2", x1)
+          _this.svgObj.append("line")
+            .attr("stroke", "blue")
+            .attr("stroke-width", 1)
+            .attr("class", "test")
+            .attr("y1", y1)
+            .attr("y2", y2)
+            .attr("x1", x1)
+            .attr("x2", x2)
+          _this.svgObj.append("line")
+            .attr('stroke-width', 1)
+            .attr("stroke", "blue")
+            .attr("class", "test")
+            .attr("y1", y1 - 4)
+            .attr("y2", y2 + 4)
+            .attr("x1", x2)
+            .attr("x2", x2)
+        }, 500)
 
       }
 
@@ -442,7 +449,8 @@ export default {
     //处理数据进行划线
     dataOperChange(list) {
       let svg = d3.selectAll(".test")
-      svg.remove();
+      // svg.remove();
+      console.log(0)
       this.xArray = [];
       this.dataArray = [];
       let dataArr = []
