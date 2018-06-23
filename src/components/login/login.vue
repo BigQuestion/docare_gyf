@@ -28,20 +28,6 @@
           </div>
         </div>
       </div>
-      <!-- <div style="position:relative;width: 120px;">
-        <div style="z-index: 0;position: absolute;left:0px;top:0px;">
-          <input type="date" v-model="date" name="" style="width: 120px;border: none;" @focus="showDateTime">
-        </div>
-        <div style="position: absolute;left:0px;top:0px;z-index: 1;" v-if="dateTimeShow">
-          <input type="text" name="" v-model="dateTime" style="width:100px;border: none;" @focus="showDateTime">
-        </div>
-        <div style="position: absolute;right:0px;top:0px;z-index: 3;pointer-events:none;">
-          △
-        </div>
-        <div style="position: absolute;left:0px;top:0px;z-index: 2;" v-if="timeShow">
-          <input ref="timeClick" type="time" name="" style="width:100px;border: none;" v-model="time" class="timePicker" @blur="hideDateTime">
-        </div>
-      </div> -->
     </div>
   </div>
 </template>

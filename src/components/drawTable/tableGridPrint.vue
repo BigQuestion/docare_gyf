@@ -58,6 +58,7 @@ export default {
       lineObj: {},
       xArray: [],
       lineArray: [],
+      svgObj: '',
 
     }
   },
@@ -77,6 +78,7 @@ export default {
         })
       }
       this.lineArray = array;
+      this.svgObj = d3.select("#tableSvgPrint")
     },
     //对时间进行计算操作
     timeControl(startTime) {
@@ -189,50 +191,42 @@ export default {
 
     },
     createLine(x1, x2, y1, y2, obj) {
-      var svg = d3.select("#tableSvgPrint");
       var _this = this;
-      var t;
       obj.nowTime = '';
-      var gWidth = this.svgWidth / this.columns;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
-        svg.append("line")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
-          .attr("fill", "none")
           .attr("stroke", "blue")
           .attr("class", "testprint")
           .attr("y1", y1 - 4)
           .attr("y2", y2 + 4)
           .attr("x1", x1)
           .attr("x2", x1)
-        svg.append("path")
+        this.svgObj.append("path")
           .attr('d', this.drawLineArrow(x1, y1, x2, y2))
           .attr('stroke-width', 1)
-          .attr("fill", "none")
           .attr("stroke", "blue")
           .attr("class", "testprint")
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
-        svg.append("line")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
-          .attr("fill", "none")
           .attr("stroke", "blue")
           .attr("class", "testprint")
           .attr("y1", y1 - 4)
           .attr("y2", y2 + 4)
           .attr("x1", x1)
           .attr("x2", x1)
-        svg.append("line")
+        this.svgObj.append("line")
           .attr("stroke", "blue")
-          .attr("fill", "none")
           .attr("stroke-width", 1)
           .attr("class", "testprint")
           .attr("y1", y1)
           .attr("y2", y2)
           .attr("x1", x1)
           .attr("x2", x2)
-        svg.append("line")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
-          .attr("fill", "none")
           .attr("stroke", "blue")
           .attr("class", "testprint")
           .attr("y1", y1 - 4)

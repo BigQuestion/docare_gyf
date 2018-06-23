@@ -10,7 +10,7 @@
           <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span>
         </div>
       </div>
-      <div id="tableGrid" style="position: relative;">
+      <div style="position: relative;">
         <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
           <g v-for="item in lineArray">
             <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
@@ -22,8 +22,8 @@
         <div @mousemove.stop="mouseMoveInfo(item,$event)" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
           <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
         </div>
-        <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1+item.w/2-10+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
-          <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+        <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1+item.w/2-8+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+          <span style="padding: 0 2px 0 0px;display: block;width: 16px;text-align: center;">{{item.obj.DOSAGE}}</span>
         </div>
         <div v-if="tipView">
           <div style="position: absolute;max-width:300px;min-width:220px;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 15" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
@@ -63,7 +63,7 @@
         <div v-for="(item,index) in dataArray" :style="{top:svgHeight/rows*index+20+'px'}" style="height: 14px;line-height: 12px;width: 165px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;">
         </div>
       </div>
-      <div id="tableGrid" style="position: relative;">
+      <div style="position: relative;">
         <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
           <g v-for="item in lineArray">
             <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
@@ -127,7 +127,7 @@ export default {
         })
       }
       this.lineArray = array;
-      this.svgObj = d3.select("#tableSvg")
+
     },
 
     //对时间进行计算操作
@@ -241,8 +241,7 @@ export default {
     },
     //不加定时器的方法
     selectMedAnesthesiaEventListNoTime() {
-      var svg = d3.selectAll(".test")
-      svg.remove();
+
       this.dataArray = [];
       this.xArray = [];
       var w = this.svgWidth,
@@ -277,13 +276,10 @@ export default {
 
     },
     createLine(x1, x2, y1, y2, obj) {
-
       var _this = this;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
-        console.log("----------------noendtime")
         this.svgObj.append("line")
           .attr('stroke-width', 1)
-          // .attr("fill", "red")
           .attr("stroke", "blue")
           .attr("class", "test")
           .attr("y1", y1 - 4)
@@ -294,16 +290,13 @@ export default {
           this.svgObj.append("path")
             .attr('d', this.drawLineArrow(x1, y1, x2, y2))
             .attr('stroke-width', 1)
-            // .attr("fill", "red")
             .attr("stroke", "blue")
             .attr("class", "test")
         }
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
-        console.log("----------------isendtime")
         _this.svgObj.append("line")
           .attr('stroke-width', 1)
-          // .attr("fill", "red")
           .attr("stroke", "blue")
           .attr("class", "test")
           .attr("y1", y1 - 4)
@@ -312,7 +305,6 @@ export default {
           .attr("x2", x1)
         _this.svgObj.append("line")
           .attr("stroke", "blue")
-          // .attr("fill", "red")
           .attr("stroke-width", 1)
           .attr("class", "test")
           .attr("y1", y1)
@@ -321,7 +313,6 @@ export default {
           .attr("x2", x2)
         _this.svgObj.append("line")
           .attr('stroke-width', 1)
-          // .attr("fill", "red")
           .attr("stroke", "blue")
           .attr("class", "test")
           .attr("y1", y1 - 4)
@@ -418,6 +409,8 @@ export default {
           }
         }
         if (this.config.pageOper == 1) {
+          this.timeControl(this.config.maxTime)
+          return
           let arrList = this.dataArray;
           this.percentPageData = arrList;
           var arrayList = [];
@@ -440,8 +433,7 @@ export default {
               }
             }
           }
-          this.timeControl(this.config.maxTime)
-          // this.dataOperChange(arrayList);
+
         }
       })
 
@@ -449,10 +441,11 @@ export default {
     },
     //处理数据进行划线
     dataOperChange(list) {
+      let svg = d3.selectAll(".test")
+      svg.remove();
       this.xArray = [];
       this.dataArray = [];
-      var svg = d3.selectAll(".test")
-      svg.remove();
+      let dataArr = []
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight,
@@ -519,13 +512,13 @@ export default {
             let flag = true;
             let topi
             y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+            y2 = y1
             //判断是否同一种药品
             if (this.dataArray.length > 0) {
               for (var j = 0; j < this.dataArray.length; j++) {
                 if (list[i].ITEM_NAME == this.dataArray[j].ITEM_NAME && list[i].ITEM_CLASS == this.dataArray[j].ITEM_CLASS) {
                   y1 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
-                  y2 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
+                  y2 = y1
                   flag = false;
                   topi = j;
                   break;
@@ -535,9 +528,53 @@ export default {
             list[i].vStartTime = '';
             list[i].nowTime = '';
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
-              this.createLine(x1, x2, y1, y2, list[i]);
-              console.log("----------------")
 
+              // this.createLine(x1, x2, y1, y2, list[i]);
+              var _this = this;
+              if (list[i].DURATIVE_INDICATOR == 1 && (list[i].ENDDATE == null || list[i].ENDDATE == "")) {
+                this.svgObj.append("line")
+                  .attr('stroke-width', 1)
+                  .attr("stroke", "blue")
+                  .attr("class", "test")
+                  .attr("y1", y1 - 4)
+                  .attr("y2", y2 + 4)
+                  .attr("x1", x1)
+                  .attr("x2", x1)
+                if (x2 - x1 > 0) {
+                  this.svgObj.append("path")
+                    .attr('d', this.drawLineArrow(x1, y1, x2, y2))
+                    .attr('stroke-width', 1)
+                    .attr("stroke", "blue")
+                    .attr("class", "test")
+                }
+              }
+              if (list[i].DURATIVE_INDICATOR == 1 && list[i].ENDDATE != null && list[i].ENDDATE != "") {
+                _this.svgObj.append("line")
+                  .attr('stroke-width', 1)
+                  .attr("stroke", "blue")
+                  .attr("class", "test")
+                  .attr("y1", y1 - 4)
+                  .attr("y2", y2 + 4)
+                  .attr("x1", x1)
+                  .attr("x2", x1)
+                _this.svgObj.append("line")
+                  .attr("stroke", "blue")
+                  .attr("stroke-width", 1)
+                  .attr("class", "test")
+                  .attr("y1", y1)
+                  .attr("y2", y2)
+                  .attr("x1", x1)
+                  .attr("x2", x2)
+                _this.svgObj.append("line")
+                  .attr('stroke-width', 1)
+                  .attr("stroke", "blue")
+                  .attr("class", "test")
+                  .attr("y1", y1 - 4)
+                  .attr("y2", y2 + 4)
+                  .attr("x1", x2)
+                  .attr("x2", x2)
+
+              }
             }
             // if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
             //   list[i].vStartTime = '';
@@ -587,6 +624,7 @@ export default {
           }
         }
       }
+
       for (var k = 0; k < this.rows - m; k++) {
         this.dataArray.push(m)
       }
@@ -595,7 +633,7 @@ export default {
 
   },
   mounted() {
-
+    this.svgObj = d3.select("#tableSvg")
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
     }
