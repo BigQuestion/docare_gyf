@@ -1782,7 +1782,7 @@ export default {
     formSetting() {
       this.settingView = !this.settingView;
       this.selectFormItemTemp.isPage = !this.selectFormItemTemp.isPage;
-      this.toChangePage(0);
+      // this.toChangePage(0);
     },
     //单子刷新按钮
     refreshForm() {
@@ -2202,7 +2202,7 @@ export default {
 
 .content {
   display: flex;
-  width: calc(100% - 185px);
+  width: calc(100% - 175px);
   height: 100%;
   background: rgb(227, 239, 255);
   min-width: 1178px;
@@ -2345,7 +2345,7 @@ export default {
 
 .information {
   position: relative;
-  width: calc(100% - 391px);
+  width: calc(100% - 381px);
   height: 100%;
   box-sizing: border-box;
   padding-left: 5px;
