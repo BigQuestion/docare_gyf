@@ -8,7 +8,7 @@
       <div style="height: 20px;width: calc(100% - 15px);padding-left: 15px;">
         <span style="font-size: 14px;">麻醉事件</span>
       </div>
-      <div style="height: 329px;display:flex;border-bottom:3px solid #7774da;">
+      <div style="height: 349px;display:flex;border-bottom:3px solid #7774da;">
         <div style="width:80%;">
           <div style="display: flex;">
             <div style="border:1px solid rgb(177,207,243);background-color:#fff;box-sizing:border-box;font-size:12px;" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
@@ -143,11 +143,41 @@
       <div style="height: 25px;padding-left: 15px;">
         <span style="line-height: 25px;font-size:14px;">体征数据</span>
       </div>
-      <div style="height: 165px;overflow:auto;background-color:#fff;font-size:12px;" ref="signContent">
-        <div style="display: flex;padding-left: 10px;">
+      <div style="height: 145px;background-color:#fff;font-size:12px;position: relative;width: 1214px;" ref="signContent">
+        <!-- 名称 -->
+        <div style="position: absolute;top: 0;left:10px;width: 100px;">
+          <div style="width: 100px;height: 18px;font-weight: 600">名称</div>
+        </div>
+        <!-- 上部时间栏目 -->
+        <div ref="timeScroll" style="width: calc(100% - 110px);position: absolute;top:0;left: 100px;overflow:hidden;">
+          <div class="flex" :style="{width: signdataList.length*60+'px'}">
+            <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
+              <div style="width: 60px;height: 18px;" :title="sItem.time">
+                {{sItem.time | discount}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 左侧名称栏目 -->
+        <div ref="headTitleScroll" style="position: absolute;top: 18px;left: 10px;;width: 100px;overflow: hidden;" :style="{height:(signdataList.length*60>1114?117:127)+'px'}">
+          <div :style="{height:itemNameList.length*22+'px'}">
+            <div style="height: 22px;width: 100px;font-weight: 600" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
+          </div>
+        </div>
+        <!-- 数据内容栏目 -->
+        <div ref="dataScroll" style="position: absolute;top: 18px;left: 100px;width: calc(100% - 100px);height: 127px;overflow: auto">
+          <div class="flex">
+            <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
+              <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
+                <input :value="secItem" style="width: 56px;" @change="signChange($event,index,sItem)">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--  <div style="display: flex;padding-left: 10px;">
           <div>
             <div style="width: 100px;">名称</div>
-            <div style="height: 22px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
+            <div style="height: 22px;width: 100px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
           </div>
           <div class="flex">
             <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
@@ -159,7 +189,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- <div class="flex">
                 <div v-for="(title,index) in titleArr">
                   <div v-if="index==0" style="width: 100px;">{{title}}</div>
@@ -1046,6 +1076,15 @@ export default {
     this.allMedAnesthesiaEventType();
     this.getSignName();
     this.getRoadList();
+    //滚动条监听
+    let timeScroll = this.$refs.timeScroll;
+    let headTitleScroll = this.$refs.headTitleScroll;
+    let dataScroll = this.$refs.dataScroll;
+    dataScroll.onscroll = () => {
+      timeScroll.scrollLeft = dataScroll.scrollLeft
+      headTitleScroll.scrollTop = dataScroll.scrollTop
+
+    }
   }
 }
 
@@ -1119,6 +1158,20 @@ button {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #E3E3E3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C1C1C1;
+  border-radius: 2px;
 }
 
 </style>

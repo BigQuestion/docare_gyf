@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative;margin:2px;" @contextmenu="showMenu">
     <div>
-      <svg :width="svgWidth" :height="svgHeight" id="opercontrolgridprint" ref="area">
+      <svg :width="svgWidth" height="450" id="opercontrolgridprint" ref="area">
         <g v-for="item in lineArray">
           <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.8px;"></line>
         </g>
@@ -151,11 +151,11 @@
           </g>
         </g>
       </svg>
-      <!-- <div style="position: absolute;top: 10px;">
+      <div style="position: absolute;top: 10px;font-size:12px;">
         100
-      </div> -->
-      <div v-if="tipView">
-        <div style="position: absolute;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 10;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
+      </div>
+      <div v-if=" tipView ">
+        <div style="position: absolute;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 10; " :style="{ top:tipTop+ 'px',left:tipLeft+ 'px'} ">
           <div>
             {{mouseItem.itemData.itemName}}
           </div>
@@ -170,20 +170,20 @@
           </div>
         </div>
       </div>
-      <div style="position: absolute;bottom: 0px;left: -25px;text-align: right;font-size: 12px;">
-        <div v-for="item in yValueArray" style="height: 22px;">
+      <div style="position: absolute;bottom: 0px;left: -25px;text-align: right;font-size: 12px; ">
+        <div v-for="item in yValueArray " style="height: 22px; ">
           {{item}}
         </div>
       </div>
     </div>
-    <div v-if="showStyleView" style="background-color: #e6e6e6;position: absolute;top: 30%;" :style="{ top:rightViewY+'px',left:rightViewX+'px'}">
-      <div style="padding: 10px;" @click="tipShowPersonStyle">
+    <div v-if="showStyleView " style="background-color: #e6e6e6;position: absolute;top: 30%; " :style="{ top:rightViewY+ 'px',left:rightViewX+ 'px'} ">
+      <div style="padding: 10px; " @click="tipShowPersonStyle ">
         个性化体征显示
       </div>
     </div>
   </div>
 </template>
-<script type="text/javascript">
+<script type="text/javascript ">
 import * as d3 from 'd3';
 import Bus from '@/bus.js';
 export default {
@@ -308,10 +308,10 @@ export default {
         eventNo: 0,
         timePoint: new Date(this.clickItem.time),
         itemValue: moveValue,
-        operator: "mdsd"
+        operator: "mdsd "
       })
       let params = this.updateDataArray;
-      this.api.updateMedPatientMonitorDatas(params)
+      this.api.updateMedPatientMonitorDatas(params, { noAlert: true })
         .then(res => {
           this.updateDataArray = [];
         })
@@ -333,7 +333,7 @@ export default {
         .then(
           res => {
             for (var i = 0; i < res.length; i++) {
-              res[i].itemValue = "";
+              res[i].itemValue = " ";
             }
             //定义一个排序方法
             let compare = function(prop) {
@@ -354,7 +354,7 @@ export default {
               }
             }
             //根据itemcode排序
-            // this.signNameLisg = res.sort(compare("itemCode"));
+            // this.signNameLisg = res.sort(compare("itemCode "));
             this.signNameLisg = res;
             this.getSignTimeData(res.length, res);
             this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
@@ -372,7 +372,7 @@ export default {
         .then(
           res => {
             for (var i = 0; i < res.length; i++) {
-              res[i].itemValue = "";
+              res[i].itemValue = " ";
             }
             //定义一个排序方法
             let compare = function(prop) {
@@ -393,7 +393,7 @@ export default {
               }
             }
             //根据itemcode排序
-            // this.signNameLisg = res.sort(compare("itemCode"));
+            // this.signNameLisg = res.sort(compare("itemCode "));
             this.signNameLisg = res;
             this.getSignTimeData(res.length, res);
           })
@@ -444,7 +444,7 @@ export default {
                   })
                 } else {
                   arr1.push({
-                    value: "",
+                    value: " ",
                     time: sortArray[j].time,
                     itemData: list[i]
 
@@ -540,7 +540,7 @@ export default {
             })
           } else {
             arr1.push({
-              value: "",
+              value: " ",
               time: sortArray[j].time,
               itemData: list[i]
 
