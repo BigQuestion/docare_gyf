@@ -1,12 +1,12 @@
 <template>
   <div :style="note" style="background-color: rgb(0,0,0);position: relative;">
     <div class="loginBox">
-      <div v-for="item in arr" style="height: 50px;">
+      <!-- <div v-for="item in arr" style="height: 50px;">
         <dateTime v-model="item.data"></dateTime>
-      </div>
-      <div style="height: 50px;">
+      </div> -->
+      <!-- <div style="height: 50px;">
         <button @click="showItem()">显示</button>
-      </div>
+      </div> -->
       <div style="display:flex;flex-direction:row-reverse;height:75px;box-sizing:border-box;padding:10px 20px 0 0;">
         <img style="width:auto;height:100%;" src="../../assets/logo.png">
       </div>

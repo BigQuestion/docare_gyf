@@ -278,7 +278,6 @@ export default {
     createLine(x1, x2, y1, y2, obj) {
       var _this = this;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
-        debugger
         setTimeout(() => {
           this.svgObj.append("line")
             .attr('stroke-width', 1)
@@ -295,11 +294,10 @@ export default {
               .attr("stroke", "blue")
               .attr("class", "test")
           }
-        }, 1000)
+        }, 500)
 
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
-        debugger
         setTimeout(() => {
           _this.svgObj.append("line")
             .attr('stroke-width', 1)
@@ -449,7 +447,7 @@ export default {
     //处理数据进行划线
     dataOperChange(list) {
       let svg = d3.selectAll(".test")
-      // svg.remove();
+      svg.remove();
       console.log(0)
       this.xArray = [];
       this.dataArray = [];

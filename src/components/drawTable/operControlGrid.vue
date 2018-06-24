@@ -484,9 +484,14 @@ export default {
 
     showData(item, ev) {
       this.mouseItem = item;
-      this.tipLeft = ev.offsetX;
+      this.tipLeft = item.x + 10;
       this.tipTop = item.y + 20;
-      this.tipView = !this.tipView;
+      if (ev.type == "mouseenter") {
+        this.tipView = true;
+      } else {
+        this.tipView = false;
+      }
+
     },
 
     getYDataArray() {
