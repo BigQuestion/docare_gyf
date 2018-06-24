@@ -8,7 +8,9 @@
         <input type="text" v-model="dateTime" :style="{width:width-20+'px'}" style="border: none;" @focus="showDateTime">
       </div>
       <div style="position: absolute;right:0px;top:0px;z-index: 3;pointer-events:none;">
-        △
+        <svg viewBox="0 0 1024 1024" width="20" height="20">
+            <polygon points="220,100 300,210 170,250" style="fill:#000;"/>
+        </svg>
       </div>
       <div style="position: absolute;left:0px;top:0px;z-index: 2;" v-if="timeShow">
         <input ref="timeClick" type="time" :style="{width:width-20+'px'}" style="border: none;text-align: center;" v-model="time" class="timePicker" @blur="hideDateTime">
