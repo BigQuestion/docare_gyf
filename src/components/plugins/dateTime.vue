@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div style="position:relative;" :style="{width:width+'px'}">
-      <div style="z-index: 0;position: absolute;left:0px;top:0px;">
-        <input type="date" class="timePicker" v-model="date" :style="{width:width+'px'}" style="border: none;" @focus="showDateTime" @change="hideDateTime">
+    <div style="position:relative;height:21px;border:1px solid #222;" :style="{width:width+'px'}">
+      <div style="z-index: 0;position: absolute;left:0px;top:1px;">
+        <input type="date" class="timePicker" v-model="date" :style="{width:width+'px'}" style="border: none;display:block;" @focus="showDateTime" @change="hideDateTime">
       </div>
-      <div style="position: absolute;left:0px;top:0px;z-index: 1;" v-if="dateTimeShow">
-        <input type="text" v-model="dateTime" :style="{width:width-20+'px'}" style="border: none;" @focus="showDateTime">
+      <div style="position: absolute;left:0px;top:1px;z-index: 1;" v-if="dateTimeShow">
+        <input type="text" v-model="dateTime" :style="{width:width-20+'px'}" style="border: none;display:block;" @focus="showDateTime">
       </div>
-      <div style="position: absolute;right:0px;top:0px;z-index: 3;pointer-events:none;">
+      <div style="position: absolute;right:0px;top:1px;z-index: 3;pointer-events:none;height:100%;">
         <svg data-v-fc154ec6="" viewBox="0 0 1024 1024" width="19" height="20">
           <polygon data-v-fc154ec6="" points="220,220 560,770 840,220" style="fill: #b3c1d7;"></polygon>
         </svg>
       </div>
-      <div style="position: absolute;left:0px;top:0px;z-index: 2;" v-if="timeShow">
-        <input ref="timeClick" type="time" :style="{width:width-20+'px'}" style="border: none;text-align: center;" v-model="time" class="timePicker" @blur="hideDateTime">
+      <div style="position: absolute;left:0px;top:1px;z-index: 2;" v-if="timeShow">
+        <input ref="timeClick" type="time" :style="{width:width-20+'px'}" style="border: none;text-align: center;display:block;" v-model="time" class="timePicker" @blur="hideDateTime">
       </div>
     </div>
   </div>
@@ -97,5 +97,10 @@ export default {
 input {
   height: 20px;
 }
-
+input::-webkit-calendar-picker-indicator{
+  color: rgba(0, 0, 0, 0);
+}
+input::-webkit-calendar-picker-indicator:hover{
+  background: rgba(0, 0, 0, 0);
+}
 </style>

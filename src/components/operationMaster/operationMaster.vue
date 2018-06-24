@@ -19,7 +19,7 @@
       </div>
       <div class="procedure" style="position: relative;">
         <div style="display: flex;height:70px;" v-if="lockedPatientInfo.patientId">
-          <div style="margin:0px 4px;">
+          <div style="margin:0px 10px;">
             <div class="lightBox" @contextmenu.prevent="showDoubleListOne(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 0" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 5" style="display:block" src="../../assets/redLight.png" alt="">
@@ -31,11 +31,11 @@
             </div>
             <div style="position: relative;">
               <!-- <input type="" name="" @click="testclick"> -->
-              <dateTime width="100" v-model="inDateTime" @change="changeStatus('5','inDateTime',$event)"></dateTime>
+              <dateTime width="110" v-model="inDateTime" @change="changeStatus('5','inDateTime',$event)"></dateTime>
               <!-- <input ref="intest" id="intest" class="timePicker" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5','inDateTime',$event)"> -->
             </div>
           </div>
-          <div style="margin:0px 4px;" v-if="inDateTime">
+          <div style="margin:0px 10px;" v-if="inDateTime">
             <div class="lightBox" @contextmenu.prevent="showDoubleListTwo(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 10" style="display:block" src="../../assets/redLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 5" style="display:block" src="../../assets/grayLight.png" alt="">
@@ -46,11 +46,12 @@
               </div>
             </div>
             <div>
-              <input class="timePicker" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10','anesStartTime',$event)">
+              <dateTime width="110" v-model="anesStartTime" @change="changeStatus('10','anesStartTime',$event)"></dateTime>
+              <!-- <input class="timePicker" type="datetime-local" name="" v-model="anesStartTime" @blur="changeStatus('10','anesStartTime',$event)"> -->
               <!-- <vue-date-calendar id="demo1" :option.sync="option"></vue-date-calendar> -->
             </div>
           </div>
-          <div style="margin:0px 4px;" v-if="anesStartTime">
+          <div style="margin:0px 10px;" v-if="anesStartTime">
             <div class="lightBox" @contextmenu.prevent="showDoubleListThree(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 10" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 15" style="display:block" src="../../assets/redLight.png" alt="">
@@ -61,10 +62,11 @@
               </div>
             </div>
             <div>
-              <input class="timePicker" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15','startDateTime',$event)">
+              <dateTime width="110" v-model="startDateTime" @change="changeStatus('15','startDateTime',$event)"></dateTime>
+              <!-- <input class="timePicker" type="datetime-local" name="" v-model="startDateTime" @blur="changeStatus('15','startDateTime',$event)"> -->
             </div>
           </div>
-          <div style="margin:0px 4px;" v-if="startDateTime">
+          <div style="margin:0px 10px;" v-if="startDateTime">
             <div class="lightBox" @contextmenu.prevent="showDoubleListFour(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 15" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 25" style="display:block" src="../../assets/redLight.png" alt="">
@@ -75,10 +77,11 @@
               </div>
             </div>
             <div>
-              <input class="timePicker" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25','endDateTime',$event)">
+              <dateTime width="110" v-model="endDateTime" @change="changeStatus('25','endDateTime',$event)"></dateTime>
+              <!-- <input class="timePicker" type="datetime-local" name="" v-model="endDateTime" @blur="changeStatus('25','endDateTime',$event)"> -->
             </div>
           </div>
-          <div style="margin:0px 4px;" v-if="endDateTime">
+          <div style="margin:0px 10px;" v-if="endDateTime">
             <div class="lightBox" @contextmenu.prevent="showDoubleListFive(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 25" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 30" style="display:block" src="../../assets/redLight.png" alt="">
@@ -89,10 +92,11 @@
               </div>
             </div>
             <div>
-              <input class="timePicker" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30','anesEndTime',$event)">
+              <dateTime width="110" v-model="anesEndTime" @change="changeStatus('30','anesEndTime',$event)"></dateTime>
+              <!-- <input class="timePicker" type="datetime-local" name="" v-model="anesEndTime" @blur="changeStatus('30','anesEndTime',$event)"> -->
             </div>
           </div>
-          <div style="margin:0px 4px;" v-if="anesEndTime">
+          <div style="margin:0px 10px;" v-if="anesEndTime">
             <div ref="area" @contextmenu.prevent="showDoubleListSix(lockedPatientInfo.operStatus)" class="lightBox">
               <img v-if="lockedPatientInfo.operStatus == 30" style="display:block" src="../../assets/grayLight.png" alt="">
               <img v-else-if="lockedPatientInfo.operStatus == 35" style="display:block" src="../../assets/redLight.png" alt="">
@@ -106,7 +110,8 @@
               </div>
             </div>
             <div>
-              <input class="timePicker" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35','outDateTime',$event)">
+              <dateTime width="110" v-model="outDateTime" @change="changeStatus('35','outDateTime',$event)"></dateTime>
+              <!-- <input class="timePicker" type="datetime-local" name="" v-model="outDateTime" @blur="changeStatus('35','outDateTime',$event)"> -->
             </div>
           </div>
         </div>
