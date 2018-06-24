@@ -9,22 +9,22 @@
         <span style="font-size: 14px;">麻醉事件</span>
       </div>
       <div style="height: 329px;display:flex;border-bottom:3px solid #7774da;">
-        <div style="width:80%;font-style: background-color:white;">
-          <div style="width: 100%;border:1px solid #222;overflow-y: auto;height:270px;box-sizing: border-box;">
-            <div style="display: flex;">
-              <div style="border:1px solid rgb(177,207,243);background-color:#fff;box-sizing:border-box;font-size:12px;" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
-                {{cell.title}}
-              </div>
+        <div style="width:80%;">
+          <div style="display: flex;">
+            <div style="border:1px solid rgb(177,207,243);background-color:#fff;box-sizing:border-box;font-size:12px;" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
+              {{cell.title}}
             </div>
+          </div>
+          <div style="width: 100%;border:1px solid #222;overflow-y: auto;height:270px;box-sizing: border-box;background-color:white;">
             <div style="min-height: 280px;" ref="eventContent">
               <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @click="clickItem(item)">
                 <!-- 判断是否为事件 -->
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
                   <div style="border:1px solid #a9a9a9;height:20px;" v-if="cl.timeEdit">
                     <!-- <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
-                    <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width" v-model="item[cl.fieldObj]"></dateTime>
+                    <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width-2" v-model="item[cl.fieldObj]"></dateTime>
                   </div>
-                  <div v-else-if="cl.isChixu">
+                  <div v-else-if="cl.isChixu" class="hideselect">
                     <select :class="{selectchooseItem:item.thooseItem}" style="height:22px;width:65px;display:block;font-size:12px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
                       <option style="background-color: white;" v-bind:value="0">
                         不持续
@@ -34,7 +34,7 @@
                       </option>
                     </select>
                   </div>
-                  <div v-else style="border:1px solid #a9a9a9;box-sizing:border-box;height:100%;" :style="{width:(cl.width)+'px'}">
+                  <div class="hideselect" v-else style="border:1px solid #a9a9a9;box-sizing:border-box;height:100%;" :style="{width:(cl.width)+'px'}">
                     <select :class="{selectchooseItem:item.thooseItem}" v-if="cl.fieldObj == 'ADMINISTRATOR'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
                       <option style="background-color: white;" v-for="(item,index) in roadList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
@@ -52,7 +52,7 @@
                   </div>
                 </div>
                 <!-- 判断是否为事件 -->
-                <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
+                <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'" class="hideselect">
                   <div v-if="cl.timeEdit" style="border:1px solid #a9a9a9;">
                     <!-- <input @change="getChangeValue(item)" style="height:20px;border:0;display:block;font-size:12px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
                     <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width" v-model="item[cl.fieldObj]"></dateTime>
@@ -1121,7 +1121,7 @@ button {
   /* border: 1px solid #A9A9A9; */
 }
 
-select {
+.hideselect select {
   /*清除select的边框样式*/
   /*border: none;*/
   /*清除select聚焦时候的边框颜色*/

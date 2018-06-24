@@ -9,7 +9,7 @@
       </div>
       <div style="position: absolute;right:0px;top:0px;z-index: 3;pointer-events:none;">
         <svg data-v-fc154ec6="" viewBox="0 0 1024 1024" width="19" height="20">
-          <polygon data-v-fc154ec6="" points="300,200 580,650 860,200" style="fill: rgb(0, 0, 0);"></polygon>
+          <polygon data-v-fc154ec6="" points="220,220 560,770 840,220" style="fill: #b3c1d7;"></polygon>
         </svg>
       </div>
       <div style="position: absolute;left:0px;top:0px;z-index: 2;" v-if="timeShow">
@@ -52,10 +52,11 @@ export default {
       this.$emit("change")
     },
   },
-  props: ['index', 'value', 'width'],
+  props: ['value', 'width'],
   mounted() {
     //判断是否传入有值
     if (this.value) {
+      debugger
       let nowDate = new Date(this.value)
       this.dateTime = nowDate.Format("MM-dd hh:mm")
       this.date = nowDate.Format("yyyy-MM-dd")
