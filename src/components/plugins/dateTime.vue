@@ -71,9 +71,7 @@ export default {
   created() {},
   beforeDestroy() {},
   components: {},
-  computed: {
-
-  }
+  computed: {}
 }
 
 </script>
