@@ -64,7 +64,9 @@ export default {
       this.time = nowDate.Format("hh:mm")
     }
   },
-  created() {},
+  created() {
+    
+  },
   beforeDestroy() {},
   components: {},
   computed: {

@@ -617,6 +617,7 @@ export default {
       formDetail: false,
       inRoomDateTime: "",
       cancelData: { dataInParent: false },
+      inDateTime: "",
       anesStartTime: "",
       startDateTime: "",
       endDateTime: "",
@@ -1073,6 +1074,7 @@ export default {
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
+      debugger
       this.inDateTime = this.changeDateFormat(item.inDateTime);
       this.anesStartTime = this.changeDateFormat(item.anesStartTime);
       this.startDateTime = this.changeDateFormat(item.startDateTime);

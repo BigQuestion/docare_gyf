@@ -13,7 +13,7 @@
       <!-- 表单设计器显示元素 -->
     </div>
     <div v-if="tipView">
-      <div style="position: absolute;background-color: #e0e052;font-size: 12px;z-index: 10;padding: 0 2px;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
+      <div style="position: absolute;background-color: #fff;border:1px solid #222;font-size: 12px;z-index: 10;padding: 0 2px;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
         <div>
           {{nowTime}}
         </div>
