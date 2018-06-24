@@ -20,7 +20,7 @@
               <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @click="clickItem(item)">
                 <!-- 判断是否为事件 -->
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
-                  <div style="border:1px solid #a9a9a9;height:20px;" v-if="cl.timeEdit">
+                  <div style="height:20px;" v-if="cl.timeEdit">
                     <!-- <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
                     <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width-2" v-model="item[cl.fieldObj]"></dateTime>
                   </div>
@@ -35,27 +35,26 @@
                     </select>
                   </div>
                   <div class="hideselect" v-else style="border:1px solid #a9a9a9;box-sizing:border-box;height:100%;" :style="{width:(cl.width)+'px'}">
-                    <select :class="{selectchooseItem:item.thooseItem}" v-if="cl.fieldObj == 'ADMINISTRATOR'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                    <select :class="{selectchooseItem:item.thooseItem}" v-if="cl.fieldObj == 'ADMINISTRATOR'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
                       <option style="background-color: white;" v-for="(item,index) in roadList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
-                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'CONCENTRATION_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'CONCENTRATION_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
                       <option style="background-color: white;" v-for="(item,index) in concentrationList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
-                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'SPEED_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'SPEED_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
                       <option style="background-color: white;" v-for="(item,index) in speedUnitList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
-                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
                       <option style="background-color: white;" v-for="(item,index) in dosageUnitsList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
                     <input v-else style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                    <!-- <select-module :object="item" :value="item[cl.fieldObj]"></select-module> -->
                   </div>
                 </div>
                 <!-- 判断是否为事件 -->
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'" class="hideselect">
-                  <div v-if="cl.timeEdit" style="border:1px solid #a9a9a9;">
+                  <div v-if="cl.timeEdit">
                     <!-- <input @change="getChangeValue(item)" style="height:20px;border:0;display:block;font-size:12px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
-                    <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width" v-model="item[cl.fieldObj]"></dateTime>
+                    <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width-2" v-model="item[cl.fieldObj]"></dateTime>
                   </div>
                   <div v-else-if="cl.isChixu">
                     <select style="height:22px;width:65px;border:0;display:block;font-size:12px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)" :style="{width:(cl.width)+'px'}">
@@ -390,14 +389,6 @@ export default {
       this.api.selectMedAnesthesiaEventList(params)
         .then(
           res => {
-            for (var i = 0; i < res.list.length; i++) {
-              if (res.list[i].START_TIME) {
-                res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
-              }
-              if (res.list[i].ENDDATE) {
-                res.list[i].ENDDATE = this.changeDateFormat(res.list[i].ENDDATE);
-              }
-            }
             for (var a = 0; a < res.list.length; a++) {
               this.$set(res.list[a], 'thooseItem', false);
             }
@@ -476,7 +467,6 @@ export default {
         addFlag: true,
         DURATIVE_INDICATOR: 0,
       };
-      debugger
       this.eventList.push(obj);
       this.$nextTick(() => {
         var div = this.$refs.eventContent
@@ -535,8 +525,8 @@ export default {
             dosageUnits: list[i].DOSAGE_UNITS,
             dosage: list[i].DOSAGE,
             administrator: list[i].ADMINISTRATOR,
-            startTime: this.datetimeLocalToDate(list[i].START_TIME),
-            endDate: this.datetimeLocalToDate(list[i].ENDDATE),
+            startTime: list[i].START_TIME,
+            endDate: list[i].ENDDATE,
             eventNo: 0,
             durativeIndicator: list[i].DURATIVE_INDICATOR,
             concentration: list[i].CONCENTRATION,
@@ -687,7 +677,6 @@ export default {
     },
     //获取改变的值
     getChangeValue(item) {
-      debugger
       let params = {}
       if (item.addFlag) {
         params = {

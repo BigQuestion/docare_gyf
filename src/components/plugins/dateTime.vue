@@ -23,20 +23,24 @@ export default {
   data() {
     return {
       myValue: '',
-      dateTime: '00-00 00:00',
-      time: '00:00',
-      date: '2018-06-23',
+      dateTime: '',
+      time: '',
+      date: '',
       dateTimeShow: true,
       timeShow: false,
+      tempValue: '', //存放传入进来的值
+      state: 0, //0代表传入值为'' 1代表传入的值不为空
     }
   },
-  watch:{
-      value(val, oldVal){//普通的watch监听
-        let nowDate = new Date(val)
-        this.dateTime = nowDate.Format("MM-dd hh:mm")
-        this.date = nowDate.Format("yyyy-MM-dd")
-        this.time = nowDate.Format("hh:mm")
-      }
+  watch: {
+    value(val, oldVal) {
+      //普通的watch监听
+      // let nowDate = new Date(val)
+      // this.dateTime = nowDate.Format("MM-dd hh:mm")
+      // this.date = nowDate.Format("yyyy-MM-dd")
+      // this.time = nowDate.Format("hh:mm")
+      this.setInitValue(val)
+    }
   },
   methods: {
     showDateTime() {
@@ -47,37 +51,44 @@ export default {
     },
     hideDateTime() {
       this.timeShow = false
-      let getDate = this.date
-      let getTime = this.time
-      let nowTime = new Date(getDate + " " + getTime)
-      this.myValue = nowTime
-      this.dateTime = nowTime.Format("MM-dd hh:mm")
-      this.date = nowTime.Format("yyyy-MM-dd")
-      this.time = nowTime.Format("hh:mm")
-      console.log(this.myValue.Format('yyyy-MM-dd hh:mm'))
-      // this.value = this.dateTime
+      this.myValue = new Date(this.date + " " + this.time)
+      let nowTime = this.myValue
+      this.dateTime = this.myValue.Format("MM-dd hh:mm")
+      this.date = this.myValue.Format("yyyy-MM-dd")
+      this.time = this.myValue.Format("hh:mm")
       this.$emit("input", this.myValue)
-      this.$emit("change")
+      if (this.value) {
+        if (new Date(this.value).getTime() != nowTime.getTime()) {
+          this.$emit("change")
+        }
+      } else {
+        this.$emit("change")
+      }
+
+    },
+    setInitValue(value) {
+      if (value) {
+        var nowDate = new Date(value)
+        this.myValue = value;
+        this.dateTime = nowDate.Format("MM-dd hh:mm")
+        this.date = nowDate.Format("yyyy-MM-dd")
+        this.time = nowDate.Format("hh:mm")
+        this.state = 1
+      } else {
+        this.dateTime = ''
+        this.date = new Date().Format("yyyy-MM-dd")
+        this.time = new Date().Format("hh:mm")
+        this.state = 0
+      }
     },
   },
   props: ['value', 'width'],
   mounted() {
     //判断是否传入有值
-    if (this.value) {
-      debugger
-      let nowDate = new Date(this.value)
-      this.dateTime = nowDate.Format("MM-dd hh:mm")
-      this.date = nowDate.Format("yyyy-MM-dd")
-      this.time = nowDate.Format("hh:mm")
-    } else {
-      let nowDate = new Date()
-      this.dateTime = nowDate.Format("MM-dd hh:mm")
-      this.date = nowDate.Format("yyyy-MM-dd")
-      this.time = nowDate.Format("hh:mm")
-    }
+    this.setInitValue(this.value)
   },
   created() {
-    
+
   },
   beforeDestroy() {},
   components: {},
@@ -97,10 +108,13 @@ export default {
 input {
   height: 20px;
 }
-input::-webkit-calendar-picker-indicator{
+
+input::-webkit-calendar-picker-indicator {
   color: rgba(0, 0, 0, 0);
 }
-input::-webkit-calendar-picker-indicator:hover{
+
+input::-webkit-calendar-picker-indicator:hover {
   background: rgba(0, 0, 0, 0);
 }
+
 </style>
