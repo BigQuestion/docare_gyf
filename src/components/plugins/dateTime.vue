@@ -30,6 +30,14 @@ export default {
       timeShow: false,
     }
   },
+  watch:{
+      value(val, oldVal){//普通的watch监听
+        let nowDate = new Date(val)
+        this.dateTime = nowDate.Format("MM-dd hh:mm")
+        this.date = nowDate.Format("yyyy-MM-dd")
+        this.time = nowDate.Format("hh:mm")
+      }
+  },
   methods: {
     showDateTime() {
       this.timeShow = true
