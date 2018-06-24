@@ -1,12 +1,12 @@
 <template>
   <div :style="note" style="background-color: rgb(0,0,0);position: relative;">
     <div class="loginBox">
-      <div v-for="item in arr" style="height: 50px;">
+      <!-- <div v-for="item in arr" style="height: 50px;">
         <dateTime v-model="item.data"></dateTime>
-      </div>
-      <div style="height: 50px;">
+      </div> -->
+      <!-- <div style="height: 50px;">
         <button @click="showItem()">显示</button>
-      </div>
+      </div> -->
       <div style="display:flex;flex-direction:row-reverse;height:75px;box-sizing:border-box;padding:10px 20px 0 0;">
         <img style="width:auto;height:100%;" src="../../assets/logo.png">
       </div>
@@ -31,20 +31,6 @@
           </div>
         </div>
       </div>
-      <!-- <div style="position:relative;width: 120px;">
-        <div style="z-index: 0;position: absolute;left:0px;top:0px;">
-          <input type="date" v-model="date" name="" style="width: 120px;border: none;" @focus="showDateTime">
-        </div>
-        <div style="position: absolute;left:0px;top:0px;z-index: 1;" v-if="dateTimeShow">
-          <input type="text" name="" v-model="dateTime" style="width:100px;border: none;" @focus="showDateTime">
-        </div>
-        <div style="position: absolute;right:0px;top:0px;z-index: 3;pointer-events:none;">
-          △
-        </div>
-        <div style="position: absolute;left:0px;top:0px;z-index: 2;" v-if="timeShow">
-          <input ref="timeClick" type="time" name="" style="width:100px;border: none;" v-model="time" class="timePicker" @blur="hideDateTime">
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -80,7 +66,7 @@ export default {
     }
   },
   methods: {
-    showItem(){
+    showItem() {
       debugger
       console.log(this.arr);
       // console.log(this.item.Format('yyyy-MM-dd hh:mm'))
@@ -160,7 +146,12 @@ export default {
     }
   },
   mounted() {
-    this.arr.push({data:new Date()})
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
+    this.arr.push({ data: new Date() })
 
     this.w = 100;
     // this.api.Regist()

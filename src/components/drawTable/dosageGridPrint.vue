@@ -57,6 +57,7 @@ export default {
       xArray: [],
       percentPageData: [],
       outputList: [], //出量数据
+      svgObj: '',
     }
   },
   methods: {
@@ -75,6 +76,7 @@ export default {
         })
       }
       this.lineArray = array;
+      this.svgObj = d3.select("#dosageprint")
     },
     getData() {
       this.dataArray = [];
@@ -146,15 +148,11 @@ export default {
     },
 
     createLine(x1, x2, y1, y2, obj) {
-      var svg = d3.select("#dosageprint");
       var _this = this;
-      var gWidth = this.svgWidth / this.columns;
       obj.dataTime = _this.getTime();
-      var t;
       obj.nowTime = '';
-      var gWidth = this.svgWidth / this.columns;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
-        svg.append("line")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
@@ -163,7 +161,7 @@ export default {
           .attr("y2", y2 + 4)
           .attr("x1", x1)
           .attr("x2", x1)
-        svg.append("path")
+        this.svgObj.append("path")
           .attr('d', this.drawLineArrow(x1, y1, x2, y2))
           .attr('stroke-width', 1)
           .attr("fill", "none")
@@ -172,7 +170,7 @@ export default {
 
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
-        svg.append("line")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
@@ -181,7 +179,7 @@ export default {
           .attr("y2", y2 + 4)
           .attr("x1", x1)
           .attr("x2", x1)
-        svg.append("line")
+        this.svgObj.append("line")
           .attr("stroke", "blue")
           .attr("fill", "none")
           .attr("stroke-width", 1)
@@ -190,7 +188,7 @@ export default {
           .attr("y2", y2)
           .attr("x1", x1)
           .attr("x2", x2)
-        svg.append("line")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
@@ -358,7 +356,6 @@ export default {
           }
         }
       }
-      console.log(this.dataArray)
       for (var k = 0; k < this.forRows - m; k++) {
         this.dataArray.push(m)
       }

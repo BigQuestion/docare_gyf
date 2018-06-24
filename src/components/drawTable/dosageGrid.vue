@@ -84,6 +84,7 @@ export default {
       percentPageData: [],
       setTimeId: '',
       outputList: [], //出量数据
+      svgObj: '',
     }
   },
   methods: {
@@ -102,13 +103,12 @@ export default {
         })
       }
       this.lineArray = array;
+      this.svgObj = d3.select("#dosage")
     },
     getData() {
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
-      // var svg = d3.selectAll(".dosagegrid")
-      // svg.remove();
       this.dataArray = [];
       for (var i = 0; i < this.forRows; i++) {
         this.dataArray.push(i)
@@ -169,8 +169,6 @@ export default {
         })
     },
     getDataNoTime() {
-      // var svg = d3.selectAll(".dosagegrid")
-      // svg.remove();
       this.xArray = [];
       this.dataArray = [];
       for (var i = 0; i < this.forRows; i++) {
@@ -204,13 +202,10 @@ export default {
     },
 
     createLine(x1, x2, y1, y2, obj) {
-      var svg = d3.select("#dosage");
       var _this = this;
-      var gWidth = this.svgWidth / this.columns;
       obj.nowTime = '';
-      var gWidth = this.svgWidth / this.columns;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
-        svg.append("line")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
@@ -219,7 +214,7 @@ export default {
           .attr("y2", y2 + 4)
           .attr("x1", x1)
           .attr("x2", x1)
-        svg.append("path")
+        this.svgObj.append("path")
           .attr('d', this.drawLineArrow(x1, y1, x2, y2))
           .attr('stroke-width', 1)
           .attr("fill", "none")
@@ -228,7 +223,7 @@ export default {
 
       }
       if (obj.DURATIVE_INDICATOR == 1 && obj.ENDDATE != null && obj.ENDDATE != "") {
-        svg.append("line")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")
@@ -237,7 +232,7 @@ export default {
           .attr("y2", y2 + 4)
           .attr("x1", x1)
           .attr("x2", x1)
-        svg.append("line")
+        this.svgObj.append("line")
           .attr("stroke", "blue")
           .attr("fill", "none")
           .attr("stroke-width", 1)
@@ -246,7 +241,7 @@ export default {
           .attr("y2", y2)
           .attr("x1", x1)
           .attr("x2", x2)
-        svg.append("line")
+        this.svgObj.append("line")
           .attr('stroke-width', 1)
           .attr("fill", "none")
           .attr("stroke", "blue")

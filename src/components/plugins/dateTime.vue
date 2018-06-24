@@ -1,17 +1,19 @@
 <template>
   <div>
-    <div style="position:relative;width: 120px;">
+    <div style="position:relative;" :style="{width:width+'px'}">
       <div style="z-index: 0;position: absolute;left:0px;top:0px;">
-        <input type="date" v-model="date" name="" style="width: 120px;border: none;" @focus="showDateTime" @change="hideDateTime">
+        <input type="date" class="timePicker" v-model="date" :style="{width:width+'px'}" style="border: none;" @focus="showDateTime" @change="hideDateTime">
       </div>
       <div style="position: absolute;left:0px;top:0px;z-index: 1;" v-if="dateTimeShow">
-        <input type="text" name="" v-model="dateTime" style="width:100px;border: none;" @focus="showDateTime">
+        <input type="text" v-model="dateTime" :style="{width:width-20+'px'}" style="border: none;" @focus="showDateTime">
       </div>
       <div style="position: absolute;right:0px;top:0px;z-index: 3;pointer-events:none;">
-        △
+        <svg data-v-fc154ec6="" viewBox="0 0 1024 1024" width="19" height="20">
+          <polygon data-v-fc154ec6="" points="220,220 560,770 840,220" style="fill: #b3c1d7;"></polygon>
+        </svg>
       </div>
       <div style="position: absolute;left:0px;top:0px;z-index: 2;" v-if="timeShow">
-        <input ref="timeClick" type="time" name="" style="width:100px;border: none;" v-model="time" class="timePicker" @blur="hideDateTime">
+        <input ref="timeClick" type="time" :style="{width:width-20+'px'}" style="border: none;text-align: center;" v-model="time" class="timePicker" @blur="hideDateTime">
       </div>
     </div>
   </div>
@@ -27,6 +29,14 @@ export default {
       dateTimeShow: true,
       timeShow: false,
     }
+  },
+  watch:{
+      value(val, oldVal){//普通的watch监听
+        let nowDate = new Date(val)
+        this.dateTime = nowDate.Format("MM-dd hh:mm")
+        this.date = nowDate.Format("yyyy-MM-dd")
+        this.time = nowDate.Format("hh:mm")
+      }
   },
   methods: {
     showDateTime() {
@@ -47,13 +57,15 @@ export default {
       console.log(this.myValue.Format('yyyy-MM-dd hh:mm'))
       // this.value = this.dateTime
       this.$emit("input", this.myValue)
+      this.$emit("change")
     },
   },
-  props: ['index', 'value'],
+  props: ['value', 'width'],
   mounted() {
     //判断是否传入有值
     if (this.value) {
-      let nowDate = this.value
+      debugger
+      let nowDate = new Date(this.value)
       this.dateTime = nowDate.Format("MM-dd hh:mm")
       this.date = nowDate.Format("yyyy-MM-dd")
       this.time = nowDate.Format("hh:mm")
@@ -69,9 +81,21 @@ export default {
   },
   beforeDestroy() {},
   components: {},
-  computed: {
-
-  }
+  computed: {}
 }
 
 </script>
+<style scoped>
+.timePicker::-webkit-inner-spin-button {
+  display: none;
+}
+
+.timePicker::-webkit-clear-button {
+  display: none;
+}
+
+input {
+  height: 20px;
+}
+
+</style>

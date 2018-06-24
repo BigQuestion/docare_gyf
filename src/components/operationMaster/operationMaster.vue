@@ -31,7 +31,8 @@
             </div>
             <div style="position: relative;">
               <!-- <input type="" name="" @click="testclick"> -->
-              <input ref="intest" id="intest" class="timePicker" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5','inDateTime',$event)">
+              <dateTime width="100" v-model="inDateTime" @change="changeStatus('5','inDateTime',$event)"></dateTime>
+              <!-- <input ref="intest" id="intest" class="timePicker" type="datetime-local" v-model="inDateTime" @blur="changeStatus('5','inDateTime',$event)"> -->
             </div>
           </div>
           <div style="margin:0px 4px;" v-if="inDateTime">
@@ -565,8 +566,8 @@ import monitor from '@/components/monitor/monitor.vue';
 import cancel from '@/components/cancel/cancel.vue';
 import { getLodop } from '@/assets/js/LodopFuncs';
 import Bus from '@/bus.js';
-// import vueDateCalendar from 'vue-date-calendar';
 import myDatepicker from '@/components/plugins/vue-datepicker.vue';
+import dateTime from '@/components/plugins/dateTime.vue';
 let LODOP
 export default {
   data() {
@@ -617,7 +618,7 @@ export default {
       formDetail: false,
       inRoomDateTime: "",
       cancelData: { dataInParent: false },
-      inDateTime: "",
+      inDateTime: '',
       anesStartTime: "",
       startDateTime: "",
       endDateTime: "",
@@ -1071,11 +1072,12 @@ export default {
       }, 1000);
     },
     lockedPatient(item) {
+      debugger
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
-      debugger
-      this.inDateTime = this.changeDateFormat(item.inDateTime);
+      this.$set(this.$data, 'inDateTime', this.changeDateFormat(item.inDateTime))
+      // this.inDateTime = this.changeDateFormat(item.inDateTime);
       this.anesStartTime = this.changeDateFormat(item.anesStartTime);
       this.startDateTime = this.changeDateFormat(item.startDateTime);
       this.endDateTime = this.changeDateFormat(item.endDateTime);
@@ -1552,6 +1554,7 @@ export default {
     },
     //修改病人手术状态
     changeStatus(status, timeType, event) {
+      debugger
       this.nextDATA = '';
       let TrueData = false;
       if (timeType == 'inDateTime') {
@@ -1582,7 +1585,8 @@ export default {
           patientId: this.lockedPatientInfo.patientId,
           visitId: this.lockedPatientInfo.visitId,
           operId: this.lockedPatientInfo.operId,
-          inDateTime: this.datetimeLocalToDate(this.inDateTime),
+          // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+          inDateTime: this.inDateTime,
           anesStartTime: this.datetimeLocalToDate(this.anesStartTime),
           startDateTime: this.datetimeLocalToDate(this.startDateTime),
           endDateTime: this.datetimeLocalToDate(this.endDateTime),
@@ -2081,6 +2085,7 @@ export default {
     personStyle,
     jzRegisterContent,
     myDatepicker,
+    dateTime,
 
   },
 }
@@ -2506,6 +2511,17 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
