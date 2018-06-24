@@ -8,8 +8,8 @@
         <input type="text" v-model="dateTime" :style="{width:width-20+'px'}" style="border: none;" @focus="showDateTime">
       </div>
       <div style="position: absolute;right:0px;top:0px;z-index: 3;pointer-events:none;">
-        <svg viewBox="0 0 1024 1024" width="20" height="20">
-            <polygon points="220,100 300,210 170,250" style="fill:#000;"/>
+        <svg data-v-fc154ec6="" viewBox="0 0 1024 1024" width="19" height="20">
+          <polygon data-v-fc154ec6="" points="300,200 580,650 860,200" style="fill: rgb(0, 0, 0);"></polygon>
         </svg>
       </div>
       <div style="position: absolute;left:0px;top:0px;z-index: 2;" v-if="timeShow">
