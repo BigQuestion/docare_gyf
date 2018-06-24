@@ -83,4 +83,8 @@ export default {
   display: none;
 }
 
+input {
+  height: 20px;
+}
+
 </style>

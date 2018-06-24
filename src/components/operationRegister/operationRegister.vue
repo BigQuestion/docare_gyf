@@ -1,6 +1,6 @@
 <template>
   <div class="dictionaries">
-    <div style="background-color: rgb(227, 239, 255);width: 1214px;z-index: 11;cursor: auto;position: absolute;top: calc(50% - 305px);height: 610px;left: calc(50% - 607px);border:2px solid rgb(54,157,200);">
+    <div style="background-color: rgb(227, 239, 255);width: 1214px;z-index: 11;cursor: auto;position: absolute;top: calc(50% - 305px);height: 610px;left: calc(50% - 607px);border:2px solid rgb(54,157,200);z-index: 1;">
       <div class="load_top" style="height: 30px;background-color: rgb(54,157,200);line-height: 30px;">
         <div>术中登记</div>
         <div @click="aboutNone" class="top_active">X</div>
@@ -9,7 +9,7 @@
         <span style="font-size: 14px;">麻醉事件</span>
       </div>
       <div style="height: 329px;display:flex;border-bottom:3px solid #7774da;">
-        <div style="width:80%;">
+        <div style="width:80%;font-style: background-color:white;">
           <div style="width: 100%;border:1px solid #222;overflow-y: auto;height:270px;box-sizing: border-box;">
             <div style="display: flex;">
               <div style="border:1px solid rgb(177,207,243);background-color:#fff;box-sizing:border-box;font-size:12px;" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
@@ -22,7 +22,7 @@
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
                   <div style="border:1px solid #a9a9a9;height:20px;" v-if="cl.timeEdit">
                     <!-- <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
-                    <dateTime @change="getChangeValue(item)" style="height:20px;border:0;display:block;font-size:12px;" :width="cl.width-2" v-model="item[cl.fieldObj]"></dateTime>
+                    <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width" v-model="item[cl.fieldObj]"></dateTime>
                   </div>
                   <div v-else-if="cl.isChixu">
                     <select :class="{selectchooseItem:item.thooseItem}" style="height:22px;width:65px;display:block;font-size:12px;" v-model="item[cl.fieldObj]" :style="{width:(cl.width)+'px'}" v-on:change="getChangeValue(item)">
@@ -55,7 +55,7 @@
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'">
                   <div v-if="cl.timeEdit" style="border:1px solid #a9a9a9;">
                     <!-- <input @change="getChangeValue(item)" style="height:20px;border:0;display:block;font-size:12px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
-                    <dateTime v-model="item[cl.fieldObj]" :width="cl.width-2"></dateTime>
+                    <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width" v-model="item[cl.fieldObj]"></dateTime>
                   </div>
                   <div v-else-if="cl.isChixu">
                     <select style="height:22px;width:65px;border:0;display:block;font-size:12px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)" :style="{width:(cl.width)+'px'}">
@@ -279,7 +279,7 @@ export default {
         {
           title: "事件名称",
           fieldObj: "ITEM_NAME",
-          width: 190
+          width: 260
         },
         {
           title: "途径",
