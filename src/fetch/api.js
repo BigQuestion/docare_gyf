@@ -34,8 +34,19 @@ export function fetch(url, params, config) {
       })
       .then(function(response) {
         resolve(response.data);
+        // if (!config.noAlert) {
+        //   if (response.data.success) {
+        //     alert("操作成功")
+        //   } else if (response.data.success == false) {
+        //     alert("操作失败")
+        //   } else {
+
+        //   }
+        // }
+
       }).catch(function(error) {
         reject(error);
+        alert("网络请求失败")
       });
   })
 }
@@ -392,7 +403,7 @@ export default {
    * 
    */
   updateMedPatientMonitorDatas(params, config) {
-    return fetch('medicalsystem/rest/medSignData/updateMedPatientMonitorDatas', params)
+    return fetch('medicalsystem/rest/medSignData/updateMedPatientMonitorDatas', params, config)
   },
 
   /**

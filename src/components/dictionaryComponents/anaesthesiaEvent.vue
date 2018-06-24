@@ -10,18 +10,24 @@
         </ul>
       </div>
       <!-- 显示详细内容 -->
-      <div style="width: 70%;height:100%;margin-top:5px;overflow-y: auto;">
-        <div style="display: flex;margin-left: 10px;width:2592px;">
-          <div class="topList" v-for="cell in contentConfig">{{cell.text}}</div>
+      <div style="width: 70%;height:100%;margin-top:5px;position: relative;">
+        <div ref="headScroll" style="width: 100%;position: absolute;left:0;top:0;z-index: 10;overflow: hidden; ">
+          <div style="display: flex;margin-left: 10px;width:2592px;">
+            <div class="topList" v-for="cell in contentConfig">{{cell.text}}</div>
+          </div>
         </div>
-        <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
-          <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177,207,243);">
-            <div style="height:100%;width:160px;" v-if="cl.status=='inable'">
-              <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @keyup="chan(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
-              <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" @click="valueWriteAble(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
-            </div>
-            <div style="width:160px;" v-if="cl.status!='inable'">
-              {{list[cl.value]}}
+        <div ref="contentScroll" style="height:calc(100% - 23px);width: 100%;overflow-y: auto;position: absolute;left:0;top:23px;">
+          <div style="width:2592px;">
+            <div v-for="list in commonTypeList" style="display: flex;margin-left: 10px;" @click="getItem(list)">
+              <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177,207,243);">
+                <div style="height:100%;width:160px;" v-if="cl.status=='inable'">
+                  <input v-if="list.writeAble" type="text" v-model="list[cl.value]" @blur="inputBlur(list)" @keyup="chan(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
+                  <input v-if="!list.writeAble" type="text" v-model="list[cl.value]" @click="valueWriteAble(list)" style="display:block;width:100%;border:0;height:100%;outline:none;">
+                </div>
+                <div style="width:160px;" v-if="cl.status!='inable'">
+                  {{list[cl.value]}}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -224,8 +230,6 @@ export default {
               this.getTypeDetail(this.tempTypeItem);
             });
       } else {
-        console.log('这是修改操作')
-        console.log(this.changeData)
         this.api.updateMedAnesthesiaEventOpenBatch(this.changeData)
           .then(
             res => {
@@ -257,7 +261,17 @@ export default {
       this.obj = item;
       this.isDelete = false;
     },
-  }
+
+  },
+  mounted() {
+    //滚动条监听
+    let conDom = this.$refs.contentScroll;
+    let headDom = this.$refs.headScroll;
+    conDom.onscroll = () => {
+      headDom.scrollLeft = conDom.scrollLeft
+
+    }
+  },
 }
 
 </script>

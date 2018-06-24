@@ -1077,7 +1077,6 @@ export default {
       }, 1000);
     },
     lockedPatient(item) {
-      debugger
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
@@ -1559,7 +1558,6 @@ export default {
     },
     //修改病人手术状态
     changeStatus(status, timeType, event) {
-      debugger
       this.nextDATA = '';
       let TrueData = false;
       if (timeType == 'inDateTime') {
@@ -2516,6 +2514,7 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
 
 
 

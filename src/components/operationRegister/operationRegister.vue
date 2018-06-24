@@ -8,7 +8,7 @@
       <div style="height: 20px;width: calc(100% - 15px);padding-left: 15px;">
         <span style="font-size: 14px;">麻醉事件</span>
       </div>
-      <div style="height: 329px;display:flex;border-bottom:3px solid #7774da;">
+      <div style="height: 349px;display:flex;border-bottom:3px solid #7774da;">
         <div style="width:80%;">
           <div style="display: flex;">
             <div style="border:1px solid rgb(177,207,243);background-color:#fff;box-sizing:border-box;font-size:12px;" :style="{minWidth:cell.width+'px'}" v-for="cell in tbconfig">
@@ -20,7 +20,7 @@
               <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @click="clickItem(item)">
                 <!-- 判断是否为事件 -->
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
-                  <div style="border:1px solid #a9a9a9;height:20px;" v-if="cl.timeEdit">
+                  <div style="height:20px;" v-if="cl.timeEdit">
                     <!-- <input style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
                     <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width-2" v-model="item[cl.fieldObj]"></dateTime>
                   </div>
@@ -35,27 +35,26 @@
                     </select>
                   </div>
                   <div class="hideselect" v-else style="border:1px solid #a9a9a9;box-sizing:border-box;height:100%;" :style="{width:(cl.width)+'px'}">
-                    <select :class="{selectchooseItem:item.thooseItem}" v-if="cl.fieldObj == 'ADMINISTRATOR'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                    <select :class="{selectchooseItem:item.thooseItem}" v-if="cl.fieldObj == 'ADMINISTRATOR'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
                       <option style="background-color: white;" v-for="(item,index) in roadList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
-                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'CONCENTRATION_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'CONCENTRATION_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
                       <option style="background-color: white;" v-for="(item,index) in concentrationList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
-                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'SPEED_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'SPEED_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
                       <option style="background-color: white;" v-for="(item,index) in speedUnitList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
-                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;" @change="getChangeValue(item)">
+                    <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
                       <option style="background-color: white;" v-for="(item,index) in dosageUnitsList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
                     <input v-else style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
-                    <!-- <select-module :object="item" :value="item[cl.fieldObj]"></select-module> -->
                   </div>
                 </div>
                 <!-- 判断是否为事件 -->
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS=='1'" class="hideselect">
-                  <div v-if="cl.timeEdit" style="border:1px solid #a9a9a9;">
+                  <div v-if="cl.timeEdit">
                     <!-- <input @change="getChangeValue(item)" style="height:20px;border:0;display:block;font-size:12px;" type="datetime-local" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]"> -->
-                    <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width" v-model="item[cl.fieldObj]"></dateTime>
+                    <dateTime :class="{selectchooseItem:item.thooseItem}" @change="getChangeValue(item)" style="border:0;display:block;font-size:12px;" :width="cl.width-2" v-model="item[cl.fieldObj]"></dateTime>
                   </div>
                   <div v-else-if="cl.isChixu">
                     <select style="height:22px;width:65px;border:0;display:block;font-size:12px;" disabled="true" v-model="item[cl.fieldObj]" v-on:change="getChangeValue(item)" :style="{width:(cl.width)+'px'}">
@@ -144,11 +143,41 @@
       <div style="height: 25px;padding-left: 15px;">
         <span style="line-height: 25px;font-size:14px;">体征数据</span>
       </div>
-      <div style="height: 165px;overflow:auto;background-color:#fff;font-size:12px;" ref="signContent">
-        <div style="display: flex;padding-left: 10px;">
+      <div style="height: 145px;background-color:#fff;font-size:12px;position: relative;width: 1214px;" ref="signContent">
+        <!-- 名称 -->
+        <div style="position: absolute;top: 0;left:10px;width: 100px;">
+          <div style="width: 100px;height: 18px;font-weight: 600">名称</div>
+        </div>
+        <!-- 上部时间栏目 -->
+        <div ref="timeScroll" style="width: calc(100% - 110px);position: absolute;top:0;left: 100px;overflow:hidden;">
+          <div class="flex" :style="{width: signdataList.length*60+'px'}">
+            <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
+              <div style="width: 60px;height: 18px;" :title="sItem.time">
+                {{sItem.time | discount}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 左侧名称栏目 -->
+        <div ref="headTitleScroll" style="position: absolute;top: 18px;left: 10px;;width: 100px;overflow: hidden;" :style="{height:(signdataList.length*60>1114?117:127)+'px'}">
+          <div :style="{height:itemNameList.length*22+'px'}">
+            <div style="height: 22px;width: 100px;font-weight: 600" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
+          </div>
+        </div>
+        <!-- 数据内容栏目 -->
+        <div ref="dataScroll" style="position: absolute;top: 18px;left: 100px;width: calc(100% - 100px);height: 127px;overflow: auto">
+          <div class="flex">
+            <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
+              <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
+                <input :value="secItem" style="width: 56px;" @change="signChange($event,index,sItem)">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--  <div style="display: flex;padding-left: 10px;">
           <div>
             <div style="width: 100px;">名称</div>
-            <div style="height: 22px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
+            <div style="height: 22px;width: 100px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
           </div>
           <div class="flex">
             <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
@@ -160,7 +189,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <!-- <div class="flex">
                 <div v-for="(title,index) in titleArr">
                   <div v-if="index==0" style="width: 100px;">{{title}}</div>
@@ -390,14 +419,6 @@ export default {
       this.api.selectMedAnesthesiaEventList(params)
         .then(
           res => {
-            for (var i = 0; i < res.list.length; i++) {
-              if (res.list[i].START_TIME) {
-                res.list[i].START_TIME = this.changeDateFormat(res.list[i].START_TIME);
-              }
-              if (res.list[i].ENDDATE) {
-                res.list[i].ENDDATE = this.changeDateFormat(res.list[i].ENDDATE);
-              }
-            }
             for (var a = 0; a < res.list.length; a++) {
               this.$set(res.list[a], 'thooseItem', false);
             }
@@ -476,7 +497,6 @@ export default {
         addFlag: true,
         DURATIVE_INDICATOR: 0,
       };
-      debugger
       this.eventList.push(obj);
       this.$nextTick(() => {
         var div = this.$refs.eventContent
@@ -535,8 +555,8 @@ export default {
             dosageUnits: list[i].DOSAGE_UNITS,
             dosage: list[i].DOSAGE,
             administrator: list[i].ADMINISTRATOR,
-            startTime: this.datetimeLocalToDate(list[i].START_TIME),
-            endDate: this.datetimeLocalToDate(list[i].ENDDATE),
+            startTime: list[i].START_TIME,
+            endDate: list[i].ENDDATE,
             eventNo: 0,
             durativeIndicator: list[i].DURATIVE_INDICATOR,
             concentration: list[i].CONCENTRATION,
@@ -687,7 +707,6 @@ export default {
     },
     //获取改变的值
     getChangeValue(item) {
-      debugger
       let params = {}
       if (item.addFlag) {
         params = {
@@ -1057,6 +1076,15 @@ export default {
     this.allMedAnesthesiaEventType();
     this.getSignName();
     this.getRoadList();
+    //滚动条监听
+    let timeScroll = this.$refs.timeScroll;
+    let headTitleScroll = this.$refs.headTitleScroll;
+    let dataScroll = this.$refs.dataScroll;
+    dataScroll.onscroll = () => {
+      timeScroll.scrollLeft = dataScroll.scrollLeft
+      headTitleScroll.scrollTop = dataScroll.scrollTop
+
+    }
   }
 }
 
@@ -1130,6 +1158,20 @@ button {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #E3E3E3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C1C1C1;
+  border-radius: 2px;
 }
 
 </style>
