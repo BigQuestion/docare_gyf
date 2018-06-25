@@ -91,12 +91,14 @@ export default {
       var timeArray = [];
       let startMinTime = this.config.startMinTime
       let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
-      if (this.config.pageOper == 0 && startMinTime) {
+      let pageOper = this.config.pageOper
+
+      if (pageOper == 0 && startMinTime) {
         for (var i = 0; i <= this.columns; i++) {
 
           timeArray.push(new Date(new Date(this.config.initTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
-      } else if (!startMinTime && this.config.pageOper == 0) {
+      } else if (!startMinTime && pageOper == 0) {
         for (var i = 0; i <= this.columns; i++) {
           timeArray.push(new Date(new Date(defaultTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
@@ -107,12 +109,13 @@ export default {
         }
       }
       this.xTimeArray = timeArray;
-      this.$nextTick(function() {
-        this.getLineXy();
-        if (this.page == false) {
-          this.selectMedAnesthesiaEventList();
-        }
-      })
+      this.getLineXy();
+      // this.$nextTick(function() {
+      // this.getLineXy();
+      if (this.page == false) {
+        this.selectMedAnesthesiaEventList();
+      }
+      // })
 
       return
       var m = this.tbMin; //加几分钟
@@ -157,6 +160,8 @@ export default {
     //加载病人麻醉事件里面麻醉用药数据
     selectMedAnesthesiaEventList() {
       //this.timeControl(this.maxTime);
+      this.dataArray = []
+      this.xArray = []
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight;
@@ -172,8 +177,6 @@ export default {
       if (this.page) {
         return;
       }
-      var m = 0;
-      this.dataArray = [];
       this.api.selectMedAnesthesiaEventList(params)
         .then(res => {
           var list = res.list;
@@ -291,60 +294,65 @@ export default {
       var svg = d3.selectAll(".testprint")
       svg.remove();
       this.xTimeArray = [];
-      if (this.config.pageOper == 0) {
-        this.config.pageNum = 1;
-        this.xTimeInit();
-      }
-      if (this.config.pageOper == -1) {
-        this.timeControl(this.config.initTime)
-        let m = this.config.initTime.getTime() - 250 * 60 * 1000;
-        // this.timeControl(new Date(m));
-        var list = [];
-        list = this.percentPageData;
-
-        for (var i = 0; i < list.length; i++) {
-          if (this.config.pagePercentNum != 1 && list[i].PATIENT_ID) {
-            list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-          }
+      this.$nextTick(function() {
+        if (this.config.pageOper == 0) {
+          this.config.pageNum = 1;
+          this.xTimeInit();
         }
-      }
-      if (this.config.pageOper == 1) {
-        let arrList = this.dataArray;
-        this.percentPageData = arrList;
-        var arrayList = [];
-        var list = this.dataArray;
-        for (var i = 0; i < list.length; i++) {
-          if (list[i].PATIENT_ID) {
-            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+        if (this.config.pageOper == -1) {
+          this.timeControl(this.config.initTime)
+          return
+          let m = this.config.initTime.getTime() - 250 * 60 * 1000;
+          // this.timeControl(new Date(m));
+          var list = [];
+          list = this.percentPageData;
 
-              if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
-                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {}
-            } else {
-              if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
-                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {
-
-              }
+          for (var i = 0; i < list.length; i++) {
+            if (this.config.pagePercentNum != 1 && list[i].PATIENT_ID) {
+              list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
             }
           }
         }
-        this.timeControl(this.config.maxTime)
-      }
+        if (this.config.pageOper == 1) {
+          this.timeControl(this.config.maxTime)
+          return
+          let arrList = this.dataArray;
+          this.percentPageData = arrList;
+          var arrayList = [];
+          var list = this.dataArray;
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].PATIENT_ID) {
+              if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
+                if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
+                  list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
+                  arrayList.push(list[i]);
+                } else {}
+              } else {
+                if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
+                  list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
+                  arrayList.push(list[i]);
+                } else {
+
+                }
+              }
+            }
+          }
+          this.timeControl(this.config.maxTime)
+        }
+      })
     },
     //处理数据进行划线
     dataOperChange(list) {
-      var svg = d3.selectAll(".test")
+      var svg = d3.selectAll(".testprint")
       svg.remove();
+      this.xArray = [];
+      this.dataArray = [];
+      let dataArr = []
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight,
         m = 0;
-      this.xArray = [];
-      this.dataArray = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].START_TIME) {
           if (i == this.rows)
