@@ -430,7 +430,6 @@ export default {
             }
             this.api.selectAllRoomNo(params).then(
                 res => {
-                    // this.roomId = res;
                     if (res.length > 1) {
                         for (var q = 1; q < res.length; q++) {
                             this.roomId.push({
@@ -459,7 +458,7 @@ export default {
                             })
                         }
                     }
-                    console.log(this.roomId)
+                    // console.log(this.roomId)
                 }
             )
         },
