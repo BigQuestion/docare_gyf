@@ -16,7 +16,7 @@
             <div class="flex1 topButton" :class="{clickClass:clickDataSix}" @click="HISVue()">
                 <span :class="{clickClass:clickDataSix}">5</span>HIS同步</div>
             <div class="flex1 topButton" @click="exit()">
-                <span>6</span>退出系统</div>
+                <span>6</span>返回列表</div>
         </div>
         <operationSchedul v-if="operationSchedul"></operationSchedul>
         <surgicalApplication v-if="surgicalApplication"></surgicalApplication>
@@ -149,9 +149,9 @@ export default {
             this.clickDataSix = true;
         },
         exit() {
-            if (confirm("是否要退出系统？")) {
+            if (confirm("是否要返回页面选择？")) {
                 this.$router.push({
-                    path: 'login'
+                    path: 'menu'
                 })
             } else {
 

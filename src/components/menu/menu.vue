@@ -11,7 +11,7 @@
                     <span>麻醉手术系统</span>
                 </div>
                 <div @click="goUrl('/statistics')" class="systemButton" style="left:360px;top:0;">
-                    <span >工作量统计</span>
+                    <span>工作量统计</span>
                 </div>
                 <div @click="goUrl('/statistics')" class="systemButton" style="left:540px;bottom:0;">
                     <span>用户管理</span>
@@ -19,8 +19,8 @@
                 <div @click="goUrl('/formDesigner')" class="systemButton" style="left:720px;top:0;">
                     <span>表单设计器</span>
                 </div>
-                <div @click="goUrl('/drawTable')" class="systemButton" style="left:900px;bottom:0;">
-                    <span>表格组件</span>
+                <div @click="exitSystem()" class="systemButton" style="left:900px;bottom:0;">
+                    <span>退出系统</span>
                 </div>
             </div>
 
@@ -42,6 +42,14 @@ export default {
                 {
                     path: url
                 })
+        },
+        // 退出系统
+        exitSystem() {
+            if (confirm("是否要退出系统？")) {
+                this.$router.push({
+                    path: 'login'
+                })
+            } else { }
         },
     },
     mounted() {
@@ -80,7 +88,7 @@ export default {
     left: 0;
 }
 
-.surround{
+.surround {
     width: 1050px;
     height: 100%;
     margin: 0 auto;
@@ -108,7 +116,7 @@ export default {
     /* background-color: #00242D; */
 }
 
-.copyRight{
+.copyRight {
     color: #fff;
     font-size: 12px;
     text-align: center;
