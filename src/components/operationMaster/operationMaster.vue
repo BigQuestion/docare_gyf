@@ -1587,21 +1587,99 @@ export default {
         }
       }
       if (TrueData) {
-        let params = {
-          patientId: this.lockedPatientInfo.patientId,
-          visitId: this.lockedPatientInfo.visitId,
-          operId: this.lockedPatientInfo.operId,
-          // inDateTime: this.datetimeLocalToDate(this.inDateTime),
-          inDateTime: this.inDateTime,
-          anesStartTime: this.anesStartTime,
-          startDateTime: this.startDateTime,
-          endDateTime: this.endDateTime,
-          anesEndTime: this.anesEndTime,
-          outDateTime: this.outDateTime,
-          operStatus: status,
-          operatingRoom: this.lockedPatientInfo.operatingRoom,
-          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+        let params = {}
+        if (this.inDateTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
         }
+        if (this.anesStartTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+
+        if (this.startDateTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            startDateTime: this.startDateTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+
+        if (this.endDateTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            startDateTime: this.startDateTime,
+            endDateTime: this.endDateTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+
+        if (this.anesEndTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            startDateTime: this.startDateTime,
+            endDateTime: this.endDateTime,
+            anesEndTime: this.anesEndTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+        if (this.outDateTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            startDateTime: this.startDateTime,
+            endDateTime: this.endDateTime,
+            anesEndTime: this.anesEndTime,
+            outDateTime: this.outDateTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+
+
+
         this.nextDATA = params;
         this.api.changeOperationStatus(params)
           .then(
@@ -2532,6 +2610,9 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
 
 
 
