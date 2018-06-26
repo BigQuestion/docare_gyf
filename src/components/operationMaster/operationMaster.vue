@@ -1593,11 +1593,11 @@ export default {
           operId: this.lockedPatientInfo.operId,
           // inDateTime: this.datetimeLocalToDate(this.inDateTime),
           inDateTime: this.inDateTime,
-          anesStartTime: this.datetimeLocalToDate(this.anesStartTime),
-          startDateTime: this.datetimeLocalToDate(this.startDateTime),
-          endDateTime: this.datetimeLocalToDate(this.endDateTime),
-          anesEndTime: this.datetimeLocalToDate(this.anesEndTime),
-          outDateTime: this.datetimeLocalToDate(this.outDateTime),
+          anesStartTime: this.anesStartTime,
+          startDateTime: this.startDateTime,
+          endDateTime: this.endDateTime,
+          anesEndTime: this.anesEndTime,
+          outDateTime: this.outDateTime,
           operStatus: status,
           operatingRoom: this.lockedPatientInfo.operatingRoom,
           operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
@@ -2532,6 +2532,8 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
 
 
 
