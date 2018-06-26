@@ -304,7 +304,6 @@ export default {
                 t2 = 0;
               }
             }
-            console.log(list[i])
             let x1 = t1 / this.tbMin * (this.svgWidth / this.columns)
             let x2 = t2 / this.tbMin * (this.svgWidth / this.columns)
             let y1

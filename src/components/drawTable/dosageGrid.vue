@@ -126,7 +126,7 @@ export default {
             var list = res.list;
             this.dataListOperFun(list)
             this.getOutList()
-            this.setTimeId = setTimeout(_ => this.getData(), this.config.timeSet)
+            // this.setTimeId = setTimeout(_ => this.getData(), this.config.timeSet)
           })
 
       }

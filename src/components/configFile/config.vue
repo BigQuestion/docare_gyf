@@ -14,7 +14,7 @@ const patientMaxTime = ''; //病人时间中最久的时间
 const startMinTime = ''; //表格最开始时间
 
 const OperatingData = '';
-const timeSet = 300000; //表格数据定时刷新时间 ms
+const timeSet = 6000000; //表格数据定时刷新时间 ms
 
 export default {
   userId,

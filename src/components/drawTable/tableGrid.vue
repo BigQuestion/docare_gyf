@@ -235,7 +235,7 @@ export default {
           if (res.list.length > 0) {
             this.dataOperChange(res.list);
           }
-          this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+          // this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
 
         });
     },

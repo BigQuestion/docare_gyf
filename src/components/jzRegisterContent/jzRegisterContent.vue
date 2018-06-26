@@ -370,11 +370,11 @@ export default {
     this.deptCode = this.config.wardCode
     this.operMasterTime = this.changeDateFormat(new Date().Format('yyyy-MM-dd hh:mm'));
     this.getAllRoomNo();
-    this.$refs.test.init({
-      loadedFun: this.getUsers,
-      chooseAction: this.chooseOperatorA,
-      fieldName: 'USER_NAME'
-    })
+    // this.$refs.test.init({
+    //   loadedFun: this.getUsers,
+    //   chooseAction: this.chooseOperatorA,
+    //   fieldName: 'USER_NAME'
+    // })
     // this.$refs.xshs.init({
     //   loadedFun: this.getxshs,
     //   chooseAction: this.choosexshs,

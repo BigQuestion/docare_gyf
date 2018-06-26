@@ -430,11 +430,12 @@ export default {
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
       }
+
       var list = this.signNameLisg;
       let arryList = this.signdataList;
       let sortArray = [];
       for (var i = 0; i < arryList.length; i++) {
-        if (new Date(arryList[i].time) > this.config.initTime) {
+        if (new Date(arryList[i].time) > new Date(this.config.initTime)) {
           sortArray.push(arryList[i])
         }
 
