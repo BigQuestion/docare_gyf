@@ -110,12 +110,9 @@ export default {
       }
       this.xTimeArray = timeArray;
       this.getLineXy();
-      // this.$nextTick(function() {
-      // this.getLineXy();
       if (this.page == false) {
         this.selectMedAnesthesiaEventList();
       }
-      // })
 
       return
       var m = this.tbMin; //加几分钟
@@ -130,8 +127,6 @@ export default {
         timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
       }
       this.xTimeArray = timeArray;
-
-
       this.$nextTick(function() {
         this.xTimeArray = timeArray; // => '更新完成'
       })
@@ -181,7 +176,6 @@ export default {
         .then(res => {
           var list = res.list;
           this.dataOperChange(list);
-          return false;
         });
     },
     //计算时间差分钟
@@ -291,56 +285,56 @@ export default {
     },
     //翻页
     pageChange() {
-      var svg = d3.selectAll(".testprint")
-      svg.remove();
-      this.xTimeArray = [];
-      this.$nextTick(function() {
-        if (this.config.pageOper == 0) {
-          this.config.pageNum = 1;
-          this.xTimeInit();
-        }
-        if (this.config.pageOper == -1) {
-          this.timeControl(this.config.initTime)
-          return
-          let m = this.config.initTime.getTime() - 250 * 60 * 1000;
-          // this.timeControl(new Date(m));
-          var list = [];
-          list = this.percentPageData;
+      // var svg = d3.selectAll(".testprint")
+      // svg.remove();
+      // this.xTimeArray = [];
+      // this.$nextTick(function() {
+      if (this.config.pageOper == 0) {
+        this.config.pageNum = 1;
+        this.xTimeInit();
+      }
+      if (this.config.pageOper == -1) {
+        this.timeControl(this.config.initTime)
+        return
+        let m = this.config.initTime.getTime() - 250 * 60 * 1000;
+        // this.timeControl(new Date(m));
+        var list = [];
+        list = this.percentPageData;
 
-          for (var i = 0; i < list.length; i++) {
-            if (this.config.pagePercentNum != 1 && list[i].PATIENT_ID) {
-              list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-            }
+        for (var i = 0; i < list.length; i++) {
+          if (this.config.pagePercentNum != 1 && list[i].PATIENT_ID) {
+            list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
           }
         }
-        if (this.config.pageOper == 1) {
-          this.timeControl(this.config.maxTime)
-          return
-          let arrList = this.dataArray;
-          this.percentPageData = arrList;
-          var arrayList = [];
-          var list = this.dataArray;
-          for (var i = 0; i < list.length; i++) {
-            if (list[i].PATIENT_ID) {
-              if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+      }
+      if (this.config.pageOper == 1) {
+        this.timeControl(this.config.maxTime)
+        return
+        let arrList = this.dataArray;
+        this.percentPageData = arrList;
+        var arrayList = [];
+        var list = this.dataArray;
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].PATIENT_ID) {
+            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
 
-                if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
-                  list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
-                  arrayList.push(list[i]);
-                } else {}
+              if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
+                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
+              } else {}
+            } else {
+              if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
+                list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
+                arrayList.push(list[i]);
               } else {
-                if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
-                  list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
-                  arrayList.push(list[i]);
-                } else {
 
-                }
               }
             }
           }
-          this.timeControl(this.config.maxTime)
         }
-      })
+        this.timeControl(this.config.maxTime)
+      }
+      // })
     },
     //处理数据进行划线
     dataOperChange(list) {
@@ -433,6 +427,7 @@ export default {
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
             }
+
 
             if (flag) {
               this.xArray.push({

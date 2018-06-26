@@ -469,10 +469,8 @@ export default {
               value: "",
               time: sortArray[j].time,
               itemData: list[i]
-
             })
           }
-
         }
         newArray.push(arr1)
       }
