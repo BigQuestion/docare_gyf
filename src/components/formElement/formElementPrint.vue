@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="value.type=='text'" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt',fontSize:value.fontSize+'pt'}" style="min-width: 20px;min-height: 20px;">
+    <div v-if="value.type=='text'" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt',fontSize:value.fontSize*0.75+'pt'}" style="min-width: 20px;min-height: 20px;">
       {{value.value}}
     </div>
-    <div v-if="value.type=='title'" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt',fontSize:value.fontSize+'pt'}" style="min-width: 20px;min-height: 20px;">
+    <div v-if="value.type=='title'" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt',fontSize:value.fontSize*0.75+'pt'}" style="min-width: 20px;min-height: 20px;">
       {{value.value}}
     </div>
     <div v-if="value.type=='input'">
@@ -61,7 +61,7 @@
       <appliances :page="isPage.isPage" :object="value"></appliances>
     </div>
     <div v-if="value.type=='specialSymbol'">
-      <specialSymbol :page="isPage.isPage" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt'}"></specialSymbol>
+      <specialSymbol :page="isPage.isPage" :object="value" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt'}"></specialSymbol>
     </div>
   </div>
 </template>

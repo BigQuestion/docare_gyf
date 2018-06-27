@@ -10,7 +10,7 @@
                         <p style="color:DarkGreen">⊙手术开始</p>
                         <p style="color:red">X手术结束</p>
                         <p style="color:red">ⓧ麻醉结束</p> -->
-        <div v-for="item in eventTypeList">
+        <div v-for="item in eventTypeList" :style="{fontSize:object.fontSize*0.75+'pt'}">
             <p v-if="item == 71" style="color:Crimson">△中心静脉压</p>
             <p v-else-if="item == 89" style="color:Blue">∨无创收缩压</p>
             <p v-else-if="item == 90" style="color:Blue">∧无创舒张压</p>
@@ -53,8 +53,9 @@ export default {
                 });
         }
     },
-    props: [ 'page'],
+    props: [ 'page','object'],
     mounted() {
+        console.log(this.object)
         if (this.page == false) {
             this.getList();
         }
