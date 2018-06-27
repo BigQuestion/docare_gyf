@@ -79,6 +79,7 @@ export default {
       this.svgObj = d3.select("#dosageprint")
     },
     getData() {
+      this.xArray = [];
       this.dataArray = [];
       for (var i = 0; i < this.forRows; i++) {
         this.dataArray.push(i)
@@ -88,7 +89,7 @@ export default {
           patientId: this.config.userInfo.patientId,
           operId: this.config.userInfo.operId,
           visitId: this.config.userInfo.visitId,
-          itemClass: 3
+          itemClass: "3B"
         }
 
         this.api.selectMedAnesthesiaEventList(params)
@@ -252,7 +253,7 @@ export default {
     //数据处理
     dataListOperFun(list) {
       var m = 0;
-      this.xArray = [];
+      // this.xArray = [];
       this.dataArray = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].START_TIME) {
@@ -299,7 +300,7 @@ export default {
               } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
               } else {
-                list[i].DURATIVE_INDICATOR = 0;
+                // list[i].DURATIVE_INDICATOR = 0;
                 t2 = 0;
               }
             }

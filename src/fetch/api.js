@@ -46,7 +46,7 @@ export function fetch(url, params, config) {
 
       }).catch(function(error) {
         reject(error);
-        alert("网络请求失败")
+        // alert("网络请求失败")
       });
   })
 }

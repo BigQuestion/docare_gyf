@@ -10,16 +10,16 @@
     </svg>
     <!-- 显示出量的数据 -->
     <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{left: item.obj.toleft-5+'px',top:index*20+120+'px'}" v-for="(item,index) in outputList">
-      <span style="padding: 0 2px 0 0px;" v-if="item.obj.DOSAGE">{{item.obj.DOSAGE}}</span>
+      <span @mouseenter="showTipInfo(item,$event)" style="padding: 0 2px 0 0px;" v-if="item.obj.DOSAGE">{{item.obj.DOSAGE}}</span>
     </div>
-    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+1+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
       <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
     </div>
-    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+1+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
       <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
     </div>
     <div v-if="tipView">
-      <div style="position: absolute;max-width:300px;min-width:220px;width:auto;background-color: white;border: 0.5px solid;font-size: 12px;z-index: 10;padding: 3px;" :style="{ top:tipTop+'px',left:tipLeft+'px'}">
+      <div style="position: absolute;max-width:300px;min-width:220px;width:auto;background-color: white;border: 0.5px solid;font-size: 12px;z-index: 10;padding: 3px;" :style="{ top:tipTop+1+'px',left:tipLeft+'px'}">
         <div>
           {{dataObj.ITEM_NAME}}({{dataObj.DOSAGE_UNITS}})
         </div>
@@ -126,7 +126,7 @@ export default {
             var list = res.list;
             this.dataListOperFun(list)
             this.getOutList()
-            this.setTimeId = setTimeout(_ => this.getData(), this.config.timeSet)
+            // this.setTimeId = setTimeout(_ => this.getData(), this.config.timeSet)
           })
 
       }
@@ -290,9 +290,8 @@ export default {
       this.dataObj = '';
     },
     mouseMoveInfo(item, ev) {
-      item.obj.nowTime = this.getTime();
       var gWidth = this.svgWidth / this.columns;
-      this.$set(this.dataObj, "dataTime", this.getTime());
+      // this.$set(this.dataObj, "dataTime", this.getTime());
       //var ev = ev || event;
       var offX = ev.offsetX + item.x1; //横坐标值
       var m = Math.round(offX / gWidth * 5);
@@ -355,7 +354,7 @@ export default {
               } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
                 t2 = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
               } else {
-                list[i].DURATIVE_INDICATOR = 0;
+                // list[i].DURATIVE_INDICATOR = 0;
                 t2 = 0;
               }
             }
@@ -383,7 +382,7 @@ export default {
               }
             }
             list[i].vStartTime = '';
-            list[i].dataTime = this.getTime();
+            list[i].dataTime = list[i].START_TIME;
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
             }

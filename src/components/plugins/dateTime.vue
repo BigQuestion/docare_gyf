@@ -2,7 +2,7 @@
   <div>
     <div style="position:relative;height:21px;border:1px solid #222;" :style="{width:width+'px'}">
       <div style="z-index: 0;position: absolute;left:0px;top:1px;">
-        <input type="date" class="timePicker" v-model="date" :style="{width:width+'px'}" style="border: none;display:block;" @focus="showDateTime" @change="hideDateTime">
+        <input type="date" class="timePicker" v-model="date" :style="{width:width-2+'px'}" style="border: none;display:block;" @focus="showDateTime" @change="hideDateTime">
       </div>
       <div style="position: absolute;left:0px;top:1px;z-index: 1;" v-if="dateTimeShow">
         <input type="text" v-model="dateTime" :style="{width:width-20+'px'}" style="border: none;display:block;" @focus="showDateTime">
@@ -30,6 +30,7 @@ export default {
       timeShow: false,
       tempValue: '', //存放传入进来的值
       state: 0, //0代表传入值为'' 1代表传入的值不为空
+      titleTime: '',
     }
   },
   watch: {
@@ -53,6 +54,7 @@ export default {
       this.timeShow = false
       this.myValue = new Date(this.date + " " + this.time)
       let nowTime = this.myValue
+      // this.titleTime = nowTime.Format("yyyy-MM-dd hh:mm")
       this.dateTime = this.myValue.Format("MM-dd hh:mm")
       this.date = this.myValue.Format("yyyy-MM-dd")
       this.time = this.myValue.Format("hh:mm")

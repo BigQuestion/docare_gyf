@@ -90,16 +90,16 @@
           <div style="width: 70px;">麻醉医生</div>
           <div>
             <input v-model="jzInfo.anesthesiaDoctor" style="width: 80px;" @dblclick="anesthesiaDoctorOpenView" readonly="readonly">
-            <userSelect v-if="anesthesiaDoctorView" methodName="anesthesiaDoctor" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closeanesthesiaDoctor="anesthesiaDoctorOpenView" width="120"></userSelect>
+            <userSelect v-if="anesthesiaDoctorView" methodName="anesthesiaDoctor" :deptCode="deptCode" userJob="医生" :dataInfo="jzInfo" v-on:closeanesthesiaDoctor="anesthesiaDoctorOpenView" width="120"></userSelect>
           </div>
           <div style="margin-left: 15px;">
             <input v-model="jzInfo.secondAnesthesiaDoctor" style="width: 80px;" @dblclick="secondAnesthesiaDoctorOpenView" readonly="readonly">
-            <userSelect v-if="secondAnesthesiaDoctorView" methodName="secondAnesthesiaDoctor" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closesecondAnesthesiaDoctor="secondAnesthesiaDoctorOpenView" width="120"></userSelect>
+            <userSelect v-if="secondAnesthesiaDoctorView" methodName="secondAnesthesiaDoctor" :deptCode="deptCode" userJob="医生" :dataInfo="jzInfo" v-on:closesecondAnesthesiaDoctor="secondAnesthesiaDoctorOpenView" width="120"></userSelect>
           </div>
           <div style="width: 70px;margin-left: 60px;">麻醉助手</div>
           <div style="margin-left: 15px;position: relative;">
             <input v-model="jzInfo.anesthesiaAssistant" style="width: 80px;" @dblclick="anesthesiaAssistantOpenView" readonly="readonly">
-            <userSelect v-if="anesthesiaAssistantView" methodName="anesthesiaAssistant" deptCode="7007" userJob="医生" :dataInfo="jzInfo" v-on:closeanesthesiaAssistant="anesthesiaAssistantOpenView" width="120"></userSelect>
+            <userSelect v-if="anesthesiaAssistantView" methodName="anesthesiaAssistant" :deptCode="deptCode" userJob="医生" :dataInfo="jzInfo" v-on:closeanesthesiaAssistant="anesthesiaAssistantOpenView" width="120"></userSelect>
             <!-- <testSelect style="position: absolute;top: 0px;" ref="test" width="120"></testSelect> -->
           </div>
           <div style="margin-left: 15px;">
@@ -141,26 +141,26 @@
           <div style="width: 70px;">洗手护士</div>
           <div>
             <input v-model="jzInfo.firstOperationNurse" style="width: 80px;" @dblclick="firstOperationNurseOpenView" readonly="readonly">
-            <userSelect v-if="firstOperationNurseView" methodName="firstOperationNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closefirstOperationNurse="firstOperationNurseOpenView" width="120"></userSelect>
+            <userSelect v-if="firstOperationNurseView" methodName="firstOperationNurse" :deptCode="deptCode" userJob="护士" :dataInfo="jzInfo" v-on:closefirstOperationNurse="firstOperationNurseOpenView" width="120"></userSelect>
           </div>
           <div style="margin-left: 10px;">
             <input v-model="jzInfo.secondOperationNurse" style="width: 80px;" @dblclick="secondOperationNurseOpenView" readonly="readonly">
-            <userSelect v-if="secondOperationNurseView" methodName="secondOperationNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closesecondOperationNurse="secondOperationNurseOpenView" width="120"></userSelect>
+            <userSelect v-if="secondOperationNurseView" methodName="secondOperationNurse" :deptCode="deptCode" userJob="护士" :dataInfo="jzInfo" v-on:closesecondOperationNurse="secondOperationNurseOpenView" width="120"></userSelect>
           </div>
         </div>
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">巡回护士</div>
           <div>
             <input v-model="jzInfo.firstSupplyNurse" style="width: 80px;" @dblclick="firstSupplyNurseOpenView" readonly="readonly">
-            <userSelect v-if="firstSupplyNurseView" methodName="firstSupplyNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closefirstSupplyNurse="firstSupplyNurseOpenView" width="120"></userSelect>
+            <userSelect v-if="firstSupplyNurseView" methodName="firstSupplyNurse" :deptCode="deptCode" userJob="护士" :dataInfo="jzInfo" v-on:closefirstSupplyNurse="firstSupplyNurseOpenView" width="120"></userSelect>
           </div>
           <div style="margin-left: 10px;">
             <input v-model="jzInfo.secondSupplyNurse" style="width: 80px;" @dblclick="secondSupplyNurseOpenView" readonly="readonly">
-            <userSelect v-if="secondSupplyNurseView" methodName="secondSupplyNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closesecondSupplyNurse="secondSupplyNurseOpenView" width="120"></userSelect>
+            <userSelect v-if="secondSupplyNurseView" methodName="secondSupplyNurse" :deptCode="deptCode" userJob="护士" :dataInfo="jzInfo" v-on:closesecondSupplyNurse="secondSupplyNurseOpenView" width="120"></userSelect>
           </div>
           <div style="margin-left: 10px;">
             <input v-model="jzInfo.thirdSupplyNurse" style="width: 80px;" @dblclick="thirdSupplyNurseOpenView" readonly="readonly">
-            <userSelect v-if="thirdSupplyNurseView" methodName="thirdSupplyNurse" deptCode="7007" userJob="护士" :dataInfo="jzInfo" v-on:closethirdSupplyNurse="thirdSupplyNurseOpenView" width="120"></userSelect>
+            <userSelect v-if="thirdSupplyNurseView" methodName="thirdSupplyNurse" :deptCode="deptCode" userJob="护士" :dataInfo="jzInfo" v-on:closethirdSupplyNurse="thirdSupplyNurseOpenView" width="120"></userSelect>
           </div>
         </div>
         <div class="flex" style="margin-top: 5px;">
@@ -210,6 +210,7 @@ export default {
       operMasterTime: '', //手术时间
       anesthesiaMethod: '', //麻醉方法
       emergencyIndicator: 1,
+      deptCode: '', //科室代码
     }
   },
   methods: {
@@ -234,7 +235,10 @@ export default {
     },
     //获取所有手术间
     getAllRoomNo() {
-      let params = {}
+      let params = {
+        deptCode: this.config.wardCode,
+        bedType: '0'
+      }
       this.api.selectAllRoomNo(params)
         .then(res => {
           this.roomList = res;
@@ -363,13 +367,14 @@ export default {
     }
   },
   mounted() {
+    this.deptCode = this.config.wardCode
     this.operMasterTime = this.changeDateFormat(new Date().Format('yyyy-MM-dd hh:mm'));
     this.getAllRoomNo();
-    this.$refs.test.init({
-      loadedFun: this.getUsers,
-      chooseAction: this.chooseOperatorA,
-      fieldName: 'USER_NAME'
-    })
+    // this.$refs.test.init({
+    //   loadedFun: this.getUsers,
+    //   chooseAction: this.chooseOperatorA,
+    //   fieldName: 'USER_NAME'
+    // })
     // this.$refs.xshs.init({
     //   loadedFun: this.getxshs,
     //   chooseAction: this.choosexshs,

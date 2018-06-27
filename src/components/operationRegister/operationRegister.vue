@@ -490,7 +490,7 @@ export default {
         SPEED_UNIT: item.speedUnit,
         DOSAGE: item.dosage,
         DOSAGE_UNITS: item.dosageUnits,
-        START_TIME: this.changeDateFormat(new Date().Format('yyyy-MM-dd hh:mm')),
+        START_TIME: item.startTime,
         ENDDATE: "",
         ITEM_CLASS: item.itemClass,
         ITEM_SPEC: item.itemSpec,
@@ -905,6 +905,11 @@ export default {
     deleteSignItem() {
       if (this.deleteTzItem == '') {
         alert("选择删除项目")
+        return false;
+      }
+      if (this.deleteTzItem.itemCode == 40 || this.deleteTzItem.itemCode == 44 || this.deleteTzItem.itemCode == 92 || this.deleteTzItem.itemCode == 188 ||
+        this.deleteTzItem.itemCode == 89 || this.deleteTzItem.itemCode == 90) {
+        alert("此项目不能删除")
         return false;
       }
       let params = {

@@ -440,7 +440,7 @@
               </div>
             </div>
           </div>
-          <div ref="mybox" id="mybox" style="display: none; ">
+          <div ref="mybox" style="display: none; ">
             <div class="designArea" style="font-size: 9pt;font-family: STSong;">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2)*0.75)+'pt'}">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
@@ -761,7 +761,8 @@ export default {
           from: '2016-02-01',
           to: '2020-02-20'
         }
-      ]
+      ],
+      timeCount: 0, //计时器次数
 
 
     }
@@ -1081,7 +1082,7 @@ export default {
       //当前病人信息存储起来
       this.config.userInfo = item;
       this.$set(this.$data, 'inDateTime', this.changeDateFormat(item.inDateTime))
-      // this.inDateTime = this.changeDateFormat(item.inDateTime);
+      this.inDateTime = this.changeDateFormat(item.inDateTime);
       this.anesStartTime = this.changeDateFormat(item.anesStartTime);
       this.startDateTime = this.changeDateFormat(item.startDateTime);
       this.endDateTime = this.changeDateFormat(item.endDateTime);
@@ -1100,6 +1101,8 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           inDateTime: '',
+          operatingRoom: this.lockedPatientInfo.operatingRoom,
+          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
         }
       } else if (sta == 5) {
         params = {
@@ -1108,6 +1111,8 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           anesStartTime: '',
+          operatingRoom: this.lockedPatientInfo.operatingRoom,
+          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
         }
       } else if (sta == 10) {
         params = {
@@ -1116,6 +1121,8 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           startDateTime: '',
+          operatingRoom: this.lockedPatientInfo.operatingRoom,
+          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
         }
       } else if (sta == 15) {
         params = {
@@ -1124,6 +1131,8 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           endDateTime: '',
+          operatingRoom: this.lockedPatientInfo.operatingRoom,
+          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
         }
       } else if (sta == 25) {
         params = {
@@ -1132,6 +1141,7 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           anesEndTime: '',
+
         }
       } else if (sta == 30) {
         params = {
@@ -1423,13 +1433,14 @@ export default {
       this.selectFormItemTemp = item;
 
       if (item.formName == '麻醉记录单') {
-        this.getMaxTime();
+        // this.getMaxTime();
 
         let inDateTime = this.config.userInfo.inDateTime
         this.tempButtonView = false;
         //查找病人的最晚时间
         this.api.selectMaxTime(timeParam)
           .then(res => {
+
             let t1 = 0
             let i = 0
             //获取病人在手术室里面最早时间
@@ -1468,6 +1479,7 @@ export default {
                 let init_Time = new Date(this.config.startMinTime);
                 this.config.initTime = new Date(this.timeSetOper(init_Time));
                 this.config.maxTime = new Date(timeDate.getTime() + 1000 * 60 * 5 * 50);
+                this.getMaxTime()
               })
             let params = {
               formName: item.formName,
@@ -1584,21 +1596,99 @@ export default {
         }
       }
       if (TrueData) {
-        let params = {
-          patientId: this.lockedPatientInfo.patientId,
-          visitId: this.lockedPatientInfo.visitId,
-          operId: this.lockedPatientInfo.operId,
-          // inDateTime: this.datetimeLocalToDate(this.inDateTime),
-          inDateTime: this.inDateTime,
-          anesStartTime: this.datetimeLocalToDate(this.anesStartTime),
-          startDateTime: this.datetimeLocalToDate(this.startDateTime),
-          endDateTime: this.datetimeLocalToDate(this.endDateTime),
-          anesEndTime: this.datetimeLocalToDate(this.anesEndTime),
-          outDateTime: this.datetimeLocalToDate(this.outDateTime),
-          operStatus: status,
-          operatingRoom: this.lockedPatientInfo.operatingRoom,
-          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+        let params = {}
+        if (this.inDateTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
         }
+        if (this.anesStartTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+
+        if (this.startDateTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            startDateTime: this.startDateTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+
+        if (this.endDateTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            startDateTime: this.startDateTime,
+            endDateTime: this.endDateTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+
+        if (this.anesEndTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            startDateTime: this.startDateTime,
+            endDateTime: this.endDateTime,
+            anesEndTime: this.anesEndTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+        if (this.outDateTime) {
+          params = {
+            patientId: this.lockedPatientInfo.patientId,
+            visitId: this.lockedPatientInfo.visitId,
+            operId: this.lockedPatientInfo.operId,
+            // inDateTime: this.datetimeLocalToDate(this.inDateTime),
+            inDateTime: this.inDateTime,
+            anesStartTime: this.anesStartTime,
+            startDateTime: this.startDateTime,
+            endDateTime: this.endDateTime,
+            anesEndTime: this.anesEndTime,
+            outDateTime: this.outDateTime,
+            operStatus: status,
+            operatingRoom: this.lockedPatientInfo.operatingRoom,
+            operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
+          }
+        }
+
+
+
         this.nextDATA = params;
         this.api.changeOperationStatus(params)
           .then(
@@ -1796,7 +1886,7 @@ export default {
     //单子刷新按钮
     refreshForm() {
       this.selectMedFormTemp(this.selectFormItemTemp);
-      // Bus.$emit('timeSetChange');
+
     },
     //单子首页
     toChangePage(num) {
@@ -1833,9 +1923,9 @@ export default {
 
           return
         }
-        this.$nextTick(function() {
-          Bus.$emit('test', num);
-        })
+        // this.$nextTick(function() {
+        Bus.$emit('test', num);
+        // })
       }
 
 
@@ -1968,40 +2058,52 @@ export default {
               this.config.maxTime = new Date(new Date(this.config.maxTime).getTime() + (time1 - time2));
             }
           }
-          this.getMaxTime();
-          this.$nextTick(function() {
+          this.getMaxTimeNoset();
 
-            Bus.$emit('timeSetChange');
-          })
         })
     },
     getMaxTime() {
-      if (this.setTimeId) {
-        this.getMaxTimeNoset();
+      let intitime = this.config.initTime
+      if (!intitime) {
         return
       }
-      let timeParam = {
-        "patientId": this.lockedPatientInfo.patientId,
-        "visitId": this.lockedPatientInfo.visitId,
-        "operId": this.lockedPatientInfo.operId,
+      if (this.setTimeId) {
+        clearTimeout(this.setTimeId);
       }
-      //查找病人的最晚时间
-      this.api.selectMaxTime(timeParam)
-        .then(res => {
-          if (res.TIME) {
 
-            if (this.config.userInfo.outDateTime) {
-              if (new Date(this.config.userInfo.outDateTime) > new Date(res.TIME)) {
-                this.config.patientMaxTime = this.config.userInfo.outDateTime;
+      let min = new Date(intitime).getMinutes();
+      let nowMin = new Date().getMinutes();
+      if (nowMin % 3 == 0) {
+        // this.timeCount++;
+        let timeParam = {
+          "patientId": this.lockedPatientInfo.patientId,
+          "visitId": this.lockedPatientInfo.visitId,
+          "operId": this.lockedPatientInfo.operId,
+        }
+        //查找病人的最晚时间
+        this.api.selectMaxTime(timeParam)
+          .then(res => {
+            if (res.TIME) {
+
+              if (this.config.userInfo.outDateTime) {
+                if (new Date(this.config.userInfo.outDateTime) > new Date(res.TIME)) {
+                  this.config.patientMaxTime = this.config.userInfo.outDateTime;
+                } else {
+                  this.config.patientMaxTime = res.TIME
+                }
               } else {
                 this.config.patientMaxTime = res.TIME
               }
-            } else {
-              this.config.patientMaxTime = res.TIME
+              this.$nextTick(function() {
+                Bus.$emit('timeSetChange');
+              })
             }
-          }
-          this.setTimeId = setTimeout(_ => this.getMaxTime(), 300000)
-        })
+
+          })
+      }
+      this.setTimeId = setTimeout(_ => this.getMaxTime(), 60000)
+      console.log(new Date())
+
     },
     getMaxTimeNoset() {
       let timeParam = {
@@ -2023,6 +2125,9 @@ export default {
             } else {
               this.config.patientMaxTime = res.TIME
             }
+            this.$nextTick(function() {
+              Bus.$emit('timeSetChange');
+            })
           }
         })
     },
@@ -2514,6 +2619,37 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

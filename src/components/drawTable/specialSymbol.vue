@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <!-- <p style="color:SeaGreen">●心率</p>
+  <div>
+    <!-- <p style="color:SeaGreen">●心率</p>
                         <p style="color:DarkGreen">●PULSE</p>
                         <p style="color:red">∨收缩压</p>
                         <p style="color:red">∧舒张压</p>
@@ -32,6 +32,7 @@
             <p v-else-if="item == 67" style="color:Red">△动脉平均压</p>
         </div>
     </div>
+  </div>
 </template>
 <script>
 export default {
@@ -62,7 +63,9 @@ export default {
     },
 
 }
+
 </script>
 <style scoped>
+
 
 </style>

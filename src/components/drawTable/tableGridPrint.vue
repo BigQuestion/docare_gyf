@@ -91,12 +91,14 @@ export default {
       var timeArray = [];
       let startMinTime = this.config.startMinTime
       let defaultTime = new Date().Format("yyyy-MM-dd") + " 08:00"
-      if (this.config.pageOper == 0 && startMinTime) {
+      let pageOper = this.config.pageOper
+
+      if (pageOper == 0 && startMinTime) {
         for (var i = 0; i <= this.columns; i++) {
 
           timeArray.push(new Date(new Date(this.config.initTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
-      } else if (!startMinTime && this.config.pageOper == 0) {
+      } else if (!startMinTime && pageOper == 0) {
         for (var i = 0; i <= this.columns; i++) {
           timeArray.push(new Date(new Date(defaultTime).getTime() + 1000 * 60 * m * i).Format("hh:mm"));
         }
@@ -107,12 +109,10 @@ export default {
         }
       }
       this.xTimeArray = timeArray;
-      this.$nextTick(function() {
-        this.getLineXy();
-        if (this.page == false) {
-          this.selectMedAnesthesiaEventList();
-        }
-      })
+      this.getLineXy();
+      if (this.page == false) {
+        this.selectMedAnesthesiaEventList();
+      }
 
       return
       var m = this.tbMin; //加几分钟
@@ -127,8 +127,6 @@ export default {
         timeArray.push(new Date(this.config.initTime.getTime() + 1000 * 60 * m * i).Format("hh:mm"));
       }
       this.xTimeArray = timeArray;
-
-
       this.$nextTick(function() {
         this.xTimeArray = timeArray; // => '更新完成'
       })
@@ -157,6 +155,8 @@ export default {
     //加载病人麻醉事件里面麻醉用药数据
     selectMedAnesthesiaEventList() {
       //this.timeControl(this.maxTime);
+      this.dataArray = []
+      this.xArray = []
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight;
@@ -172,13 +172,10 @@ export default {
       if (this.page) {
         return;
       }
-      var m = 0;
-      this.dataArray = [];
       this.api.selectMedAnesthesiaEventList(params)
         .then(res => {
           var list = res.list;
           this.dataOperChange(list);
-          return false;
         });
     },
     //计算时间差分钟
@@ -288,15 +285,17 @@ export default {
     },
     //翻页
     pageChange() {
-      var svg = d3.selectAll(".testprint")
-      svg.remove();
-      this.xTimeArray = [];
+      // var svg = d3.selectAll(".testprint")
+      // svg.remove();
+      // this.xTimeArray = [];
+      // this.$nextTick(function() {
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
         this.xTimeInit();
       }
       if (this.config.pageOper == -1) {
         this.timeControl(this.config.initTime)
+        return
         let m = this.config.initTime.getTime() - 250 * 60 * 1000;
         // this.timeControl(new Date(m));
         var list = [];
@@ -309,6 +308,8 @@ export default {
         }
       }
       if (this.config.pageOper == 1) {
+        this.timeControl(this.config.maxTime)
+        return
         let arrList = this.dataArray;
         this.percentPageData = arrList;
         var arrayList = [];
@@ -333,18 +334,19 @@ export default {
         }
         this.timeControl(this.config.maxTime)
       }
-
+      // })
     },
     //处理数据进行划线
     dataOperChange(list) {
-      var svg = d3.selectAll(".test")
+      var svg = d3.selectAll(".testprint")
       svg.remove();
+      this.xArray = [];
+      this.dataArray = [];
+      let dataArr = []
       var w = this.svgWidth,
         lMin = this.tbMin,
         h = this.svgHeight,
         m = 0;
-      this.xArray = [];
-      this.dataArray = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].START_TIME) {
           if (i == this.rows)
@@ -425,6 +427,7 @@ export default {
             if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
               this.createLine(x1, x2, y1, y2, list[i]);
             }
+
 
             if (flag) {
               this.xArray.push({
