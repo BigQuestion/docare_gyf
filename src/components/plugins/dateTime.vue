@@ -30,6 +30,7 @@ export default {
       timeShow: false,
       tempValue: '', //存放传入进来的值
       state: 0, //0代表传入值为'' 1代表传入的值不为空
+      titleTime: '',
     }
   },
   watch: {
@@ -53,6 +54,7 @@ export default {
       this.timeShow = false
       this.myValue = new Date(this.date + " " + this.time)
       let nowTime = this.myValue
+      // this.titleTime = nowTime.Format("yyyy-MM-dd hh:mm")
       this.dateTime = this.myValue.Format("MM-dd hh:mm")
       this.date = this.myValue.Format("yyyy-MM-dd")
       this.time = this.myValue.Format("hh:mm")

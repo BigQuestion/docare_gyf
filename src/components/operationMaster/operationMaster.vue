@@ -1082,7 +1082,7 @@ export default {
       //当前病人信息存储起来
       this.config.userInfo = item;
       this.$set(this.$data, 'inDateTime', this.changeDateFormat(item.inDateTime))
-      // this.inDateTime = this.changeDateFormat(item.inDateTime);
+      this.inDateTime = this.changeDateFormat(item.inDateTime);
       this.anesStartTime = this.changeDateFormat(item.anesStartTime);
       this.startDateTime = this.changeDateFormat(item.startDateTime);
       this.endDateTime = this.changeDateFormat(item.endDateTime);
@@ -1101,6 +1101,8 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           inDateTime: '',
+          operatingRoom: this.lockedPatientInfo.operatingRoom,
+          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
         }
       } else if (sta == 5) {
         params = {
@@ -1109,6 +1111,8 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           anesStartTime: '',
+          operatingRoom: this.lockedPatientInfo.operatingRoom,
+          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
         }
       } else if (sta == 10) {
         params = {
@@ -1117,6 +1121,8 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           startDateTime: '',
+          operatingRoom: this.lockedPatientInfo.operatingRoom,
+          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
         }
       } else if (sta == 15) {
         params = {
@@ -1125,6 +1131,8 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           endDateTime: '',
+          operatingRoom: this.lockedPatientInfo.operatingRoom,
+          operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
         }
       } else if (sta == 25) {
         params = {
@@ -1133,6 +1141,7 @@ export default {
           operId: this.lockedPatientInfo.operId,
           operStatus: sta,
           anesEndTime: '',
+
         }
       } else if (sta == 30) {
         params = {
@@ -2610,6 +2619,9 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
 
 
 
