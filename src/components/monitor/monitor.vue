@@ -717,7 +717,7 @@ export default {
                                         }
                                     }
                                 )
-                            }else if(this.bindin == '' &&this.bindingTwo == ''){
+                            }else if(this.binding == '' &&this.bindingTwo == ''){
                                 alert('若想启动采集程序，请绑定仪器。')
                             }else{
                                 window.ipc.send('runexe');
