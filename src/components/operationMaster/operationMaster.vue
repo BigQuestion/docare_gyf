@@ -441,7 +441,7 @@
             </div>
           </div>
           <div ref="mybox" style="display: none; ">
-            <div class="designArea" style="font-size: 9pt;font-family: STSong;">
+            <div class="designArea" style="font-size: 12pt;font-family: STSong;">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2)*0.75)+'pt'}">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
               </div>
@@ -2110,7 +2110,6 @@ export default {
               } else {
                 this.config.patientMaxTime = res.TIME
               }
-              debugger
               this.$nextTick(function() {
                 Bus.$emit('timeSetChange');
               })
@@ -2640,6 +2639,8 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
 
 
 
