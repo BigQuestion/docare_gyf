@@ -10,7 +10,7 @@
                         <p style="color:DarkGreen">⊙手术开始</p>
                         <p style="color:red">X手术结束</p>
                         <p style="color:red">ⓧ麻醉结束</p> -->
-    <div v-for="item in eventTypeList">
+    <div v-for="item in eventTypeList" :style="{fontSize:object.fontSize*0.75+'pt'}">
       <p v-if="item == 71" style="color:Crimson">△中心静脉压</p>
       <p v-else-if="item == 89" style="color:Blue">∨无创收缩压</p>
       <p v-else-if="item == 90" style="color:Blue">∧无创舒张压</p>
@@ -31,6 +31,7 @@
       <p v-else-if="item == 66" style="color:Red">∧动脉舒张压</p>
       <p v-else-if="item == 67" style="color:Red">△动脉平均压</p>
     </div>
+  </div>
   </div>
 </template>
 <script>
@@ -59,7 +60,7 @@ export default {
         });
     }
   },
-  props: ['page'],
+  props: ['page', 'object'],
   mounted() {
     if (this.page == false) {
       this.getList();
