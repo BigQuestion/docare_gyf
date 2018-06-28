@@ -42,8 +42,8 @@
                                 </div>
                             </div>
                             <!-- <div @click="pushData()" v-if="showarrange" class="pushAuto" :style="{top:clickTop+'px',left:clickLeft+'px'}">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                分配手术
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        分配手术
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                         </div>
                     </div>
                     <div v-if="chooseOneType=='docoptions'" v-for="item in options" @click="joinData('docoptions',item)" class="docList rows">
@@ -103,7 +103,7 @@
                         <!-- 清空 -->
                         <!-- <div v-if="showList" style="width:100%;height:auto;z-index:9999;">
 
-                                                                                                                                                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                                                            </div> -->
                         <!-- </div> -->
                     </div>
                 </div>
@@ -355,7 +355,7 @@ export default {
                 { data: '巡回护士2', type: 'seconddoctour' },
             ],
             roomId: [{
-                name: '01',
+                name: '',
                 chooseClass: true,
                 docoptions: '',
                 docmzkUsers: '',
@@ -430,8 +430,12 @@ export default {
             }
             this.api.selectAllRoomNo(params).then(
                 res => {
-                    if (res.length > 1) {
-                        for (var q = 1; q < res.length; q++) {
+                    console.log(res)
+                    console.log(this.roomId)
+                    for (var q = 0; q < res.length; q++) {
+                        if (q == 0) {
+                            this.roomId[0].name = res[0].roomNo;
+                        } else {
                             this.roomId.push({
                                 name: res[q].roomNo,
                                 chooseClass: false,
@@ -458,6 +462,7 @@ export default {
                             })
                         }
                     }
+                    this.hasChooseRoom = this.roomId[0];
                     // console.log(this.roomId)
                 }
             )
@@ -1736,7 +1741,6 @@ export default {
         this.area = window;
         let totalWidth = this.plusAll();
         this.$set(this.$data, 'totalWidth', totalWidth)
-        this.hasChooseRoom = this.roomId[0];
         this.dateValue = new Date().Format("yyyy-MM-dd");
         this.getList(this.dateValue);
 

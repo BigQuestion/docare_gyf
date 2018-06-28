@@ -56,7 +56,6 @@ export default {
     },
     props: [ 'page','object'],
     mounted() {
-        console.log(this.object)
         if (this.page == false) {
             this.getList();
         }
