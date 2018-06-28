@@ -800,6 +800,7 @@ export default {
           LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.normal.innerHTML);
           LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
           LODOP.PREVIEW();
+          // LODOP.PRINT()
         }, 1000)
       } else {
         setTimeout(() => {
@@ -812,6 +813,7 @@ export default {
             this.printPage(this.currentPageNum);
           } else {
             LODOP.PREVIEW();
+            // LODOP.PRINT()
           }
         }, 1000)
       }
@@ -2110,7 +2112,6 @@ export default {
               } else {
                 this.config.patientMaxTime = res.TIME
               }
-              debugger
               this.$nextTick(function() {
                 Bus.$emit('timeSetChange');
               })
@@ -2640,6 +2641,12 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
 
 
 

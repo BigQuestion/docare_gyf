@@ -5,7 +5,6 @@
                 <div>监护仪</div>
                 <div @click="aboutNone" class="top_active">X</div>
             </div>
-
             <div style="display:flex;position:absolute;top:34px;left:4px;">
                 <div class="titleBox" v-for="item in machineList" :style="{width:item.width+'px',textAlign:item.textalign}">{{item.text}}</div>
             </div>
@@ -34,10 +33,14 @@
             </div>
             <div class="bottomBox">
                 <div class="inputBox">
-                    <span>开始时间</span><input style="width:190px;" @blur="dataOfChange('1',$event)" :value="dataOfStart" type="datetime-local">
-                    <span>默认记录间隔</span><input style="width:45px;" @blur="dataOfChange('2',$event)" :value="defaultRecvFrequency" type="text">
-                    <span>实际记录间隔</span><input style="width:45px;" @blur="dataOfChange('3',$event)" :value="currentRecvFrequency" type="text">
-                    <span>采集次数/秒</span><input style="width:45px;" @blur="dataOfChange('4',$event)" :value="currentRecvtimesUplimit" type="text">
+                    <span>开始时间</span>
+                    <input style="width:190px;" @blur="dataOfChange('1',$event)" :value="dataOfStart" type="datetime-local">
+                    <span>默认记录间隔</span>
+                    <input style="width:45px;" @blur="dataOfChange('2',$event)" :value="defaultRecvFrequency" type="text">
+                    <span>实际记录间隔</span>
+                    <input style="width:45px;" @blur="dataOfChange('3',$event)" :value="currentRecvFrequency" type="text">
+                    <span>采集次数/秒</span>
+                    <input style="width:45px;" @blur="dataOfChange('4',$event)" :value="currentRecvtimesUplimit" type="text">
                 </div>
                 <div class="sureBox">
                     <button v-if="data" @click="aboutNone">关闭</button>
@@ -45,7 +48,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
@@ -54,97 +56,95 @@ export default {
         return {
             userInfoDataBody: this.config,
             data: this.dataOfNoneClick.noneData,
-            machineList: [
-                {
-                    text: "监护仪",
-                    value: "monitorLabel",
-                    width: 171,
-                    textalign: 'left',
-                },
-                {
-                    text: "开始时间",
-                    value: "datalogStartTime",
-                    width: 170,
-                    textalign: 'left',
-                },
-                {
-                    text: "默认记录",
-                    value: "defaultRecvFrequency",
-                    width: 100,
-                    textalign: 'left',
-                },
-                {
-                    text: "实际记录",
-                    value: "currentRecvFrequency",
-                    width: 100,
-                    textalign: 'left',
-                },
-                {
-                    text: "采集次数/秒",
-                    value: "currentRecvtimesUplimit",
-                    width: 100,
-                    textalign: 'left',
-                },
-                {
-                    text: "手术",
-                    value: "six",
-                    width: 80,
-                    textalign: 'left',
-                },
-                {
-                    text: "选择",
-                    value: "seven",
-                    type: "raido",
-                    width: 50,
-                    textalign: 'center',
-                },
+            machineList: [{
+                text: "监护仪",
+                value: "monitorLabel",
+                width: 171,
+                textalign: 'left',
+            },
+            {
+                text: "开始时间",
+                value: "datalogStartTime",
+                width: 170,
+                textalign: 'left',
+            },
+            {
+                text: "默认记录",
+                value: "defaultRecvFrequency",
+                width: 100,
+                textalign: 'left',
+            },
+            {
+                text: "实际记录",
+                value: "currentRecvFrequency",
+                width: 100,
+                textalign: 'left',
+            },
+            {
+                text: "采集次数/秒",
+                value: "currentRecvtimesUplimit",
+                width: 100,
+                textalign: 'left',
+            },
+            {
+                text: "手术",
+                value: "six",
+                width: 80,
+                textalign: 'left',
+            },
+            {
+                text: "选择",
+                value: "seven",
+                type: "raido",
+                width: 50,
+                textalign: 'center',
+            },
 
             ],
             commonTypeList: [],
-            anesthesiaList: [
-                {
-                    text: "麻醉机",
-                    value: "monitorLabel",
-                    width: 171,
-                    textalign: 'left',
-                },
-                {
-                    text: "开始时间",
-                    value: "datalogStartTime",
-                    width: 170,
-                    textalign: 'left',
-                },
-                {
-                    text: "默认记录",
-                    value: "defaultRecvFrequency",
-                    width: 100,
-                    textalign: 'left',
-                },
-                {
-                    text: "实际记录",
-                    value: "currentRecvFrequency",
-                    width: 100,
-                    textalign: 'left',
-                },
-                {
-                    text: "采集次数/秒",
-                    value: "currentRecvtimesUplimit",
-                    width: 100,
-                    textalign: 'left',
-                },
-                {
-                    text: "手术",
-                    value: "six",
-                    width: 80,
-                    textalign: 'left',
-                },
-                {
-                    text: "选择",
-                    value: "seven",
-                    type: "raido",
-                    width: 50,
-                    textalign: 'center',
-                },
+            anesthesiaList: [{
+                text: "麻醉机",
+                value: "monitorLabel",
+                width: 171,
+                textalign: 'left',
+            },
+            {
+                text: "开始时间",
+                value: "datalogStartTime",
+                width: 170,
+                textalign: 'left',
+            },
+            {
+                text: "默认记录",
+                value: "defaultRecvFrequency",
+                width: 100,
+                textalign: 'left',
+            },
+            {
+                text: "实际记录",
+                value: "currentRecvFrequency",
+                width: 100,
+                textalign: 'left',
+            },
+            {
+                text: "采集次数/秒",
+                value: "currentRecvtimesUplimit",
+                width: 100,
+                textalign: 'left',
+            },
+            {
+                text: "手术",
+                value: "six",
+                width: 80,
+                textalign: 'left',
+            },
+            {
+                text: "选择",
+                value: "seven",
+                type: "raido",
+                width: 50,
+                textalign: 'center',
+            },
             ],
             commonTypeListTwo: [],
             binding: '',
@@ -663,8 +663,7 @@ export default {
 
                                 }
 
-                            }
-                            else if (this.binding !== '' && this.bindingTwo !== '' && this.cancelData == true && this.cancelDataTwo == true && this.bothClick1 == false && this.bothClick2 == false && this.thisAdata == true && this.thisBdata == true) {
+                            } else if (this.binding !== '' && this.bindingTwo !== '' && this.cancelData == true && this.cancelDataTwo == true && this.bothClick1 == false && this.bothClick2 == false && this.thisAdata == true && this.thisBdata == true) {
                                 // alert('7')
                                 let cancelQuesB1 = {
                                     monitorLabel: this.binding.monitorLabel,
@@ -714,16 +713,15 @@ export default {
                                         if (res.success == true) {
                                             this.dataInAnesthesia();
                                             this.thisOnchange = false;
-
+                                            window.ipc.send('runexe');
                                         }
                                     }
                                 )
-                            } else if (this.binding == '' && this.bindingTwo == '') {
+                            }else if(this.bindin == '' &&this.bindingTwo == ''){
                                 alert('若想启动采集程序，请绑定仪器。')
-                            } else {
+                            }else{
                                 window.ipc.send('runexe');
                             }
-
             // else if (this.thisOnchange == true && this.bothClick1 == '' && this.bothClick2 == '') {
 
             //         console.log(this.thisAdata)
@@ -818,6 +816,7 @@ export default {
 
     },
 }
+
 </script>
 <style scoped>
 .greenClass {
