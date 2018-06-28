@@ -18,13 +18,13 @@
       <p v-else-if="item == 100" style="color:Red">X体温</p>
       <p v-else-if="item == 104" style="color:#8080FF">X肛温</p>
       <p v-else-if="item == 105" style="color:#FF8080">X鼻咽温</p>
-      <!-- <p v-else-if="item == 112" style="color:Blue">△ETCO2</p> -->
-      <!-- <p v-else-if="item == 188">●SpO2</p> -->
-      <!-- <p v-else-if="item == 202">△f</p> -->
+      <p v-else-if="item == 112" style="color:Blue">△ETCO2</p>
+      <p v-else-if="item == 188">●SpO2</p>
+      <p v-else-if="item == 202">△f</p>
       <p v-else-if="item == 208">△Ppeak</p>
       <p v-else-if="item == 209">△Pplat</p>
       <p v-else-if="item == 210">△Pmean</p>
-      <!-- <p v-else-if="item == 212">△TVE</p> -->
+      <p v-else-if="item == 212">△TVE</p>
       <p v-else-if="item == 40" style="color:SeaGreen">●心率</p>
       <p v-else-if="item == 44" style="color:DarkGreen">●PULSE</p>
       <p v-else-if="item == 65" style="color:Red">∨动脉收缩压</p>
@@ -34,6 +34,7 @@
   </div>
 </template>
 <script>
+import Bus from '@/bus.js';
 export default {
   data() {
     return {
@@ -42,6 +43,7 @@ export default {
   },
   methods: {
     getList() {
+
       this.api.getPatientAllCode({
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
@@ -49,7 +51,11 @@ export default {
         eventNo: 0,
       }).then(
         res => {
-          this.eventTypeList = res;
+          if (res.length > 0) {
+            this.eventTypeList = res;
+          } else {
+            this.eventTypeList = []
+          }
         });
     }
   },
@@ -58,6 +64,12 @@ export default {
     if (this.page == false) {
       this.getList();
     }
+  },
+  created() {
+    Bus.$on('timeSetChange', this.getList)
+  },
+  beforeDestroy() {
+    Bus.$off('timeSetChange', this.getList)
   },
 
 }

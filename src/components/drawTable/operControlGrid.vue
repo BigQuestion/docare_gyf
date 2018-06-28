@@ -58,23 +58,23 @@
             <text stroke="rgb(255,128,128)" transform="matrix(0.44269931316375727,0,0,0.44269931316375727,164.78615606576204,120.13502615876496) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_34" y="-260.674143" x="-380.226641" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#000000">X</text>
           </g>
           <!-- ETCO2 CODE:112 △ -->
-          <!-- <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '112'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '112'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '112'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <path stroke="blue" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
-          </g> -->
+          </g>
           <!-- Sp02 CODE:188 ● -->
-          <!--  <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '188'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '188'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '188'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <circle class="opercontrol" r="3" fill="blue"></circle>
-          </g> -->
+          </g>
           <!-- f CODE:202 △ 暂无此代码颜色-->
-          <!-- <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '202'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '202'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '202'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
-          </g> -->
+          </g>
           <!-- Ppeak CODE:208 △ 暂无此代码颜色-->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '208'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '208'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
@@ -270,7 +270,6 @@ export default {
           circleData: this.pathArray[i]
         })
       }
-      // console.log(this.pathArray)
 
 
     },
@@ -323,9 +322,10 @@ export default {
     },
     //获取病人生命体征项目
     getSignName() {
-      if (this.setTimeId) {
-        clearTimeout(this.setTimeId)
-      }
+      // if (this.setTimeId) {
+      //   clearTimeout(this.setTimeId)
+      // }
+
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
@@ -336,79 +336,41 @@ export default {
       this.api.getSignName(params)
         .then(
           res => {
-            for (var i = 0; i < res.length; i++) {
-              res[i].itemValue = " ";
+            // for (var i = 0; i < res.length; i++) {
+            //   res[i].itemValue = " ";
+            // }
+            if (res.length > 0) {
+              this.signNameLisg = res;
+              this.getSignTimeData();
+            } else {
+              this.signNameLisg = []
+              this.dataPathArray = []
             }
-            //定义一个排序方法
-            let compare = function(prop) {
-              return function(obj1, obj2) {
-                let val1 = obj1[prop]
-                let val2 = obj2[prop]
-                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                  val1 = Number(val1);
-                  val2 = Number(val2);
-                }
-                if (val1 < val2) {
-                  return -1;
-                } else if (val1 > val2) {
-                  return 1;
-                } else {
-                  return 0;
-                }
-              }
-            }
-            //根据itemcode排序
-            // this.signNameLisg = res.sort(compare("itemCode "));
-            this.signNameLisg = res;
-            this.getSignTimeData(res.length, res);
-            this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
-          })
-    },
-    getSignNameNoTime() {
-      let params = {
-        patientId: this.config.userInfo.patientId,
-        operId: this.config.userInfo.operId,
-        visitId: this.config.userInfo.visitId,
-        eventNo: 0,
-      }
 
-      this.api.getSignName(params)
-        .then(
-          res => {
-            for (var i = 0; i < res.length; i++) {
-              res[i].itemValue = " ";
-            }
-            //定义一个排序方法
-            let compare = function(prop) {
-              return function(obj1, obj2) {
-                let val1 = obj1[prop]
-                let val2 = obj2[prop]
-                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                  val1 = Number(val1);
-                  val2 = Number(val2);
-                }
-                if (val1 < val2) {
-                  return -1;
-                } else if (val1 > val2) {
-                  return 1;
-                } else {
-                  return 0;
-                }
-              }
-            }
-            //根据itemcode排序
-            // this.signNameLisg = res.sort(compare("itemCode "));
-            this.signNameLisg = res;
-            this.getSignTimeData(res.length, res);
+            // this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
           })
     },
-    getSignTimeData(len, list) {
+    getSignTimeData() {
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
         eventNo: 0
       }
+      this.api.getNewTimeData(params)
+        .then(res => {
+          if (res.length > 0) {
+            res.sort(function(a, b) {
+              return Date.parse(a.time) - Date.parse(b.time); //时间正序
+            });
+            this.dataOperFun(res);
+          } else {
+            this.dataPathArray = []
+          }
+
+        })
+      return
+
       this.api.getSignTimeData(params)
         .then(
           res => {
@@ -458,6 +420,7 @@ export default {
               }
               newArray.push(arr1)
             }
+
             for (var i = 0; i < newArray.length; i++) {
               for (var j = 0; j < newArray[i].length; j++) {
                 let min = '';
@@ -487,6 +450,13 @@ export default {
     },
 
     showData(item, ev) {
+      let nameList = this.signNameLisg
+      // this.$nextTick(() => {
+      nameList.forEach(it => {
+        if (item.itemCode == it.itemCode) {
+          item.itemData.itemName = it.itemName
+        }
+      })
       this.mouseItem = item;
       this.tipLeft = item.x + 10;
       this.tipTop = item.y + 20;
@@ -495,6 +465,8 @@ export default {
       } else {
         this.tipView = false;
       }
+      // })
+
 
     },
 
@@ -509,9 +481,10 @@ export default {
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
       }
+      this.pathArray = [];
+      this.getSignName();
       // this.initFun();
-      // return
-      var list = this.signNameLisg;
+      return
       let arryList = this.signdataList;
       let sortArray = [];
       for (var i = 0; i < arryList.length; i++) {
@@ -519,6 +492,7 @@ export default {
           sortArray.push(arryList[i])
         }
       }
+
       if (sortArray.length < 1) {
         this.pathArray = [];
         this.calculatePath();
@@ -532,6 +506,59 @@ export default {
 
     //数据处理
     dataOperFun(sortArray) {
+      let testArr = []
+      sortArray.forEach(item => {
+        item.dataValue.forEach(va => {
+          let obj = {}
+          obj.time = "20" + va.TIME_POINT;
+          obj.value = va.ITEM_VALUE,
+            obj.itemCode = va.ITEM_NAME
+          testArr.push(obj)
+        })
+      })
+
+
+      var map = {},
+        dest = [];
+      for (var i = 0; i < testArr.length; i++) {
+        var ai = testArr[i];
+        if (!map[ai.itemCode]) {
+          dest.push({
+            itemCode: ai.itemCode,
+            itemData: [ai]
+          });
+          map[ai.itemCode] = ai;
+        } else {
+          for (var j = 0; j < dest.length; j++) {
+            var dj = dest[j];
+            if (dj.itemCode == ai.itemCode) {
+              dj.itemData.push(ai);
+              break;
+            }
+          }
+        }
+      }
+      for (var i = 0; i < dest.length; i++) {
+        let listOne = dest[i].itemData
+        for (var j = 0; j < listOne.length; j++) {
+
+          let min = '';
+          if (new Date(listOne[j].time) > this.config.maxTime) {
+            min = 700 + 1;
+          } else {
+            min = this.getMinuteDif(this.config.initTime, listOne[j].time);
+          }
+          let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
+          let y = this.svgHeight - Math.round(listOne[j].value / 10 * (this.svgHeight / this.rows))
+          listOne[j].x = x;
+          listOne[j].y = y;
+          listOne[j].itemData = { itemCode: listOne[j].itemCode, itemName: '' }
+        }
+        this.pathArray.push(listOne);
+      }
+      this.calculatePath();
+
+      return
       var list = this.signNameLisg;
       var newArray = [];
       for (var i = 0; i < list.length; i++) {
@@ -587,18 +614,6 @@ export default {
 
       this.getYDataArray();
     },
-    initFunNoTime() {
-      this.getLineXy();
-      if (this.page == false) {
-        this.getSignNameNoTime();
-      }
-
-      this.getYDataArray();
-    },
-    runTimeFun() {
-      this.initFun()
-
-    }
   },
   mounted() {
     if (this.setTimeId) {
@@ -609,11 +624,11 @@ export default {
   },
   created() {
     Bus.$on('test', this.pageTurnFun)
-    Bus.$on('timeSetChange', this.initFunNoTime)
+    Bus.$on('timeSetChange', this.pageTurnFun)
   },
   beforeDestroy() {
     Bus.$off('test', this.pageTurnFun);
-    Bus.$off('timeSetChange', this.initFunNoTime)
+    Bus.$off('timeSetChange', this.pageTurnFun)
     clearTimeout(this.setTimeId);
   },
   components: {

@@ -151,7 +151,7 @@ export default {
                       }
                     } else {}
                     this.dataBody.sort(this.sortFun)
-                    this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+                    // this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
                   });
               });
           });

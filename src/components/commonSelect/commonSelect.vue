@@ -124,7 +124,6 @@ export default {
     },
 
     busToTop() {
-      debugger
       this.$emit('toparentevent', this.conInfo);
     },
 

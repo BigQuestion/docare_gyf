@@ -54,7 +54,8 @@
         <div class="flex" style="margin-top: 5px;">
           <div style="width: 70px;">手术时间</div>
           <div>
-            <input type="datetime-local" v-model="operMasterTime" name="" style="width: 170px;">
+            <!-- <dateTime width="170" v-model="operMasterTime" @change="changeStatus('5','inDateTime',$event)"></dateTime> -->
+            <input type="datetime-local" v-model="operMasterTime" class="timePicker" name="" style="width: 170px;">
           </div>
           <div style="width: 40px;margin-left: 20px;">台次</div>
           <div>
@@ -182,6 +183,7 @@
 import jzSelect from '@/components/jzRegisterContent/jzSelect.vue';
 import userSelect from '@/components/jzRegisterContent/userSelect.vue';
 import testSelect from '@/components/jzRegisterContent/testSelect.vue';
+import dateTime from '@/components/plugins/dateTime.vue';
 export default {
   data() {
     return {
@@ -331,6 +333,7 @@ export default {
         thirdSupplyNurse: this.jzInfo.thirdSupplyNurseId,
         operationName: this.jzInfo.operationName,
         operStatus: 0,
+        operatingRoom: this.config.wardCode //手术室代码
       }
       this.api.insertEmergencyWrite(params)
         .then(res => {
@@ -387,7 +390,8 @@ export default {
   components: {
     jzSelect,
     userSelect,
-    testSelect
+    testSelect,
+    dateTime
   },
   computed: {
 
@@ -395,3 +399,9 @@ export default {
 }
 
 </script>
+<style scoped>
+.timePicker::-webkit-inner-spin-button {
+  display: none;
+}
+
+</style>

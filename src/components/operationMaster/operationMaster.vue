@@ -1081,13 +1081,19 @@ export default {
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
-      this.$set(this.$data, 'inDateTime', this.changeDateFormat(item.inDateTime))
-      this.inDateTime = this.changeDateFormat(item.inDateTime);
-      this.anesStartTime = this.changeDateFormat(item.anesStartTime);
-      this.startDateTime = this.changeDateFormat(item.startDateTime);
-      this.endDateTime = this.changeDateFormat(item.endDateTime);
-      this.anesEndTime = this.changeDateFormat(item.anesEndTime);
-      this.outDateTime = this.changeDateFormat(item.outDateTime);
+      // this.$set(this.$data, 'inDateTime', this.changeDateFormat(item.inDateTime))
+      this.inDateTime = item.inDateTime
+      this.anesStartTime = item.anesStartTime
+      this.startDateTime = item.startDateTime
+      this.endDateTime = item.endDateTime
+      this.anesEndTime = item.anesEndTime
+      this.outDateTime = item.outDateTime
+      // this.inDateTime = this.changeDateFormat(item.inDateTime);
+      // this.anesStartTime = this.changeDateFormat(item.anesStartTime);
+      // this.startDateTime = this.changeDateFormat(item.startDateTime);
+      // this.endDateTime = this.changeDateFormat(item.endDateTime);
+      // this.anesEndTime = this.changeDateFormat(item.anesEndTime);
+      // this.outDateTime = this.changeDateFormat(item.outDateTime);
       this.initComponementConfig();
 
     },
@@ -1200,6 +1206,10 @@ export default {
                 }
               )
               this.doShowData = false;
+              if (this.setTimeId) {
+                this.refreshForm();
+              }
+
             } else {
               alert(res.msg)
             }
@@ -1615,8 +1625,8 @@ export default {
             visitId: this.lockedPatientInfo.visitId,
             operId: this.lockedPatientInfo.operId,
             // inDateTime: this.datetimeLocalToDate(this.inDateTime),
-            inDateTime: this.inDateTime,
-            anesStartTime: this.anesStartTime,
+            inDateTime: new Date(this.inDateTime),
+            anesStartTime: new Date(this.anesStartTime),
             operStatus: status,
             operatingRoom: this.lockedPatientInfo.operatingRoom,
             operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
@@ -1628,9 +1638,9 @@ export default {
             patientId: this.lockedPatientInfo.patientId,
             visitId: this.lockedPatientInfo.visitId,
             operId: this.lockedPatientInfo.operId,
-            inDateTime: this.inDateTime,
-            anesStartTime: this.anesStartTime,
-            startDateTime: this.startDateTime,
+            inDateTime: new Date(this.inDateTime),
+            anesStartTime: new Date(this.anesStartTime),
+            startDateTime: new Date(this.startDateTime),
             operStatus: status,
             operatingRoom: this.lockedPatientInfo.operatingRoom,
             operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
@@ -1643,10 +1653,10 @@ export default {
             visitId: this.lockedPatientInfo.visitId,
             operId: this.lockedPatientInfo.operId,
             // inDateTime: this.datetimeLocalToDate(this.inDateTime),
-            inDateTime: this.inDateTime,
-            anesStartTime: this.anesStartTime,
-            startDateTime: this.startDateTime,
-            endDateTime: this.endDateTime,
+            inDateTime: new Date(this.inDateTime),
+            anesStartTime: new Date(this.anesStartTime),
+            startDateTime: new Date(this.startDateTime),
+            endDateTime: new Date(this.endDateTime),
             operStatus: status,
             operatingRoom: this.lockedPatientInfo.operatingRoom,
             operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
@@ -1659,11 +1669,11 @@ export default {
             visitId: this.lockedPatientInfo.visitId,
             operId: this.lockedPatientInfo.operId,
             // inDateTime: this.datetimeLocalToDate(this.inDateTime),
-            inDateTime: this.inDateTime,
-            anesStartTime: this.anesStartTime,
-            startDateTime: this.startDateTime,
-            endDateTime: this.endDateTime,
-            anesEndTime: this.anesEndTime,
+            inDateTime: new Date(this.inDateTime),
+            anesStartTime: new Date(this.anesStartTime),
+            startDateTime: new Date(this.startDateTime),
+            endDateTime: new Date(this.endDateTime),
+            anesEndTime: new Date(this.anesEndTime),
             operStatus: status,
             operatingRoom: this.lockedPatientInfo.operatingRoom,
             operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
@@ -1675,20 +1685,17 @@ export default {
             visitId: this.lockedPatientInfo.visitId,
             operId: this.lockedPatientInfo.operId,
             // inDateTime: this.datetimeLocalToDate(this.inDateTime),
-            inDateTime: this.inDateTime,
-            anesStartTime: this.anesStartTime,
-            startDateTime: this.startDateTime,
-            endDateTime: this.endDateTime,
-            anesEndTime: this.anesEndTime,
-            outDateTime: this.outDateTime,
+            inDateTime: new Date(this.inDateTime),
+            anesStartTime: new Date(this.anesStartTime),
+            startDateTime: new Date(this.startDateTime),
+            endDateTime: new Date(this.endDateTime),
+            anesEndTime: new Date(this.anesEndTime),
+            outDateTime: new Date(this.outDateTime),
             operStatus: status,
             operatingRoom: this.lockedPatientInfo.operatingRoom,
             operatingRoomNo: this.lockedPatientInfo.operatingRoomNo
           }
         }
-
-
-
         this.nextDATA = params;
         this.api.changeOperationStatus(params)
           .then(
@@ -1726,6 +1733,10 @@ export default {
                 }
                 alert(res.msg)
               }
+              if (this.setTimeId) {
+                this.refreshForm();
+              }
+
             });
       } else {
         alert('当前时间不能小于之前时间！')
@@ -2040,6 +2051,11 @@ export default {
               time = inDateTime
             } else {
               time = new Date().Format("yyyy-MM-dd") + " 08:00:00";
+              this.config.initTime = new Date(time);
+              this.config.startMinTime = new Date(time);
+              this.config.maxTime = '';
+              Bus.$emit('timeSetChange');
+              return
             }
           }
           if (startMinTime) {
@@ -2097,12 +2113,14 @@ export default {
               this.$nextTick(function() {
                 Bus.$emit('timeSetChange');
               })
+            } else {
+              Bus.$emit('timeSetChange');
             }
 
           })
       }
       this.setTimeId = setTimeout(_ => this.getMaxTime(), 60000)
-      console.log(new Date())
+      // console.log(new Date())
 
     },
     getMaxTimeNoset() {
@@ -2128,6 +2146,8 @@ export default {
             this.$nextTick(function() {
               Bus.$emit('timeSetChange');
             })
+          } else {
+            Bus.$emit('timeSetChange');
           }
         })
     },
@@ -2619,6 +2639,19 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
