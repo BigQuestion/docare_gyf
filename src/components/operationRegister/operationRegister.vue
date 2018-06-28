@@ -1123,7 +1123,6 @@ export default {
     }
 
     document.addEventListener('click', (e) => {
-      debugger
       if (this.$refs.codeSelect && !this.$refs.codeSelect.contains(e.target)) {
         this.signItemView = false
       }

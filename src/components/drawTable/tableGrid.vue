@@ -276,6 +276,7 @@ export default {
 
     },
     createLine(x1, x2, y1, y2, obj) {
+      debugger
       var _this = this;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
         // setTimeout(() => {
@@ -465,6 +466,7 @@ export default {
             //结束时间间隔
             let eMin = ''
             let maxPatTime = this.config.patientMaxTime
+            debugger
             //判断是否在当前时间内
             if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
               continue;

@@ -19,7 +19,7 @@
       <p v-else-if="item == 104" style="color:#8080FF">X肛温</p>
       <p v-else-if="item == 105" style="color:#FF8080">X鼻咽温</p>
       <p v-else-if="item == 112" style="color:Blue">△ETCO2</p>
-      <p v-else-if="item == 188">●SpO2</p>
+      <p v-else-if="item == 188" style="color:Blue">●SpO2</p>
       <p v-else-if="item == 202">△f</p>
       <p v-else-if="item == 208">△Ppeak</p>
       <p v-else-if="item == 209">△Pplat</p>

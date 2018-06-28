@@ -6,6 +6,9 @@
     <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt dashed'+conInfo.lineColor}">
       {{infoData[attrName]}}
     </div>
+    <div v-else-if="infoData.strFormatMode != ''&&infoData.strFormatMode != 'false'&&infoData.strFormatMode != 'true'">
+      <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
+    </div>
     <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}">
       {{infoData[attrName]}}
     </div>

@@ -2089,7 +2089,7 @@ export default {
 
       let min = new Date(intitime).getMinutes();
       let nowMin = new Date().getMinutes();
-      if (nowMin % 3 == 0) {
+      if (nowMin % 5 == 0) {
         // this.timeCount++;
         let timeParam = {
           "patientId": this.lockedPatientInfo.patientId,
@@ -2110,6 +2110,7 @@ export default {
               } else {
                 this.config.patientMaxTime = res.TIME
               }
+              debugger
               this.$nextTick(function() {
                 Bus.$emit('timeSetChange');
               })
@@ -2639,6 +2640,10 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
 
 
 
