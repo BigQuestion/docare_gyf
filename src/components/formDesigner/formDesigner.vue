@@ -216,6 +216,7 @@
               <div class="ediChild">
                 底线颜色:
               </div>
+              <!-- <colorPicker></colorPicker> -->
               <colorPicker v-model="chooseItems[0].lineColor"></colorPicker>{{chooseItems[0].lineColor}}
             </div>
           </div>
