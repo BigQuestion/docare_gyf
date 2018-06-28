@@ -714,11 +714,16 @@ export default {
                                         if (res.success == true) {
                                             this.dataInAnesthesia();
                                             this.thisOnchange = false;
-                                            window.ipc.send('runexe');
+
                                         }
                                     }
                                 )
+                            } else if (this.binding == '' && this.bindingTwo == '') {
+                                alert('若想启动采集程序，请绑定仪器。')
+                            } else {
+                                window.ipc.send('runexe');
                             }
+
             // else if (this.thisOnchange == true && this.bothClick1 == '' && this.bothClick2 == '') {
 
             //         console.log(this.thisAdata)
