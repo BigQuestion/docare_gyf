@@ -17,7 +17,7 @@
       </div>
     </div>
     <div v-else>
-      <div v-if="conInfo.strFormatMode != ''&&conInfo.strFormatMode != 'false'&&conInfo.strFormatMode != 'true'">
+      <div v-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'">
         <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
       </div>
       <div v-else>
@@ -148,7 +148,6 @@ export default {
   props: ['conInfo', 'attrName', 'data', 'infoData'],
   mounted() {
     this.conInfo.modifyFiledValue = '';
-
   },
   created() {
     // 点击其他不在的区域触发事件

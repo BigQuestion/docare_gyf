@@ -1,15 +1,14 @@
 <template>
   <div style="position: relative;font-size: 10.5pt;font-family: SimSun;">
-    <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt solid'+conInfo.lineColor}">
+    <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt solid'+conInfo.lineColor}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
-    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt dashed'+conInfo.lineColor}">
+    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt dashed'+conInfo.lineColor}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
-    <div v-else-if="infoData.strFormatMode != ''&&infoData.strFormatMode != 'false'&&infoData.strFormatMode != 'true'">
-      <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
-    </div>
-    <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}">
+    <!-- <input v-model="strToDate"   :readonly="true"> -->
+    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}"  style="min-width: 20px;min-height: 20px;">{{strToDate}}</div>
+    <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
   </div>
@@ -26,7 +25,6 @@ export default {
       infoData: this.conInfo,
       changeTimes: 0,
       focusState: false,
-
     }
   },
   methods: {
@@ -43,21 +41,9 @@ export default {
   },
   computed: {
     strToDate() {
-      if (this.conInfo.strFormatMode == 'true' && this.infoData.value) {
-        var time = new Date(this.conInfo.value);
-        var y = time.getFullYear();
-        if (y < 10) {
-          y = '0' + y;
-        }
-        var m = time.getMonth() + 1;
-        if (m < 10) {
-          m = '0' + m;
-        }
-        var d = time.getDate();
-        if (d < 10) {
-          d = '0' + d;
-        }
-        return y + '-' + m + '-' + d;
+      if (this.infoData.value && this.infoData.strFormatMode == 'yyyy-MM-dd' || this.infoData.strFormatMode == 'hh:mm' || this.infoData.strFormatMode == 'yyyy-MM-dd hh:mm') {
+        var time = new Date(this.conInfo.value).Format(this.conInfo.strFormatMode);
+        return time;
       }
     }
   },
@@ -102,5 +88,4 @@ export default {
   border-bottom: 1px solid #222;
   color: red !important;
 }
-
 </style>
