@@ -1733,9 +1733,9 @@ export default {
                 }
                 alert(res.msg)
               }
-              if (this.setTimeId) {
-                this.refreshForm();
-              }
+              // if (this.setTimeId) {
+              //   this.refreshForm();
+              // }
 
             });
       } else {
