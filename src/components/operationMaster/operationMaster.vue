@@ -441,7 +441,7 @@
             </div>
           </div>
           <div ref="mybox" style="display: none; ">
-            <div class="designArea" style="font-size: 12pt;font-family: STSong;">
+            <div class="designArea" style="font-size: 9pt;font-family: STSong;">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2)*0.75)+'pt'}">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
               </div>
@@ -800,6 +800,7 @@ export default {
           LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.normal.innerHTML);
           LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
           LODOP.PREVIEW();
+          // LODOP.PRINT()
         }, 1000)
       } else {
         setTimeout(() => {
@@ -812,6 +813,7 @@ export default {
             this.printPage(this.currentPageNum);
           } else {
             LODOP.PREVIEW();
+            // LODOP.PRINT()
           }
         }, 1000)
       }
@@ -2639,6 +2641,10 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
 
 
 

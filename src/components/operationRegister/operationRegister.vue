@@ -217,8 +217,11 @@
             {{ option.itemName }}
           </option>
         </select> -->
+        <div>
+          <input v-model="serchZmItem" @keyup="serchJmItem">
+        </div>
         <div style="padding-left: 5px;z-index: 3;background-color: white;height: 200px;overflow-y: auto;">
-          <div class="listIngt" @click="getSeclectItem(option)" v-for="option in allSignItems">{{option.itemName}}</div>
+          <div class="listIngt" @click="getSeclectItem(option)" v-for="option in showItemList">{{option.itemName}}</div>
         </div>
       </div>
       <div style="margin-top: 5px;padding-left:15px;">
@@ -406,6 +409,8 @@ export default {
       concentrationList: [], //用药浓度列表,
       speedUnitList: [], //速度单位列表
       dosageUnitsList: [], //用药单位列表
+      serchZmItem: '',
+      showItemList: [],
 
     }
   },
@@ -910,15 +915,18 @@ export default {
     },
     //添加生命体征项目
     addSignItem() {
+      this.serchZmItem = ''
       if (this.allSignItems.length == 0) {
         let params = {}
         this.api.selectAllItems(params)
           .then(res => {
             this.allSignItems = res.list;
+            this.showItemList = res.list;
             this.signItemView = !this.signItemView;
           })
       } else {
         this.signItemView = !this.signItemView;
+
       }
 
     },
@@ -1098,6 +1106,24 @@ export default {
             this.dosageUnitsList = rt.list
           });
     },
+    serchJmItem() {
+      var list = this.allSignItems;
+      var m = this.serchZmItem.toUpperCase();
+      var newList = [];
+      if (m) {
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].pyjm && list[i].pyjm.indexOf(m) >= 0) {
+            newList.push(list[i]);
+          }
+
+        }
+        this.showItemList = newList;
+      } else {
+        this.showItemList = list;
+      }
+
+
+    },
   },
   props: ['objectItem', 'parentToChild'],
   computed: {},
@@ -1125,15 +1151,15 @@ export default {
     document.addEventListener('click', (e) => {
       if (this.$refs.codeSelect && !this.$refs.codeSelect.contains(e.target)) {
         this.signItemView = false
+        this.serchZmItem = ''
+        this.showItemList = this.allSignItems
+
       }
     })
   },
-
-  create() {
-    console.log("create")
-    debugger
-
-  }
+  beforeDestroy() {
+    document.removeEventListener('click', (e) => {})
+  },
 }
 
 </script>
