@@ -806,12 +806,14 @@ export default {
         setTimeout(() => {
           LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
           LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+          // LODOP.ADD_PRINT_HTML(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML)
           LODOP.NewPageA();
           if (index + 1 <= this.config.pageTotal) {
             this.toChangePage(1);
             this.currentPageNum++;
             this.printPage(this.currentPageNum);
           } else {
+            // LODOP.PRINT_DESIGN();
             LODOP.PREVIEW();
             // LODOP.PRINT()
           }
@@ -2641,6 +2643,12 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
 
 
 
