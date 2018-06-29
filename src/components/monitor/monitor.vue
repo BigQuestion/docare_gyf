@@ -345,6 +345,7 @@ export default {
             this.currentRecvFrequency = item.currentRecvFrequency;
             this.currentRecvtimesUplimit = item.currentRecvtimesUplimit;
             this.binding = {
+                bedNo:this.config.userInfo.operatingRoomNo,
                 itemType: 0,
                 wardCode: this.config.wardCode,
                 wardType: 0,
@@ -356,8 +357,8 @@ export default {
                 datalogStartTime: this.dataOfStartSql,
                 defaultRecvFrequency: item.defaultRecvFrequency,
                 monitorLabel: item.monitorLabel,
+                
             }
-            // console.log(this.binding)
             // console.log(this.thisAdata)
             if (this.thisAdata == true) {
                 for (var i = 0; i <= this.commonTypeList.length - 1; i++) {
@@ -407,6 +408,7 @@ export default {
             var timeStart = new Date().Format('yyyy-MM-dd hh:mm');
             this.dataOfStartSql = timeStart;
             this.bindingTwo = {
+                bedNo:this.config.userInfo.operatingRoomNo,
                 itemType: 1,
                 wardCode: this.config.wardCode,
                 wardType: 0,
@@ -756,6 +758,7 @@ export default {
                         this.currentRecvFrequency = this.commonTypeList[a].currentRecvFrequency
                         this.currentRecvtimesUplimit = this.commonTypeList[a].currentRecvtimesUplimit
                         this.binding = {
+                            bedNo:this.config.userInfo.operatingRoomNo,
                             itemType: 0,
                             wardCode: this.config.wardCode,
                             wardType: 0,
@@ -786,6 +789,7 @@ export default {
                         this.currentRecvFrequency = this.commonTypeListTwo[j].currentRecvFrequency
                         this.currentRecvtimesUplimit = this.commonTypeListTwo[j].currentRecvtimesUplimit
                         this.bindingTwo = {
+                            bedNo:this.config.userInfo.operatingRoomNo,
                             itemType: 1,
                             wardCode: this.config.wardCode,
                             wardType: 0,
