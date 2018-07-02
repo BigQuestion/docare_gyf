@@ -422,9 +422,11 @@ export default {
   },
   created() {
     Bus.$on('test', this.pageTurnFun)
+    Bus.$on('timeSetChange', this.getData)
   },
   beforeDestroy() {
     Bus.$off('test', this.pageTurnFun);
+    Bus.$off('timeSetChange', this.getData)
   },
   components: {
 

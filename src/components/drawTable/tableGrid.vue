@@ -276,7 +276,6 @@ export default {
 
     },
     createLine(x1, x2, y1, y2, obj) {
-      debugger
       var _this = this;
       if (obj.DURATIVE_INDICATOR == 1 && (obj.ENDDATE == null || obj.ENDDATE == "")) {
         // setTimeout(() => {
@@ -466,7 +465,6 @@ export default {
             //结束时间间隔
             let eMin = ''
             let maxPatTime = this.config.patientMaxTime
-            debugger
             //判断是否在当前时间内
             if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
               continue;
@@ -568,7 +566,7 @@ export default {
                 y2: y2,
                 w: x2 - x1,
                 obj: list[i],
-                top: m * 15
+                top: m * (this.svgHeight / this.rows)
 
               })
               this.dataArray.push(list[i]);
@@ -582,7 +580,7 @@ export default {
                 y2: y2,
                 w: x2 - x1,
                 obj: list[i],
-                top: topi * 15
+                top: topi * (this.svgHeight / this.rows)
               })
 
             }
@@ -595,8 +593,6 @@ export default {
         this.dataArray.push(m)
       }
     },
-
-
   },
   mounted() {
     this.svgObj = d3.select("#tableSvg")

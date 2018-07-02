@@ -2,7 +2,7 @@
   <div style="position: relative;margin:2px;">
     <!-- <div style="height: 2px;width: 700px;background-color: red;margin-bottom: 20px;"></div> -->
     <div v-if="!page">
-      <div style="max-height: 15pt;padding: 1.5pt 0pt;display: none" ref="timelist">
+      <div style="max-height: 15pt;padding: 1.5pt 0pt;" ref="timelist">
         <div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 20pt;margin-left: -7pt;font-size: 9pt;display: inline-block;" :title="item">{{item}}</div>
         <div v-else style="width: 9pt;display: inline-block;"></div>
       </div>
@@ -11,7 +11,7 @@
         </div>
       </div>
       <div id="tableGrid" style="position: relative;">
-        <svg :width="svgWidth" :style="{height:svgHeight+'pt'}" id="tableSvgPrint">
+        <svg :width="svgWidth" :height="svgHeight" id="tableSvgPrint">
           <g v-for="item in lineArray">
             <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
           </g>
@@ -437,7 +437,7 @@ export default {
                 y2: y2,
                 w: x2 - x1,
                 obj: list[i],
-                top: m * 15
+                top: m * (this.svgHeight / this.rows)
 
               })
               this.dataArray.push(list[i]);
@@ -451,7 +451,7 @@ export default {
                 y2: y2,
                 w: x2 - x1,
                 obj: list[i],
-                top: topi * 15
+                top: topi * (this.svgHeight / this.rows)
               })
 
             }
@@ -474,10 +474,11 @@ export default {
   },
   created() {
     Bus.$on('test', this.pageChange)
-    // Bus.$on('print', this.xTimeInit)
+    Bus.$on('timeSetChange', this.xTimeInit)
   },
   beforeDestroy() {
     Bus.$off('test', this.pageChange);
+    Bus.$off('timeSetChange', this.xTimeInit)
     // Bus.$off('print', this.xTimeInit);
   },
   components: {
