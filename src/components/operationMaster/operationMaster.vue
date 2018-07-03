@@ -841,7 +841,7 @@ export default {
         this.imageBox.firstChild.style.height = height + "px"
 
 
-        LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
+        LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.imageBox.innerHTML);
         LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
         // LODOP.PRINT_DESIGN();
         // LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
@@ -2711,6 +2711,7 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
 
 
 
