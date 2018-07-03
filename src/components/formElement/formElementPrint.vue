@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="font-weight:bold;">
     <div v-if="value.type=='text'" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt',fontSize:value.fontSize+'pt'}" style="min-width: 20px;min-height: 20px;">
       {{value.value}}
     </div>

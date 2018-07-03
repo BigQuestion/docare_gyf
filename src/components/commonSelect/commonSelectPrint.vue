@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative;font-size: 10.5pt;font-family: SimSun;">
+  <div style="position: relative;font-size: 10.5pt;font-family: SimSun;font-weight:bold;">
     <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt solid'+conInfo.lineColor,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
