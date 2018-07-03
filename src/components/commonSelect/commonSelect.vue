@@ -18,10 +18,10 @@
     </div>
     <div v-else>
       <div v-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'">
-        <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
+        <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
       </div>
       <div v-else>
-        <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="true">
+        <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="true">
       </div>
     </div>
   </div>
