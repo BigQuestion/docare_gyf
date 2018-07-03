@@ -7,7 +7,7 @@
       {{infoData[attrName]}}
     </div>
     <!-- <input v-model="strToDate"   :readonly="true"> -->
-    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}"  style="min-width: 20px;min-height: 20px;">{{strToDate}}</div>
+    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" style="min-width: 20px;min-height: 20px;">{{strToDate}}</div>
     <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
@@ -88,4 +88,5 @@ export default {
   border-bottom: 1px solid #222;
   color: red !important;
 }
+
 </style>

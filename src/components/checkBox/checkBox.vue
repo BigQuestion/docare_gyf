@@ -10,7 +10,7 @@
           </div> -->
         <label>
           <input v-if="isSelected[index]" type="checkbox" @change="getSingleSelect(item,index)" checked v-model="isSelected[index]" v-bind:value="item.ItemValue" />
-          <input v-if="!isSelected[index]" type="checkbox" @change="getSingleSelect(item,index)" v-model="isSelected[index]" v-bind:value="item.ItemValue" /> {{item.ItemName}}
+          <input v-if="!isSelected[index]" type="checkbox" @change="getSingleSelect(item,index)" v-model="isSelected[index]" v-bind:value="item.ItemValue" /> <span :style="{fontSize:boxValue.fontSize+'pt'}">{{item.ItemName}}</span>
         </label>
       </div>
       <div v-else>
@@ -24,7 +24,7 @@
     <div v-else style="display: flex;">
       <div v-for="item in boxValue.listData" style="margin:0px 2px;">
         <label>
-          <input type="checkbox" disabled="disabled" v-on:value="item.ItemValue" />{{item.ItemName}}</label>
+          <input type="checkbox" disabled="disabled" v-on:value="item.ItemValue" /><span :style="{fontSize:boxValue.fontSize+'pt'}">{{item.ItemName}}</span></label>
       </div>
     </div>
   </div>
