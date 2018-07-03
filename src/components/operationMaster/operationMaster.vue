@@ -807,12 +807,12 @@ export default {
       let contentImageBox;
       let imageBox;
       canvasBox = document.createElement("div");
-      canvasBox.style.width = imageWidth + "px";
-      canvasBox.style.height = height + "px";
+      canvasBox.style.width = imageWidth * 2 + "px";
+      canvasBox.style.height = height * 2 + "px";
       document.body.appendChild(canvasBox);
       contentImageBox = document.createElement("div");
-      contentImageBox.style.width = width + "px";
-      contentImageBox.style.height = height + "px";
+      contentImageBox.style.width = width * 2 + "px";
+      contentImageBox.style.height = height * 2 + "px";
 
       document.body.appendChild(contentImageBox);
       imageBox = document.createElement("div");
@@ -836,13 +836,23 @@ export default {
       let boxHtml = this.$refs.mybox
       html2canvas(boxHtml, { width: imageWidth, height: height, scale: 5 }).then(canvas => {
         this.canvasBox.appendChild(canvas)
-        this.imageBox.appendChild(Canvas2Image.convertToImage(canvas, width, height, "png"))
+        // canvas.style.zoom = 1;
+        canvas.style.transform = "scale(2,2)";
+        canvas.style.transformOrigin = "0 0";
+        // var canvas = document.querySelector("canvas");
+        // var context = canvas.getContext('2d');
+        // // 【重要】关闭抗锯齿
+        // context.mozImageSmoothingEnabled = false;
+        // context.webkitImageSmoothingEnabled = false;
+        // context.msImageSmoothingEnabled = false;
+        // context.imageSmoothingEnabled = false;
+        this.imageBox.appendChild(Canvas2Image.convertToImage(canvas, width * 2, height * 2, "png"))
         this.imageBox.firstChild.style.width = imageWidth + "px"
         this.imageBox.firstChild.style.height = height + "px"
 
 
-        LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.contentImageBox.innerHTML);
-        LODOP.SET_PRINT_STYLEA(0, "Stretch", 2);
+        LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.imageBox.innerHTML);
+        LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
         // LODOP.PRINT_DESIGN();
         // LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
         //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
@@ -854,7 +864,7 @@ export default {
         } else {
           LODOP.PREVIEW();
         }
-        this.removeTempDom();
+        // this.removeTempDom();
       });
 
       // this.printed = true;
@@ -2711,6 +2721,51 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
