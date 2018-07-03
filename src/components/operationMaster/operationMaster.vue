@@ -441,7 +441,7 @@
             </div>
           </div>
           <!-- :style="{'display':showPrint?'inline':'none'}" -->
-          <div ref="mybox">
+          <div ref="mybox" :style="{'display':showPrint?'inline':'none'}">
             <div class="designArea" style="font-size: 14pt;font-family: SimSun;height: 1900px;">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2)*0.75)+'pt'}">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
@@ -834,17 +834,17 @@ export default {
       this.createTempDom(width, height, imageWidth);
 
       let boxHtml = this.$refs.mybox
-      html2canvas(boxHtml, { width: imageWidth, height: height }).then(canvas => {
+      html2canvas(boxHtml, { width: imageWidth, height: height, scale: 5 }).then(canvas => {
         this.canvasBox.appendChild(canvas)
         this.imageBox.appendChild(Canvas2Image.convertToImage(canvas, width, height, "png"))
-        // this.imageBox.firstChild.style.width = imageWidth + "px"
-        // this.imageBox.firstChild.style.height = height + "px"
+        this.imageBox.firstChild.style.width = imageWidth + "px"
+        this.imageBox.firstChild.style.height = height + "px"
 
 
-        // LODOP.ADD_PRINT_HTML(1, 1, "100%", "BottomMargin:1mm", this.imageBox.innerHTML);
+        LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
         LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
         // LODOP.PRINT_DESIGN();
-        LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
+        // LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
         //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
         LODOP.NewPageA();
         if (index + 1 <= this.config.pageTotal) {
@@ -854,7 +854,7 @@ export default {
         } else {
           LODOP.PREVIEW();
         }
-        // this.removeTempDom();
+        this.removeTempDom();
       });
 
       // this.printed = true;
@@ -2711,6 +2711,14 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
+
+
 
 
 

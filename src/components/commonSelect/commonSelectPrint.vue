@@ -42,7 +42,7 @@ export default {
   computed: {
     strToDate() {
       if (this.infoData.value && this.infoData.strFormatMode ==
- 'yyyy-MM-dd' || this.infoData.strFormatMode == 'hh:mm' || this.infoData.strFormatMode == 'yyyy-MM-dd hh:mm') {
+        'yyyy-MM-dd' || this.infoData.strFormatMode == 'hh:mm' || this.infoData.strFormatMode == 'yyyy-MM-dd hh:mm') {
         var time = new Date(this.conInfo.value).Format(this.conInfo.strFormatMode);
         return time;
       }
