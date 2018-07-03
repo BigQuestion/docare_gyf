@@ -437,7 +437,7 @@ export default {
                 y2: y2,
                 w: x2 - x1,
                 obj: list[i],
-                top: m * 15
+                top: m * (this.svgHeight / this.rows)
 
               })
               this.dataArray.push(list[i]);
@@ -451,7 +451,7 @@ export default {
                 y2: y2,
                 w: x2 - x1,
                 obj: list[i],
-                top: topi * 15
+                top: topi * (this.svgHeight / this.rows)
               })
 
             }
@@ -474,10 +474,11 @@ export default {
   },
   created() {
     Bus.$on('test', this.pageChange)
-    // Bus.$on('print', this.xTimeInit)
+    Bus.$on('timeSetChange', this.xTimeInit)
   },
   beforeDestroy() {
     Bus.$off('test', this.pageChange);
+    Bus.$off('timeSetChange', this.xTimeInit)
     // Bus.$off('print', this.xTimeInit);
   },
   components: {

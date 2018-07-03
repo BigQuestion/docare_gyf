@@ -440,8 +440,8 @@
               </div>
             </div>
           </div>
-          <div ref="mybox" style="display: none; ">
-            <div class="designArea" style="font-size: 9pt;font-family: STSong;">
+          <div ref="mybox" :style="{'display':showPrint?'inline':'none'}">
+            <div class="designArea" style="font-size: 12pt;font-family: STSong;height: 1900px;">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2)*0.75)+'pt'}">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
               </div>
@@ -454,13 +454,13 @@
             </div>
           </div>
           <div v-if="formDetail" style="position: absolute;bottom:30px;right: 20px;">
-            <button v-if="pageButtonView" @click="toChangePage(0)">首页</button>
+            <button ref="buttonTest" v-if="pageButtonView" @click="toChangePage(0)">首页</button>
             <button v-if="pageButtonView" @click="toChangePage(-1)">上一页</button>
             <button v-if="pageButtonView" @click="toChangePage(1)">下一页</button>
             <button v-if="tempButtonView" @click="applyTemplateFun">应用模板</button>
             <button v-if="tempButtonView" @click="openSaveTemView">保存模板</button>
             <button @click="submitSaveForm">保存</button>
-            <button @click="printPdf">打印</button>
+            <button @click="CreateOneFormPage">打印</button>
             <button @click="formSetting">配置</button>
             <button @click="refreshForm">刷新</button>
           </div>
@@ -573,6 +573,8 @@ import { getLodop } from '@/assets/js/LodopFuncs';
 import Bus from '@/bus.js';
 import myDatepicker from '@/components/plugins/vue-datepicker.vue';
 import dateTime from '@/components/plugins/dateTime.vue';
+import html2canvas from 'html2canvas'
+import { Canvas2Image } from '@/assets/js/canvas2image';
 let LODOP
 export default {
   data() {
@@ -763,33 +765,107 @@ export default {
         }
       ],
       timeCount: 0, //计时器次数
+      canvasBox: '',
+      contentImageBox: '',
+      imageBox: '',
+      showPrint: false,
 
 
     }
   },
   methods: {
-    printPdf() {
-      this.printed = true;
-      this.$set(this.config, 'isPrintedView', true);
-      this.isPrint = true;
-      Bus.$emit('print', "print");
-      //LODOP.PRINT();
-      const _this = this;
-      this.CreateOneFormPage();
+    lodopInit() {
+      LODOP = getLodop();
+      LODOP.SET_PRINT_PAGESIZE(0, "176mm", "250mm", "B5")
+      var _this = this;
       if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
         //不在打印预览界面
         if (Value == 0) {
-          _this.$set(_this.config, 'isPrintedView', false);
-          Bus.$emit('noprint', "print");
-          _this.isPrint = false;
+          // _this.$set(_this.config, 'isPrintedView', false);
+          // Bus.$emit('noprint', "print");
+          // _this.isPrint = false;
           _this.toChangePage(0);
+
+
+
         }
 
       };
     },
+    removeTempDom() {
+      this.contentImageBox.removeChild(this.imageBox);
+      this.imageBox = ''
+      document.body.removeChild(this.contentImageBox);
+      this.contentImageBox = ''
+      document.body.removeChild(this.canvasBox);
+      this.canvasBox = ''
+      this.showPrint = false
+    },
+    createTempDom(width, height, imageWidth) {
+      let canvasBox;
+      let contentImageBox;
+      let imageBox;
+      canvasBox = document.createElement("div");
+      canvasBox.style.width = imageWidth + "px";
+      canvasBox.style.height = height + "px";
+      document.body.appendChild(canvasBox);
+      contentImageBox = document.createElement("div");
+      contentImageBox.style.width = width + "px";
+      contentImageBox.style.height = height + "px";
+
+      document.body.appendChild(contentImageBox);
+      imageBox = document.createElement("div");
+      imageBox.style.width = width + "px";
+      imageBox.style.height = height + "px";
+      imageBox.style.textAlign = "center";
+      contentImageBox.appendChild(imageBox);
+
+
+      this.canvasBox = canvasBox
+      this.contentImageBox = contentImageBox
+      this.imageBox = imageBox
+    },
+    printPdf(index) {
+      this.showPrint = true
+      let width = 1112
+      let height = 1580
+      let imageWidth = 900
+      this.createTempDom(width, height, imageWidth);
+
+      let boxHtml = this.$refs.mybox
+      html2canvas(boxHtml, { width: imageWidth, height: height }).then(canvas => {
+        this.canvasBox.appendChild(canvas)
+        this.imageBox.appendChild(Canvas2Image.convertToImage(canvas, width, height, "png"))
+        this.imageBox.firstChild.style.width = imageWidth + "px"
+        this.imageBox.firstChild.style.height = height + "px"
+
+
+        LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.imageBox.innerHTML);
+        LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+        // LODOP.PRINT_DESIGN();
+        // LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
+        //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+        LODOP.NewPageA();
+        if (index + 1 <= this.config.pageTotal) {
+          this.toChangePage(1);
+          this.currentPageNum++;
+          this.printPage(this.currentPageNum);
+        } else {
+          LODOP.PREVIEW();
+        }
+        this.removeTempDom();
+      });
+
+      // this.printed = true;
+      // this.$set(this.config, 'isPrintedView', true);
+      // this.isPrint = true;
+      // Bus.$emit('print', "print");
+      // //LODOP.PRINT();
+      // const _this = this;
+      // this.CreateOneFormPage();
+
+    },
     CreateOneFormPage() {
-      LODOP = getLodop();
-      LODOP.SET_PRINT_PAGESIZE(0, "176mm", "250mm", "B5")
       this.currentPageNum = 1;
       this.printPage(this.currentPageNum)
     },
@@ -804,17 +880,7 @@ export default {
         }, 1000)
       } else {
         setTimeout(() => {
-          LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
-          LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-          LODOP.NewPageA();
-          if (index + 1 <= this.config.pageTotal) {
-            this.toChangePage(1);
-            this.currentPageNum++;
-            this.printPage(this.currentPageNum);
-          } else {
-            LODOP.PREVIEW();
-            // LODOP.PRINT()
-          }
+          this.printPdf(index);
         }, 1000)
       }
 
@@ -1429,6 +1495,7 @@ export default {
           });
     },
     selectMedFormTemp(item) {
+      this.lodopInit();
       let timeParam = {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
@@ -1533,6 +1600,7 @@ export default {
                             this.$set(this.formItems, i, tempObj);
                           }
                         }
+
                       });
                   // this.formItems = tempItems;
                 });
@@ -2179,6 +2247,7 @@ export default {
 
   },
   mounted() {
+
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
     }
@@ -2641,96 +2710,6 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*::-webkit-datetime-edit-year-field {
   display: none;
 }*/
