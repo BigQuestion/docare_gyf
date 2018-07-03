@@ -1,14 +1,14 @@
 <template>
   <div style="position: relative;font-size: 10.5pt;font-family: SimSun;">
-    <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt solid'+conInfo.lineColor}" style="min-width: 20px;min-height: 20px;">
+    <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt solid'+conInfo.lineColor,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
-    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt dashed'+conInfo.lineColor}" style="min-width: 20px;min-height: 20px;">
+    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt dashed'+conInfo.lineColor,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
     <!-- <input v-model="strToDate"   :readonly="true"> -->
-    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}"  style="min-width: 20px;min-height: 20px;">{{strToDate}}</div>
-    <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity}" style="min-width: 20px;min-height: 20px;">
+    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}"  style="min-width: 20px;min-height: 20px;">{{strToDate}}</div>
+    <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
   </div>

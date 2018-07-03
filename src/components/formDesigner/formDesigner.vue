@@ -123,6 +123,14 @@
               </select>
             </div>
             <div v-if="chooseItems[0]" class="ediclass">
+              <div class="ediChild">
+                TextAlign:
+              </div>
+              <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].TextAlign,'isData',chooseItems[0].TextAlignMode)" v-model="chooseItems[0].TextAlignMode">
+                <option v-for="btn in chooseItems[0].TextAlign" :value="btn.isData">{{btn.isData}}</option>
+              </select>
+            </div>
+            <div v-if="chooseItems[0]" class="ediclass">
               <!-- 是否可编辑:<input type="" name="" v-model="chooseItems[0].isEdit"> -->
               <div class="ediChild">
                 是否可编辑:
@@ -362,6 +370,8 @@ export default {
           value: '',
           ForeColor: '#0000FF',
           opacity: 1,
+          TextAlign: [{ isData: 'left' }, { isData: 'center' }, { isData: 'right' }],
+          TextAlignMode: 'left', //真为多选，假为单选
           MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
           MultiSelectMode: 'false', //真为多选，假为单选
           isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
