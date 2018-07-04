@@ -1,5 +1,5 @@
 <template>
-  <div style="font-weight:bold;">
+  <div style="font-weight:200;">
     <div v-if="value.type=='text'" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt',fontSize:value.fontSize+'pt'}" style="min-width: 20px;min-height: 20px;">
       {{value.value}}
     </div>
@@ -16,10 +16,10 @@
       <input type="checkbox" name="" v-model="value.text">
     </div>
     <div v-if="value.type=='line'">
-      <div style="margin-top:1px;height:1pt;border-top:1px solid #000;" :style="{width:value.width*0.75+'pt'}"></div>
+      <div style="margin-top:1px;height:1pt;border-top:1pt solid #000;" :style="{width:value.width*0.75+'pt'}"></div>
     </div>
     <div v-if="value.type=='verticalLine'">
-      <div style="margin-left:1px;width:1pt;border-right:1px solid #000;" :style="{height:value.height*0.75+'pt'}"></div>
+      <div style="margin-left:1px;width:1pt;border-right:1pt solid #000;" :style="{height:value.height*0.75+'pt'}"></div>
     </div>
     <div v-if="value.type=='textarea'">
       <textarea :style="{height:value.height*0.75+'pt',width:value.width*0.75+'pt'}" v-model="value.text"></textarea>
