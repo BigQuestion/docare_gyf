@@ -866,7 +866,7 @@ export default {
           LODOP.PRINT_DESIGN();
           // LODOP.PREVIEW();
         }
-        // this.removeTempDom();
+        this.removeTempDom();
       });
 
       // this.printed = true;
@@ -2723,6 +2723,8 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
 
 
 
