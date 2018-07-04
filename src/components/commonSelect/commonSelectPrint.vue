@@ -5,7 +5,7 @@
     </div>
     <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;position:relative;">
       {{infoData[attrName]}}
-      <div style="position:absolute;bottom:-38px;">
+      <div style="position:absolute;bottom:-30px;">
         <svg height="30" :width="conInfo.width">
           <g fill="none" stroke="black" stroke-width="1">
             <path stroke-dasharray="5,5" d="M0 0 l215 0" />
