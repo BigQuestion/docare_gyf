@@ -84,14 +84,15 @@ export default {
     return {
       data: [],
       line: '',
-      rows: 10,
+      rows: 8,
       columns: 50,
       handleItem: {},
       wd: 0,
       ht: 0,
       xTimeArray: [],
       svgWidth: 700,
-      svgHeight: 150,
+      svgHeight: 150
+,
       svgPadding: 0,
       //每个格子代表时间(分钟)
       tbMin: 5,

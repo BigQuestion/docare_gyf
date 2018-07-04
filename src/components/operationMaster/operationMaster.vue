@@ -831,7 +831,7 @@ export default {
       let width = 1112
       let height = 1580
       let imageWidth = 900
-      let scale = 3
+      let scale = 2
       this.createTempDom(width, height, imageWidth, scale);
 
       let boxHtml = this.$refs.mybox
@@ -863,10 +863,10 @@ export default {
           this.currentPageNum++;
           this.printPage(this.currentPageNum);
         } else {
-          LODOP.PRINT_DESIGN();
-          // LODOP.PREVIEW();
+          // LODOP.PRINT_DESIGN();
+          LODOP.PREVIEW();
         }
-        this.removeTempDom();
+        // this.removeTempDom();
       });
 
       // this.printed = true;
@@ -2723,6 +2723,9 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
 
 
 

@@ -849,7 +849,7 @@ export default {
 }
 
 .item.choosed {
-  border: 1px dashed #000;
+  border: 1px dashed rgba(0, 0, 0, 0.8);
 }
 
 .item:hover {
@@ -908,7 +908,7 @@ export default {
   position: relative;
   height: 600px;
   width: 900px;
-  border: 1px solid;
+  /*border: 1px solid;*/
   overflow: auto;
   box-sizing: border-box;
 }
