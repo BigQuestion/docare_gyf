@@ -427,7 +427,7 @@
         </div>
         <!--单子信息-->
         <div class="information" v-if="formDetail" :class="{allWidth:widthData}">
-          <div>
+          <div ref="mybox1">
             <div class="designArea" ref="normal" :style="{height: areaheight+'px'}">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450' - (item.width/2))+'px'}">
                 <form-element ref="formElement" :value="item" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element>
@@ -802,17 +802,17 @@ export default {
       this.canvasBox = ''
       this.showPrint = false
     },
-    createTempDom(width, height, imageWidth, sacle) {
+    createTempDom(width, height, imageWidth, scale) {
       let canvasBox;
       let contentImageBox;
       let imageBox;
       canvasBox = document.createElement("div");
-      canvasBox.style.width = imageWidth * sacle + "px";
-      canvasBox.style.height = height * sacle + "px";
+      canvasBox.style.width = imageWidth * scale + "px";
+      canvasBox.style.height = height * scale + "px";
       document.body.appendChild(canvasBox);
       contentImageBox = document.createElement("div");
-      contentImageBox.style.width = width * sacle + "px";
-      contentImageBox.style.height = height * sacle + "px";
+      contentImageBox.style.width = width * scale + "px";
+      contentImageBox.style.height = height * scale + "px";
 
       document.body.appendChild(contentImageBox);
       imageBox = document.createElement("div");
@@ -831,23 +831,23 @@ export default {
       let width = 1112
       let height = 1580
       let imageWidth = 900
-      let sacle = 3
-      this.createTempDom(width, height, imageWidth, sacle);
+      let scale = 3
+      this.createTempDom(width, height, imageWidth, scale);
 
       let boxHtml = this.$refs.mybox
       html2canvas(boxHtml, { width: imageWidth, height: height, scale: 5 }).then(canvas => {
         this.canvasBox.appendChild(canvas)
         // canvas.style.zoom = 1;
-        canvas.style.transform = "scale(" + sacle + "," + sacle + ")";
+        canvas.style.transform = "scale(" + scale + "," + scale + ")";
         canvas.style.transformOrigin = "0 0";
         // var canvas = document.querySelector("canvas");
-        // var context = canvas.getContext('2d');
-        // // 【重要】关闭抗锯齿
-        // context.mozImageSmoothingEnabled = false;
-        // context.webkitImageSmoothingEnabled = false;
-        // context.msImageSmoothingEnabled = false;
-        // context.imageSmoothingEnabled = false;
-        this.imageBox.appendChild(Canvas2Image.convertToImage(canvas, width * sacle, height * sacle, "png"))
+        var context = canvas.getContext('2d');
+        // 【重要】关闭抗锯齿
+        context.mozImageSmoothingEnabled = false;
+        context.webkitImageSmoothingEnabled = false;
+        context.msImageSmoothingEnabled = false;
+        context.imageSmoothingEnabled = false;
+        this.imageBox.appendChild(Canvas2Image.convertToImage(canvas, width * scale, height * scale, "png"))
         this.imageBox.firstChild.style.width = imageWidth + "px"
         this.imageBox.firstChild.style.height = height + "px"
 
@@ -863,8 +863,8 @@ export default {
           this.currentPageNum++;
           this.printPage(this.currentPageNum);
         } else {
-          // LODOP.PREVIEW();
           LODOP.PRINT_DESIGN();
+          // LODOP.PREVIEW();
         }
         // this.removeTempDom();
       });
@@ -2723,6 +2723,48 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

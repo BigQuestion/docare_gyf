@@ -2,10 +2,10 @@
   <div style="position: relative;margin:2px;">
     <svg :width="svgWidth" :height="svgHeight" id="dosageprint">
       <g v-for="item in lineArray">
-        <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
+        <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:1px;"></line>
       </g>
       <g v-for="(item,index) in lineArray" v-if="index < rows">
-        <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
+        <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:1px;"></line>
       </g>
     </svg>
     <!-- 显示出量的数据 -->
