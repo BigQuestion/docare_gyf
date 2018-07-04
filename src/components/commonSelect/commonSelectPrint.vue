@@ -3,11 +3,11 @@
     <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt solid'+conInfo.lineColor,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
-    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt dashed'+conInfo.lineColor,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
+    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
       <svg height="30" :width="conInfo.width">
         <g fill="none" stroke="black" stroke-width="1">
-          <path stroke-dasharray="5,5" d="M5 20 l215 0" />
+          <path stroke-dasharray="5,5" d="M0 0 l215 0" />
         </g>
       </svg>
     </div>
