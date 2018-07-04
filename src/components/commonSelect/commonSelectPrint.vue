@@ -5,11 +5,11 @@
     </div>
     <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
-      <svg height="30" :width="conInfo.width">
+      <!-- <svg height="30" :width="conInfo.width">
         <g fill="none" stroke="black" stroke-width="1">
           <path stroke-dasharray="5,5" d="M0 0 l215 0" />
         </g>
-      </svg>
+      </svg> -->
     </div>
     <!-- <input v-model="strToDate"   :readonly="true"> -->
     <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}" style="min-width: 20px;min-height: 20px;">{{strToDate}}</div>

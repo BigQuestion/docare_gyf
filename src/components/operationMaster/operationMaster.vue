@@ -831,11 +831,11 @@ export default {
       let width = 1112
       let height = 1580
       let imageWidth = 900
-      let scale = 2
+      let scale = 2.5
       this.createTempDom(width, height, imageWidth, scale);
 
       let boxHtml = this.$refs.mybox
-      html2canvas(boxHtml, { width: imageWidth, height: height, scale: 5 }).then(canvas => {
+      html2canvas(boxHtml, { width: imageWidth, height: height, scale: 4 }).then(canvas => {
         this.canvasBox.appendChild(canvas)
         // canvas.style.zoom = 1;
         canvas.style.transform = "scale(" + scale + "," + scale + ")";
@@ -2723,6 +2723,11 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
 
 
 
