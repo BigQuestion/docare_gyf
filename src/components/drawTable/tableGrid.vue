@@ -84,7 +84,7 @@ export default {
     return {
       data: [],
       line: '',
-      rows: 10,
+      rows: 8,
       columns: 50,
       handleItem: {},
       wd: 0,
