@@ -8,7 +8,7 @@
         <div>
           <input v-model="serchZm" @keyup="serchJm">
         </div>
-        <div class="listIngt" @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" :style="{width:conInfo.width+'px'}">
+        <div class="listIngt" @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" :style="{width:conInfo.width+10+'px'}">
           <div v-if="conInfo.dictShowFiled!=''&&conInfo.dictShowFiled!=null">
             {{item.DICTSHOWFILED}}
           </div>
@@ -18,7 +18,7 @@
     </div>
     <div v-else>
       <div v-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'">
-        <input :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" v-model="strToDate" style="min-width: 20px;min-height: 20px;" :readonly="true">
+        <input :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" v-model="strToDate" style="min-width: 20px;min-height: 20px;border:none;border-bottom: 1px solid #000;" :readonly="true">
       </div>
       <div v-else>
         <input v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="true">

@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative;font-size: 10.5pt;font-family: SimSun;font-weight:bold;">
+  <div style="position: relative;font-family: SimSun;font-weight:bold;">
     <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',borderBottom:'1pt solid'+conInfo.lineColor,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
@@ -7,7 +7,7 @@
       {{infoData[attrName]}}
     </div>
     <!-- <input v-model="strToDate"   :readonly="true"> -->
-    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}"  style="min-width: 20px;min-height: 20px;">{{strToDate}}</div>
+    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}" style="min-width: 20px;min-height: 20px;">{{strToDate}}</div>
     <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
       {{infoData[attrName]}}
     </div>
@@ -41,7 +41,8 @@ export default {
   },
   computed: {
     strToDate() {
-      if (this.infoData.value && this.infoData.strFormatMode == 'yyyy-MM-dd' || this.infoData.strFormatMode == 'hh:mm' || this.infoData.strFormatMode == 'yyyy-MM-dd hh:mm') {
+      if (this.infoData.value && this.infoData.strFormatMode ==
+        'yyyy-MM-dd' || this.infoData.strFormatMode == 'hh:mm' || this.infoData.strFormatMode == 'yyyy-MM-dd hh:mm') {
         var time = new Date(this.conInfo.value).Format(this.conInfo.strFormatMode);
         return time;
       }
@@ -88,4 +89,5 @@ export default {
   border-bottom: 1px solid #222;
   color: red !important;
 }
+
 </style>
