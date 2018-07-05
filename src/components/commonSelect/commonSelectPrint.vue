@@ -1,11 +1,11 @@
 <template>
   <div style="position: relative;font-family: SimSun;font-weight:bold;">
-    <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
+    <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;position:relative;">
       {{infoData[attrName]}}
       <div style="position:absolute;bottom:-22px;">
-        <svg height="20" :width="conInfo.width">
+        <svg height="20" :style="{width:conInfo.width+'px'}">
           <g fill="none" stroke="black" stroke-width="1">
-            <path stroke-dasharray="5,5" d="M0 0 l215 0" />
+            <path stroke-dasharray="5,5" d="M0 0 l555 0" />
           </g>
         </svg>
       </div>
@@ -13,29 +13,29 @@
     <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;position:relative;">
       {{infoData[attrName]}}
       <div style="position:absolute;bottom:-22px;">
-        <svg height="20" :width="conInfo.width">
+        <svg height="20" :style="{width:conInfo.width+'px'}">
           <g fill="none" stroke="black" stroke-width="1">
-            <path stroke-dasharray="5,5" d="M0 0 l215 0" />
+            <path stroke-dasharray="5,5" d="M0 0 l555 0" />
           </g>
         </svg>
       </div>
     </div>
     <!-- <input v-model="strToDate"   :readonly="true"> -->
-    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}" style="min-width: 20px;min-height: 20px;">{{strToDate}}
+    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}" style="min-width: 20px;min-height: 20px;position:relative;">{{strToDate}}
       <div style="position:absolute;bottom:-22px;">
-        <svg height="20" :width="conInfo.width">
+        <svg height="20" :style="{width:conInfo.width+'px'}">
           <g fill="none" stroke="black" stroke-width="1">
-            <path stroke-dasharray="5,5" d="M0 0 l215 0" />
+            <path stroke-dasharray="5,5" d="M0 0 l555 0" />
           </g>
         </svg>
       </div>
     </div>
-    <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;">
+    <div v-else :style="{width:conInfo.width+'px',border:conInfo.borderStyle,color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;position:relative;">
       {{infoData[attrName]}}
-      <div style="position:absolute;bottom:-38px;">
-        <svg height="30" :width="conInfo.width">
+      <div style="position:absolute;bottom:-22px;">
+        <svg height="30" :style="{width:conInfo.width+'px'}">
           <g fill="none" stroke="black" stroke-width="1">
-            <path stroke-dasharray="5,5" d="M0 0 l215 0" />
+            <path stroke-dasharray="5,5" d="M0 0 l555 0" />
           </g>
         </svg>
       </div>
