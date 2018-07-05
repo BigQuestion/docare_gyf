@@ -450,7 +450,6 @@ export default {
     },
     //处理数据进行划线
     dataOperChange(list) {
-      debugger
       let svg = d3.selectAll(".test")
       svg.remove();
       this.xArray = [];

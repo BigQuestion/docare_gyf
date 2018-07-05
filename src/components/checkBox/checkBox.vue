@@ -30,6 +30,7 @@
   </div>
 </template>
 <script>
+import Bus from '@/bus.js';
 export default {
   data() {
     return {
@@ -51,7 +52,6 @@ export default {
     },
 
     getItemValue() {
-
       let params = [];
       params.push({
         "patientId": this.config.userInfo.patientId,
@@ -63,20 +63,21 @@ export default {
 
       this.api.getFormSqlResult(params)
         .then(res => {
-          this.resultValue = res[this.boxValue.SourceFieldName];
+          let field = this.boxValue.SourceTableName + this.boxValue.SourceFieldName
+          this.resultValue = res[field];
 
           if (this.boxValue.MultiSelectMode == 'false') {
             for (var i = 0; i < this.boxValue.listData.length; i++) {
-              if (this.boxValue.listData[i].ItemValue == res[this.boxValue.SourceFieldName]) {
+              if (this.boxValue.listData[i].ItemValue == res[field]) {
                 this.isSelected.push(true);
               } else {
                 this.isSelected.push(false);
               }
             }
           } else {
-            if (res[this.boxValue.SourceFieldName] != 'null' && res[this.boxValue.SourceFieldName] != "" &&
-              res[this.boxValue.SourceFieldName] != null) {
-              this.multSelctValue = res[this.boxValue.SourceFieldName].split(',');
+            if (res[field] != 'null' && res[field] != "" &&
+              res[field] != null) {
+              this.multSelctValue = res[field].split(',');
             }
 
           }
@@ -119,8 +120,17 @@ export default {
 
   },
   mounted() {
+
     this.getItemValue();
-  }
+  },
+  created() {
+    Bus.$on('timeSetChange', this.getItemValue)
+
+  },
+  beforeDestroy() {
+    Bus.$off('timeSetChange', this.getItemValue)
+
+  },
 }
 
 </script>

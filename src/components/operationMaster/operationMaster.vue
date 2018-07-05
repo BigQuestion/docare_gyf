@@ -1171,6 +1171,7 @@ export default {
       }, 1000);
     },
     lockedPatient(item) {
+      debugger
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
@@ -1569,8 +1570,17 @@ export default {
                   }
                 }
                 if (res.TIME) {
-                  this.config.patientMaxTime = res.TIME;
-                  t1 = this.coutTimes(this.config.startMinTime, res.TIME, 'minute');
+                  if (this.config.userInfo.outDateTime) {
+                    if (new Date(this.config.userInfo.outDateTime) > new Date(res.TIME)) {
+
+                      this.config.patientMaxTime = this.config.userInfo.outDateTime;
+                    } else {
+                      this.config.patientMaxTime = res.TIME
+                    }
+                  } else {
+                    this.config.patientMaxTime = res.TIME
+                  }
+                  t1 = this.coutTimes(this.config.startMinTime, this.config.patientMaxTime, 'minute');
                   i = Math.ceil(t1 / 250);
                   this.config.pageTotal = i;
                   if (t1 > 250) {
@@ -1579,6 +1589,7 @@ export default {
                     this.pageButtonView = false
                   }
                 }
+
                 var timeDate = new Date(this.config.startMinTime);
                 let init_Time = new Date(this.config.startMinTime);
                 this.config.initTime = new Date(this.timeSetOper(init_Time));
@@ -1627,7 +1638,6 @@ export default {
                         }
 
                       });
-                  // this.formItems = tempItems;
                 });
             if (this.setTimeId) {
               this.$nextTick(function() {
@@ -1905,6 +1915,7 @@ export default {
     },
     //获取单子修改的数据
     getValue(dataValue) {
+      debugger
       var modifyValue = '';
       if (dataValue.dictShowFiled != '' && dataValue.dictShowFiled != null) {
         modifyValue = dataValue.modifyFiledValue
@@ -2172,6 +2183,50 @@ export default {
           this.getMaxTimeNoset();
 
         })
+      let item = this.selectFormItemTemp
+      let params = {
+        formName: item.formName,
+        id: item.id
+      }
+      let arry = [];
+      this.api.selectMedFormTemp(params)
+        .then(
+          res => {
+            if (res.formContent == "null" || res.formContent == null) {
+              return;
+            }
+            let tempItems = JSON.parse(res.formContent);
+            this.formItems = JSON.parse(res.formContent);
+            var list = this.formItems;
+            for (var i = 0; i < list.length; i++) {
+              if (list[i].fieldName) {
+                arry.push({
+                  "patientId": this.lockedPatientInfo.patientId,
+                  "visitId": this.lockedPatientInfo.visitId,
+                  "operId": this.lockedPatientInfo.operId,
+                  "tableName": list[i].tableName,
+                  "coluName": list[i].fieldName,
+                  "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
+                  "dictTableName": list[i].dictTableName, //字典表名称
+                  "dictField": list[i].dictField, //字典字段名称
+                  "dictSelect": list[i].dictSelect,
+                })
+              }
+            }
+            this.api.getFormSqlResult(arry)
+              .then(
+                result => {
+                  for (var i = 0; i < list.length; i++) {
+                    if (list[i].fieldName) {
+                      let obj = this.formItems[i];
+                      obj.value = result[list[i].tableName + list[i].fieldName];
+                      let tempObj = JSON.parse(JSON.stringify(obj));
+                      this.$set(this.formItems, i, tempObj);
+                    }
+                  }
+
+                });
+          });
     },
     getMaxTime() {
       let intitime = this.config.initTime
@@ -2198,12 +2253,21 @@ export default {
 
               if (this.config.userInfo.outDateTime) {
                 if (new Date(this.config.userInfo.outDateTime) > new Date(res.TIME)) {
+
                   this.config.patientMaxTime = this.config.userInfo.outDateTime;
                 } else {
                   this.config.patientMaxTime = res.TIME
                 }
               } else {
                 this.config.patientMaxTime = res.TIME
+              }
+              var t1 = this.coutTimes(this.config.startMinTime, this.config.patientMaxTime, 'minute');
+              var i = Math.ceil(t1 / 250);
+              this.config.pageTotal = i;
+              if (t1 > 250) {
+                this.pageButtonView = true
+              } else {
+                this.pageButtonView = false
               }
               this.$nextTick(function() {
                 Bus.$emit('timeSetChange');
@@ -2738,6 +2802,29 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -22,7 +22,7 @@
       </div>
       <div v-else>
         <input v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;border:none;border-bottom: 1px dashed #000;" :readonly="true">
-        <input v-else :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;border:none;border-bottom: 1px dashed #000;">
+        <input v-else :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" @change="busToTop" v-model="infoData.value" style="min-width: 20px;min-height: 20px;border:none;border-bottom: 1px dashed #000;">
       </div>
     </div>
   </div>
@@ -51,7 +51,6 @@ export default {
         coluName: this.conInfo.dictField,
         dictShowFiled: this.conInfo.dictShowFiled, //字典显示字段名称
       }
-      debugger
       this.api.getColumContext(params)
         .then(res => {
           this.medAnaesthesiaDictList = res;
@@ -126,6 +125,8 @@ export default {
     },
 
     busToTop() {
+      debugger
+      this.$set(this.conInfo, 'modifyFiledValue', this.conInfo.value);
       this.$emit('toparentevent', this.conInfo);
     },
 
