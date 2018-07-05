@@ -2,21 +2,25 @@
   <div style="position: relative;margin:2px;">
     <div v-if="!page">
       <div style="max-height: 20px;">
-        <div v-for="(item,index) in xTimeArray" v-if="index%3==0" style="width: 30px;margin-left: -9pt;font-size: 12px;display: inline-block;" :title="item">{{item}}</div>
+        <div v-for="(item,index) in xTimeArray" v-if="index%6==0" style="width: 30px;margin-left: -8px;font-size: 12px;display: inline-block;" :title="item">{{item}}</div>
         <div v-else style="width: 12px;display: inline-block;"></div>
       </div>
       <div>
-        <div v-for="(item,index) in dataArray" v-if="index < rows" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px'}" style="height: 14px;line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 12px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
+        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px',lineHeight:svgHeight/rows+'px',}" style="line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 14px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
+          <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span>
+        </div>
+        <div v-for="(item,index2) in dataArray" v-if="index2==rows-1" :style="{top:svgHeight/rows*index2+20+'px',height:svgHeight/rows+'px',lineHeight:svgHeight/rows+'px',}" style="width: 160px; font-size: 14px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
           <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span>
         </div>
       </div>
       <div style="position: relative;">
         <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
-          <g v-for="item in lineArray">
-            <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.5px;"></line>
+          <g v-for="(item,index2) in lineArray">
+            <line v-if="index2%6==0" :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:1px;"></line>
+            <line v-else :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:1px;"></line>
           </g>
           <g v-for="(item,index) in lineArray" v-if="index < rows">
-            <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>
+            <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:1px;"></line>
           </g>
         </svg>
         <div @mousemove.stop="mouseMoveInfo(item,$event)" @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
@@ -446,6 +450,7 @@ export default {
     },
     //处理数据进行划线
     dataOperChange(list) {
+      debugger
       let svg = d3.selectAll(".test")
       svg.remove();
       this.xArray = [];
@@ -457,7 +462,7 @@ export default {
         m = 0;
       for (var i = 0; i < list.length; i++) {
         if (list[i].START_TIME) {
-          if (i == this.rows)
+          if (i == -1)
             break;
           else {
             //开始时间间隔
@@ -533,10 +538,9 @@ export default {
             list[i].vStartTime = '';
             list[i].nowTime = '';
             let _this = this
-            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0) {
-              // setTimeout(() => {
+
+            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0 && m < this.rows) {
               this.createLine(x1, x2, y1, y2, list[i]);
-              // }, 1000)
 
 
             }
@@ -559,18 +563,21 @@ export default {
 
 
             if (flag) {
-              this.xArray.push({
-                x1: x1,
-                y1: y1,
-                x2: x2,
-                y2: y2,
-                w: x2 - x1,
-                obj: list[i],
-                top: m * (this.svgHeight / this.rows)
+              if (m < this.rows) {
+                this.xArray.push({
+                  x1: x1,
+                  y1: y1,
+                  x2: x2,
+                  y2: y2,
+                  w: x2 - x1,
+                  obj: list[i],
+                  top: m * (this.svgHeight / this.rows)
 
-              })
-              this.dataArray.push(list[i]);
-              m++;
+                })
+                this.dataArray.push(list[i]);
+                m++;
+              }
+
 
             } else {
               this.xArray.push({
