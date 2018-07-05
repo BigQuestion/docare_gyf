@@ -88,18 +88,23 @@ export default {
           this.api.selectMedAnesthesiaEventList(paramsTwo)
             .then(zze => {
               if (zze.list.length > 6) {
-                for (var t = 7; t < zze.list.length; t++) {
-                  var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
-                  if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                for (var ti = 0; ti < 6; ti++) {
+                  for (var t = 6; t < zze.list.length; t++) {
+                    if (zze.list[ti].ITEM_NAME !== zze.list[t].ITEM_NAME && zze.list[ti].ITEM_CLASS !== zze.list[t].ITEM_CLASS) {
+                      var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
+                      if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                        this.dataBody.push({
+                          ITEM_NAME: zze.list[t].ITEM_NAME,
+                          START_TIME: zze.list[t].START_TIME,
+                          sort: timeMoreOne
+                        });
+                      }
+                    } else {
 
-                    var time8 = timeMoreOne - this.startTimeInPage
-                    var leftPlace8 = ((time8 * 3) / 60 / 1000);
-                    this.dataBody.push({
-                      ITEM_NAME: zze.list[t].ITEM_NAME,
-                      START_TIME: zze.list[t].START_TIME,
-                      sort: timeMoreOne
-                    });
+                    }
+
                   }
+                  break;
                 }
               } else {
 
@@ -113,19 +118,28 @@ export default {
               }
               this.api.selectMedAnesthesiaEventList(paramsTwo)
                 .then(aff => {
-                  if (aff.list.length > 10) {
-                    for (var h = 11; h < aff.list.length; h++) {
-                      var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
-                      if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
-                        var time8 = timeMoreOne - this.startTimeInPage
-                        var leftPlace8 = ((time8 * 3) / 60 / 1000);
-                        this.dataBody.push({
-                          ITEM_NAME: aff.list[h].ITEM_NAME,
-                          START_TIME: aff.list[h].START_TIME,
-                          sort: timeMoreOne
-                        });
+                  if (aff.list.length > 8) {
+                    for (var hi = 0; hi < 8; hi++) {
+                      for (var h = 8; h < aff.list.length; h++) {
+                        if (aff.list[hi].ITEM_NAME !== aff.list[h].ITEM_NAME && aff.list[hi].ITEM_CLASS !== aff.list[h].ITEM_CLASS) {
+                          var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
+                          if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                            this.dataBody.push({
+                              ITEM_NAME: aff.list[h].ITEM_NAME,
+                              START_TIME: aff.list[h].START_TIME,
+                              sort: timeMoreOne,
+                              DOSAGE: aff.list[h].DOSAGE,
+                              DOSAGE_UNITS: aff.list[h].DOSAGE_UNITS,
+                            });
+                          }
+                        } else {
+
+                        }
+
                       }
+                      break;
                     }
+
                   } else {
 
                   }
