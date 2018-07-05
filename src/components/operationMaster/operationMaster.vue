@@ -770,11 +770,28 @@ export default {
       contentImageBox: '',
       imageBox: '',
       showPrint: false,
+      printPageNameArr: [], //打印图片名称数组
 
 
     }
   },
   methods: {
+    electronListener() {
+      //监听mian process里发出的message
+      window.ipc.on('savesuccess', (event, arg) => {
+        // alert("web2" + arg); // prints "pong"  在electron中web page里的console方法不起作用，因此使用alert作为测试方法
+        var imagesArr = JSON.parse(arg);
+        imagesArr.forEach(item => {
+          LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", item);
+          LODOP.SET_PRINT_STYLEA(0, "Stretch", 2);
+          LODOP.NEWPAGE();
+        })
+
+        LODOP.PREVIEW();
+
+      })
+
+    },
     lodopInit() {
       LODOP = getLodop();
       LODOP.SET_PRINT_PAGESIZE(0, "176mm", "250mm", "B5")
@@ -782,13 +799,10 @@ export default {
       if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
         //不在打印预览界面
         if (Value == 0) {
-          // _this.$set(_this.config, 'isPrintedView', false);
-          // Bus.$emit('noprint', "print");
-          // _this.isPrint = false;
           _this.toChangePage(0);
-
-
-
+          if (window.ipc) {
+            window.ipc.send('deleteImages', "delete");
+          }
         }
 
       };
@@ -831,56 +845,55 @@ export default {
       let width = 1112
       let height = 1580
       let imageWidth = 900
-      let scale = 2
+      let scale = 3
       this.createTempDom(width, height, imageWidth, scale);
 
       let boxHtml = this.$refs.mybox
-      html2canvas(boxHtml, { width: imageWidth, height: height, scale: 4 }).then(canvas => {
+      html2canvas(boxHtml, { width: imageWidth, height: height, scale: 5 }).then(canvas => {
         this.canvasBox.appendChild(canvas)
         // canvas.style.zoom = 1;
         canvas.style.transform = "scale(" + scale + "," + scale + ")";
         canvas.style.transformOrigin = "0 0";
-        // var canvas = document.querySelector("canvas");
-        var context = canvas.getContext('2d');
-        // 【重要】关闭抗锯齿
-        context.mozImageSmoothingEnabled = false;
-        context.webkitImageSmoothingEnabled = false;
-        context.msImageSmoothingEnabled = false;
-        context.imageSmoothingEnabled = false;
-        this.imageBox.appendChild(Canvas2Image.convertToImage(canvas, width * scale, height * scale, "png"))
-        this.imageBox.firstChild.style.width = imageWidth + "px"
-        this.imageBox.firstChild.style.height = height + "px"
-
-
-        LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.imageBox.innerHTML);
-        LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-        // LODOP.PRINT_DESIGN();
-        // LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.mybox.innerHTML);
-        //   LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-        LODOP.NewPageA();
-        if (index + 1 <= this.config.pageTotal) {
-          this.toChangePage(1);
-          this.currentPageNum++;
-          this.printPage(this.currentPageNum);
-        } else {
-          // LODOP.PRINT_DESIGN();
-          LODOP.PREVIEW();
+        canvas.style.paddingLeft = 5 + "px"
+        var dataURL = canvas.toDataURL("image/png", 1.0);
+        var objString = JSON.stringify({ data: dataURL, imageName: this.printPageNameArr[index], imgArr: this.printPageNameArr, index: index });
+        if (window.ipc) {
+          window.ipc.send('getImageData', objString);
         }
-        // this.removeTempDom();
+        this.removeTempDom();
+        this.toChangePage(1);
+        if (index < this.config.pageTotal - 1) {
+          index++;
+          this.printPage(index);
+        }
       });
 
-      // this.printed = true;
-      // this.$set(this.config, 'isPrintedView', true);
-      // this.isPrint = true;
-      // Bus.$emit('print', "print");
-      // //LODOP.PRINT();
-      // const _this = this;
-      // this.CreateOneFormPage();
+    },
+    sendSaveImageMsg() {
+
 
     },
     CreateOneFormPage() {
+      var pageTotal = this.config.pageTotal;
+      this.printPageNameArr = [];
+
+      for (var i = 0; i < pageTotal; i++) {
+        this.printPageNameArr.push(getGuid());
+      }
+
+      function getGuid() {
+        var d = new Date().getTime();
+        var guid = 'xxxx-xxxx-xxxx-xxxx'.replace(
+          /[xy]/g,
+          function(c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+          });
+        return guid
+      }
       this.currentPageNum = 1;
-      this.printPage(this.currentPageNum)
+      this.printPage(this.currentPageNum - 1)
     },
     printPage(index) {
       if (this.selectFormItemTemp.formName == '手术清点单') {
@@ -889,12 +902,12 @@ export default {
           LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.normal.innerHTML);
           LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
           LODOP.PREVIEW();
-          // LODOP.PRINT()
-        }, 1000)
+        }, 500)
       } else {
         setTimeout(() => {
           this.printPdf(index);
-        }, 1000)
+
+        }, 500)
       }
 
 
@@ -906,7 +919,6 @@ export default {
       list.writeAble = true;
     },
     searchPatientList() {
-      // this.getTime = this.startTime1.time;
       if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
         var now = new Date();
         var year = now.getFullYear();
@@ -2260,6 +2272,9 @@ export default {
 
   },
   mounted() {
+    if (window.ipc) {
+      this.electronListener();
+    }
 
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
@@ -2723,6 +2738,110 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -21,7 +21,7 @@
         <input :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" v-model="strToDate" style="min-width: 20px;min-height: 20px;border:none;border-bottom: 1px dashed #000;" :readonly="true">
       </div>
       <div v-else>
-        <input v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;" :readonly="true">
+        <input v-if="conInfo.isEditMode=='false'&&conInfo.readOnlyMode=='false'" :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;border:none;border-bottom: 1px dashed #000;" :readonly="true">
         <input v-else :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,}" v-model="infoData.value" style="min-width: 20px;min-height: 20px;border:none;border-bottom: 1px dashed #000;">
       </div>
     </div>
