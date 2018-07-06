@@ -9,8 +9,8 @@
       </g>
     </svg>
     <!-- 显示出量的数据 -->
-    <div style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{left: item.obj.toleft-5+'px',top:index*20+120+'px'}" v-for="(item,index) in outputList">
-      <span style="padding: 0 2px 0 0px;" v-if="item.obj.DOSAGE">{{item.obj.DOSAGE}}</span>
+    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{left: item.x1-5+'px',top:item.y2+'px'}" v-for="(item,index) in outDosageData">
+      <span @mouseenter="showTipInfo(item,$event)" style="padding: 0 2px 0 0px;" v-if="item.obj.DOSAGE">{{item.obj.DOSAGE}}</span>
     </div>
     <div v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
       <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
@@ -58,6 +58,7 @@ export default {
       percentPageData: [],
       outputList: [], //出量数据
       svgObj: '',
+      outDosageData: [],
     }
   },
   methods: {
@@ -112,19 +113,53 @@ export default {
       this.api.selectMedAnesthesiaEventList(params1)
         .then(res => {
           let list = res.list;
-          this.outputList = res.list;
-          let temparr = this.outputList
+          // this.outputList = res.list;
+          let temparr = res.list
           let arr = []
-          for (let i = 0; i < temparr.length; i++) {
+          let temp = []
+          let topi = 0
+          for (var i = 0; i < temparr.length; i++) {
             if (temparr[i].START_TIME) {
               if (new Date(temparr[i].START_TIME) <= new Date(this.config.maxTime) && new Date(temparr[i].START_TIME) >= new Date(this.config.initTime)) {
+                let flag = true;
+                let y2 = 0;
                 let x = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
                 let x2 = x / this.tbMin * (this.svgWidth / this.columns)
-                temparr[i].toleft = x2
-                arr.push({ obj: temparr[i], y2: i * 20 + 120, x1: x2 })
+                if (arr.length > 0) {
+                  for (var j = 0; j < arr.length; j++) {
+                    if (list[i].ITEM_NAME == arr[j].obj.ITEM_NAME && list[i].ITEM_CLASS == arr[j].obj.ITEM_CLASS) {
+                      flag = false
+                      y2 = j * 20 + 120
+                    }
+                  }
+                }
+                //不是同一种
+                if (flag) {
+                  y2 = arr.length * 20 + 120
+                  temp.push({
+                    y2: y2,
+                    x1: x2,
+                    obj: temparr[i]
+                  })
+                  // temparr[i].toleft = x2
+                  arr.push({ obj: temparr[i] })
+                } else {
+                  temp.push({
+                    y2: y2,
+                    x1: x2,
+                    obj: temparr[i]
+                  })
+                }
+
+
               }
             }
           }
+
+          this.outDosageData = temp
+
+
+
 
           for (var i = 0; i < 3; i++) {
             if (arr.length < 3) {

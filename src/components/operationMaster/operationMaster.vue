@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="procedure" style="position: relative;">
-        <div style="display: flex;height:70px;" v-if="lockedPatientInfo.patientId">
+        <div style="display: flex;height:70px;" v-if="showFormView">
           <div style="margin:0px 10px;">
             <div class="lightBox" @contextmenu.prevent="showDoubleListOne(lockedPatientInfo.operStatus)">
               <img v-if="lockedPatientInfo.operStatus == 0" style="display:block" src="../../assets/grayLight.png" alt="">
@@ -580,6 +580,7 @@ let LODOP
 export default {
   data() {
     return {
+      showFormView: false, //显示几张单子按钮
       printed: false,
       isPrint: false,
       doShowDataOne: false,
@@ -1171,7 +1172,7 @@ export default {
       }, 1000);
     },
     lockedPatient(item) {
-      debugger
+      this.showFormView = true
       this.lockedPatientInfo = item;
       //当前病人信息存储起来
       this.config.userInfo = item;
@@ -2802,6 +2803,7 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
 
 
 
