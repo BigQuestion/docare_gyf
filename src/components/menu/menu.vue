@@ -38,10 +38,15 @@ export default {
     },
     methods: {
         goUrl(url) {
-            this.$router.push(
-                {
-                    path: url
-                })
+            if (url == '/statistics' || url == '/formDesigner') {
+                alert('暂无权限。')
+            } else {
+                this.$router.push(
+                    {
+                        path: url
+                    })
+            }
+
         },
         // 退出系统
         exitSystem() {
