@@ -891,6 +891,7 @@ export default {
 
     },
     CreateOneFormPage() {
+      this.lodopInit();
       this.printLoading = true
       var pageTotal = this.config.pageTotal;
       this.printPageNameArr = [];
@@ -2074,7 +2075,18 @@ export default {
         // })
       }
 
+      var list = this.formItems;
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].fieldName) {
+          if (list[i].fieldName == "page") {
+            let obj = this.formItems[i];
+            obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
+            let tempObj = JSON.parse(JSON.stringify(obj));
+            this.$set(this.formItems, i, tempObj);
 
+          }
+        }
+      }
 
     },
     //初始化表格配置信息
@@ -2901,6 +2913,12 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
+
+
+
+
+
 
 
 
