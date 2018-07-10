@@ -30,10 +30,10 @@
       <p v-else-if="item == 65" style="color:Red">∨动脉收缩压</p>
       <p v-else-if="item == 66" style="color:Red">∧动脉舒张压</p>
       <p v-else-if="item == 67" style="color:Red">△动脉平均压</p>
-      <p v-else-if="item == '麻醉开始'" style="color:#222">X麻醉开始</p>
+      <p v-else-if="item == '麻醉开始'" style="color:#222;"><span style="font-size:18px;">×</span>麻醉开始</p>
       <p v-else-if="item == '手术开始'" style="color:#222">⊙手术开始</p>
       <p v-else-if="item == '手术结束'" style="color:red"><span style="font-size:14px;">ⓧ</span>手术结束</p>
-      <p v-else-if="item == '麻醉结束'" style="color:red;">X麻醉结束</p>
+      <p v-else-if="item == '麻醉结束'" style="color:red;"><span style="font-size:18px;">×</span>麻醉结束</p>
     </div>
   </div>
   </div>
