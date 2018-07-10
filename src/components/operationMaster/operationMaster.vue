@@ -1,5 +1,15 @@
 <template>
   <div v-if="!settingView" style="height:100%;position:relative;overflow-y:hidden;" @click="allNone()">
+    <div style="width: 100%;height: 100%;background-color: #ebf1f9;position: absolute;top: 0;left:0;z-index: 999;" v-if="printLoading">
+      <div class="loading">
+        打印数据加载中....
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
     <div class="head">
       <div class="logo">
         <div :style="logo">
@@ -179,7 +189,7 @@
           </div>
         </div>
       </div>
-      <div class="content">
+      <div class="content" style="overflow-y:hidden;overflow-x: hidden; ">
         <!-- <div class="patientList" :class="{animationClassNone:showData,animationClassShow:showDataTwo}"> -->
         <div class="patientList" v-show="showData">
           <div style="height:105px;border-bottom:1px solid rgb(175,205,242);box-sizing:border-box;">
@@ -772,6 +782,7 @@ export default {
       imageBox: '',
       showPrint: false,
       printPageNameArr: [], //打印图片名称数组
+      printLoading: false, //打印加载
 
 
     }
@@ -789,10 +800,12 @@ export default {
         })
 
         LODOP.PREVIEW();
+        this.printLoading = false;
 
       })
 
     },
+    //打印插件初始化
     lodopInit() {
       LODOP = getLodop();
       LODOP.SET_PRINT_PAGESIZE(0, "176mm", "250mm", "B5")
@@ -804,6 +817,7 @@ export default {
           if (window.ipc) {
             window.ipc.send('deleteImages', "delete");
           }
+          _this.printLoading = false;
         }
 
       };
@@ -875,13 +889,14 @@ export default {
 
     },
     CreateOneFormPage() {
+      this.printLoading = true
       var pageTotal = this.config.pageTotal;
       this.printPageNameArr = [];
 
       for (var i = 0; i < pageTotal; i++) {
         this.printPageNameArr.push(getGuid());
       }
-
+      //生成带时间的guid作为图片名称
       function getGuid() {
         var d = new Date().getTime();
         var guid = 'xxxx-xxxx-xxxx-xxxx'.replace(
@@ -2803,6 +2818,83 @@ export default {
   background-color: #316AC5;
   color: #fff;
 }
+
+.loading {
+  width: 150px;
+  height: 15px;
+  margin: 0 auto;
+  position: relative;
+  top: 50%;
+}
+
+.loading span {
+  position: absolute;
+  width: 15px;
+  height: 100%;
+  border-radius: 50%;
+  background: lightgreen;
+  -webkit-animation: load 1.04s ease-in infinite alternate;
+}
+
+@-webkit-keyframes load {
+  0% {
+    opacity: 1;
+    -webkit-transform: translate(0px);
+  }
+  100% {
+    opacity: 0.2;
+    -webkit-transform: translate(150px);
+  }
+}
+
+.loading span:nth-child(1) {
+  -webkit-animation-delay: 0.13s;
+}
+
+.loading span:nth-child(2) {
+  -webkit-animation-delay: 0.26s;
+}
+
+.loading span:nth-child(3) {
+  -webkit-animation-delay: 0.39s;
+}
+
+.loading span:nth-child(4) {
+  -webkit-animation-delay: 0.52s;
+}
+
+.loading span:nth-child(5) {
+  -webkit-animation-delay: 0.65s;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
