@@ -10,7 +10,7 @@
         </svg>
       </div>
     </div>
-    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,textAlign:conInfo.TextAlignMode,fontSize:conInfo.fontSize}" style="min-width: 20px;min-height: 20px;position:relative;">
+    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,textAlign:conInfo.TextAlignMode,fontSize:conInfo.fontSize+'pt'}" style="min-width: 20px;min-height: 20px;position:relative;">
       {{infoData[attrName]}}
       <div style="position:absolute;bottom:-22px;">
         <svg height="20" :style="{width:conInfo.width+'px'}">
@@ -21,7 +21,7 @@
       </div>
     </div>
     <!-- <input v-model="strToDate"   :readonly="true"> -->
-    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}" style="min-width: 20px;min-height: 20px;position:relative;">{{strToDate}}
+    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}" style="min-width: 20px;min-height: 20px;position:relative;">{{strToDate}}
       <div style="position:absolute;bottom:-22px;">
         <svg height="20" :style="{width:conInfo.width+'px'}">
           <g fill="none" stroke="black" stroke-width="1">

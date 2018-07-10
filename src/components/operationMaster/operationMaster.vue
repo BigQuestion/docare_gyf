@@ -794,13 +794,13 @@ export default {
         // alert("web2" + arg); // prints "pong"  在electron中web page里的console方法不起作用，因此使用alert作为测试方法
         var imagesArr = JSON.parse(arg);
         imagesArr.forEach(item => {
-          LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", item);
+          LODOP.ADD_PRINT_IMAGE(1, 0, "100%", "BottomMargin:0.1mm", item);
           LODOP.SET_PRINT_STYLEA(0, "Stretch", 2);
           LODOP.NEWPAGE();
         })
 
         LODOP.PREVIEW();
-        this.printLoading = false;
+        // this.printLoading = false;
 
       })
 
@@ -811,13 +811,15 @@ export default {
       LODOP.SET_PRINT_PAGESIZE(0, "176mm", "250mm", "B5")
       var _this = this;
       if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
+
         //不在打印预览界面
-        if (Value == 0) {
+        if (Value) {
+          _this.printLoading = false;
           _this.toChangePage(0);
           if (window.ipc) {
             window.ipc.send('deleteImages', "delete");
           }
-          _this.printLoading = false;
+
         }
 
       };
@@ -1646,10 +1648,18 @@ export default {
                       result => {
                         for (var i = 0; i < list.length; i++) {
                           if (list[i].fieldName) {
-                            let obj = this.formItems[i];
-                            obj.value = result[list[i].tableName + list[i].fieldName];
-                            let tempObj = JSON.parse(JSON.stringify(obj));
-                            this.$set(this.formItems, i, tempObj);
+                            if (list[i].fieldName == "page") {
+                              let obj = this.formItems[i];
+                              obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
+                              let tempObj = JSON.parse(JSON.stringify(obj));
+                              this.$set(this.formItems, i, tempObj);
+                            } else {
+                              let obj = this.formItems[i];
+                              obj.value = result[list[i].tableName + list[i].fieldName];
+                              let tempObj = JSON.parse(JSON.stringify(obj));
+                              this.$set(this.formItems, i, tempObj);
+                            }
+
                           }
                         }
 
@@ -2027,6 +2037,7 @@ export default {
         this.config.pagePercentNum = 1;
         this.config.pageOper = num;
         this.setBusInitTime();
+        this.getFormData();
       }
       if (num == -1) {
         if (this.config.pagePercentNum > 2) {
@@ -2042,6 +2053,7 @@ export default {
         } else {
           return
         }
+        this.getFormData();
         this.$nextTick(function() {
           Bus.$emit('test', num);
         })
@@ -2056,6 +2068,7 @@ export default {
 
           return
         }
+        this.getFormData();
         // this.$nextTick(function() {
         Bus.$emit('test', num);
         // })
@@ -2177,7 +2190,7 @@ export default {
               this.config.startMinTime = new Date(time);
               this.config.maxTime = '';
               Bus.$emit('timeSetChange');
-              return
+
             }
           }
           if (startMinTime) {
@@ -2197,8 +2210,13 @@ export default {
             }
           }
           this.getMaxTimeNoset();
+          this.getFormData();
 
         })
+
+    },
+    //获取单子数据
+    getFormData() {
       let item = this.selectFormItemTemp
       let params = {
         formName: item.formName,
@@ -2234,10 +2252,17 @@ export default {
                 result => {
                   for (var i = 0; i < list.length; i++) {
                     if (list[i].fieldName) {
-                      let obj = this.formItems[i];
-                      obj.value = result[list[i].tableName + list[i].fieldName];
-                      let tempObj = JSON.parse(JSON.stringify(obj));
-                      this.$set(this.formItems, i, tempObj);
+                      if (list[i].fieldName == "page") {
+                        let obj = this.formItems[i];
+                        obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
+                        let tempObj = JSON.parse(JSON.stringify(obj));
+                        this.$set(this.formItems, i, tempObj);
+                      } else {
+                        let obj = this.formItems[i];
+                        obj.value = result[list[i].tableName + list[i].fieldName];
+                        let tempObj = JSON.parse(JSON.stringify(obj));
+                        this.$set(this.formItems, i, tempObj);
+                      }
                     }
                   }
 
@@ -2317,6 +2342,16 @@ export default {
               }
             } else {
               this.config.patientMaxTime = res.TIME
+            }
+            let t1 = 0
+            let i = 0
+            t1 = this.coutTimes(this.config.startMinTime, this.config.patientMaxTime, 'minute');
+            i = Math.ceil(t1 / 250);
+            this.config.pageTotal = i;
+            if (t1 > 250) {
+              this.pageButtonView = true
+            } else {
+              this.pageButtonView = false
             }
             this.$nextTick(function() {
               Bus.$emit('timeSetChange');
@@ -2866,6 +2901,28 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
