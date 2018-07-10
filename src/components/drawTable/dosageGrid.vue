@@ -150,7 +150,6 @@ export default {
           let temp = []
           let topi = 0
           for (var i = 0; i < temparr.length; i++) {
-            debugger
             if (temparr[i].START_TIME) {
               if (new Date(temparr[i].START_TIME) <= new Date(this.config.maxTime) && new Date(temparr[i].START_TIME) >= new Date(this.config.initTime)) {
                 let flag = true;

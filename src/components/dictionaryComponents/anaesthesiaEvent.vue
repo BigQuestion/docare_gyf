@@ -143,26 +143,21 @@ export default {
     chan(list) {
       this.isSave = false;
       this.isCancle = false;
-      console.log(this.isSave + 'isSave')
-      console.log('敲了键盘');
+
     },
     inputBlur(list) {
-      console.log('失去焦点')
-      console.log(list.writeAble + 'write');
       list.writeAble = false;
       if (list.arrayStats == 0) {
-        console.log('123')
+
       } else {
         this.changeData.push(list)
-        console.log(this.changeData)
+
       }
     },
     valueWriteAble(list) {
-      console.log('点击')
       this.obj = list;
       this.isSave = true;
       list.writeAble = true;
-      console.log(list.writeAble + 'write');
     },
     getTypeDetail(item) {
       this.tempTypeItem = item;
@@ -173,12 +168,10 @@ export default {
       this.api.medAnesthesiaEventOpenByItemClass(params)
         .then(
           res => {
-            console.log(res.list)
             this.commonTypeList = res.list;
           });
     },
     addMedAnesthesiaInputDict() {
-      console.log(this.tempTypeItem)
       this.commonTypeList.push({
         arrayStats: 0, //0为新增
         itemNo: this.commonTypeList.length + 1,
@@ -194,7 +187,6 @@ export default {
       });
       this.isAdd = true;
       this.isCancle = false;
-      console.log(this.commonTypeList);
     },
     cancleEdit() {
       this.changeData = [];
@@ -208,7 +200,6 @@ export default {
       var li = this.commonTypeList;
       var k = li.length - 1;
       let params = {};
-      console.log(li)
 
       if (li[k].arrayStats == 0) {
         console.log('这是新增操作')
@@ -235,6 +226,11 @@ export default {
             res => {
               this.changeData = [];
               this.getTypeDetail(this.tempTypeItem);
+              if (res.success) {
+                alert("保存成功")
+              } else {
+                alert("保存失败")
+              }
             });
       }
       this.isCancle = true;
