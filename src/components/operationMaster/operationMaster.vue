@@ -864,8 +864,21 @@ export default {
       let imageWidth = 900
       let scale = 3
       this.createTempDom(width, height, imageWidth, scale);
+      var list = this.formItems;
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].fieldName) {
+          if (list[i].fieldName == "page") {
+            let obj = this.formItems[i];
+            obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
+            let tempObj = JSON.parse(JSON.stringify(obj));
+            this.$set(this.formItems, i, tempObj);
 
-      let boxHtml = this.$refs.mybox
+          }
+        }
+      }
+      let boxHtml = ''
+      boxHtml = this.$refs.mybox
+      console.log(boxHtml)
       html2canvas(boxHtml, { width: imageWidth, height: height, scale: 5 }).then(canvas => {
         this.canvasBox.appendChild(canvas)
         // canvas.style.zoom = 1;
@@ -877,7 +890,7 @@ export default {
         if (window.ipc) {
           window.ipc.send('getImageData', objString);
         }
-        this.removeTempDom();
+        // this.removeTempDom();
         this.toChangePage(1);
         if (index < this.config.pageTotal - 1) {
           index++;
@@ -2034,6 +2047,7 @@ export default {
     },
     //单子首页
     toChangePage(num) {
+
       if (num == 0) {
         this.config.pagePercentNum = 1;
         this.config.pageOper = num;
@@ -2075,18 +2089,7 @@ export default {
         // })
       }
 
-      var list = this.formItems;
-      for (var i = 0; i < list.length; i++) {
-        if (list[i].fieldName) {
-          if (list[i].fieldName == "page") {
-            let obj = this.formItems[i];
-            obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
-            let tempObj = JSON.parse(JSON.stringify(obj));
-            this.$set(this.formItems, i, tempObj);
 
-          }
-        }
-      }
 
     },
     //初始化表格配置信息
@@ -2913,6 +2916,15 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
+
+
+
+
+
+
+
+
 
 
 
