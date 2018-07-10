@@ -1,15 +1,15 @@
 <template>
   <div>
     <!-- <p style="color:SeaGreen">●心率</p>
-                        <p style="color:DarkGreen">●PULSE</p>
-                        <p style="color:red">∨收缩压</p>
-                        <p style="color:red">∧舒张压</p>
-                        <p style="color:pink">○自主呼吸</p>
-                        <p style="color:SpringGreen">△中心静脉压</p>
-                        <p style="color:DarkGreen">X麻醉开始</p>
-                        <p style="color:DarkGreen">⊙手术开始</p>
-                        <p style="color:red">X手术结束</p>
-                        <p style="color:red">ⓧ麻醉结束</p> -->
+                                <p style="color:DarkGreen">●PULSE</p>
+                                <p style="color:red">∨收缩压</p>
+                                <p style="color:red">∧舒张压</p>
+                                <p style="color:pink">○自主呼吸</p>
+                                <p style="color:SpringGreen">△中心静脉压</p>
+                                <p style="color:DarkGreen">X麻醉开始</p>
+                                <p style="color:DarkGreen">⊙手术开始</p>
+                                <p style="color:red">X手术结束</p>
+                                <p style="color:red">ⓧ麻醉结束</p> -->
     <div v-for="item in eventTypeList" :style="{fontSize:object.fontSize*0.75+'pt'}">
       <p v-if="item == 71" style="color:Crimson">△中心静脉压</p>
       <p v-else-if="item == 89" style="color:Blue">∨无创收缩压</p>
@@ -30,6 +30,10 @@
       <p v-else-if="item == 65" style="color:Red">∨动脉收缩压</p>
       <p v-else-if="item == 66" style="color:Red">∧动脉舒张压</p>
       <p v-else-if="item == 67" style="color:Red">△动脉平均压</p>
+      <p v-else-if="item == '麻醉开始'" style="color:#222">X麻醉开始</p>
+      <p v-else-if="item == '手术开始'" style="color:#222">⊙手术开始</p>
+      <p v-else-if="item == '手术结束'" style="color:red"><span style="font-size:14px;">ⓧ</span>手术结束</p>
+      <p v-else-if="item == '麻醉结束'" style="color:red;">X麻醉结束</p>
     </div>
   </div>
   </div>
@@ -44,7 +48,6 @@ export default {
   },
   methods: {
     getList() {
-
       this.api.getPatientAllCode({
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
@@ -52,12 +55,34 @@ export default {
         eventNo: 0,
       }).then(
         res => {
+          console.log(res)
           if (res.length > 0) {
             this.eventTypeList = res;
           } else {
             this.eventTypeList = []
           }
+          this.pushFun();
         });
+
+    },
+    pushFun() {
+      // 手术开始
+      if (this.config.userInfo.startDateTime) {
+        this.eventTypeList.push('手术开始')
+      }
+      // 麻醉开始
+      if (this.config.userInfo.anesStartTime) {
+        this.eventTypeList.push('麻醉开始')
+      }
+      // 麻醉结束
+      if (this.config.userInfo.anesEndTime) {
+        this.eventTypeList.push('麻醉结束')
+      }
+      // 手术结束
+      if (this.config.userInfo.endDateTime) {
+        this.eventTypeList.push('手术结束')
+      }
+      console.log(this.eventTypeList)
     }
   },
   props: ['page', 'object'],
@@ -77,6 +102,5 @@ export default {
 
 </script>
 <style scoped>
-
 
 </style>
