@@ -2,9 +2,9 @@
   <div style="position: relative;margin:2px;">
     <!-- <div style="height: 2px;width: 700px;background-color: red;margin-bottom: 20px;"></div> -->
     <div v-if="!page">
-      <div style="max-height: 15pt;padding: 1.5pt 0pt;" ref="timelist">
-        <div v-for="(item,index) in xTimeArray" v-if="index%6==0" style="width: 20pt;margin-left: -7pt;font-size: 9pt;display: inline-block;" :title="item">{{item}}</div>
-        <div v-else style="width: 9pt;display: inline-block;"></div>
+      <div style="max-height: 20px;" ref="timelist">
+        <div v-for="(item,index) in xTimeArray" v-if="index%6==0" style="width: 30px;margin-left: -8px;font-size: 12px;display: inline-block;">{{item}}</div>
+        <div v-else style="width: 12px;display: inline-block;"></div>
       </div>
       <div>
         <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px',lineHeight:svgHeight/rows+'px',}" style="width: 160px;border-bottom: 1px solid #8391a2;  font-size: 14px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
@@ -24,10 +24,12 @@
           </g>
         </svg>
         <div v-if="item.obj.DURATIVE_INDICATOR=='0'||!item.obj.DURATIVE_INDICATOR" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
-          <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+          <span v-if="item.obj.ITEM_NAME=='七氟烷'" style="padding: 0 2px 0 0px;">{{item.obj.CONCENTRATION}}{{item.obj.CONCENTRATION_UNIT}}</span>
+          <span v-else style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
         </div>
-        <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+'px',left:item.x1+item.w/2-10+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
-          <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+        <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+2+'px',left:item.x1+item.w/2-10+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+          <span v-if="item.obj.ITEM_NAME=='七氟烷'" style="padding: 0 2px 0 0px;display: block;width: 16px;text-align: center;">{{item.obj.CONCENTRATION}}{{item.obj.CONCENTRATION_UNIT}}</span>
+          <span v-else style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
         </div>
       </div>
     </div>

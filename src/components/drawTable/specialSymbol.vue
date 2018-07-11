@@ -18,13 +18,13 @@
       <p v-else-if="item == 100" style="color:Red">X体温</p>
       <p v-else-if="item == 104" style="color:#8080FF">X肛温</p>
       <p v-else-if="item == 105" style="color:#FF8080">X鼻咽温</p>
-      <p v-else-if="item == 112" style="color:Blue">△ETCO2</p>
-      <p v-else-if="item == 188" style="color:Blue">●SpO2</p>
-      <p v-else-if="item == 202">△f</p>
+      <!-- <p v-else-if="item == 112" style="color:Blue">△ETCO2</p> -->
+      <!-- <p v-else-if="item == 188" style="color:Blue">●SpO2</p> -->
+      <!-- <p v-else-if="item == 202">△f</p> -->
       <p v-else-if="item == 208">△Ppeak</p>
       <p v-else-if="item == 209">△Pplat</p>
       <p v-else-if="item == 210">△Pmean</p>
-      <p v-else-if="item == 212">△TVE</p>
+      <!-- <p v-else-if="item == 212">△TVE</p> -->
       <p v-else-if="item == 40" style="color:SeaGreen">●心率</p>
       <p v-else-if="item == 44" style="color:DarkGreen">●PULSE</p>
       <p v-else-if="item == 65" style="color:Red">∨动脉收缩压</p>
@@ -55,7 +55,6 @@ export default {
         eventNo: 0,
       }).then(
         res => {
-          console.log(res)
           if (res.length > 0) {
             this.eventTypeList = res;
           } else {
@@ -82,7 +81,6 @@ export default {
       if (this.config.userInfo.endDateTime) {
         this.eventTypeList.push('手术结束')
       }
-      console.log(this.eventTypeList)
     }
   },
   props: ['page', 'object'],
@@ -102,5 +100,6 @@ export default {
 
 </script>
 <style scoped>
+
 
 </style>

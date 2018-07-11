@@ -12,10 +12,10 @@
     <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{left: item.x1-5+'px',top:item.y2+'px'}" v-for="(item,index) in outDosageData">
       <span @mouseenter="showTipInfo(item,$event)" style="padding: 0 2px 0 0px;" v-if="item.obj.DOSAGE">{{item.obj.DOSAGE}}</span>
     </div>
-    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+1+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+2+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
       <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
     </div>
-    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+1+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+2+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
       <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
     </div>
     <div v-if="tipView">
@@ -45,8 +45,8 @@
     <div style="height: 100px;width: 140px; position: absolute;top: 0px;left: -140px;">
       <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 14px;padding-left: 5px;white-space:nowrap;word-break: keep-all;" :style="{height:svgHeight/rows-1+'px'}"><span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span></div>
     </div>
-    <div style="width: 25px; position: absolute;top: 0px;left: -165px;border-right: 1px solid #8391a2;border-bottom: 1px solid #8391a2;    display: flex;align-items: center;" :style="{height:forRows*(svgHeight/rows)-1+'px'}">
-      输液
+    <div style="width: 22px; position: absolute;top: 0px;left: -165px;border-right: 1px solid #8391a2;border-bottom: 1px solid #8391a2;    display: flex;align-items: center;" :style="{height:forRows*(svgHeight/rows)-1+'px'}">
+      <!--  输液︵ 输血︶ -->
     </div>
     <div style="width: 165px; position: absolute;top: 0px;left: -165px;font-size: 14px;" :style="{height:outRows*(svgHeight/rows)-1+'px',top:forRows*(svgHeight/rows)+'px'}">
       <!-- <div v-for="item in outRows" v-if="item!=3" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">

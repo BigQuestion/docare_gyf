@@ -6,9 +6,9 @@
       <input v-else-if="conInfo.readOnlyMode=='true'" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" :readonly="true" style="border:none;border-bottom: 1px dashed #000;">
       <div v-if="nameView" style="position: absolute;top: 0px;height: 300px;overflow: auto;border:1px solid;z-index: 20;background-color:white;" :style="{width:conInfo.width+'px'}">
         <div>
-          <input v-model="serchZm" @keyup="serchJm">
+          <input ref="inSelect" v-model="serchZm" @keyup="serchJm" :style="{width:conInfo.width+'px'}">
         </div>
-        <div class="listIngt" @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" :style="{width:conInfo.width+10+'px'}">
+        <div class="listIngt" @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" :style="{width:conInfo.width+'px'}">
           <div v-if="conInfo.dictShowFiled!=''&&conInfo.dictShowFiled!=null">
             {{item.DICTSHOWFILED}}
           </div>
@@ -58,7 +58,10 @@ export default {
       this.api.allColumContext(params)
         .then(res => {
           this.allList = res;
+          this.$refs.inSelect.focus()
         })
+
+
 
     },
     getSelected(item) {
@@ -125,7 +128,6 @@ export default {
     },
 
     busToTop() {
-      debugger
       this.$set(this.conInfo, 'modifyFiledValue', this.conInfo.value);
       this.$emit('toparentevent', this.conInfo);
     },
@@ -182,6 +184,20 @@ export default {
 .listIngt:hover {
   background-color: #1E90FF;
   color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #E3E3E3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C1C1C1;
+  border-radius: 2px;
 }
 
 </style>
