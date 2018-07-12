@@ -67,7 +67,7 @@
                     </select>
                   </div>
                   <div v-else style="border:1px solid #a9a9a9;">
-                    <input style="height:20px;border:0;display:block;font-size:12px;" readonly="readonly" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
+                    <input style="height:20px;border:0;display:block;font-size:12px;" type="text" @change="getChangeValue(item)" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
                   </div>
                 </div>
               </div>
@@ -218,7 +218,7 @@
           </option>
         </select> -->
         <div>
-          <input v-model="serchZmItem" @keyup="serchJmItem">
+          <input ref="inSelect" v-model="serchZmItem" @keyup="serchJmItem">
         </div>
         <div style="padding-left: 5px;z-index: 3;background-color: white;height: 200px;overflow-y: auto;">
           <div class="listIngt" @click="getSeclectItem(option)" v-for="option in showItemList">{{option.itemName}}</div>
@@ -893,6 +893,9 @@ export default {
     },
     //
     signChange(e, index, sItem) {
+
+      debugger
+      sItem.dataValue[index] = e.currentTarget.value
       this.updateDataList.push({
         itemName: this.itemNameList[index].itemCode,
         patientId: this.objectItem.patientId,
@@ -1037,6 +1040,7 @@ export default {
       }
       let params = []
       for (var i = 0; i < list.length; i++) {
+        debugger
         var obj = {
           itemNo: list[i].ITEM_NO,
           createBy: createBy,
@@ -1059,6 +1063,11 @@ export default {
       }
       this.api.insertBtchMedAnesthesiaEventTemplet(params)
         .then(res => {
+          if (res.success) {
+            alert("保存成功")
+          } else {
+            alert("保存失败")
+          }
           this.cancleSaveTemp();
         })
     },

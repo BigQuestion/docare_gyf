@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative;font-family: SimSun;font-weight:bold;">
-    <div v-if="infoData.bottomLineMode&&infoData.lineTypeMode=='solid'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;position:relative;">
-      {{infoData[attrName]}}
+    <div v-if="conInfo.bottomLineMode&&conInfo.lineTypeMode=='solid'&&conInfo.strFormatMode==''" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,cursor:conInfo.cursorMode,opacity:conInfo.opacity,border:'0',textAlign:conInfo.TextAlignMode,}" style="min-width: 20px;min-height: 20px;position:relative;">
+      {{conInfo[attrName]}}
       <div style="position:absolute;bottom:-22px;">
         <svg height="20" :style="{width:conInfo.width+'px'}">
           <g fill="none" stroke="black" stroke-width="1">
@@ -10,8 +10,8 @@
         </svg>
       </div>
     </div>
-    <div v-else-if="infoData.bottomLineMode&&infoData.lineTypeMode=='dashed'&&infoData.strFormatMode==''" :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,textAlign:conInfo.TextAlignMode,fontSize:conInfo.fontSize}" style="min-width: 20px;min-height: 20px;position:relative;">
-      {{infoData[attrName]}}
+    <div v-else-if="conInfo.bottomLineMode&&conInfo.lineTypeMode=='dashed'&&conInfo.strFormatMode==''" :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,textAlign:conInfo.TextAlignMode,fontSize:conInfo.fontSize+'pt'}" style="min-width: 20px;min-height: 20px;position:relative;">
+      {{conInfo[attrName]}}
       <div style="position:absolute;bottom:-22px;">
         <svg height="20" :style="{width:conInfo.width+'px'}">
           <g fill="none" stroke="black" stroke-width="1">
@@ -21,7 +21,7 @@
       </div>
     </div>
     <!-- <input v-model="strToDate"   :readonly="true"> -->
-    <div v-else-if="infoData.strFormatMode == 'yyyy-MM-dd'||infoData.strFormatMode == 'hh:mm'||infoData.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',border:conInfo.borderStyle,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}" style="min-width: 20px;min-height: 20px;position:relative;">{{strToDate}}
+    <div v-else-if="conInfo.strFormatMode == 'yyyy-MM-dd'||conInfo.strFormatMode == 'hh:mm'||conInfo.strFormatMode == 'yyyy-MM-dd hh:mm'" :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt',textAlign:conInfo.TextAlignMode}" style="min-width: 20px;min-height: 20px;position:relative;">{{strToDate}}
       <div style="position:absolute;bottom:-22px;">
         <svg height="20" :style="{width:conInfo.width+'px'}">
           <g fill="none" stroke="black" stroke-width="1">
@@ -31,7 +31,7 @@
       </div>
     </div>
     <div v-else :style="{width:conInfo.width+'px',cursor:conInfo.cursorMode,opacity:conInfo.opacity,textAlign:conInfo.TextAlignMode,fontSize:conInfo.fontSize}" style="min-width: 20px;min-height: 20px;">
-      {{infoData[attrName]}}
+      {{conInfo[attrName]}}
       <div style="position:absolute;bottom:-22px;">
         <svg height="30" :style="{width:conInfo.width+'px'}">
           <g fill="none" stroke="black" stroke-width="1">
@@ -70,8 +70,8 @@ export default {
   },
   computed: {
     strToDate() {
-      if (this.infoData.value && this.infoData.strFormatMode ==
-        'yyyy-MM-dd' || this.infoData.strFormatMode == 'hh:mm' || this.infoData.strFormatMode == 'yyyy-MM-dd hh:mm') {
+      if (this.conInfo.value && this.conInfo.strFormatMode ==
+        'yyyy-MM-dd' || this.conInfo.strFormatMode == 'hh:mm' || this.conInfo.strFormatMode == 'yyyy-MM-dd hh:mm') {
         var time = new Date(this.conInfo.value).Format(this.conInfo.strFormatMode);
         return time;
       }
@@ -91,14 +91,7 @@ export default {
       }
     })
   },
-  watch: {
-    "infoData.value": function() {
-      this.changeTimes = this.changeTimes + 1;
-      if (this.changeTimes > 1) {
-        this.$emit('toparentevent', this.conInfo);
-      }
-    }
-  }
+
 }
 
 </script>

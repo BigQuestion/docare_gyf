@@ -2,7 +2,8 @@
   <div v-if="!settingView" style="height:100%;position:relative;overflow-y:hidden;" @click="allNone()">
     <div style="width: 100%;height: 100%;background-color: #ebf1f9;position: absolute;top: 0;left:0;z-index: 999;" v-if="printLoading">
       <div class="loading">
-        打印数据加载中....
+        {{config.pagePercentNum}}/{{config.pageTotal}}打印数据加载中....
+        <br>
         <span></span>
         <span></span>
         <span></span>
@@ -335,7 +336,7 @@
                 </div>
                 <div class="left15">付费方式</div>
                 <div class="in_con">
-                  {{patientInfo.NAME}}
+                  <!-- {{patientInfo.NAME}} -->
                 </div>
               </div>
               <div class="container">
@@ -462,15 +463,15 @@
             </div>
           </div>
           <!-- :style="{'display':showPrint?'inline':'none'}" -->
-          <div ref="mybox" :style="{'display':showPrint?'inline':'none'}">
+          <div ref="mybox" id="mybox" :style="{'display':showPrint?'inline':'none'}">
             <div class="designArea" style="font-size: 14pt;font-family: SimSun;height: 1900px;">
-              <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2)*0.75)+'pt'}">
+              <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2))+'px'}">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
               </div>
               <div v-if="item.type == 'div'&&(item.width/2) >= 451" class="item" style="position:absolute;min-height: 3px;min-width:3px;left:0;" :class="{choosed:item.chosen}" v-for="item in formItems">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
               </div>
-              <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x*0.75+'pt',top:item.y*0.75+'pt'}">
+              <div v-if="item.type !== 'div'" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:item.x+'px',top:item.y+'px'}">
                 <form-element-print :value="item" :isPrint="isPrint" :isPage="atherInput" v-on:toTopEvent="getValue" :objectItem="lockedPatientInfo"></form-element-print>
               </div>
             </div>
@@ -802,16 +803,18 @@ export default {
     electronListener() {
       //监听mian process里发出的message
       window.ipc.on('savesuccess', (event, arg) => {
+        console.log(new Date(), "electron返回监听")
         // alert("web2" + arg); // prints "pong"  在electron中web page里的console方法不起作用，因此使用alert作为测试方法
         var imagesArr = JSON.parse(arg);
         imagesArr.forEach(item => {
-          LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", item);
+          LODOP.ADD_PRINT_IMAGE(1, 0, "100%", "BottomMargin:0.5mm", item);
           LODOP.SET_PRINT_STYLEA(0, "Stretch", 2);
           LODOP.NEWPAGE();
         })
 
         LODOP.PREVIEW();
-        this.printLoading = false;
+        console.log(new Date(), "打印预览执行")
+        // this.printLoading = false;
 
       })
 
@@ -822,13 +825,15 @@ export default {
       LODOP.SET_PRINT_PAGESIZE(0, "176mm", "250mm", "B5")
       var _this = this;
       if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
+
         //不在打印预览界面
-        if (Value == 0) {
+        if (Value) {
+          _this.printLoading = false;
           _this.toChangePage(0);
           if (window.ipc) {
             window.ipc.send('deleteImages', "delete");
           }
-          _this.printLoading = false;
+
         }
 
       };
@@ -840,7 +845,8 @@ export default {
       this.contentImageBox = ''
       document.body.removeChild(this.canvasBox);
       this.canvasBox = ''
-      this.showPrint = false
+      // this.showPrint = false
+      this.$refs.mybox.style.display = "none";
     },
     createTempDom(width, height, imageWidth, scale) {
       let canvasBox;
@@ -867,14 +873,18 @@ export default {
       this.imageBox = imageBox
     },
     printPdf(index) {
-      this.showPrint = true
+      console.log(new Date(), "生成图片开始时间")
+      this.$refs.mybox.style.display = "inline";
+      // this.$set(this.$data, 'showPrint', true)
+      // this.showPrint = true
       let width = 1112
       let height = 1580
       let imageWidth = 900
       let scale = 3
       this.createTempDom(width, height, imageWidth, scale);
 
-      let boxHtml = this.$refs.mybox
+      let boxHtml = ''
+      boxHtml = this.$refs.mybox
       html2canvas(boxHtml, { width: imageWidth, height: height, scale: 5 }).then(canvas => {
         this.canvasBox.appendChild(canvas)
         // canvas.style.zoom = 1;
@@ -887,12 +897,74 @@ export default {
           window.ipc.send('getImageData', objString);
         }
         this.removeTempDom();
-        this.toChangePage(1);
-        if (index < this.config.pageTotal - 1) {
-          index++;
-          this.printPage(index);
-        }
+        this.toChangePage(1).then(() => {
+          debugger
+          if (index < this.config.pageTotal - 1) {
+            index++;
+            this.printPage(index);
+          }
+          console.log(new Date(), "生成图片结束并发送electrion")
+        })
+
       });
+      return
+
+      // this.formItems = []
+      // let item = this.selectFormItemTemp
+      // let params = {
+      //   formName: item.formName,
+      //   id: item.id
+      // }
+      // let arry = [];
+      // this.api.selectMedFormTemp(params)
+      //   .then(
+      //     res => {
+      //       if (res.formContent == "null" || res.formContent == null) {
+      //         return;
+      //       }
+      //       let tempItems = JSON.parse(res.formContent);
+      //       this.formItems = JSON.parse(res.formContent);
+      //       var list = this.formItems;
+      //       for (var i = 0; i < list.length; i++) {
+      //         if (list[i].fieldName) {
+      //           arry.push({
+      //             "patientId": this.lockedPatientInfo.patientId,
+      //             "visitId": this.lockedPatientInfo.visitId,
+      //             "operId": this.lockedPatientInfo.operId,
+      //             "tableName": list[i].tableName,
+      //             "coluName": list[i].fieldName,
+      //             "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
+      //             "dictTableName": list[i].dictTableName, //字典表名称
+      //             "dictField": list[i].dictField, //字典字段名称
+      //             "dictSelect": list[i].dictSelect,
+      //           })
+      //         }
+      //       }
+      //       this.api.getFormSqlResult(arry)
+      //         .then(
+      //           result => {
+      //             for (var i = 0; i < list.length; i++) {
+      //               if (list[i].fieldName) {
+      //                 if (list[i].fieldName == "page") {
+      //                   let obj = this.formItems[i];
+      //                   obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
+      //                   let tempObj = JSON.parse(JSON.stringify(obj));
+      //                   this.$set(this.formItems, i, tempObj);
+      //                 } else {
+      //                   let obj = this.formItems[i];
+      //                   obj.value = result[list[i].tableName + list[i].fieldName];
+      //                   let tempObj = JSON.parse(JSON.stringify(obj));
+      //                   this.$set(this.formItems, i, tempObj);
+      //                 }
+
+      //               }
+      //             }
+
+      //           });
+      //     });
+
+
+
 
     },
     sendSaveImageMsg() {
@@ -900,6 +972,8 @@ export default {
 
     },
     CreateOneFormPage() {
+      console.log(new Date(), "打印按钮加载")
+      this.lodopInit();
       this.printLoading = true
       var pageTotal = this.config.pageTotal;
       this.printPageNameArr = [];
@@ -923,6 +997,7 @@ export default {
       this.printPage(this.currentPageNum - 1)
     },
     printPage(index) {
+      console.log(new Date(), "printPage打印页", index)
       if (this.selectFormItemTemp.formName == '手术清点单') {
 
         setTimeout(() => {
@@ -931,10 +1006,10 @@ export default {
           LODOP.PREVIEW();
         }, 500)
       } else {
-        setTimeout(() => {
-          this.printPdf(index);
+        // setTimeout(() => {
+        this.printPdf(index);
 
-        }, 500)
+        // }, 500)
       }
 
 
@@ -1657,10 +1732,18 @@ export default {
                       result => {
                         for (var i = 0; i < list.length; i++) {
                           if (list[i].fieldName) {
-                            let obj = this.formItems[i];
-                            obj.value = result[list[i].tableName + list[i].fieldName];
-                            let tempObj = JSON.parse(JSON.stringify(obj));
-                            this.$set(this.formItems, i, tempObj);
+                            if (list[i].fieldName == "page") {
+                              let obj = this.formItems[i];
+                              obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
+                              let tempObj = JSON.parse(JSON.stringify(obj));
+                              this.$set(this.formItems, i, tempObj);
+                            } else {
+                              let obj = this.formItems[i];
+                              obj.value = result[list[i].tableName + list[i].fieldName];
+                              let tempObj = JSON.parse(JSON.stringify(obj));
+                              this.$set(this.formItems, i, tempObj);
+                            }
+
                           }
                         }
 
@@ -1942,7 +2025,6 @@ export default {
     },
     //获取单子修改的数据
     getValue(dataValue) {
-      debugger
       var modifyValue = '';
       if (dataValue.dictShowFiled != '' && dataValue.dictShowFiled != null) {
         modifyValue = dataValue.modifyFiledValue
@@ -2034,43 +2116,57 @@ export default {
     },
     //单子首页
     toChangePage(num) {
-      if (num == 0) {
-        this.config.pagePercentNum = 1;
-        this.config.pageOper = num;
-        this.setBusInitTime();
-      }
-      if (num == -1) {
-        if (this.config.pagePercentNum > 2) {
-          this.config.pagePercentNum = this.config.pagePercentNum - 1;
-          this.config.pageOper = num;
-          var m = new Date(this.config.initTime).getTime() - 250 * 60 * 1000;
-          this.setFormTime(m);
-        } else if (this.config.pagePercentNum == 2) {
+      var pec = new Promise((resolve, reject) => {
+        if (num == 0) {
           this.config.pagePercentNum = 1;
-          this.config.pageOper = 0;
-          var m = new Date(this.config.initTime).getTime() - 250 * 60 * 1000;
-          this.setFormTime(m);
-        } else {
-          return
-        }
-        this.$nextTick(function() {
-          Bus.$emit('test', num);
-        })
-      }
-      if (num == 1) {
-        if (this.config.pagePercentNum < this.config.pageTotal) {
-          this.config.pagePercentNum = this.config.pagePercentNum + 1;
           this.config.pageOper = num;
-          var m = new Date(this.config.maxTime).getTime();
-          this.setFormTime(m);
-        } else {
-
-          return
+          this.setBusInitTime();
+          this.getFormData().then(() => {
+            resolve()
+          })
         }
-        // this.$nextTick(function() {
-        Bus.$emit('test', num);
-        // })
-      }
+        if (num == -1) {
+          if (this.config.pagePercentNum > 2) {
+            this.config.pagePercentNum = this.config.pagePercentNum - 1;
+            this.config.pageOper = num;
+            var m = new Date(this.config.initTime).getTime() - 250 * 60 * 1000;
+            this.setFormTime(m);
+          } else if (this.config.pagePercentNum == 2) {
+            this.config.pagePercentNum = 1;
+            this.config.pageOper = 0;
+            var m = new Date(this.config.initTime).getTime() - 250 * 60 * 1000;
+            this.setFormTime(m);
+          } else {
+
+          }
+          this.getFormData().then(() => {
+            resolve()
+          });
+
+        }
+        if (num == 1) {
+          if (this.config.pagePercentNum < this.config.pageTotal) {
+            this.config.pagePercentNum = this.config.pagePercentNum + 1;
+            this.config.pageOper = num;
+            var m = new Date(this.config.maxTime).getTime();
+            this.setFormTime(m);
+            this.getFormData().then(() => {
+              resolve()
+            });
+          } else {
+
+
+          }
+
+          // this.$nextTick(function() {
+          // Bus.$emit('test', num);
+          // })
+        }
+
+
+      })
+
+      return pec;
 
 
 
@@ -2188,7 +2284,7 @@ export default {
               this.config.startMinTime = new Date(time);
               this.config.maxTime = '';
               Bus.$emit('timeSetChange');
-              return
+
             }
           }
           if (startMinTime) {
@@ -2208,52 +2304,78 @@ export default {
             }
           }
           this.getMaxTimeNoset();
+          this.getFormData();
 
         })
+
+    },
+    //获取单子数据
+    getFormData() {
       let item = this.selectFormItemTemp
       let params = {
         formName: item.formName,
         id: item.id
       }
       let arry = [];
-      this.api.selectMedFormTemp(params)
-        .then(
-          res => {
-            if (res.formContent == "null" || res.formContent == null) {
-              return;
-            }
-            let tempItems = JSON.parse(res.formContent);
-            this.formItems = JSON.parse(res.formContent);
-            var list = this.formItems;
-            for (var i = 0; i < list.length; i++) {
-              if (list[i].fieldName) {
-                arry.push({
-                  "patientId": this.lockedPatientInfo.patientId,
-                  "visitId": this.lockedPatientInfo.visitId,
-                  "operId": this.lockedPatientInfo.operId,
-                  "tableName": list[i].tableName,
-                  "coluName": list[i].fieldName,
-                  "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
-                  "dictTableName": list[i].dictTableName, //字典表名称
-                  "dictField": list[i].dictField, //字典字段名称
-                  "dictSelect": list[i].dictSelect,
-                })
+      var pro = new Promise((resolve, reject) => {
+        this.api.selectMedFormTemp(params)
+          .then(
+            res => {
+              if (res.formContent == "null" || res.formContent == null) {
+                return;
               }
-            }
-            this.api.getFormSqlResult(arry)
-              .then(
-                result => {
-                  for (var i = 0; i < list.length; i++) {
-                    if (list[i].fieldName) {
-                      let obj = this.formItems[i];
-                      obj.value = result[list[i].tableName + list[i].fieldName];
-                      let tempObj = JSON.parse(JSON.stringify(obj));
-                      this.$set(this.formItems, i, tempObj);
+              let tempItems = JSON.parse(res.formContent);
+              this.formItems = JSON.parse(res.formContent);
+              var list = this.formItems;
+              for (var i = 0; i < list.length; i++) {
+                if (list[i].fieldName) {
+                  arry.push({
+                    "patientId": this.lockedPatientInfo.patientId,
+                    "visitId": this.lockedPatientInfo.visitId,
+                    "operId": this.lockedPatientInfo.operId,
+                    "tableName": list[i].tableName,
+                    "coluName": list[i].fieldName,
+                    "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
+                    "dictTableName": list[i].dictTableName, //字典表名称
+                    "dictField": list[i].dictField, //字典字段名称
+                    "dictSelect": list[i].dictSelect,
+                  })
+                }
+              }
+              this.api.getFormSqlResult(arry)
+                .then(
+                  result => {
+                    for (var i = 0; i < list.length; i++) {
+                      if (list[i].fieldName) {
+                        if (list[i].fieldName == "page") {
+                          let obj = this.formItems[i];
+                          obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
+                          let tempObj = JSON.parse(JSON.stringify(obj));
+                          this.$set(this.formItems, i, tempObj);
+                        } else {
+                          let obj = this.formItems[i];
+                          obj.value = result[list[i].tableName + list[i].fieldName];
+                          let tempObj = JSON.parse(JSON.stringify(obj));
+                          this.$set(this.formItems, i, tempObj);
+                        }
+                      }
                     }
-                  }
+                    Bus.$emit('test', '--');
+                    let loadTime = 1000;
+                    if (window.loadTime) {
+                      loadTime = window.loadTime
+                    }
+                    setTimeout(() => {
 
-                });
-          });
+                      resolve(result);
+                    }, loadTime)
+
+                  })
+
+            });
+      });
+      return pro;
+
     },
     getMaxTime() {
       let intitime = this.config.initTime
@@ -2328,6 +2450,16 @@ export default {
               }
             } else {
               this.config.patientMaxTime = res.TIME
+            }
+            let t1 = 0
+            let i = 0
+            t1 = this.coutTimes(this.config.startMinTime, this.config.patientMaxTime, 'minute');
+            i = Math.ceil(t1 / 250);
+            this.config.pageTotal = i;
+            if (t1 > 250) {
+              this.pageButtonView = true
+            } else {
+              this.pageButtonView = false
             }
             this.$nextTick(function() {
               Bus.$emit('timeSetChange');
@@ -2813,7 +2945,7 @@ export default {
   border: 1px solid #B4C7FF;
 }
 
-.pageInSelect {
+.pageInSelec {
   position: absolute;
   top: -120px;
   height: 120px;
@@ -2831,7 +2963,7 @@ export default {
 }
 
 .loading {
-  width: 150px;
+  width: 180px;
   height: 15px;
   margin: 0 auto;
   position: relative;
@@ -2878,6 +3010,117 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
