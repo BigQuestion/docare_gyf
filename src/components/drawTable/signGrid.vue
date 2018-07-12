@@ -207,7 +207,7 @@ export default {
                 patientId: this.config.userInfo.patientId,
                 operId: this.config.userInfo.operId,
                 visitId: this.config.userInfo.visitId,
-                itemClass: "2C",
+                itemClass: "2C4",
               }
               this.api.selectMedAnesthesiaEventList(paramsThree)
                 .then(aff => {
@@ -281,7 +281,7 @@ export default {
                   var pei = 0;
                   for (var k = 0; k < this.dataBody.length; k++) {
                     if (this.dataBody[k - 1]) {
-                      if (this.dataBody[k].left == this.dataBody[k - 1].left) {
+                      if (this.dataBody[k].left == this.dataBody[k - 1].left||this.dataBody[k].left<this.dataBody[k - 1].left+10) {
                         this.dataBody[k].bottom = this.dataBody[k - 1].bottom + 15;
                       } else {
                         this.dataBody[k].bottom = 0;
