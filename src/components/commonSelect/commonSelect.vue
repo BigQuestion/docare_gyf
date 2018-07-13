@@ -126,7 +126,7 @@ export default {
       }
       this.medAnaesthesiaDictList = newList;
     },
-
+    //讲数据返回上级
     busToTop() {
       this.$set(this.conInfo, 'modifyFiledValue', this.conInfo.value);
       this.$emit('toparentevent', this.conInfo);

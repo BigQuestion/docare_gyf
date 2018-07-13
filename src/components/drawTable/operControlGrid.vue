@@ -233,6 +233,7 @@ export default {
       signNameLisg: [],
       setTimeId: '', //定时器执行
       spo2List: [],
+      breathData: [], //呼吸数据
     }
 
   },
@@ -322,7 +323,7 @@ export default {
         eventNo: 0,
         timePoint: new Date(this.clickItem.time),
         itemValue: moveValue,
-        operator: "mdsd "
+        operator: this.config.userId
       })
       let params = this.updateDataArray;
       this.api.updateMedPatientMonitorDatas(params, { noAlert: true })
@@ -362,12 +363,26 @@ export default {
           })
     },
     getSignTimeData() {
+      let param = {
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
+        itemClass: 'A'
+      }
+      this.api.selectMedAnesthesiaEventList(param)
+        .then(
+          res => {
+            let list = res.list
+            this.breathData = list
+          });
+
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
         eventNo: 0
       }
+
       this.api.getNewTimeData(params)
         .then(res => {
           if (res.length > 0) {
@@ -381,74 +396,6 @@ export default {
 
         })
       return
-
-      this.api.getSignTimeData(params)
-        .then(
-          res => {
-            if (res.length < 1) {
-              return false
-            }
-            var sortArray = [];
-            for (var i = 0; i < res.length; i++) {
-              var item = res[i].dataValue;
-              item = eval('(' + item + ')');
-              let xL = len - item.length
-
-              if (xL > 0) {
-                for (var j = 0; j < xL; j++) {
-                  item.push('');
-                }
-              }
-              res[i].dataValue = item;
-            }
-            res.sort(function(a, b) {
-              return Date.parse(a.time) - Date.parse(b.time); //时间正序
-            });
-            for (var i = 0, l = res.length; i < l; i++) {
-              sortArray.push(res[i]);
-            }
-            this.signdataList = sortArray;
-            var newArray = [];
-            for (var i = 0; i < len; i++) {
-              var arr1 = [];
-              for (var j = 0; j < sortArray.length; j++) {
-                if (sortArray[j].dataValue[i]) {
-                  arr1.push({
-                    value: sortArray[j].dataValue[i],
-                    time: sortArray[j].time,
-                    itemData: list[i]
-
-                  })
-                } else {
-                  arr1.push({
-                    value: " ",
-                    time: sortArray[j].time,
-                    itemData: list[i]
-
-                  })
-                }
-
-              }
-              newArray.push(arr1)
-            }
-
-            for (var i = 0; i < newArray.length; i++) {
-              for (var j = 0; j < newArray[i].length; j++) {
-                let min = '';
-                if (new Date(newArray[i][j].time) > this.config.maxTime) {
-                  min = this.getMinuteDif(this.config.initTime, this.config.maxTime) + 1;
-                } else {
-                  min = this.getMinuteDif(this.config.initTime, newArray[i][j].time);
-                }
-                let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
-                let y = this.svgHeight - Math.round(newArray[i][j].value / 10 * (this.svgHeight / this.rows))
-                newArray[i][j].x = x;
-                newArray[i][j].y = y;
-              }
-            }
-            this.pathArray = newArray;
-            this.calculatePath();
-          })
     },
 
     //计算时间差分钟
@@ -530,8 +477,7 @@ export default {
           testArr.push(obj)
         })
       })
-
-
+      //整理每个项目的不同时间点
       var map = {},
         dest = [];
       for (var i = 0; i < testArr.length; i++) {
@@ -552,9 +498,19 @@ export default {
           }
         }
       }
+      debugger
       for (var i = 0; i < dest.length; i++) {
         let listOne = dest[i].itemData
+
         for (var j = 0; j < listOne.length; j++) {
+          //如果是呼吸项目
+          //   let startTime
+          // if (dest[i].itemCode == 92) {
+          //   startTime = this.breathData[0].START_TIME
+          //   if(new Date(startTime)){
+
+          //   }
+          // }
 
           let min = '';
           if (new Date(listOne[j].time) > this.config.maxTime) {
@@ -587,6 +543,7 @@ export default {
           }
         }
       }
+      debugger
       this.spo2List = spo2List;
       this.calculatePath();
 
