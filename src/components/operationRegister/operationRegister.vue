@@ -279,7 +279,7 @@
           <input v-model="templetName" style="width: 200px;">
         </div>
         <div style="padding-left: 15px;">
-          <input type="checkbox" name="" :checked="checkState">
+          <input type="checkbox" name="" v-model="checkState" v-bind:value="checkState">
           <span>是否私有</span>
           <button @click="saveTemplet">保存</button>
           <button @click="cancleSaveTemp">取消</button>
@@ -480,6 +480,11 @@ export default {
       this.api.deleteMedAnesthesiaEvent(params)
         .then(
           res => {
+            if (res.success) {
+              alert("删除成功")
+            } else {
+              alert("删除失败")
+            }
             this.selectMedAnesthesiaEventList();
           })
     },
@@ -527,6 +532,12 @@ export default {
             .then(res => {
               this.selectMedAnesthesiaEventList();
               this.changeEvent = [];
+              if (res.success) {
+                alert("保存成功")
+              } else {
+                alert("保存失败")
+              }
+
             })
         }
 
@@ -538,21 +549,6 @@ export default {
       var arry1 = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].addFlag) {
-          // addParams.push({
-          //   patientId: list[i].PATIENT_ID,
-          //   visitId: list[i].VISIT_ID,
-          //   operId: list[i].OPER_ID,
-          //   itemClass: list[i].ITEM_CLASS,
-          //   itemName: list[i].ITEM_NAME,
-          //   itemSpec: list[i].ITEM_SPEC,
-          //   dosageUnits: list[i].DOSAGE_UNITS,
-          //   dosage: list[i].DOSAGE,
-          //   administrator: list[i].ADMINISTRATOR,
-          //   startTime: this.datetimeLocalToDate(list[i].START_TIME),
-          //   endDate: this.datetimeLocalToDate(list[i].ENDDATE),
-          //   eventNo: 0,
-          //   durativeIndicator: 0,
-          // })
           let par = {
             patientId: list[i].PATIENT_ID,
             visitId: list[i].VISIT_ID,
@@ -573,14 +569,24 @@ export default {
             speedUnit: list[i].SPEED_UNIT,
 
           }
-          this.api.insertMedAnesthesiaEvent(par)
-            .then(res => {
-              this.selectMedAnesthesiaEventList();
-            })
+          arry1.push(par)
+          // this.api.insertMedAnesthesiaEvent(par)
+          //   .then(res => {
+          //     this.selectMedAnesthesiaEventList();
+          //   })
         }
       }
-
-      alert("保存成功")
+      if (arry1.length > 0) {
+        this.api.insertMedAnesthesiaEventBatch(arry1)
+          .then(res => {
+            if (res.success) {
+              alert("保存成功")
+            } else {
+              alert("保存失败")
+            }
+            this.selectMedAnesthesiaEventList();
+          })
+      }
     },
     getSignName() {
       let params = {
@@ -893,8 +899,6 @@ export default {
     },
     //
     signChange(e, index, sItem) {
-
-      debugger
       sItem.dataValue[index] = e.currentTarget.value
       this.updateDataList.push({
         itemName: this.itemNameList[index].itemCode,
@@ -1040,7 +1044,6 @@ export default {
       }
       let params = []
       for (var i = 0; i < list.length; i++) {
-        debugger
         var obj = {
           itemNo: list[i].ITEM_NO,
           createBy: createBy,

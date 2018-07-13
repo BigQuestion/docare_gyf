@@ -1,5 +1,5 @@
 <script type="text/javascript">
-const userId = "MDSD";
+const userId = "";
 const userInfo = "";
 const isPrintedView = false; //是否在打印预览
 const pageTotal = 1; //总页数

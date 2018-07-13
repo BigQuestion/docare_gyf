@@ -1,7 +1,8 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'http://182.61.36.247:8080';
+// axios.defaults.baseURL = 'http://182.61.36.247:8080';
+axios.defaults.baseURL = 'http://111.111.111.156:8080';
 // axios.defaults.baseURL = 'http://localhost:8088';
-// axios.defaults.baseURL = 'http://111.111.111.156:8080';
+
 
 
 //返回状态判断
@@ -306,6 +307,7 @@ export default {
     return fetch('medicalsystem/rest/medAnesthesiaComm/insertMedAnesthesiaEventOpen', params)
   },
 
+
   /**
    * 修改麻醉事件记录
    * 
@@ -327,6 +329,9 @@ export default {
    */
   insertMedAnesthesiaEvent(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/insertMedAnesthesiaEvent', params)
+  },
+  insertMedAnesthesiaEventBatch(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/insertMedAnesthesiaEventBatch', params)
   },
 
   /**

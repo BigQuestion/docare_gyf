@@ -207,7 +207,7 @@ export default {
                   patientId: this.config.userInfo.patientId,
                   operId: this.config.userInfo.operId,
                   visitId: this.config.userInfo.visitId,
-                  itemClass: "2C",
+                  itemClass: "2C4",
                 }
                 this.api.selectMedAnesthesiaEventList(paramsThree)
                   .then(aff => {

@@ -811,7 +811,7 @@ export default {
     //打印插件初始化
     lodopInit() {
       LODOP = getLodop();
-      LODOP.SET_PRINT_PAGESIZE(0, "176mm", "250mm", "B5")
+      LODOP.SET_PRINT_PAGESIZE(0, "182mm", "270mm", "")
       var _this = this;
       if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
 
@@ -866,18 +866,25 @@ export default {
       this.$refs.mybox.style.display = "inline";
       // this.$set(this.$data, 'showPrint', true)
       // this.showPrint = true
-      let width = 1112
+      let width = 1118
       let height = 1580
       let imageWidth = 900
-      let scale = 3
-      this.createTempDom(width, height, imageWidth, scale);
+      let scale1 = 1
+      let scale2 = 2
+      if (window.scale1) {
+        scale1 = window.scale1
+      }
+      if (window.scale2) {
+        scale2 = window.scale1
+      }
+      this.createTempDom(width, height, imageWidth, scale1);
 
       let boxHtml = ''
       boxHtml = this.$refs.mybox
-      html2canvas(boxHtml, { width: imageWidth, height: height, scale: 5 }).then(canvas => {
+      html2canvas(boxHtml, { width: imageWidth, height: height, scale: scale2 }).then(canvas => {
         this.canvasBox.appendChild(canvas)
         // canvas.style.zoom = 1;
-        canvas.style.transform = "scale(" + scale + "," + scale + ")";
+        canvas.style.transform = "scale(" + scale1 + "," + scale1 + ")";
         canvas.style.transformOrigin = "0 0";
         canvas.style.paddingLeft = 5 + "px"
         var dataURL = canvas.toDataURL("image/png", 1.0);
@@ -887,7 +894,6 @@ export default {
         }
         this.removeTempDom();
         this.toChangePage(1).then(() => {
-          debugger
           if (index < this.config.pageTotal - 1) {
             index++;
             this.printPage(index);
@@ -2998,6 +3004,53 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

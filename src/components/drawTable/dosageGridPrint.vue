@@ -24,7 +24,7 @@
       <div v-for="item in dataArray" style="border-bottom: 1px solid #8391a2;font-size: 14px;padding-left: 5px;white-space:nowrap;word-break: keep-all;" :style="{height:svgHeight/rows-1+'px'}"><span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span></div>
     </div>
     <div style="width: 25px; position: absolute;top: 0px;left: -165px;border-right: 1px solid #8391a2;border-bottom: 1px solid #8391a2;    display: flex;align-items: center;" :style="{height:forRows*(svgHeight/rows)-1+'px'}">
-      输液
+      <!-- 输液 -->
     </div>
     <div style="width: 165px; position: absolute;top: 0px;left: -165px;font-size: 14px;" :style="{height:outRows*(svgHeight/rows)-1+'px',top:forRows*(svgHeight/rows)+'px'}">
       <div v-for="(item,index) in outputList" style="border-bottom: 1px solid #8391a2;" :style="{height:svgHeight/rows-1+'px'}">

@@ -89,6 +89,7 @@ export default {
       console.log(e.x);
     },
     login() {
+      this.config.userId = ""
       let params = {
         loginName: this.loginName,
         loginPwd: this.loginPwd
@@ -97,6 +98,7 @@ export default {
       this.api.login(params)
         .then(res => {
           if (res.success) {
+            this.config.userId = this.loginName
             this.$router.push({
               path: 'menu'
             })

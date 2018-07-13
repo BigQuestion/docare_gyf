@@ -334,7 +334,7 @@ export default {
           value: '输入文字',
           selectKeyfield: 'id',
           ForeColor: '#000',
-          fontSize: '1',
+          fontSize: '13',
         },
         {
           text: '文本控件',
@@ -343,7 +343,7 @@ export default {
           width: '80',
           ForeColor: '#000',
           height: '',
-          fontSize: '1',
+          fontSize: '13',
         }, {
           text: '文本',
           type: 'text',
@@ -354,7 +354,7 @@ export default {
           tableName: '',
           ForeColor: '#0000FF',
           borderStyle: '1px solid #222',
-          fontSize: '1',
+          fontSize: '13',
         }, {
           text: '输入框',
           type: 'input',
@@ -366,7 +366,7 @@ export default {
           dictShowFiled: '',
           dictField: '',
           borderStyle: '1px solid #222',
-          fontSize: '1',
+          fontSize: '13',
           value: '',
           ForeColor: '#0000FF',
           opacity: 1,
@@ -443,7 +443,7 @@ export default {
           type: "dataOfGrid",
           width: 600,
           height: 72,
-          fontSize: '1',
+          fontSize: '13',
         }, {
           text: "自定义控件",
           type: "checkBoxAll",
