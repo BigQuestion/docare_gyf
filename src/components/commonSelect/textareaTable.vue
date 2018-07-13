@@ -1,6 +1,6 @@
 <template>
     <div>
-        <textarea v-on:blur="myMethod()" :style="{height:conInfo.height+'px',width:conInfo.width+'px',color:conInfo.ForeColor,}" style="resize:none;" v-model="conInfo.value"></textarea>
+        <textarea v-on:blur="myMethod()" :style="{height:conInfo.height+'px',width:conInfo.width+'px',color:conInfo.ForeColor,fontSize:conInfo.fontSize+'pt'}" style="resize:none;" v-model="conInfo.value"></textarea>
     </div>
 </template>
 <script>

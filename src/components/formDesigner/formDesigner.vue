@@ -463,7 +463,7 @@ export default {
         type: "textarea",
         height: "100",
         width: "300",
-        fontSize: '1',
+        fontSize: '12',
         ForeColor: '#0000FF',
         fieldName: '',
         tableName: '',
