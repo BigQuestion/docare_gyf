@@ -22,7 +22,7 @@
       <div style="margin-left:1px;width:1pt;border-right:1pt solid #000;" :style="{height:value.height+'px'}"></div>
     </div>
     <div v-if="value.type=='textarea'">
-      <textarea :style="{height:value.height*0.75+'pt',width:value.width*0.75+'pt'}" v-model="value.text"></textarea>
+      <textareaTable :conInfo="value" v-on:toparentevent="getChlidValue"></textareaTable>
     </div>
     <div v-if="value.type=='autoInput'">
       <textarea :style="{height:value.height*0.75+'pt',width:value.width*0.75+'pt'}" v-model="value.text"></textarea>
@@ -76,6 +76,7 @@ import signGridPrint from '@/components/drawTable/signGridPrint.vue';
 import dataOfGridPrint from '@/components/drawTable/dataOfGridPrint.vue';
 import appliances from '@/components/appliances/appliances.vue';
 import specialSymbol from '@/components/drawTable/specialSymbol.vue';
+import textareaTable from '@/components/commonSelect/textareaTable.vue';
 export default {
   data() {
     return {
@@ -101,6 +102,7 @@ export default {
     dataOfGridPrint,
     appliances,
     specialSymbol,
+    textareaTable,
   },
   mounted() {}
 }
