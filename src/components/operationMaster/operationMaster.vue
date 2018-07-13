@@ -232,8 +232,19 @@
           </div>
           <div style="overflow-y: auto;height:calc(100% - 105px - 80px);font-size:12px;">
             <div v-for="item in patientList" class="listBorder" :class="{thisClickBackClass:item.thisClickBack}" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
-              <div class="patientContent title_back">
+              <div class="patientContent title_back" style="display:flex;justify-content:space-between;">
                 <span>手术间 {{item.operatingRoomNo}}</span>
+                <span v-if="item.operStatus == 0" style="color:red;">准备手术</span>
+                <span v-if="item.operStatus == 5" style="color:red;">入手术室</span>
+                <span v-else-if="item.operStatus == 10" style="color:red;">麻醉开始</span>
+                <span v-else-if="item.operStatus == 15" style="color:red;">手术开始</span>
+                <span v-else-if="item.operStatus == 25" style="color:red;">手术结束</span>
+                <span v-else-if="item.operStatus == 30" style="color:red;">麻醉结束</span>
+                <span v-else-if="item.operStatus == 35" style="color:red;">出手术室</span>
+                <span v-else-if="item.operStatus == 60" style="color:red;">转入病房</span>
+                <span v-else-if="item.operStatus == 45" style="color:red;">进复苏室</span>
+                <span v-else-if="item.operStatus == 40" style="color:red;">待复苏</span>
+                <span v-else-if="item.operStatus == 65" style="color:red;">转入ICU</span>
               </div>
               <ul style="padding-left:5px;">
                 <li>患者 {{item.patientName}} {{item.patientId}} 住院号 {{item.inpNo}}</li>
@@ -2605,7 +2616,7 @@ export default {
   border-bottom: 1px solid rgb(177, 207, 243);
   line-height: 26px;
   color: rgb(23, 68, 140);
-  padding-left: 5px;
+  padding: 0 5px;
 }
 
 .procedure {
@@ -2963,6 +2974,7 @@ export default {
   margin: 0 auto;
   position: relative;
   top: 50%;
+  font-size: 12px;
 }
 
 .loading span {
@@ -3004,6 +3016,7 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
 
 
 

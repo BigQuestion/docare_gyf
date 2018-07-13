@@ -516,6 +516,8 @@ export default {
 
     //数据处理
     dataOperFun(sortArray) {
+      this.spo2List = []
+      this.pathArray = []
       let testArr = []
       sortArray.forEach(item => {
         item.dataValue.forEach(va => {

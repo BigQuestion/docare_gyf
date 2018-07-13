@@ -661,7 +661,7 @@ export default {
       }
     },
     save() {
-      if (this.dataInfo) {
+      if (this.dataInfo && this.formItems.length > 0) {
         let params = {
           formContent: JSON.stringify(this.formItems),
           formName: this.dataInfo.formName,

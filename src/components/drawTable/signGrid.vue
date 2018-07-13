@@ -123,10 +123,13 @@ export default {
         }
       }
     },
+    // 获取数据
     selectMedAnesthesiaEventList() {
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
       }
+      this.dataOfBottom = [];
+      this.dataBody = [];
       var nber = 1;
       this.pageOn = this.config.pageOper;
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
@@ -281,7 +284,7 @@ export default {
                     var pei = 0;
                     for (var k = 0; k < this.dataBody.length; k++) {
                       if (this.dataBody[k - 1]) {
-                        if (this.dataBody[k].left == this.dataBody[k - 1].left) {
+                        if (this.dataBody[k].left == this.dataBody[k - 1].left || this.dataBody[k].left < this.dataBody[k - 1].left + 10) {
                           this.dataBody[k].bottom = this.dataBody[k - 1].bottom + 15;
                         } else {
                           this.dataBody[k].bottom = 0;
