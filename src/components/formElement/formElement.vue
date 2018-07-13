@@ -29,7 +29,7 @@
       <div style="margin-left:1px;width:1px;background: #000;" :style="{height:value.height+'px'}"></div>
     </div>
     <div v-if="value.type=='textarea'">
-      <textarea :style="{height:value.height+'px',width:value.width+'px'}" v-model="value.text"></textarea>
+      <textareaTable :conInfo="value" v-on:toparentevent="getChlidValue"></textareaTable>
     </div>
     <div v-if="value.type=='autoInput'">
       <textarea :style="{height:value.height+'px',width:value.width+'px'}" v-model="value.text"></textarea>
@@ -83,6 +83,7 @@ import signGrid from '@/components/drawTable/signGrid.vue';
 import dataOfGrid from '@/components/drawTable/dataOfGrid.vue';
 import appliances from '@/components/appliances/appliances.vue';
 import specialSymbol from '@/components/drawTable/specialSymbol.vue';
+import textareaTable from '@/components/commonSelect/textareaTable.vue';
 import Bus from '@/bus.js';
 export default {
   data() {
@@ -111,6 +112,7 @@ export default {
     dataOfGrid,
     appliances,
     specialSymbol,
+    textareaTable,
   },
   mounted() {
     // console.log(this.objectItem)
