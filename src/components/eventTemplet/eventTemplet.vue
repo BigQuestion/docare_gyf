@@ -1,6 +1,6 @@
 <template>
   <!-- <div style="position:absolute;z-index:12;cursor:not-allowed;width:100%;height:100%;"> -->
-  <div style="cursor:auto;width:85%;min-height: 700px;background-color: rgb(228, 240, 255);z-index: 13;border:2px solid rgb(68,170,211);position: absolute;">
+  <div style="cursor:auto;width:85%;min-height: 600px;background-color: rgb(228, 240, 255);z-index: 13;border:2px solid rgb(68,170,211);position: absolute;">
     <div class="load_top" style="height: 30px;padding: 0px 10px;background-color:rgb(68,170,211);color: white;">
       <div>套用模板</div>
       <div @click="closeWin" class="top_active">X</div>
@@ -8,7 +8,7 @@
     <div style="height: 50px;padding-left: 20px;px;border:1px solid rgb(179,207,243);">
       <span style="font-size: 20px;line-height: 50px;">事件模板</span>
     </div>
-    <div style="display: flex;height: 500px;background-color: white;">
+    <div style="display: flex;height: 450px;background-color: white;">
       <div style="width: 25%;overflow-y: auto;box-sizing:border-box;border:1px solid #97B1D1;">
         <div style="height: 20px;padding-left: 20px;background-color: rgb(228, 240, 255);">
           <span>模板名称</span>

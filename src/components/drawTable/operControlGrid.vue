@@ -576,15 +576,16 @@ export default {
         this.pathArray.push(listOne);
       }
       let list = this.pathArray
-      this.spo2List = []
+      let spo2List = []
       for (var i = 0; i < list.length; i++) {
         for (var j = 0; j < list[i].length; j++) {
           if (list[i][j].itemCode == 188 || list[i][j].itemCode == 212 || list[i][j].itemCode == 112 || list[i][j].itemCode == 202) {
-            this.spo2List.push({ codeName: list[i][j].itemData.itemName, dataList: list[i] })
+            spo2List.push({ codeName: list[i][j].itemData.itemName, dataList: list[i] })
             break;
           }
         }
       }
+      this.spo2List = spo2List;
       this.calculatePath();
 
       return false;
