@@ -3,8 +3,10 @@
     <div>
       <!-- ETCO2 CODE:112，Sp02 CODE:188，TVE CODE:212,f code=202应该显示数字 -->
       <svg :width="svgWidth" :height="svgHeight" id="opercontrolgridprint" ref="area">
-        <g v-for="item in lineArray">
-          <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.8px;"></line>
+        <g v-for="(item,index) in lineArray">
+          <!-- <line :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:0.8px;"></line> -->
+          <line v-if="index%6==0" :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:rgba(0,0,0,0.6);stroke-width:2px;"></line>
+          <line v-else :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:1px;"></line>
         </g>
         <g v-for="(item,index) in lineArray" v-if="index < rows">
           <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:0.5px;"></line>

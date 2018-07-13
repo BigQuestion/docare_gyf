@@ -16,7 +16,7 @@
       <div style="position: relative;">
         <svg :width="svgWidth" :height="svgHeight" id="tableSvg">
           <g v-for="(item,index2) in lineArray">
-            <line v-if="index2%6==0" :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:1px;"></line>
+            <line v-if="index2%6==0" :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:rgba(0,0,0,0.6);stroke-width:2px;"></line>
             <line v-else :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:1px;"></line>
           </g>
           <g v-for="(item,index) in lineArray" v-if="index < rows">
