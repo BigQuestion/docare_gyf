@@ -234,8 +234,9 @@
             <div v-for="item in patientList" class="listBorder" :class="{thisClickBackClass:item.thisClickBack}" v-on:click="patientDeatilInfo(item)" v-on:dblclick="lockedPatient(item)">
               <div class="patientContent title_back" style="display:flex;justify-content:space-between;">
                 <span style="font-weight:bold;">手术间 {{item.operatingRoomNo}}</span>
+                <span v-if="item.emergencyIndicator == 1" style="color:red;font-weight:bold;">急诊</span>
                 <span v-if="item.operStatus == 0" style="color:#15428B;font-weight:bold;">准备手术</span>
-                <span v-if="item.operStatus == 5" style="color:#15428B;font-weight:bold;">入手术室</span>
+                <span v-if="item.operStatus == 5" style="color:red;font-weight:bold;">入手术室</span>
                 <span v-else-if="item.operStatus == 10" style="color:red;font-weight:bold;">麻醉开始</span>
                 <span v-else-if="item.operStatus == 15" style="color:red;font-weight:bold;">手术开始</span>
                 <span v-else-if="item.operStatus == 25" style="color:red;font-weight:bold;">手术结束</span>
@@ -1051,6 +1052,7 @@ export default {
       this.api.getMedOperationMasterList(params)
         .then(
           res => {
+            console.log(res.list)
             for (var p = 0; p < res.list.length; p++) {
               this.$set(res.list[p], 'thisClickBack', false);
             }
@@ -2683,7 +2685,7 @@ export default {
 
 .leftNoneBox {
   height: 100%;
-  min-width: 8px;
+  min-width: 12px;
   background-color: #8DB8F0;
   position: relative;
   cursor: pointer;
@@ -2692,15 +2694,16 @@ export default {
 }
 
 .leftNoneImg {
-  width: 7px;
+  width: 8px;
   height: 82px;
   position: absolute;
   top: calc(50% - 41px);
+  left: calc(50% - 4px);
 }
 
 .leftNoneImg img {
   display: block;
-  width: 7px;
+  width: 8px;
   height: 7px;
   margin: 10px 0;
 }
@@ -2710,7 +2713,7 @@ export default {
 }
 
 .patientInfo {
-  width: calc(100% - 395px);
+  width: calc(100% - 400px);
   box-sizing: border-box;
   padding-left: 5px;
   /* min-width: 898px; */
