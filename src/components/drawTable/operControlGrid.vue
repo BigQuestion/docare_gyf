@@ -152,6 +152,8 @@
       <!-- <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" transform="rotate(-180)" fill-opacity="null" stroke-opacity="null" fill="#000"/> -->
       <!-- X -->
       <!-- <text stroke="null" transform="matrix(0.44269931316375727,0,0,0.44269931316375727,164.78615606576204,120.13502615876496) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_34" y="-260.674143" x="-380.226641" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#000000">X</text> -->
+      <!-- ~ -->
+      <!-- <path stroke="#000" id="svg_1" d="m0.75,0.75c0,0 4.705594,4.705594 4.567194,4.567194c0.1384,0.1384 4.290395,-4.013595 4.151995,-4.428795c0.002306,0.274494 4.807215,5.084015 4.705594,4.705594" opacity="0.5" stroke-width="1.5" fill="#fff"/> -->
       <div v-for="(data,index1) in spo2List">
         <div v-if="index2%2==0&&item.x<700&&item.value>0&&item.x>0" v-for="(item,index2) in data.dataList" style="position: absolute;top: 0px;color: blue;font-size:12px;" :style="{left:item.x+'px',top:index1*14+'px'}">
           {{item.value}}

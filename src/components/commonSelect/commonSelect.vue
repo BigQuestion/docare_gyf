@@ -60,9 +60,6 @@ export default {
           this.allList = res;
           this.$refs.inSelect.focus()
         })
-
-
-
     },
     getSelected(item) {
       if (this.conInfo.dictShowFiled != '' && this.conInfo.dictShowFiled != null) {
