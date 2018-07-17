@@ -41,6 +41,11 @@
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
           </g>
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '111'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
+          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '111'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+            <path d="m-3.3,2.532892c0,0 3.2484,-5.53107 3.1606,-5.53107c-0.078586,-0.117878 3.24841,5.53107 3.2484,5.53106" fill-opacity="null" stroke-opacity="null" stroke="magenta" stroke-width="1.5" fill="none" />
+          </g>
           <!-- 体温 CODE:100 X -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '100'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="red" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '100'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
@@ -367,34 +372,35 @@ export default {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
-        itemClass: 'A'
+        itemClass: 'Y'
       }
       this.api.selectMedAnesthesiaEventList(param)
         .then(
           res => {
             let list = res.list
             this.breathData = list
+            let params = {
+              patientId: this.config.userInfo.patientId,
+              operId: this.config.userInfo.operId,
+              visitId: this.config.userInfo.visitId,
+              eventNo: 0
+            }
+
+            this.api.getNewTimeData(params)
+              .then(res => {
+                if (res.length > 0) {
+                  res.sort(function(a, b) {
+                    return Date.parse(a.time) - Date.parse(b.time); //时间正序
+                  });
+                  this.dataOperFun(res);
+                } else {
+                  this.dataPathArray = []
+                }
+
+              })
           });
 
-      let params = {
-        patientId: this.config.userInfo.patientId,
-        operId: this.config.userInfo.operId,
-        visitId: this.config.userInfo.visitId,
-        eventNo: 0
-      }
 
-      this.api.getNewTimeData(params)
-        .then(res => {
-          if (res.length > 0) {
-            res.sort(function(a, b) {
-              return Date.parse(a.time) - Date.parse(b.time); //时间正序
-            });
-            this.dataOperFun(res);
-          } else {
-            this.dataPathArray = []
-          }
-
-        })
       return
     },
 
@@ -498,19 +504,23 @@ export default {
           }
         }
       }
-      debugger
+      console.log(dest)
       for (var i = 0; i < dest.length; i++) {
         let listOne = dest[i].itemData
 
         for (var j = 0; j < listOne.length; j++) {
           //如果是呼吸项目
-          //   let startTime
-          // if (dest[i].itemCode == 92) {
-          //   startTime = this.breathData[0].START_TIME
-          //   if(new Date(startTime)){
-
-          //   }
-          // }
+          let startTime
+          let name = ''
+          if (dest[i].itemCode == 92 && this.breathData.length > 0) {
+            startTime = this.breathData[0].START_TIME
+            //当控制呼吸的开始时间大于呼吸时间的时候就需要显示控制呼吸
+            if (new Date(startTime) <= new Date(listOne[j].time)) {
+              listOne[j].itemCode = 111
+              listOne[j].value = 0
+              name = "控制呼吸"
+            }
+          }
 
           let min = '';
           if (new Date(listOne[j].time) > this.config.maxTime) {
@@ -522,7 +532,7 @@ export default {
           let y = this.svgHeight - Math.round(listOne[j].value / 10 * (this.svgHeight / this.rows))
           listOne[j].x = x;
           listOne[j].y = y;
-          let name = ''
+
           let nameList = this.signNameLisg
           nameList.forEach(it => {
             if (listOne[j].itemCode == it.itemCode) {
@@ -543,7 +553,6 @@ export default {
           }
         }
       }
-      debugger
       this.spo2List = spo2List;
       this.calculatePath();
 

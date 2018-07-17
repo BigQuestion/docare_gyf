@@ -505,6 +505,7 @@ export default {
         DOSAGE_UNITS: item.dosageUnits,
         START_TIME: item.startTime,
         ENDDATE: "",
+        EVENT_ATTR: item.eventAttr,
         ITEM_CLASS: item.itemClass,
         ITEM_SPEC: item.itemSpec,
         addFlag: true,
@@ -567,6 +568,7 @@ export default {
             concentrationUnit: list[i].CONCENTRATION_UNIT,
             performSpeed: list[i].PERFORM_SPEED,
             speedUnit: list[i].SPEED_UNIT,
+            eventAttr: list[i].EVENT_ATTR
 
           }
           arry1.push(par)

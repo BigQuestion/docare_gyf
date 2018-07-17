@@ -27,9 +27,9 @@
           <span v-if="item.obj.ITEM_NAME=='七氟烷'" style="padding: 0 2px 0 0px;">{{item.obj.CONCENTRATION}}{{item.obj.CONCENTRATION_UNIT}}</span>
           <span v-else style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
         </div>
-        <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+2+'px',left:item.x1+item.w/2-8+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+        <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+2+'px',left:item.x1+item.w/2-8+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
           <span v-if="item.obj.ITEM_NAME=='七氟烷'" style="padding: 0 2px 0 0px;display: block;width: 16px;text-align: center;">{{item.obj.CONCENTRATION}}{{item.obj.CONCENTRATION_UNIT}}</span>
-          <span v-else style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+          <span v-else style="padding: 0 2px 0 0px;background-color: white;">{{item.obj.DOSAGE}}</span>
         </div>
         <div v-if="tipView">
           <div style="position: absolute;max-width:300px;min-width:220px;width:auto;background-color: white;border: 0.5px solid;padding: 3px;font-size: 12px;z-index: 15" :style="{ top:tipTop+'px',left:tipLeft+'px'}">

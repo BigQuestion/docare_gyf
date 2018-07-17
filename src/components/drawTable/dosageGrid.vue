@@ -2,10 +2,9 @@
   <div style="position: relative;margin:2px;">
     <svg :width="svgWidth" :height="svgHeight" id="dosage">
       <g v-for="(item,index) in lineArray">
-  <line v-if="index%6==0" :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:rgba(0,0,0,0.6);stroke-width:2px;"></line>
-  <line v-else :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:1px;"></line>
-</g>
-
+        <line v-if="index%6==0" :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:rgba(0,0,0,0.6);stroke-width:2px;"></line>
+        <line v-else :x1="item.x.x1" :x2="item.x.x1" y1="0" :y2="svgHeight" style="stroke:#8391a2;stroke-width:1px;"></line>
+      </g>
       <g v-for="(item,index) in lineArray" v-if="index < rows">
         <line x1="0" x2="700" :y1="item.y.y1" :y2="item.y.y1" style="stroke:#8391a2;stroke-width:1px;"></line>
       </g>
@@ -14,11 +13,11 @@
     <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" style="csursor: pointer;position: absolute;font-size: 8pt;color: blue;" :style="{left: item.x1-5+'px',top:item.y2+'px'}" v-for="(item,index) in outDosageData">
       <span @mouseenter="showTipInfo(item,$event)" style="padding: 0 2px 0 0px;" v-if="item.obj.DOSAGE">{{item.obj.DOSAGE}}</span>
     </div>
-    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+2+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
-      <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+    <div @mouseenter="showTipInfo(item,$event)" @mouseleave="hideTipInfo()" v-if="item.obj.DURATIVE_INDICATOR=='0'" style="cursor: default;position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+2+'px',left:item.x1-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+      <span style="padding: 0 2px 0 0px;background-color: white;">{{item.obj.DOSAGE}}</span>
     </div>
-    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;background-color: white;" :style="{top:item.top+2+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
-      <span style="padding: 0 2px 0 0px;">{{item.obj.DOSAGE}}</span>
+    <div v-if="item.obj.DURATIVE_INDICATOR=='1'" style="position: absolute;font-size: 8pt;color: blue;" :style="{top:item.top+2+'px',left:item.x1+item.w/2-1+'px',height:svgHeight/rows-3+'px',lineHeight:svgHeight/rows+'px'}" v-for="(item,index) in xArray">
+      <span style="padding: 0 2px 0 0px;background-color: white;">{{item.obj.DOSAGE}}</span>
     </div>
     <div v-if="tipView">
       <div style="position: absolute;max-width:300px;min-width:220px;width:auto;background-color: white;border: 0.5px solid;font-size: 12px;z-index: 10;padding: 3px;" :style="{ top:tipTop+1+'px',left:tipLeft+'px'}">

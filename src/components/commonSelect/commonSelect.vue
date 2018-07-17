@@ -6,7 +6,7 @@
       <input v-else-if="conInfo.readOnlyMode=='true'" v-model="infoData[attrName]" :style="{width:conInfo.width+'px',color:conInfo.ForeColor,textAlign:conInfo.TextAlignMode,cursor:conInfo.cursorMode,opacity:conInfo.opacity,fontSize:conInfo.fontSize+'pt'}" :readonly="true" style="border:none;border-bottom: 1px dashed #000;">
       <div v-if="nameView" style="position: absolute;top: 0px;height: 300px;overflow: auto;border:1px solid;z-index: 20;background-color:white;" :style="{width:conInfo.width+'px'}">
         <div>
-          <input ref="inSelect" v-model="serchZm" @keyup="serchJm" :style="{width:conInfo.width+'px'}">
+          <input id="inSelect" ref="inSelect" v-model="serchZm" @keyup="serchJm" :style="{width:conInfo.width+'px'}">
         </div>
         <div class="listIngt" @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" :style="{width:conInfo.width+'px'}">
           <div v-if="conInfo.dictShowFiled!=''&&conInfo.dictShowFiled!=null">
@@ -44,6 +44,8 @@ export default {
   },
   methods: {
     showView() {
+      // this.$refs.inSelect.focus()
+
       this.nameView = true;
       let params = {
         tableName: this.conInfo.dictTableName,
@@ -53,12 +55,13 @@ export default {
       }
       this.api.getColumContext(params)
         .then(res => {
+          document.getElementById("inSelect").focus()
           this.medAnaesthesiaDictList = res;
         })
       this.api.allColumContext(params)
         .then(res => {
           this.allList = res;
-          this.$refs.inSelect.focus()
+
         })
 
 
