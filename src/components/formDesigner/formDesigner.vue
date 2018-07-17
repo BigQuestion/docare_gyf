@@ -113,6 +113,15 @@
               <colorPicker v-model="chooseItems[0].ForeColor"></colorPicker>{{chooseItems[0].ForeColor}}
             </div>
             <div v-if="chooseItems[0]" class="ediclass">
+              <!-- MultiSelect:<input type="" name="" v-model="chooseItems[0].MultiSelect"> -->
+              <div class="ediChild">
+                MultiSelect:
+              </div>
+              <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
+                <option v-for="btn in chooseItems[0].MultiSelect" :value="btn.isData">{{btn.isData}}</option>
+              </select>
+            </div>
+            <div v-if="chooseItems[0]" class="ediclass">
               <div class="ediChild">
                 数据源表名称：
               </div>
@@ -471,6 +480,8 @@ export default {
         dictSelect: '',
         dictShowFiled: '',
         dictField: '',
+        MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
+        MultiSelectMode: 'false', //真为多选，假为单选
       }, {
         text: "麻醉量表格组件",
         type: "formDiv",

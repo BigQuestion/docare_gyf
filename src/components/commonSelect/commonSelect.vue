@@ -63,9 +63,6 @@ export default {
           this.allList = res;
 
         })
-
-
-
     },
     getSelected(item) {
       if (this.conInfo.dictShowFiled != '' && this.conInfo.dictShowFiled != null) {

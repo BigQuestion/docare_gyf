@@ -34,6 +34,7 @@
       <p v-else-if="item == '手术开始'" style="color:#222">⊙手术开始</p>
       <p v-else-if="item == '手术结束'" style="color:red"><span style="font-size:14px;">ⓧ</span>手术结束</p>
       <p v-else-if="item == '麻醉结束'" style="color:red;"><span style="font-size:18px;">×</span>麻醉结束</p>
+      <!-- <path stroke="#000" id="svg_1" d="m0.75,0.75c0,0 4.705594,4.705594 4.567194,4.567194c0.1384,0.1384 4.290395,-4.013595 4.151995,-4.428795c0.002306,0.274494 4.807215,5.084015 4.705594,4.705594" opacity="0.5" stroke-width="1.5" fill="#fff"/> -->
     </div>
   </div>
   </div>
