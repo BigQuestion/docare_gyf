@@ -278,6 +278,17 @@ export default {
                       })
                     }
                   }
+                  // 控制呼吸
+                  let paramBr = {
+                    patientId: this.config.userInfo.patientId,
+                    operId: this.config.userInfo.operId,
+                    visitId: this.config.userInfo.visitId,
+                    itemClass: 'Y'
+                  }
+                  this.api.selectMedAnesthesiaEventList(paramBr)
+                  .then(add => {
+                    console.log(add.list)
+                  })
                   // 筛选重复项，使其往上位移
                   dataBodyNew.sort(this.sortFun);
                   var pei = 0;
