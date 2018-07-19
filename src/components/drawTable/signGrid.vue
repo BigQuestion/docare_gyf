@@ -6,6 +6,11 @@
         <span style="font-size:21px;font-family:microsoft yahei;" v-else-if="item.name=='手术开始'">⊙</span>
         <span style="color:red;font-size:21px;font-family:microsoft yahei;" v-else-if="item.name=='麻醉结束'">×</span>
         <span style="color:red;" v-else-if="item.name=='手术结束'">ⓧ</span>
+        <span style="color:magenta;" v-else-if="item.name=='控制呼吸'">
+          <svg :width="14+'px'" :height="5+'px'">
+            <path stroke="magenta" id="svg_1" d="m0.75,0.75c0,0 4.705594,4.705594 4.567194,4.567194c0.1384,0.1384 4.290395,-4.013595 4.151995,-4.428795c0.002306,0.274494 4.807215,5.084015 4.705594,4.705594" opacity="0.5" stroke-width="1.5" fill="#fff" />
+          </svg>
+        </span>
         <span v-else>{{item.hasNum}}</span>
       </div>
     </div>
@@ -286,27 +291,44 @@ export default {
                     itemClass: 'Y'
                   }
                   this.api.selectMedAnesthesiaEventList(paramBr)
-                  .then(add => {
-                    console.log(add.list)
-                  })
-                  // 筛选重复项，使其往上位移
-                  dataBodyNew.sort(this.sortFun);
-                  var pei = 0;
-                  for (var k = 0; k < dataBodyNew.length; k++) {
-                    if (dataBodyNew[k - 1]) {
-                      if (dataBodyNew[k].left == dataBodyNew[k - 1].left || dataBodyNew[k].left < dataBodyNew[k - 1].left + 10) {
-                        dataBodyNew[k].bottom = dataBodyNew[k - 1].bottom + 15;
-                      } else {
-                        dataBodyNew[k].bottom = 0;
+                    .then(add => {
+                      console.log(add.list)
+                      if (add.list.length > 0) {
+                        var timeBr = new Date(add.list[0].START_TIME).getTime();
+                        if (this.startTimeInPage <= timeBr && timeBr <= this.maxTimeInPage) {
+                          var timekz = timeBr - this.startTimeInPage
+                          var leftPlaceBr = ((timekz * 2.78) / 60 / 1000);
+                          this.dataOfBottom.push({
+                            leftData: leftPlaceBr
+                          })
+                          dataBodyNew.push({
+                            left: leftPlaceBr,
+                            bottom: 0,
+                            name: '控制呼吸',
+                            time: add.list[0].START_TIME,
+                          })
+                        }
                       }
-                    } else {
+                      // 筛选重复项，使其往上位移
+                      dataBodyNew.sort(this.sortFun);
+                      var pei = 0;
+                      for (var k = 0; k < dataBodyNew.length; k++) {
+                        if (dataBodyNew[k - 1]) {
+                          if (dataBodyNew[k].left == dataBodyNew[k - 1].left || dataBodyNew[k].left < dataBodyNew[k - 1].left + 10) {
+                            dataBodyNew[k].bottom = dataBodyNew[k - 1].bottom + 15;
+                          } else {
+                            dataBodyNew[k].bottom = 0;
+                          }
+                        } else {
 
-                    }
-                  }
-                  // console.log(this.dataBodyNew)
-                  this.dataBody = dataBodyNew;
-                  this.lineArray = res.list;
-                  // this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+                        }
+                      }
+                      // console.log(this.dataBodyNew)
+                      this.dataBody = dataBodyNew;
+                      this.lineArray = res.list;
+                      // this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+                    })
+
                 })
             })
 

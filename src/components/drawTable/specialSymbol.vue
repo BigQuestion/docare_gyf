@@ -1,15 +1,15 @@
 <template>
   <div>
     <!-- <p style="color:SeaGreen">●心率</p>
-                                <p style="color:DarkGreen">●PULSE</p>
-                                <p style="color:red">∨收缩压</p>
-                                <p style="color:red">∧舒张压</p>
-                                <p style="color:pink">○自主呼吸</p>
-                                <p style="color:SpringGreen">△中心静脉压</p>
-                                <p style="color:DarkGreen">X麻醉开始</p>
-                                <p style="color:DarkGreen">⊙手术开始</p>
-                                <p style="color:red">X手术结束</p>
-                                <p style="color:red">ⓧ麻醉结束</p> -->
+                                        <p style="color:DarkGreen">●PULSE</p>
+                                        <p style="color:red">∨收缩压</p>
+                                        <p style="color:red">∧舒张压</p>
+                                        <p style="color:pink">○自主呼吸</p>
+                                        <p style="color:SpringGreen">△中心静脉压</p>
+                                        <p style="color:DarkGreen">X麻醉开始</p>
+                                        <p style="color:DarkGreen">⊙手术开始</p>
+                                        <p style="color:red">X手术结束</p>
+                                        <p style="color:red">ⓧ麻醉结束</p> -->
     <div v-for="item in eventTypeList" :style="{fontSize:object.fontSize*0.75+'pt'}">
       <p v-if="item == 71" style="color:Crimson">△中心静脉压</p>
       <p v-else-if="item == 89" style="color:Blue">∨无创收缩压</p>
@@ -30,11 +30,19 @@
       <p v-else-if="item == 65" style="color:Red">∨动脉收缩压</p>
       <p v-else-if="item == 66" style="color:Red">∧动脉舒张压</p>
       <p v-else-if="item == 67" style="color:Red">△动脉平均压</p>
-      <p v-else-if="item == '麻醉开始'" style="color:#222;"><span style="font-size:18px;">×</span>麻醉开始</p>
+      <p v-else-if="item == '麻醉开始'" style="color:#222;">
+        <span style="font-size:18px;">×</span>麻醉开始</p>
       <p v-else-if="item == '手术开始'" style="color:#222">⊙手术开始</p>
-      <p v-else-if="item == '手术结束'" style="color:red"><span style="font-size:14px;">ⓧ</span>手术结束</p>
-      <p v-else-if="item == '麻醉结束'" style="color:red;"><span style="font-size:18px;">×</span>麻醉结束</p>
-      <!-- <path stroke="#000" id="svg_1" d="m0.75,0.75c0,0 4.705594,4.705594 4.567194,4.567194c0.1384,0.1384 4.290395,-4.013595 4.151995,-4.428795c0.002306,0.274494 4.807215,5.084015 4.705594,4.705594" opacity="0.5" stroke-width="1.5" fill="#fff"/> -->
+      <p v-else-if="item == '手术结束'" style="color:red">
+        <span style="font-size:14px;">ⓧ</span>手术结束</p>
+      <p v-else-if="item == '麻醉结束'" style="color:red;">
+        <span style="font-size:18px;">×</span>麻醉结束</p>
+      <p v-else-if="item == 'kzhx'" style="display:flex;align-items:center;color:magenta;">
+        <svg :width="14+'px'" :height="5+'px'">
+          <path stroke="magenta" id="svg_1" d="m0.75,0.75c0,0 4.705594,4.705594 4.567194,4.567194c0.1384,0.1384 4.290395,-4.013595 4.151995,-4.428795c0.002306,0.274494 4.807215,5.084015 4.705594,4.705594" opacity="0.5" stroke-width="1.5" fill="#fff" />
+        </svg>
+        控制呼吸
+      </p>
     </div>
   </div>
   </div>
@@ -82,6 +90,21 @@ export default {
       if (this.config.userInfo.endDateTime) {
         this.eventTypeList.push('手术结束')
       }
+      // 控制呼吸
+      // 控制呼吸
+      let paramBr = {
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
+        itemClass: 'Y'
+      }
+      this.api.selectMedAnesthesiaEventList(paramBr)
+        .then(add => {
+          console.log(add.list)
+          if (add.list.length > 0) {
+            this.eventTypeList.push('kzhx')
+          }
+        })
     }
   },
   props: ['page', 'object'],
@@ -101,6 +124,5 @@ export default {
 
 </script>
 <style scoped>
-
 
 </style>
