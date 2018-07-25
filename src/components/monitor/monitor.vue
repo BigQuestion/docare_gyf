@@ -345,7 +345,7 @@ export default {
             this.currentRecvFrequency = item.currentRecvFrequency;
             this.currentRecvtimesUplimit = item.currentRecvtimesUplimit;
             this.binding = {
-                bedNo:this.config.userInfo.operatingRoomNo,
+                bedNo: this.config.userInfo.operatingRoomNo,
                 itemType: 0,
                 wardCode: this.config.wardCode,
                 wardType: 0,
@@ -357,7 +357,7 @@ export default {
                 datalogStartTime: this.dataOfStartSql,
                 defaultRecvFrequency: item.defaultRecvFrequency,
                 monitorLabel: item.monitorLabel,
-                
+
             }
             // console.log(this.thisAdata)
             if (this.thisAdata == true) {
@@ -408,7 +408,7 @@ export default {
             var timeStart = new Date().Format('yyyy-MM-dd hh:mm');
             this.dataOfStartSql = timeStart;
             this.bindingTwo = {
-                bedNo:this.config.userInfo.operatingRoomNo,
+                bedNo: this.config.userInfo.operatingRoomNo,
                 itemType: 1,
                 wardCode: this.config.wardCode,
                 wardType: 0,
@@ -489,6 +489,26 @@ export default {
 
         },
         bindingFunction() {
+            let nameMonitorOne;
+            let nameMonitorTwo;
+            if (this.binding.monitorLabel) {
+                let afg = {
+                    monitorLabel: this.binding.monitorLabel
+                }
+                this.api.selectMonitor(afg)
+                    .then(kkk => {
+                        nameMonitorOne = kkk.driverProg;
+                    })
+            }
+            if (this.bindingTwo.monitorLabel) {
+                let afgT = {
+                    monitorLabel: this.bindingTwo.monitorLabel
+                }
+                this.api.selectMonitor(afgT)
+                    .then(kkk => {
+                        nameMonitorTwo = kkk.driverProg;
+                    })
+            }
             // 监护仪
             if (this.binding !== '' && this.cancelData == false && this.bothClick1 == true && this.bothClick2 == false) {
                 // alert('1')
@@ -502,7 +522,7 @@ export default {
                                     this.firstmonitor();
                                     this.thisOnchange = false;
                                     this.bothClick1 = false;
-                                    window.ipc.send('runexe');
+                                    window.ipc.send('runexe',nameMonitorOne);
                                 }
                             }
                         )
@@ -517,7 +537,7 @@ export default {
                                 this.firstmonitor();
                                 this.thisOnchange = false;
                                 this.bothClick1 = false;
-                                window.ipc.send('runexe');
+                                window.ipc.send('runexe',nameMonitorOne);
                             }
                         }
                     )
@@ -536,7 +556,7 @@ export default {
                                         this.dataInAnesthesia();
                                         this.thisOnchange = false;
                                         this.bothClick2 = false;
-                                        window.ipc.send('runexe');
+                                        window.ipc.send('runmzexe',nameMonitorTwo);
                                     }
                                 }
                             )
@@ -551,7 +571,7 @@ export default {
                                     this.dataInAnesthesia();
                                     this.thisOnchange = false;
                                     this.bothClick2 = false;
-                                    window.ipc.send('runexe');
+                                    window.ipc.send('runmzexe',nameMonitorTwo);
                                 }
                             }
                         )
@@ -571,7 +591,7 @@ export default {
                                     this.firstmonitor();
                                     this.cancelData = '';
                                     this.thisOnchange = false;
-                                    window.ipc.send('runexe');
+                                    window.ipc.send('runexe',nameMonitorOne);
                                 }
                             }
                             )
@@ -589,7 +609,7 @@ export default {
                                         this.dataInAnesthesia();
                                         this.cancelDataTwo = '';
                                         this.thisOnchange = false;
-                                        window.ipc.send('runexe');
+                                        window.ipc.send('runmzexe',nameMonitorTwo);
                                     }
                                 }
                                 )
@@ -604,7 +624,7 @@ export default {
                                                 res => {
                                                     if (res.success == true) {
                                                         this.dataInAnesthesia();
-                                                        window.ipc.send('runexe');
+                                                        window.ipc.send('runmzexe',nameMonitorTwo);
                                                         this.thisOnchange = false;
                                                     }
                                                 }
@@ -623,7 +643,7 @@ export default {
                                                 if (res.success == true) {
                                                     this.firstmonitor();
                                                     this.thisOnchange = false;
-                                                    window.ipc.send('runexe');
+                                                    window.ipc.send('runexe',nameMonitorOne);
                                                 }
                                             }
                                         )
@@ -637,7 +657,7 @@ export default {
                                                 if (res.success == true) {
                                                     this.dataInAnesthesia();
                                                     this.thisOnchange = false;
-                                                    window.ipc.send('runexe');
+                                                    window.ipc.send('runmzexe',nameMonitorTwo);
                                                 }
                                             }
                                         )
@@ -655,7 +675,7 @@ export default {
                                                         if (res.success == true) {
                                                             this.dataInAnesthesia();
                                                             this.thisOnchange = false;
-                                                            window.ipc.send('runexe');
+                                                            window.ipc.send('runmzexe',nameMonitorTwo);
                                                         }
                                                     }
                                                 )
@@ -689,7 +709,7 @@ export default {
                                                         this.dataInAnesthesia();
                                                         this.cancelDataTwo = '';
                                                         this.thisOnchange = false;
-                                                        window.ipc.send('runexe');
+                                                        window.ipc.send('runmzexe',nameMonitorTwo);
                                                     }
                                                 }
                                                 )
@@ -704,7 +724,7 @@ export default {
                                         if (res.success == true) {
                                             this.firstmonitor();
                                             this.thisOnchange = false;
-                                            window.ipc.send('runexe');
+                                            window.ipc.send('runexe',nameMonitorOne);
                                         }
                                     }
                                 )
@@ -715,14 +735,15 @@ export default {
                                         if (res.success == true) {
                                             this.dataInAnesthesia();
                                             this.thisOnchange = false;
-                                            window.ipc.send('runexe');
+                                            window.ipc.send('runmzexe',nameMonitorTwo);
                                         }
                                     }
                                 )
-                            }else if(this.binding == '' &&this.bindingTwo == ''){
+                            } else if (this.binding == '' && this.bindingTwo == '') {
                                 alert('若想启动采集程序，请绑定仪器。')
-                            }else{
-                                window.ipc.send('runexe');
+                            } else {
+                                window.ipc.send('runexe',nameMonitorOne);
+                                window.ipc.send('runmzexe',nameMonitorTwo);
                             }
             // else if (this.thisOnchange == true && this.bothClick1 == '' && this.bothClick2 == '') {
 
@@ -758,7 +779,7 @@ export default {
                         this.currentRecvFrequency = this.commonTypeList[a].currentRecvFrequency
                         this.currentRecvtimesUplimit = this.commonTypeList[a].currentRecvtimesUplimit
                         this.binding = {
-                            bedNo:this.config.userInfo.operatingRoomNo,
+                            bedNo: this.config.userInfo.operatingRoomNo,
                             itemType: 0,
                             wardCode: this.config.wardCode,
                             wardType: 0,
@@ -789,7 +810,7 @@ export default {
                         this.currentRecvFrequency = this.commonTypeListTwo[j].currentRecvFrequency
                         this.currentRecvtimesUplimit = this.commonTypeListTwo[j].currentRecvtimesUplimit
                         this.bindingTwo = {
-                            bedNo:this.config.userInfo.operatingRoomNo,
+                            bedNo: this.config.userInfo.operatingRoomNo,
                             itemType: 1,
                             wardCode: this.config.wardCode,
                             wardType: 0,
