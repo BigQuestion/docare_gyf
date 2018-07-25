@@ -305,7 +305,8 @@ export default {
                             left: leftPlaceBr,
                             bottom: 0,
                             name: '控制呼吸',
-                            time: add.list[0].START_TIME,
+                            time: '',
+                            // time: add.list[0].START_TIME,
                           })
                         }
                       }
@@ -342,7 +343,11 @@ export default {
       this.tipView = true;
       this.showDataMore = true;
       this.nameInItem = item.name;
-      this.nowTime = item.time;
+      if(item.name == '控制呼吸'){
+        this.nowTime ='';
+      }else{
+        this.nowTime = item.time;
+      }
     },
     moveEvent(event) {
       // console.log(event.offsetX)
