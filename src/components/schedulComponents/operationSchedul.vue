@@ -42,8 +42,8 @@
                                 </div>
                             </div>
                             <!-- <div @click="pushData()" v-if="showarrange" class="pushAuto" :style="{top:clickTop+'px',left:clickLeft+'px'}">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        分配手术
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        分配手术
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                         </div>
                     </div>
                     <div v-if="chooseOneType=='docoptions'" v-for="item in options" @click="joinData('docoptions',item)" class="docList rows">
@@ -103,7 +103,7 @@
                         <!-- 清空 -->
                         <!-- <div v-if="showList" style="width:100%;height:auto;z-index:9999;">
 
-                                                                                                                                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                                                            </div> -->
                         <!-- </div> -->
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                     <div @click="modalCancel" class="font_active">X</div>
                 </div>
                 <div class="modalBody">
-                    <div v-for="(item,index) in tableConfig" class="flex">
+                    <div v-for="(item,index) in infoMode" class="flex">
                         <div class="label">{{item.text}}：</div>
                         <textarea style="outline:none;" v-if="item.text == '备注'" readonly name="" id="" v-model="handleItem[item.value]"></textarea>
                         <select @change="getNewPushData(item,index)" v-else-if="item.optin == true&&item.value == 'anesthesiaDoctorName'" style="width:134px;" v-model="handleItem[item.value]">
@@ -203,7 +203,7 @@
                             <option value=""></option>
                             <option v-for="all in tour" v-bind:value="all.userName">{{all.userName}}</option>
                         </select>
-                        <input v-else style="width:130px;outline:none;" readonly type="" name="" v-model="handleItem[item.value]">
+                        <input v-else style="width:130px;outline:none;" v-bind:readonly="readonlyData" type="" name="" v-model="handleItem[item.value]">
                     </div>
                 </div>
                 <div class="modalFoot">
@@ -226,6 +226,7 @@ export default {
             assistant: [],
             wash: [],
             tour: [],
+            readonlyData:false,
             handleItem: {},
             handleItemTow: {},
             tableConfig: [{
@@ -289,57 +290,130 @@ export default {
                 width: 100,
                 optin: false,
             }
-                // ,{
-                //     text: '主麻医师',
-                //     value: 'anesthesiaDoctorName',
-                //     width: 100,
-                //     optin: false,
-                // }, {
-                //     text: '副麻医师1',
-                //     value: 'firstAnesthesiaAssistantName',
-                //     width: 100,
-                //     optin: false,
-                // }, {
-                //     text: '副麻医师2',
-                //     value: 'secondAnesthesiaAssistantName',
-                //     width: 100,
-                //     optin: false,
-                // }, {
-                //     text: '手术助手1',
-                //     value: 'firstAssistantName',
-                //     width: 100,
-                //     optin: false,
-                // }, {
-                //     text: '手术助手2',
-                //     value: 'secondAssistantName',
-                //     width: 100,
-                //     optin: false,
-                // }, {
-                //     text: '洗手护士1',
-                //     value: 'firstOperationNurseName',
-                //     width: 100,
-                //     optin: false,
-                // }, {
-                //     text: '洗手护士2',
-                //     value: 'secondOperationNurseName',
-                //     width: 100,
-                //     optin: false,
-                // }, {
-                //     text: '巡回护士1',
-                //     value: 'firstSupplyNurseName',
-                //     width: 100,
-                //     optin: false,
-                // }, {
-                //     text: '巡回护士2',
-                //     value: 'secondSupplyNurseName',
-                //     width: 100,
-                //     optin: false,
-                // }, {
-                //     text: '麻醉方法',
-                //     value: 'anesthesiaMethod',
-                //     width: 200,
-                //     optin: false,
-                // }, 
+            ],
+            infoMode: [{
+                text: '申请时间',
+                value: 'scheduledDateTime',
+                width: 60,
+                optin: false,
+            }, {
+                text: '科室名称',
+                value: 'deptName',
+                width: 60,
+                optin: false,
+            }, {
+                text: '手术医师',
+                value: 'surgeonName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '手术名称',
+                value: 'operationSchName',
+                width: 250,
+                optin: false,
+            }, {
+                text: '台次',
+                value: 'sequence',
+                width: 60,
+                optin: false,
+            }, {
+                text: '病人姓名',
+                value: 'patientName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '年龄',
+                value: 'patienAge',
+                width: 60,
+            }, {
+                text: '性别',
+                value: 'patientSex',
+                width: 60,
+                optin: false,
+            }, {
+                text: '床号',
+                value: 'bedNo',
+                width: 60,
+                optin: false,
+            }, {
+                text: '诊断',
+                value: 'diagBeforeOperation',
+                width: 200,
+                optin: false,
+            }, {
+                text: "手术审核时间",
+                type: "inSelect",
+                value: "reqDateTime",
+                width: 120,
+                optin: false,
+            },
+            {
+                text: '主麻医师',
+                value: 'anesthesiaDoctorName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '副麻医师1',
+                value: 'firstAnesthesiaAssistantName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '副麻医师2',
+                value: 'secondAnesthesiaAssistantName',
+                width: 100,
+                optin: false,
+            },
+            {
+                text: '手术助手1',
+                value: 'firstAssistantName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '手术助手2',
+                value: 'secondAssistantName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '洗手护士1',
+                value: 'firstOperationNurseName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '洗手护士2',
+                value: 'secondOperationNurseName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '巡回护士1',
+                value: 'firstSupplyNurseName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '巡回护士2',
+                value: 'secondSupplyNurseName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '洗手护士2',
+                value: 'secondOperationNurseName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '巡回护士1',
+                value: 'firstSupplyNurseName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '巡回护士2',
+                value: 'secondSupplyNurseName',
+                width: 100,
+                optin: false,
+            }, {
+                text: '备注',
+                value: 'notesOnOperation',
+                width: 100,
+                optin: false,
+            }
             ],
             getLength: '0',
             listChooseBody: [
@@ -614,48 +688,53 @@ export default {
             this.handleItemTow = JSON.parse(JSON.stringify(item));
             // console.log(this.tableConfig)
             if (item.state == 0 || item.state == 1) {
-                for (var a = 0; a < this.tableConfig.length; a++) {
-                    if (this.tableConfig[a].value == 'anesthesiaDoctorName') {
+                for (var a = 0; a < this.infoMode.length; a++) {
+                    if (this.infoMode[a].value == 'anesthesiaDoctorName') {
                         // console.log('主治医生')
-                        this.tableConfig[a].optin = true;
-                    } else if (this.tableConfig[a].value == 'firstAnesthesiaAssistantName') {
+                        this.infoMode[a].optin = true;
+                    } else if (this.infoMode[a].value == 'firstAnesthesiaAssistantName') {
                         // console.log('副麻医生1')
-                        this.tableConfig[a].optin = true;
-                    } else if (this.tableConfig[a].value == 'secondAnesthesiaAssistantName') {
+                        this.infoMode[a].optin = true;
+                    } else if (this.infoMode[a].value == 'secondAnesthesiaAssistantName') {
                         // console.log('副麻医生2')
-                        this.tableConfig[a].optin = true;
-                    } else if (this.tableConfig[a].value == 'firstAssistantName') {
+                        this.infoMode[a].optin = true;
+                    } else if (this.infoMode[a].value == 'firstAssistantName') {
                         // console.log('手术助手1')
-                        this.tableConfig[a].optin = true;
-                    } else if (this.tableConfig[a].value == 'secondAssistantName') {
+                        this.infoMode[a].optin = true;
+                    } else if (this.infoMode[a].value == 'secondAssistantName') {
                         // console.log('手术助手2')
-                        this.tableConfig[a].optin = true;
-                    } else if (this.tableConfig[a].value == 'firstOperationNurseName') {
+                        this.infoMode[a].optin = true;
+                    } else if (this.infoMode[a].value == 'firstOperationNurseName') {
                         // console.log('洗手护士1')
-                        this.tableConfig[a].optin = true;
-                    } else if (this.tableConfig[a].value == 'secondOperationNurseName') {
+                        this.infoMode[a].optin = true;
+                    } else if (this.infoMode[a].value == 'secondOperationNurseName') {
                         // console.log('洗手护士2')
-                        this.tableConfig[a].optin = true;
-                    } else if (this.tableConfig[a].value == 'firstSupplyNurseName') {
+                        this.infoMode[a].optin = true;
+                    } else if (this.infoMode[a].value == 'firstSupplyNurseName') {
                         // console.log('主治医生')
-                        this.tableConfig[a].optin = true;
-                    } else if (this.tableConfig[a].value == 'secondSupplyNurseName') {
+                        this.infoMode[a].optin = true;
+                    } else if (this.infoMode[a].value == 'secondSupplyNurseName') {
                         // console.log('主治医生')
-                        this.tableConfig[a].optin = true;
+                        this.infoMode[a].optin = true;
                     }
 
                 }
             } else {
-                for (var b = 0; b < this.tableConfig.length; b++) {
-                    this.tableConfig[b].optin = false;
+                for (var b = 0; b < this.infoMode.length; b++) {
+                    this.infoMode[b].optin = false;
                 }
             }
-
+            
             // console.log(this.handleItem)
             this.mask = true;
+            if(item.state == 1||item.state==0){
+                this.readonlyData = false;
+            }else{
+                this.readonlyData = true;
+            }
         },
         showShadow(cell) {
-            // console.log(cell)
+            console.log(cell)
             // console.log(this.scheduleListRight)
             for (var a = 0; a < this.scheduleListRight.length; a++) {
                 this.scheduleListRight[a].clickShadowData = false;
