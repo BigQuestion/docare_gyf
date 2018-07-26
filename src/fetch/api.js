@@ -788,5 +788,13 @@ export default {
     return fetch('medicalsystem/rest/synchro/synchroUserAndDept', params)
   },
 
+  /**
+   * 修改用户密码
+   * 
+   */
+  updateUserPassword(params, config) {
+    return fetch('medicalsystem/rest/medUsers/updateUserPassword', params)
+  },
+
 
 }
