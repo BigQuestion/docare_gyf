@@ -22,17 +22,17 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-      method: 'post',
-      url: url,
-      data: JSON.stringify(params),
-      timeout: config.timeout,
-      headers: {
-        'Content-type': 'application/json',
-        "Accept": "*/*",
-      },
-      datatype: "json",
-    })
-      .then(function (response) {
+        method: 'post',
+        url: url,
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype: "json",
+      })
+      .then(function(response) {
         resolve(response.data);
         // if (!config.noAlert) {
         //   if (response.data.success) {
@@ -44,7 +44,7 @@ export function fetch(url, params, config) {
         //   }
         // }
 
-      }).catch(function (error) {
+      }).catch(function(error) {
         reject(error);
         // alert("网络请求失败")
       });
@@ -543,9 +543,9 @@ export default {
     return fetch('medicalsystem/rest/medMonitorDictCon/selectMonitorList', params)
   },
   /**
- * 获取监护仪(麻醉仪)详情
- * 
- */
+   * 获取监护仪(麻醉仪)详情
+   * 
+   */
   selectMonitor(params, config) {
     return fetch('medicalsystem/rest/medMonitorDictCon/selectMonitor', params)
   },
@@ -777,7 +777,7 @@ export default {
    * 
    */
   synchroSchedule(params, config) {
-    return fetch('medicalsystem/rest/synchro/synchroSchedule', params)
+    return fetch('medicalsystem/rest/synchro/synchroWebSchedule', params)
   },
 
   /**

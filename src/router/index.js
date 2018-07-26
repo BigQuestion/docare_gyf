@@ -27,7 +27,10 @@ const formDesigner = resolve => {
     require(['../components/formDesigner/formDesigner.vue'], resolve)
 };
 const drawTable = resolve => {
-    require(['../components/drawTable/drawTable.vue'], resolve)
+  require(['../components/drawTable/drawTable.vue'], resolve)
+};
+const management = resolve => {
+  require(['../components/management/management.vue'], resolve)
 };
 export default new Router({
   routes: [ {
@@ -59,8 +62,11 @@ export default new Router({
   ,{
     path: '/formDesigner',
     component: formDesigner
-  },,{
+  },{
     path: '/drawTable',
     component: drawTable
+  },{
+    path: '/management',
+    component: management
   },]
 })
