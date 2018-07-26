@@ -13,7 +13,7 @@
                 <div @click="goUrl('/statistics')" class="systemButton" style="left:360px;top:0;">
                     <span>工作量统计</span>
                 </div>
-                <div @click="goUrl('/statistics')" class="systemButton" style="left:540px;bottom:0;">
+                <div @click="goUrl('/management')" class="systemButton" style="left:540px;bottom:0;">
                     <span>用户管理</span>
                 </div>
                 <div @click="goUrl('/formDesigner')" class="systemButton" style="left:720px;top:0;">
