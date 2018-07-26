@@ -6,7 +6,7 @@ const pageTotal = 1; //总页数
 const pagePercentNum = 1; //当前页
 const pageOper = 0; //0代表点击首页  1代表点击下一页 -1代表上一页
 
-const wardCode = 7007;
+const wardCode = 210;
 const maxTime = "";
 const initTime = "";
 const patientMinTime = ''; //病人的最早时间
