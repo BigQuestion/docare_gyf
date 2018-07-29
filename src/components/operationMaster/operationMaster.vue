@@ -186,7 +186,7 @@
             <button class="list_button">系统配置</button>
             <button @click="getAboutUs" class="list_button">关于</button>
             <button @click="exitSystem" class="list_button">返回列表</button>
-            <button class="list_button">修改密码</button>
+            <button @click="openChangePassWordView" class="list_button">修改密码</button>
           </div>
         </div>
       </div>
@@ -207,6 +207,13 @@
                   <input type="radio" id="three" @click="searchPatientList" value="25" v-model="operStatus">
                   <label for="three">术后</label>
                   <br>
+                </div>
+                <div style="margin-left:15px;">
+                  <span>手术间</span>
+                  <select style="width: 60px;" v-model="operatingRoomNo" @change="searchPatientList">
+                    <option value=""></option>
+                    <option v-for="(item,index) in roomList" :value="item.roomNo">{{ item.roomNo}}</option>
+                  </select>
                 </div>
               </div>
               <div class="container" style="padding-left: 5px;margin-bottom:10px;">
@@ -448,7 +455,7 @@
             </div>
           </div>
         </div>
-        <!--单子信息-->
+        <!-- 单子信息 -->
         <div class="information" v-if="formDetail" :class="{allWidth:widthData}">
           <div ref="mybox1">
             <div class="designArea" ref="normal" :style="{height: areaheight+'px'}">
@@ -463,7 +470,7 @@
               </div>
             </div>
           </div>
-          <!-- :style="{'display':showPrint?'inline':'none'}" -->
+          :style="{'display':showPrint?'inline':'none'}"
           <div ref="mybox" id="mybox" :style="{'display':showPrint?'inline':'none'}">
             <div class="designArea" style="font-size: 14pt;font-family: SimSun;height: 1900px;">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2))+'px'}">
@@ -499,6 +506,11 @@
     <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView" v-on:submitSave="submitPatientInfo" v-on:turnToSetting="toSetting"></patientOperationInfo>
     <operationRegister @refreshTime="timeChangeBus()" v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
+    <!-- 密码修改 -->
+    <div class="dictionaries" v-if="changePassWord">
+      <changePassWord @closeChangePassWordView="closeChangePassWordView"></changePassWord>
+    </div>
+    <!-- 字典显示界面 -->
     <div v-if="dictView" class="dictionaries">
       <div class="window_load">
         <div class="load_top">
@@ -599,6 +611,7 @@ import myDatepicker from '@/components/plugins/vue-datepicker.vue';
 import dateTime from '@/components/plugins/dateTime.vue';
 import html2canvas from 'html2canvas'
 import { Canvas2Image } from '@/assets/js/canvas2image';
+import changePassWord from '@/components/operationMaster/changePassWord.vue';
 let LODOP
 export default {
   data() {
@@ -796,6 +809,9 @@ export default {
       showPrint: false,
       printPageNameArr: [], //打印图片名称数组
       printLoading: false, //打印加载
+      roomList: [], //手术间数据
+      operatingRoomNo: '', //手术间
+      changePassWord: false, //修改密码界面
 
 
     }
@@ -883,6 +899,9 @@ export default {
       let imageWidth = 900
       let scale1 = 1
       let scale2 = 2
+      if (this.selectFormItemTemp.formName != '麻醉记录单') {
+        height = 1100;
+      }
       if (window.scale1) {
         scale1 = window.scale1
       }
@@ -915,64 +934,6 @@ export default {
 
       });
       return
-
-      // this.formItems = []
-      // let item = this.selectFormItemTemp
-      // let params = {
-      //   formName: item.formName,
-      //   id: item.id
-      // }
-      // let arry = [];
-      // this.api.selectMedFormTemp(params)
-      //   .then(
-      //     res => {
-      //       if (res.formContent == "null" || res.formContent == null) {
-      //         return;
-      //       }
-      //       let tempItems = JSON.parse(res.formContent);
-      //       this.formItems = JSON.parse(res.formContent);
-      //       var list = this.formItems;
-      //       for (var i = 0; i < list.length; i++) {
-      //         if (list[i].fieldName) {
-      //           arry.push({
-      //             "patientId": this.lockedPatientInfo.patientId,
-      //             "visitId": this.lockedPatientInfo.visitId,
-      //             "operId": this.lockedPatientInfo.operId,
-      //             "tableName": list[i].tableName,
-      //             "coluName": list[i].fieldName,
-      //             "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
-      //             "dictTableName": list[i].dictTableName, //字典表名称
-      //             "dictField": list[i].dictField, //字典字段名称
-      //             "dictSelect": list[i].dictSelect,
-      //           })
-      //         }
-      //       }
-      //       this.api.getFormSqlResult(arry)
-      //         .then(
-      //           result => {
-      //             for (var i = 0; i < list.length; i++) {
-      //               if (list[i].fieldName) {
-      //                 if (list[i].fieldName == "page") {
-      //                   let obj = this.formItems[i];
-      //                   obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
-      //                   let tempObj = JSON.parse(JSON.stringify(obj));
-      //                   this.$set(this.formItems, i, tempObj);
-      //                 } else {
-      //                   let obj = this.formItems[i];
-      //                   obj.value = result[list[i].tableName + list[i].fieldName];
-      //                   let tempObj = JSON.parse(JSON.stringify(obj));
-      //                   this.$set(this.formItems, i, tempObj);
-      //                 }
-
-      //               }
-      //             }
-
-      //           });
-      //     });
-
-
-
-
     },
     sendSaveImageMsg() {
 
@@ -982,6 +943,9 @@ export default {
       console.log(new Date(), "打印按钮加载")
       this.lodopInit();
       this.printLoading = true
+      if (this.selectFormItemTemp.formName != '麻醉记录单') {
+        this.config.pageTotal = 1;
+      }
       var pageTotal = this.config.pageTotal;
       this.printPageNameArr = [];
 
@@ -1004,20 +968,21 @@ export default {
       this.printPage(this.currentPageNum - 1)
     },
     printPage(index) {
-      console.log(new Date(), "printPage打印页", index)
-      if (this.selectFormItemTemp.formName == '手术清点单') {
+      this.printPdf(index);
+      // console.log(new Date(), "printPage打印页", index)
+      // if (this.selectFormItemTemp.formName != '麻醉记录单') {
 
-        setTimeout(() => {
-          LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.normal.innerHTML);
-          LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
-          LODOP.PREVIEW();
-        }, 500)
-      } else {
-        // setTimeout(() => {
-        this.printPdf(index);
+      //   setTimeout(() => {
+      //     LODOP.ADD_PRINT_IMAGE(1, 1, "100%", "BottomMargin:1mm", this.$refs.normal.innerHTML);
+      //     LODOP.SET_PRINT_STYLEA(0, "Stretch", 1);
+      //     LODOP.PREVIEW();
+      //   }, 500)
+      // } else {
+      //   // setTimeout(() => {
+      //   this.printPdf(index);
 
-        // }, 500)
-      }
+      //   // }, 500)
+      // }
 
 
     },
@@ -1047,12 +1012,12 @@ export default {
         dateTime: this.getTime,
         operStatus: this.operStatus,
         patientName: this.patientName,
-        patientId: this.patientId
+        patientId: this.patientId,
+        operatingRoom: this.operatingRoomNo,
       }
       this.api.getMedOperationMasterList(params)
         .then(
           res => {
-            console.log(res.list)
             for (var p = 0; p < res.list.length; p++) {
               this.$set(res.list[p], 'thisClickBack', false);
             }
@@ -1074,7 +1039,8 @@ export default {
                 dateTime: this.getTime,
                 operStatus: this.operStatus,
                 patientName: this.patientName,
-                patientId: this.patientId
+                patientId: this.patientId,
+                operatingRoom: this.operatingRoomNo,
               }
               this.api.getMedOperationMasterList(paramsTwo)
                 .then(
@@ -1112,7 +1078,8 @@ export default {
         dateTime: this.getTime,
         operStatus: this.operStatus,
         patientName: this.patientName,
-        patientId: this.patientId
+        patientId: this.patientId,
+        operatingRoom: this.operatingRoomNo,
       }
       this.api.getMedOperationMasterList(params)
         .then(
@@ -1132,7 +1099,8 @@ export default {
         dateTime: this.getTime,
         operStatus: this.operStatus,
         patientName: this.patientName,
-        patientId: this.patientId
+        patientId: this.patientId,
+        operatingRoom: this.operatingRoomNo,
       }
       this.api.getMedOperationMasterList(params)
         .then(
@@ -1164,7 +1132,8 @@ export default {
         dateTime: this.getTime,
         operStatus: this.operStatus,
         patientName: this.patientName,
-        patientId: this.patientId
+        patientId: this.patientId,
+        operatingRoom: this.operatingRoomNo,
       }
       this.api.getMedOperationMasterList(params)
         .then(
@@ -2500,6 +2469,24 @@ export default {
       returnTime = time;
       return returnTime
     },
+    //获取手术间
+    getOperaRooms() {
+      let params = {
+        deptCode: this.config.wardCode,
+        bedType: '0'
+      }
+      this.api.selectAllRoomNo(params)
+        .then(res => {
+          this.roomList = res;
+        })
+    },
+    //关闭修改密码界面
+    closeChangePassWordView() {
+      this.changePassWord = false;
+    },
+    openChangePassWordView() {
+      this.changePassWord = true;
+    },
 
   },
   mounted() {
@@ -2510,6 +2497,7 @@ export default {
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
     }
+    this.getOperaRooms();
     this.searchPatientList();
     this.setIntervaled();
     this.selectMedFormList();
@@ -2544,6 +2532,7 @@ export default {
     jzRegisterContent,
     myDatepicker,
     dateTime,
+    changePassWord,
 
   },
 }
@@ -3019,6 +3008,70 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

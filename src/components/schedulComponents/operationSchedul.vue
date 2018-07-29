@@ -503,8 +503,6 @@ export default {
       }
       this.api.selectAllRoomNo(params).then(
         res => {
-          console.log(res)
-          console.log(this.roomId)
           for (var q = 0; q < res.length; q++) {
             if (q == 0) {
               this.roomId[0].name = res[0].roomNo;

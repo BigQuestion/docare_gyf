@@ -14,14 +14,9 @@ zxs.html
 *.ntvs*
 *.njsproj
 *.sln
-*.rar
 *.com
 *.class
 *.dll
-*.exe
-*.o
-*.so
-# compression file
 *.7z
 *.dmg
 *.gz
