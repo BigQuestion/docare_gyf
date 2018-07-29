@@ -22,17 +22,17 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-        method: 'post',
-        url: url,
-        data: JSON.stringify(params),
-        timeout: config.timeout,
-        headers: {
-          'Content-type': 'application/json',
-          "Accept": "*/*",
-        },
-        datatype: "json",
-      })
-      .then(function(response) {
+      method: 'post',
+      url: url,
+      data: JSON.stringify(params),
+      timeout: config.timeout,
+      headers: {
+        'Content-type': 'application/json',
+        "Accept": "*/*",
+      },
+      datatype: "json",
+    })
+      .then(function (response) {
         resolve(response.data);
         // if (!config.noAlert) {
         //   if (response.data.success) {
@@ -44,7 +44,7 @@ export function fetch(url, params, config) {
         //   }
         // }
 
-      }).catch(function(error) {
+      }).catch(function (error) {
         reject(error);
         // alert("网络请求失败")
       });
@@ -58,6 +58,34 @@ export default {
    */
   login(params, config) {
     return fetch('/medicalsystem/rest/medUsers/userLogin', params)
+  },
+  /**
+ * 获取用户信息列表
+ * 
+ */
+  medUsersList(params, config) {
+    return fetch('/medicalsystem/rest/medUsers/medUsersList', params)
+  },
+  /**
+ * 获取所有科室
+ * 
+ */
+  getAllDept(params, config) {
+    return fetch('/medicalsystem/rest/medAnesthesiaComm/getAllDept', params)
+  },
+  /**
+ * 新增用户接口
+ * 
+ */
+  userRegister(params, config) {
+    return fetch('/medicalsystem/rest/medUsers/userRegister', params)
+  },
+  /**
+* 修改用户接口
+* 
+*/
+  updateMedUsers(params, config) {
+    return fetch('/medicalsystem/rest/medUsers/updateMedUsers', params)
   },
   /**
    * 获取预备排班手术列表
