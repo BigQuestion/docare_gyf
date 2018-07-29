@@ -239,7 +239,7 @@ export default {
             } else if (this.thisNewFun == false && this.thisChangeUserFun == false && this.thisChangePassWord == true) {
                 // 修改密码
                 var dataBody = {
-                    oldPassword: this.oldPassWord,
+                    isValOldPwd: 'f',
                     newPassword: this.passWord,
                     loginName: this.loginName,
                 }
