@@ -66,7 +66,7 @@
           <div style="width: 70px;margin-left: 30px;">
             <span style="color: red">*</span>手术间</div>
           <div>
-            <select style="width: 80px;" v-model="roomMasterNo">
+            <select style="width: 60px;" v-model="roomMasterNo">
               <option v-for="(item,index) in roomList" :value="item.roomNo">{{ item.roomNo}}</option>
             </select>
             <span>(双击选择)</span>

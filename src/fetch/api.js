@@ -17,7 +17,7 @@ export function fetch(url, params, config) {
     config = {};
   }
   if (!config.timeout) {
-    config.timeout = 500000;
+    config.timeout = 30000;
   }
   return new Promise((resolve, reject) => {
     params = params ? params : {};

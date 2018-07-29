@@ -72,7 +72,7 @@ export function getLodop(oOBJECT, oEMBED) {
         return;
       } else {
 
-        if (CLODOP.CVERSION < "3.0.2.9") {
+        if (CLODOP.CVERSION < "3.0.4.3") {
           if (isIE) document.write(strCLodopUpdate);
           else
             document.body.innerHTML = strCLodopUpdate + document.body.innerHTML;
@@ -110,7 +110,7 @@ export function getLodop(oOBJECT, oEMBED) {
         return LODOP;
       };
     };
-    if (LODOP.VERSION < "6.2.2.1") {
+    if (LODOP.VERSION < "6.2.2.2") {
       if (!needCLodop()) {
         if (is64IE) document.write(strHtm64_Update);
         else

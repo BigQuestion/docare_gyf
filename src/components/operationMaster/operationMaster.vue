@@ -470,7 +470,6 @@
               </div>
             </div>
           </div>
-          :style="{'display':showPrint?'inline':'none'}"
           <div ref="mybox" id="mybox" :style="{'display':showPrint?'inline':'none'}">
             <div class="designArea" style="font-size: 14pt;font-family: SimSun;height: 1900px;">
               <div v-if="item.type == 'div'&&(item.width/2) <= 450" class="item" style="position:absolute;min-height: 3px;min-width:3px;" :class="{choosed:item.chosen}" v-for="item in formItems" :style="{left:('450*0.75' - (item.width/2))+'px'}">
@@ -3008,6 +3007,7 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
 
 
 
