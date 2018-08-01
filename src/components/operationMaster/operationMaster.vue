@@ -430,9 +430,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                                                                                                                  <div class="in_con">
-                                                                                                                    {{patientInfo.QIEKOU_NUMBER}}
-                                                                                                                  </div> -->
+                                                                                                                                <div class="in_con">
+                                                                                                                                  {{patientInfo.QIEKOU_NUMBER}}
+                                                                                                                                </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -1895,7 +1895,51 @@ export default {
               if (res.success == true) {
                 if (this.lockedPatientInfo.operStatus === 0 && status == 5) {
                   this.firstRoom.noneData = false;
-                  this.monitorDataShow.noneData = true;
+                  // 获取监护仪数据
+                  let monitor = {
+                    itemType: 0,
+                    wardCode: this.config.wardCode,
+                    wardType: 0
+                  }
+                  this.api.selectMonitorList(params)
+                    .then(raa => {
+                      console.log(raa.list)
+                      // 默认绑定监护仪
+                      let binding = {
+                        bedNo: this.config.userInfo.operatingRoomNo,
+                        itemType: 0,
+                        wardCode: this.config.wardCode,
+                        wardType: 0,
+                        operId: this.config.userInfo.operId,
+                        patientId: this.config.userInfo.patientId,
+                        visitId: this.config.userInfo.visitId,
+                        currentRecvFrequency: raa.list[0].currentRecvFrequency,
+                        currentRecvtimesUplimit: raa.list[0].currentRecvtimesUplimit,
+                        datalogStartTime: new Date().Format('yyyy-MM-dd hh:mm'),
+                        defaultRecvFrequency: raa.list[0].defaultRecvFrequency,
+                        monitorLabel: raa.list[0].monitorLabel,
+                      }
+                      this.api.bindPatientMonitor(binding).then(
+                        ref => {
+                          console.log(binding)
+                          if (ref.success == true) {
+                            console.log(ref)
+                            // 查询监护仪名称并调用程序
+                            let afgT = {
+                              monitorLabel: binding.monitorLabel
+                            }
+                            this.api.selectMonitor(afgT)
+                              .then(kkk => {
+                                // 打开监护仪界面
+                                this.monitorDataShow.noneData = true;
+                                window.ipc.send('runexe', kkk.driverProg);
+                              })
+
+                          }
+                        }
+                      )
+                    })
+
                 }
                 this.searchPatientList();
                 this.api.selectMedOperationMaster({
@@ -3023,538 +3067,6 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*::-webkit-datetime-edit-year-field {

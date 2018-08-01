@@ -196,7 +196,6 @@ export default {
           wardType: 0
         }
       }
-
       this.api.selectMonitorList(params)
         .then(
           res => {
@@ -209,7 +208,6 @@ export default {
             }
             for (var a = 0; a < res.list.length; a++) {
               if (this.commonTypeList[a].operId == this.userInfoDataBody.userInfo.operId && this.commonTypeList[a].visitId == this.userInfoDataBody.userInfo.visitId && this.commonTypeList[a].patientId == this.userInfoDataBody.userInfo.patientId) {
-
                 this.$set(this.commonTypeList[a], 'isBeChoosed', true)
                 this.$set(this.commonTypeList[a], 'checkedData', true)
               } else {
@@ -357,7 +355,6 @@ export default {
         datalogStartTime: this.dataOfStartSql,
         defaultRecvFrequency: item.defaultRecvFrequency,
         monitorLabel: item.monitorLabel,
-
       }
       // console.log(this.thisAdata)
       if (this.thisAdata == true) {
@@ -888,7 +885,7 @@ export default {
   margin: 10px 2px 2px;
   padding-top: 24px;
   overflow-y: auto;
-  /* background-color: #fff; */
+  background-color: #fff;
 }
 
 .HoverClass:hover {

@@ -22,8 +22,8 @@
                         <button class="firstButton" :class="{buttonBackground:disabledAdd}" v-bind:disabled="disabledAdd" @click="addUser()">新增用户</button>
                         <button class="buttonClass" :class="{buttonBackground:disabledChange}" v-bind:disabled="disabledChange" @click="changeUser()" style="width:90px;">修改用户信息</button>
                         <button class="buttonClass" :class="{buttonBackground:disabledWord}" v-bind:disabled="disabledWord" @click="changePassWord()">修改密码</button>
-                        <button class="buttonClass buttonBackground">停用</button>
-                        <button class="buttonClass buttonBackground">启用</button>
+                        <!-- <button class="buttonClass buttonBackground">停用</button> -->
+                        <!-- <button class="buttonClass buttonBackground">启用</button> -->
                     </div>
                 </div>
             </div>
@@ -57,6 +57,7 @@ export default {
         return {
             allowClick: true,
             userList: [],
+            userId:'',
             deptName: '',
             userName: '',
             loginName: '',
@@ -123,6 +124,7 @@ export default {
                 this.userName = item.userName;
                 this.loginName = item.loginName;
                 this.oldPassWord = item.loginPwd;
+                this.userId = item.userId;
             }
         },
         // 新增
@@ -226,6 +228,7 @@ export default {
                     loginName: this.loginName,
                     userName: this.userName,
                     deptId: this.oldDeptData,
+                    userId:this.userId,
                 }
                 this.api.updateMedUsers(dataBody)
                     .then(change => {
