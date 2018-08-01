@@ -385,6 +385,13 @@ export default {
   deleteMedAnesthesiaEvent(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnesthesiaEvent', params)
   },
+  /**
+ * 批量删除病人麻醉事件记录
+ * 
+ */
+  deleteBatchMedAnesthesiaEvent(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/deleteBatchMedAnesthesiaEvent', params)
+  },
 
   /**
    * 获取所有生命体征选项

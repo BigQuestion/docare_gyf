@@ -12,11 +12,11 @@
           <h2 style="color:white;">DoCare麻醉临床信息系统V5.0</h2>
           <div style="margin-top:20px;height:24px;">
             <span style="display:inline-block;width:65px;height:100%;color:#fff;">用户名：</span>
-            <input type="" name="" style="width: 180px;height:22px;box-sizing:border-box;" v-model="loginName">
+            <input type="" name="" style="width: 180px;height:22px;box-sizing:border-box;" v-model="loginName" @keyup.enter='nextInput' ref="inputEml">
           </div>
           <div style="margin-top:5px;height:24px;">
             <span style="display:inline-block;width:65px;height:100%;color:#fff;">密 码：</span>
-            <input @keyup.enter='login' type="password" name="" style="width: 180px;height:22px;box-sizing:border-box;" v-model="loginPwd">
+            <input @keyup.enter='login' type="password" name="" style="width: 180px;height:22px;box-sizing:border-box;" ref="inputNext" v-model="loginPwd">
           </div>
           <div style="padding-right:50px;box-sizing:border-box;display:flex;flex-direction:row-reverse;margin-top:20px;height:30px;">
             <button style="width:100px;height:30px;" class="btn">取消</button>
@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       arr: [],
+      focusStatus: true,
       timeTest: '',
       msg: '欢迎登陆！',
       loginName: '',
@@ -139,10 +140,15 @@ export default {
     },
     runexe() {
       window.ipc.send('runexe')
-
+    },
+    nextInput(){
+      this.$refs.inputNext.focus();
     }
+
   },
+
   mounted() {
+    this.$refs.inputEml.focus();
     this.w = 100;
   },
   components: {
@@ -177,5 +183,4 @@ export default {
 .timePicker::-webkit-inner-spin-button {
   display: none;
 }
-
 </style>
