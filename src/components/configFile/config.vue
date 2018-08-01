@@ -15,6 +15,7 @@ const startMinTime = ''; //表格最开始时间
 
 const OperatingData = '';
 const timeSet = 6000000; //表格数据定时刷新时间 ms
+const roomId = ''; //定义手术间
 
 export default {
   userId,
@@ -32,6 +33,7 @@ export default {
   patientMinTime,
   startMinTime,
   patientMaxTime,
+  roomId,
 }
 
 </script>

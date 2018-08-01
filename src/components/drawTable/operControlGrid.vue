@@ -371,7 +371,6 @@ export default {
           })
     },
     getSignTimeData() {
-      debugger
       let param = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,

@@ -992,6 +992,7 @@ export default {
       list.writeAble = true;
     },
     searchPatientList() {
+      debugger
       if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
         var now = new Date();
         var year = now.getFullYear();
@@ -2496,8 +2497,23 @@ export default {
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
     }
+
+    if (window.fs) {
+      window.fs.readFile('./resources/app/room.json', 'utf8', (err, data) => {
+
+        if (data) {
+          this.config.roomId = JSON.parse(data).roomId
+          this.operatingRoomNo = JSON.parse(data).roomId
+        }
+        this.$nextTick(() => {
+          this.searchPatientList();
+        })
+
+      });
+    }
+
     this.getOperaRooms();
-    this.searchPatientList();
+
     this.setIntervaled();
     this.selectMedFormList();
     this.getHeight();
@@ -3007,6 +3023,27 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,7 +1,7 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'http://182.61.36.247:8080';
 // axios.defaults.baseURL = 'http://111.111.111.156:8080';
-// axios.defaults.baseURL = 'http://localhost:8088';
+axios.defaults.baseURL = 'http://localhost:8088';
 
 
 
@@ -22,17 +22,17 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-      method: 'post',
-      url: url,
-      data: JSON.stringify(params),
-      timeout: config.timeout,
-      headers: {
-        'Content-type': 'application/json',
-        "Accept": "*/*",
-      },
-      datatype: "json",
-    })
-      .then(function (response) {
+        method: 'post',
+        url: url,
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype: "json",
+      })
+      .then(function(response) {
         resolve(response.data);
         // if (!config.noAlert) {
         //   if (response.data.success) {
@@ -44,9 +44,9 @@ export function fetch(url, params, config) {
         //   }
         // }
 
-      }).catch(function (error) {
+      }).catch(function(error) {
         reject(error);
-        // alert("网络请求失败")
+        alert("网络请求失败")
       });
   })
 }
@@ -60,30 +60,30 @@ export default {
     return fetch('/medicalsystem/rest/medUsers/userLogin', params)
   },
   /**
- * 获取用户信息列表
- * 
- */
+   * 获取用户信息列表
+   * 
+   */
   medUsersList(params, config) {
     return fetch('/medicalsystem/rest/medUsers/medUsersList', params)
   },
   /**
- * 获取所有科室
- * 
- */
+   * 获取所有科室
+   * 
+   */
   getAllDept(params, config) {
     return fetch('/medicalsystem/rest/medAnesthesiaComm/getAllDept', params)
   },
   /**
- * 新增用户接口
- * 
- */
+   * 新增用户接口
+   * 
+   */
   userRegister(params, config) {
     return fetch('/medicalsystem/rest/medUsers/userRegister', params)
   },
   /**
-* 修改用户接口
-* 
-*/
+   * 修改用户接口
+   * 
+   */
   updateMedUsers(params, config) {
     return fetch('/medicalsystem/rest/medUsers/updateMedUsers', params)
   },
