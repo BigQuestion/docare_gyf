@@ -486,6 +486,7 @@ export default {
       //整理每个项目的不同时间点
       var map = {},
         dest = [];
+      var isData = false; //定义变量判断这个病人是否有体征呼吸数据
       for (var i = 0; i < testArr.length; i++) {
         var ai = testArr[i];
         if (!map[ai.itemCode]) {
@@ -505,9 +506,14 @@ export default {
         }
       }
       for (var i = 0; i < dest.length; i++) {
+        //判断整个数据里面是否有体征呼吸数据
+        if (dest[i].itemCode == 92) {
+          isData = true
+        }
         let listOne = dest[i].itemData
         //如果插入了控制呼吸
         if (dest[i].itemCode == 92 && this.breathData.length > 0) {
+          console.log(this.breathData)
           let name = '控制呼吸'
           let startTime = this.breathData[0].START_TIME
           //对控制呼吸的数据进行生成
@@ -589,8 +595,44 @@ export default {
             listOne[j].itemData = { itemCode: listOne[j].itemCode, itemName: name }
           }
         }
-
+        console.log(listOne)
         this.pathArray.push(listOne);
+      }
+      console.log(pathArray)
+      //如果没有体征呼吸数据
+      if (!isData && this.breathData.length > 0) {
+        let list = this.breathData;
+        let obj = {
+          itemCode: '',
+          itemData: {},
+          time: '',
+          value: '',
+          x: '',
+          y: ''
+        }
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].ENDDATE) {
+            let countMin = this.coutTimes(new Date(list[i].START_TIME), new Date(list[i].ENDDATE), 'minute');
+            let numCount = countMin / 5
+            let dataArr = []
+            for (let l = 0; l < numCount; l++) {
+              dataArr.push({
+                itemCode: list[i].ITEM_CODE,
+                time: new Date(new Date(list[i].START_TIME).getTime() + 1000 * 60 * 5 * l).Format("yyyy-MM-dd hh:mm"),
+                value: list[i].DOSAGE,
+                itemData: {
+                  itemCode: list[i].ITEM_CODE,
+                  itemName: list[i].ITEM_NAME
+                }
+              })
+            }
+          }
+
+        }
+
+
+
+        console.log(this.breathData)
       }
       let list = this.pathArray
       let spo2List = []

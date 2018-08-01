@@ -17,7 +17,7 @@ export function fetch(url, params, config) {
     config = {};
   }
   if (!config.timeout) {
-    config.timeout = 30000;
+    config.timeout = 300000;
   }
   return new Promise((resolve, reject) => {
     params = params ? params : {};
@@ -386,9 +386,9 @@ export default {
     return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnesthesiaEvent', params)
   },
   /**
- * 批量删除病人麻醉事件记录
- * 
- */
+   * 批量删除病人麻醉事件记录
+   * 
+   */
   deleteBatchMedAnesthesiaEvent(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/deleteBatchMedAnesthesiaEvent', params)
   },

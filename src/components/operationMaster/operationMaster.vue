@@ -992,7 +992,6 @@ export default {
       list.writeAble = true;
     },
     searchPatientList() {
-      debugger
       if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
         var now = new Date();
         var year = now.getFullYear();
@@ -3067,6 +3066,7 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
 
 
 /*::-webkit-datetime-edit-year-field {
