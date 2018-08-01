@@ -24,6 +24,7 @@
                         <button class="buttonClass" :class="{buttonBackground:disabledWord}" v-bind:disabled="disabledWord" @click="changePassWord()">修改密码</button>
                         <!-- <button class="buttonClass buttonBackground">停用</button> -->
                         <!-- <button class="buttonClass buttonBackground">启用</button> -->
+                         <button style="margin-left: 10px;font-size: 12px;height: 21px;width: 70px;line-height: 21px;" @click="exitSystem">返回列表</button>
                     </div>
                 </div>
             </div>
@@ -57,11 +58,11 @@ export default {
         return {
             allowClick: true,
             userList: [],
-            userId:'',
+            userId: '',
             deptName: '',
             userName: '',
             loginName: '',
-            oldPassWord:'',
+            oldPassWord: '',
             passWord: '',
             passWordRept: '',
             readOnlyDep: true,
@@ -79,6 +80,14 @@ export default {
         }
     },
     methods: {
+        // 退出系统
+        exitSystem() {
+            if (confirm("是否要返回页面选择？")) {
+                this.$router.push({
+                    path: 'menu'
+                })
+            } else { }
+        },
         // 清空输入框内容，且取消左边选中
         empty() {
             for (var a = 0; a < this.userList.length; a++) {
@@ -228,7 +237,7 @@ export default {
                     loginName: this.loginName,
                     userName: this.userName,
                     deptId: this.oldDeptData,
-                    userId:this.userId,
+                    userId: this.userId,
                 }
                 this.api.updateMedUsers(dataBody)
                     .then(change => {
@@ -253,7 +262,7 @@ export default {
                             alert(change.msg)
                             this.cancel();
                             this.getList();
-                        }else{
+                        } else {
                             alert(change.msg)
                         }
                     })
