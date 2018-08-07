@@ -116,7 +116,7 @@ export default {
     //对于输入拼音简码进行筛选
     serchJm() {
       var list = this.allList;
-      var m = this.serchZm.toUpperCase();
+      var m = this.serchZm.toUpperCase();   
       var newList = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].PYJM && list[i].PYJM.indexOf(m) >= 0) {
@@ -124,6 +124,9 @@ export default {
         }
 
       }
+      console.log(list)
+      console.log(m)
+      console.log(newList)
       this.medAnaesthesiaDictList = newList;
     },
     //讲数据返回上级
