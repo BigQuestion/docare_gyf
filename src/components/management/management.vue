@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="width:100%;height:100%;" @click="this.selectShowDate = false;">
         <div style="width:670px;height:480px;border:1px solid #222;display:flex;margin-left:10px;">
             <div style="width:420px;height:100%;">
                 <div style="height:24px;width:100%;background-color:#F0F0F0;">
@@ -24,7 +24,7 @@
                         <button class="buttonClass" :class="{buttonBackground:disabledWord}" v-bind:disabled="disabledWord" @click="changePassWord()">修改密码</button>
                         <!-- <button class="buttonClass buttonBackground">停用</button> -->
                         <!-- <button class="buttonClass buttonBackground">启用</button> -->
-                         <button style="margin-left: 10px;font-size: 12px;height: 21px;width: 70px;line-height: 21px;" @click="exitSystem">返回列表</button>
+                        <button style="margin-left: 10px;font-size: 12px;height: 21px;width: 70px;line-height: 21px;" @click="exitSystem">返回列表</button>
                     </div>
                 </div>
             </div>
@@ -32,9 +32,20 @@
                 <h2>用户基本信息</h2>
                 <p>所在科室</p>
                 <input v-if="readOnlyDep" type="text" :class="{backgroundGray:readOnlyDep}" v-bind:readonly="readOnlyDep" v-model="deptName">
-                <select v-else style="width:159px;height:18px;" v-model="oldDeptData">
-                    <option v-for="(item,index) in deptList" :value="item.deptCode">{{item.deptName}}</option>
-                </select>
+                <div v-else style="width:157px;position: relative;height:20px;">
+                    <div class="selectBox" ref="main" style="z-index: 20;background-color:white;width:157px;" :class="{selectClass:selectShowDate}">
+                        <div>
+                            <input v-model="deptName" @keyup="serchJm" @focus="showSelect()">
+                        </div>
+                        <div v-if="selectShowDate" class="listIngt" @click="getSelected(item)" v-for="item in deptList">
+                            <div>{{item.deptName}}</div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- <select v-else style="width:159px;height:18px;" v-model="oldDeptData">
+                                                    <option v-for="(item,index) in deptList" :value="item.deptCode">{{item.deptName}}</option>
+                                                </select> -->
                 <p>用户名称</p>
                 <input style="width:159px;box-sizing:border-box;" type="text" :class="{backgroundGray:readOnlyUser}" v-bind:readonly="readOnlyUser" v-model="userName">
                 <p>登陆名称</p>
@@ -59,7 +70,9 @@ export default {
             allowClick: true,
             userList: [],
             userId: '',
+            oldDeptData: '',
             deptName: '',
+            copyDeptName: '',
             userName: '',
             loginName: '',
             oldPassWord: '',
@@ -77,9 +90,43 @@ export default {
             thisNewFun: false,
             thisChangeUserFun: false,
             thisChangePassWord: false,
+            selectShowDate: false,
         }
     },
     methods: {
+        showSelect() {
+            this.selectShowDate = true;
+            this.deptName = '';
+        },
+        //对于输入拼音简码进行筛选
+        serchJm() {
+            var list = this.deptList;
+            var m = this.deptName.toUpperCase();
+            var newList = [];
+            if (m == '') {
+                this.getAllDept();
+            } else {
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].inputCode && list[i].inputCode.indexOf(m) >= 0) {
+                        newList.push(list[i]);
+                    }
+
+                }
+            }
+
+            console.log(list)
+            console.log(m)
+            console.log(newList)
+            this.deptList = newList;
+        },
+        // 点击下拉框内容
+        getSelected(item) {
+            console.log(item)
+            this.deptName = item.deptName;
+            this.oldDeptData = item.deptCode;
+            this.copyDeptName = item.deptName;
+            this.selectShowDate = false;
+        },
         // 退出系统
         exitSystem() {
             if (confirm("是否要返回页面选择？")) {
@@ -95,6 +142,7 @@ export default {
             }
             this.oldDeptData = '';
             this.deptName = '';
+            this.copyDeptName = '';
             this.userName = '';
             this.loginName = '';
             this.passWord = '';
@@ -129,6 +177,7 @@ export default {
                     this.userList[a].clickData = false;
                 }
                 item.clickData = true;
+                this.copyDeptName = item.deptName;
                 this.deptName = item.deptName;
                 this.userName = item.userName;
                 this.loginName = item.loginName;
@@ -159,11 +208,11 @@ export default {
             this.disabledAdd = true;
             this.disabledChange = false;
             this.disabledWord = true;
-            for (var i = 0; i < this.deptList.length; i++) {
-                if (this.deptList[i].deptName == this.deptName) {
-                    this.oldDeptData = this.deptList[i].deptCode;
-                }
-            }
+            // for (var i = 0; i < this.deptList.length; i++) {
+            //     if (this.deptList[i].deptName == this.deptName) {
+            //         this.oldDeptData = this.deptList[i].deptCode;
+            //     }
+            // }
             this.readOnlyDep = false;
             this.readOnlyUser = false;
             this.readOnlyLogin = false;
@@ -191,7 +240,6 @@ export default {
         },
         // 取消
         cancel() {
-            this.deptName = '';
             this.allowClick = true;
             this.empty();
             this.disabledAdd = false;
@@ -273,7 +321,20 @@ export default {
     mounted() {
         this.getList();
         this.getAllDept();
-    }
+    },
+    created() {
+        // 点击其他不在的区域触发事件
+        document.addEventListener('click', (e) => {
+            if (this.selectShowDate) {
+                if (!this.$refs.main.contains(e.target)) {
+                    this.selectShowDate = false;
+                    this.deptName = this.copyDeptName;
+                    this.getAllDept();
+                }
+            }
+
+        })
+    },
 
 }
 </script>
@@ -326,5 +387,24 @@ input {
     width: 70px;
     margin-left: 10px;
     line-height: 21px;
+}
+
+.selectClass {
+    height: 168px;
+    width: 178px !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #222;
+    position: absolute;
+}
+
+.listIngt {
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.listIngt:hover {
+    background-color: #1E90FF;
+    color: #fff;
 }
 </style>
