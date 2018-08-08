@@ -406,50 +406,10 @@ export default {
 
       if (this.config.pageOper == 0) {
         this.config.pageNum = 1;
-        this.getData();
       }
-      if (this.config.pageOper == -1) {
-        this.getData();
-        return
-        let m = this.config.initTime.getTime();
-        var list = [];
-        list = this.percentPageData;
-        for (var i = 0; i < list.length; i++) {
-          if (this.config.pagePercentNum != 1 && list[i].MAX_TIME) {
-            list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-          }
-        }
-        this.dataListOperFun(list);
-      }
-      if (this.config.pageOper == 1) {
-        this.getData();
-        return
-        let arrList = this.dataArray;
-        this.percentPageData = arrList;
-        var arrayList = [];
-        var list = this.dataArray;
-        for (var i = 0; i < list.length; i++) {
-          if (list[i].PATIENT_ID) {
-            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+      this.getData();
+      return
 
-              if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
-                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {}
-            } else {
-              if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
-                list[i].vStartTime = this.config.initTime.Format("yyyy-MM-dd hh:mm:ss");
-                arrayList.push(list[i]);
-              } else {
-
-              }
-            }
-          }
-        }
-
-        this.dataListOperFun(arrayList);
-
-      }
     },
   },
   mounted() {

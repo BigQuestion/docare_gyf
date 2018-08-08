@@ -36,15 +36,19 @@
                   </div>
                   <div class="hideselect" v-else style="border:1px solid #a9a9a9;box-sizing:border-box;height:100%;" :style="{width:(cl.width)+'px'}">
                     <select :class="{selectchooseItem:item.thooseItem}" v-if="cl.fieldObj == 'ADMINISTRATOR'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
+                      <option value=""></option>
                       <option style="background-color: white;" v-for="(item,index) in roadList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
                     <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'CONCENTRATION_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
+                      <option value=""></option>
                       <option style="background-color: white;" v-for="(item,index) in concentrationList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
                     <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'SPEED_UNIT'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
+                      <option value=""></option>
                       <option style="background-color: white;" v-for="(item,index) in speedUnitList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
                     <select :class="{selectchooseItem:item.thooseItem}" v-else-if="cl.fieldObj == 'DOSAGE_UNITS'" v-model="item[cl.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;" @change="getChangeValue(item)">
+                      <option value=""></option>
                       <option style="background-color: white;" v-for="(item,index) in dosageUnitsList" :value="item.itemName">{{ item.itemName }}</option>
                     </select>
                     <input v-else style="height:20px;border:0;display:block;font-size:12px;" @change="getChangeValue(item)" type="text" :style="{width:(cl.width-2)+'px'}" v-model="item[cl.fieldObj]">
@@ -551,6 +555,7 @@ export default {
         ITEM_SPEC: item.itemSpec,
         addFlag: true,
         DURATIVE_INDICATOR: 0,
+        ITEM_CODE: item.itemCode
       };
       this.eventList.push(obj);
       this.$nextTick(() => {
@@ -610,8 +615,8 @@ export default {
             concentrationUnit: list[i].CONCENTRATION_UNIT,
             performSpeed: list[i].PERFORM_SPEED,
             speedUnit: list[i].SPEED_UNIT,
-            eventAttr: list[i].EVENT_ATTR
-
+            eventAttr: list[i].EVENT_ATTR,
+            itemCode: list[i].ITEM_CODE
           }
           arry1.push(par)
           // this.api.insertMedAnesthesiaEvent(par)
@@ -770,6 +775,7 @@ export default {
     },
     //获取改变的值
     getChangeValue(item) {
+      debugger
       let params = {}
       if (item.addFlag) {
         params = {
@@ -786,6 +792,7 @@ export default {
           speedUnit: item.SPEED_UNIT,
           dosage: item.DOSAGE,
           dosageUnits: item.DOSAGE_UNITS,
+          itemClass: item.ITEM_CALSS,
           durativeIndicator: item.DURATIVE_INDICATOR,
           startTime: new Date(item.START_TIME),
           endDate: item.ENDDATE ? new Date(item.ENDDATE) : '',
@@ -805,6 +812,7 @@ export default {
           performSpeed: item.PERFORM_SPEED,
           speedUnit: item.SPEED_UNIT,
           dosage: item.DOSAGE,
+          itemClass: item.ITEM_CALSS,
           dosageUnits: item.DOSAGE_UNITS,
           durativeIndicator: item.DURATIVE_INDICATOR,
           startTime: new Date(item.START_TIME),

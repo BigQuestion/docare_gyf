@@ -41,9 +41,19 @@
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
           </g>
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'zzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
+          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'zzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+            <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
+          </g>
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'fzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
+          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'fzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+            <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
+          </g>
           <!-- ~ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'kzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'kzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'kzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <path stroke="magenta" id="svg_1" d="m-5.75,-2.75c0,0 4.705594,4.705594 4.567194,4.567194c0.1384,0.1384 4.290395,-4.013595 4.151995,-4.428795c0.002306,0.274494 4.807215,5.084015 4.705594,4.705594" opacity="0.5" stroke-width="1.5" fill="#fff" />
           </g>
@@ -468,6 +478,28 @@ export default {
 
 
     },
+    obj2key(obj, keys) {
+      var n = keys.length,
+        key = [];
+      while (n--) {
+        key.push(obj[keys[n]]);
+      }
+      return key.join('|');
+    },
+
+    uniqeByKeys(array, keys) {
+      var arr = [];
+      var hash = {};
+      for (var i = 0, j = array.length; i < j; i++) {
+        var k = this.obj2key(array[i], keys);
+        if (!(k in hash)) {
+          hash[k] = true;
+          arr.push(array[i]);
+        }
+      }
+      return arr;
+    },
+
 
     //数据处理
     dataOperFun(sortArray) {
@@ -512,67 +544,77 @@ export default {
         }
         let listOne = dest[i].itemData
         //如果插入了控制呼吸
-        if (dest[i].itemCode == 92 && this.breathData.length > 0) {
-          console.log(this.breathData)
-          let name = '控制呼吸'
-          let startTime = this.breathData[0].START_TIME
-          //对控制呼吸的数据进行生成
-          let time = ''
-          //如果没有控制呼吸的结束时间
-          if (!this.breathData[0].ENDDATE) {
-            time = this.config.patientMaxTime
+        if (isData && this.breathData.length > 0) {
+          let list = this.breathData
+          let tempArr = []
+          let firstIn = false
+          for (var m = 0; m < list.length; m++) {
+            let name = '控制呼吸'
+            let startTime = list[m].START_TIME
+            //对控制呼吸的数据进行生成
+            let time = ''
+            //如果没有控制呼吸的结束时间
+            if (!list[m].ENDDATE) {
+              time = this.config.patientMaxTime
 
-          }
-          //如果有结束时间
-          else {
-            time = this.breathData[0].ENDDATE
-          }
-          //计算控制呼吸与当前最大时间的差值
-          let countMin = this.coutTimes(new Date(startTime), new Date(time), 'minute');
-          //一组数据5分钟
-          let numCount = countMin / 5
-          let dataArr = []
-          for (var l = 0; l < numCount; l++) {
-            dataArr.push({
-              itemCode: 'kzhx',
-              time: new Date(new Date(startTime).getTime() + 1000 * 60 * 5 * l).Format("yyyy-MM-dd hh:mm"),
-              value: this.breathData[0].DOSAGE,
-              itemData: {
-                itemCode: 'kzhx',
-                itemName: name
+            }
+            //如果有结束时间
+            else {
+              time = list[m].ENDDATE
+            }
+            //计算事件呼吸与当前最大时间的差值
+            let countMin = this.coutTimes(new Date(startTime), new Date(time), 'minute');
+            //一组数据5分钟
+            let numCount = countMin / 5
+            let dataArr = []
+            for (var l = 0; l < numCount; l++) {
+              dataArr.push({
+                itemCode: list[m].ITEM_CODE,
+                time: new Date(new Date(startTime).getTime() + 1000 * 60 * 5 * l).Format("yyyy-MM-dd hh:mm"),
+                value: list[m].DOSAGE,
+                itemData: {
+                  itemCode: list[m].ITEM_CODE,
+                  itemName: list[m].ITEM_NAME
+                }
+              })
+            }
+            //找出体征呼吸在控制呼吸发生之前的数据
+            let signBreathArr = []
+            let signTimeArr = []
+            let si = list.length - 1
+            for (var j = 0; j < listOne.length; j++) {
+              //体征呼吸数据时间在事件呼吸时间之前
+              if (new Date(listOne[j].time) < new Date(startTime) && !firstIn) {
+                listOne[j].itemData = { itemCode: listOne[j].itemCode, itemName: "呼吸" }
+                signBreathArr.push(listOne[j])
               }
-            })
-          }
-          //找出体征呼吸在控制呼吸发生之前的数据
-          let signBreathArr = []
-          let signTimeArr = []
-          for (var j = 0; j < listOne.length; j++) {
-            if (new Date(listOne[j].time) < new Date(startTime)) {
-              listOne[j].itemData = { itemCode: listOne[j].itemCode, itemName: "呼吸" }
-              signBreathArr.push(listOne[j])
+              if (list[si].ENDDATE && new Date(list[si].ENDDATE) <= new Date(listOne[j].time) && m == si) {
+                listOne[j].itemData = { itemCode: listOne[j].itemCode, itemName: "呼吸" }
+                signTimeArr.push(listOne[j])
+              }
             }
-            if (this.breathData[0].ENDDATE && new Date(this.breathData[0].ENDDATE) <= new Date(listOne[j].time)) {
-              listOne[j].itemData = { itemCode: listOne[j].itemCode, itemName: "呼吸" }
-              signTimeArr.push(listOne[j])
+            firstIn = true
+            //合并呼吸与控制呼吸的数据
+            signBreathArr.push.apply(signBreathArr, signTimeArr)
+            signBreathArr.push.apply(signBreathArr, dataArr)
+            signBreathArr.sort(function(a, b) {
+              return Date.parse(a.time) - Date.parse(b.time); //时间正序
+            });
+            for (var n = 0; n < signBreathArr.length; n++) {
+              let min = '';
+              if (new Date(signBreathArr[n].time) > this.config.maxTime) {
+                min = 700 + 1;
+              } else {
+                min = this.getMinuteDif(this.config.initTime, signBreathArr[n].time);
+              }
+              let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
+              let y = this.svgHeight - Math.round(signBreathArr[n].value / 10 * (this.svgHeight / this.rows))
+              signBreathArr[n].x = x;
+              signBreathArr[n].y = y;
             }
+            tempArr.push.apply(tempArr, signBreathArr)
           }
-          //合并呼吸与控制呼吸的数据
-          signBreathArr.push.apply(signBreathArr, dataArr)
-          signBreathArr.push.apply(signBreathArr, signTimeArr)
-          listOne = signBreathArr
-          for (var n = 0; n < listOne.length; n++) {
-            let min = '';
-            if (new Date(listOne[n].time) > this.config.maxTime) {
-              min = 700 + 1;
-            } else {
-              min = this.getMinuteDif(this.config.initTime, listOne[n].time);
-            }
-            let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
-            let y = this.svgHeight - Math.round(listOne[n].value / 10 * (this.svgHeight / this.rows))
-            listOne[n].x = x;
-            listOne[n].y = y;
-
-          }
+          listOne = tempArr
         } else {
           for (var j = 0; j < listOne.length; j++) {
             let name = ''
@@ -595,44 +637,55 @@ export default {
             listOne[j].itemData = { itemCode: listOne[j].itemCode, itemName: name }
           }
         }
-        console.log(listOne)
-        this.pathArray.push(listOne);
+        let temp = this.uniqeByKeys(listOne, ['itemCode', 'time']);
+        this.pathArray.push(temp);
+        // this.pathArray.push(listOne);
       }
-      console.log(pathArray)
-      //如果没有体征呼吸数据
+      //如果只有事件里面呼吸数据
       if (!isData && this.breathData.length > 0) {
         let list = this.breathData;
-        let obj = {
-          itemCode: '',
-          itemData: {},
-          time: '',
-          value: '',
-          x: '',
-          y: ''
-        }
+        //定义一个总数组把几个呼吸数据进行组合
+        let allArrData = []
         for (let i = 0; i < list.length; i++) {
+          let endEvTime = ''
+          //如果有结束时间
           if (list[i].ENDDATE) {
-            let countMin = this.coutTimes(new Date(list[i].START_TIME), new Date(list[i].ENDDATE), 'minute');
-            let numCount = countMin / 5
-            let dataArr = []
-            for (let l = 0; l < numCount; l++) {
-              dataArr.push({
-                itemCode: list[i].ITEM_CODE,
-                time: new Date(new Date(list[i].START_TIME).getTime() + 1000 * 60 * 5 * l).Format("yyyy-MM-dd hh:mm"),
-                value: list[i].DOSAGE,
-                itemData: {
-                  itemCode: list[i].ITEM_CODE,
-                  itemName: list[i].ITEM_NAME
-                }
-              })
-            }
+            endEvTime = list[i].ENDDATE
+
+          } else {
+            endEvTime = this.config.patientMaxTime
           }
+          let countMin = this.coutTimes(new Date(list[i].START_TIME), new Date(endEvTime), 'minute');
+          let numCount = countMin / 5
+          let dataArr = []
+          for (let l = 0; l < numCount; l++) {
+            dataArr.push({
+              itemCode: list[i].ITEM_CODE,
+              time: new Date(new Date(list[i].START_TIME).getTime() + 1000 * 60 * 5 * l).Format("yyyy-MM-dd hh:mm"),
+              value: list[i].DOSAGE,
+              itemData: {
+                itemCode: list[i].ITEM_CODE,
+                itemName: list[i].ITEM_NAME
+              }
+            })
+          }
+          allArrData.push.apply(allArrData, dataArr)
 
         }
+        for (var n = 0; n < allArrData.length; n++) {
+          let min = '';
+          if (new Date(allArrData[n].time) > new Date(this.config.maxTime)) {
+            min = 700 + 1;
+          } else {
+            min = this.getMinuteDif(this.config.initTime, allArrData[n].time);
+          }
+          let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
+          let y = this.svgHeight - Math.round(allArrData[n].value / 10 * (this.svgHeight / this.rows))
+          allArrData[n].x = x;
+          allArrData[n].y = y;
 
-
-
-        console.log(this.breathData)
+        }
+        this.pathArray.push(allArrData);
       }
       let list = this.pathArray
       let spo2List = []

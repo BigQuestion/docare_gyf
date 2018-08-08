@@ -487,6 +487,7 @@
             <button ref="buttonTest" v-if="pageButtonView" @click="toChangePage(0)">首页</button>
             <button v-if="pageButtonView" @click="toChangePage(-1)">上一页</button>
             <button v-if="pageButtonView" @click="toChangePage(1)">下一页</button>
+            <button v-if="pageButtonView" @click="toChangePage(2)">末页</button>
             <button v-if="tempButtonView" @click="applyTemplateFun">应用模板</button>
             <button v-if="tempButtonView" @click="openSaveTemView">保存模板</button>
             <button @click="submitSaveForm">保存</button>
@@ -2182,6 +2183,23 @@ export default {
           // Bus.$emit('test', num);
           // })
         }
+        //末页
+        if (num == 2) {
+          debugger
+          let m1 = this.config.pageTotal
+          let m2 = this.config.pagePercentNum
+          let m3 = m1 - m2
+          console.log(new Date(this.config.initTime).getTime());
+
+          let timeStart = m3 * 250 * 60 * 1000 + new Date(this.config.initTime).getTime();
+
+          this.setFormTime(timeStart);
+          this.config.pagePercentNum = this.config.pageTotal;
+          this.config.pageOper = num;
+          this.getFormData().then(() => {
+            resolve()
+          });
+        }
 
 
       })
@@ -3066,6 +3084,16 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
