@@ -162,6 +162,13 @@ export default {
   mounted() {
     this.$refs.inputEml.focus();
     this.w = 100;
+    if (window.fs) {
+      window.fs.readFile('./resources/app/room.json', 'utf8', (err, data) => {
+        if (data) {
+          this.config.roomId = JSON.parse(data).roomId
+        }
+      });
+    }
   },
   components: {
     dateTime

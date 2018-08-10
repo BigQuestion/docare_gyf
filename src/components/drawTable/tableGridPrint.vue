@@ -1,3 +1,4 @@
+f
 <template>
   <div style="position: relative;margin:2px;">
     <!-- <div style="height: 2px;width: 700px;background-color: red;margin-bottom: 20px;"></div> -->
@@ -340,6 +341,10 @@ export default {
           }
         }
         this.timeControl(this.config.maxTime)
+      }
+      if (this.config.pageOper == 2) {
+        this.timeControl(this.config.maxTime)
+        return
       }
       // })
     },

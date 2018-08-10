@@ -17,22 +17,22 @@ export function fetch(url, params, config) {
     config = {};
   }
   if (!config.timeout) {
-    config.timeout = 500000;
+    config.timeout = 300000;
   }
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-      method: 'post',
-      url: url,
-      data: JSON.stringify(params),
-      timeout: config.timeout,
-      headers: {
-        'Content-type': 'application/json',
-        "Accept": "*/*",
-      },
-      datatype: "json",
-    })
-      .then(function (response) {
+        method: 'post',
+        url: url,
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype: "json",
+      })
+      .then(function(response) {
         resolve(response.data);
         // if (!config.noAlert) {
         //   if (response.data.success) {
@@ -44,9 +44,9 @@ export function fetch(url, params, config) {
         //   }
         // }
 
-      }).catch(function (error) {
+      }).catch(function(error) {
         reject(error);
-        // alert("网络请求失败")
+        alert("网络请求失败")
       });
   })
 }
@@ -60,30 +60,30 @@ export default {
     return fetch('/medicalsystem/rest/medUsers/userLogin', params)
   },
   /**
- * 获取用户信息列表
- * 
- */
+   * 获取用户信息列表
+   * 
+   */
   medUsersList(params, config) {
     return fetch('/medicalsystem/rest/medUsers/medUsersList', params)
   },
   /**
- * 获取所有科室
- * 
- */
+   * 获取所有科室
+   * 
+   */
   getAllDept(params, config) {
     return fetch('/medicalsystem/rest/medAnesthesiaComm/getAllDept', params)
   },
   /**
- * 新增用户接口
- * 
- */
+   * 新增用户接口
+   * 
+   */
   userRegister(params, config) {
     return fetch('/medicalsystem/rest/medUsers/userRegister', params)
   },
   /**
-* 修改用户接口
-* 
-*/
+   * 修改用户接口
+   * 
+   */
   updateMedUsers(params, config) {
     return fetch('/medicalsystem/rest/medUsers/updateMedUsers', params)
   },
@@ -386,9 +386,9 @@ export default {
     return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnesthesiaEvent', params)
   },
   /**
- * 批量删除病人麻醉事件记录
- * 
- */
+   * 批量删除病人麻醉事件记录
+   * 
+   */
   deleteBatchMedAnesthesiaEvent(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/deleteBatchMedAnesthesiaEvent', params)
   },

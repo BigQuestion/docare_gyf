@@ -446,6 +446,9 @@ export default {
           }
 
         }
+        if (this.config.pageOper == 2) {
+          this.timeControl(this.config.maxTime)
+        }
       })
 
 

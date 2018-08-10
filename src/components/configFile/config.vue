@@ -1,5 +1,5 @@
 <script type="text/javascript">
-const userId = "";
+const userId = "admin";
 const userInfo = "";
 const loginName = '';//登陆用户昵称
 const isPrintedView = false; //是否在打印预览
@@ -7,7 +7,7 @@ const pageTotal = 1; //总页数
 const pagePercentNum = 1; //当前页
 const pageOper = 0; //0代表点击首页  1代表点击下一页 -1代表上一页
 
-const wardCode = 38;
+const wardCode = 210;
 const maxTime = "";
 const initTime = "";
 const patientMinTime = ''; //病人的最早时间
@@ -16,6 +16,7 @@ const startMinTime = ''; //表格最开始时间
 
 const OperatingData = '';
 const timeSet = 6000000; //表格数据定时刷新时间 ms
+const roomId = ''; //定义手术间
 
 export default {
   userId,
@@ -34,6 +35,7 @@ export default {
   patientMinTime,
   startMinTime,
   patientMaxTime,
+  roomId,
 }
 
 </script>
