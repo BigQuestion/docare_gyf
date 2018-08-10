@@ -124,9 +124,6 @@ export default {
         }
 
       }
-      console.log(list)
-      console.log(m)
-      console.log(newList)
       this.medAnaesthesiaDictList = newList;
     },
     //讲数据返回上级

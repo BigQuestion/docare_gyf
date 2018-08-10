@@ -15,9 +15,10 @@
               {{cell.title}}
             </div>
           </div>
-          <div style="width: 100%;border:1px solid #222;overflow-y: auto;height:270px;box-sizing: border-box;background-color:white;" ref="eventContent">
+          <!-- @mousedown="downFun($event)" @mousemove="moveFun($event)" @mouseout="outFun($event)" -->
+          <div @mousedown="downFun()" @mouseup="upFun()" style="width: 100%;border:1px solid #222;overflow-y: auto;height:270px;box-sizing: border-box;background-color:white;" ref="eventContent">
             <div style="min-height: 280px;">
-              <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @keydown.ctrl="pushArray()" @keyup="onlyOne()" @click="clickItem(item)">
+              <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @mouseleave="outFun(item)" @click="clickItem(item,$event)">
                 <!-- 判断是否为事件 -->
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">
                   <div style="height:20px;" v-if="cl.timeEdit">
@@ -175,48 +176,48 @@
           </div>
         </div>
         <!--  <div style="display: flex;padding-left: 10px;">
-                            <div>
-                              <div style="width: 100px;">名称</div>
-                              <div style="height: 22px;width: 100px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
-                            </div>
-                            <div class="flex">
-                              <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
-                                <div style="width: 60px;" :title="sItem.time">
-                                  {{sItem.time | discount}}
-                                </div>
-                                <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
-                                  <input :value="secItem" style="width: 60px;" @change="signChange($event,index,sItem)">
-                                </div>
-                              </div>
-                            </div>
-                          </div> -->
-        <!-- <div class="flex">
-                                  <div v-for="(title,index) in titleArr">
-                                    <div v-if="index==0" style="width: 100px;">{{title}}</div>
-                                    <div v-else style="width: 60px;" :title="title">{{title | discount}}</div>
-                                  </div>
-                                </div>
-                                <div class="flex" style="overflow-y:hidden;overflow-x: auto;">
                                   <div>
-                                    <div style="height: 22px;width: 100px;" v-for="name in itemNameList">{{name.itemName}}</div>
+                                    <div style="width: 100px;">名称</div>
+                                    <div style="height: 22px;width: 100px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
                                   </div>
-                                  <div>
-                                    <div v-for="item in dataArr" class="flex">
-                                      <div v-for="data in item">
-                                        <input :value="data" style="width: 60px;" @change="signChange($event,index,data)">
+                                  <div class="flex">
+                                    <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
+                                      <div style="width: 60px;" :title="sItem.time">
+                                        {{sItem.time | discount}}
+                                      </div>
+                                      <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
+                                        <input :value="secItem" style="width: 60px;" @change="signChange($event,index,sItem)">
                                       </div>
                                     </div>
                                   </div>
-                                  <div>
-                                  </div>
                                 </div> -->
+        <!-- <div class="flex">
+                                        <div v-for="(title,index) in titleArr">
+                                          <div v-if="index==0" style="width: 100px;">{{title}}</div>
+                                          <div v-else style="width: 60px;" :title="title">{{title | discount}}</div>
+                                        </div>
+                                      </div>
+                                      <div class="flex" style="overflow-y:hidden;overflow-x: auto;">
+                                        <div>
+                                          <div style="height: 22px;width: 100px;" v-for="name in itemNameList">{{name.itemName}}</div>
+                                        </div>
+                                        <div>
+                                          <div v-for="item in dataArr" class="flex">
+                                            <div v-for="data in item">
+                                              <input :value="data" style="width: 60px;" @change="signChange($event,index,data)">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div>
+                                        </div>
+                                      </div> -->
       </div>
       <div v-if="signItemView" id="codeSelect" ref="codeSelect" style="position: absolute;bottom:35px;left: 150px;">
         <!-- <select v-model="selected" v-on:change="getSeclectItem">
-                          <option v-for="option in allSignItems" v-bind:value="option">
-                            {{ option.itemName }}
-                          </option>
-                        </select> -->
+                                <option v-for="option in allSignItems" v-bind:value="option">
+                                  {{ option.itemName }}
+                                </option>
+                              </select> -->
         <div>
           <input ref="inSelect" v-model="serchZmItem" @keyup="serchJmItem">
         </div>
@@ -301,7 +302,6 @@ export default {
   data() {
     return {
       dataIn: this.parentToChild.dataInParent,
-      keyDown: false,
       tbconfig: [{
         title: "",
         fieldObj: "",
@@ -412,7 +412,7 @@ export default {
       dosageUnitsList: [], //用药单位列表
       serchZmItem: '',
       showItemList: [],
-
+      morClick: false,
     }
   },
   methods: {
@@ -434,6 +434,7 @@ export default {
           this.eventList = res.list;
           this.eventTempList = res.list;
           this.selectedItem = [];
+          this.moreClickData = [];
         });
     },
     allMedAnesthesiaEventType() {
@@ -461,33 +462,37 @@ export default {
           this.newEvenNameList = res.list;
         });
     },
-    // 多选
-    pushArray() {
-      this.keyDown = true;
-      console.log(this.keyDown)
-    },
-    // 恢复单选
-    onlyOne() {
-      this.keyDown = false;
-      console.log(this.keyDown)
-    },
     //得到选中的并集麻醉事件记录
-    clickItem(item) {
-      if (this.keyDown == true) {
+    clickItem(item, event) {
+      for (var a = 0; a < this.eventList.length; a++) {
+        this.$set(this.eventList[a], 'thooseItem', false);
+      }
+      item.thooseItem = true;
+      this.selectedItem[0] = item;
+    },
+    // 鼠标点击判断是否持续
+    downFun() {
+      for (var i = 0; i < this.eventList.length; i++) {
+        this.eventList[i].thooseItem = false;
+      }
+      this.moreClickData = [];
+      this.morClick = true;
+    },
+    // 松开多选点击
+    upFun() {
+      this.morClick = false;
+    },
+    // 鼠标位移多个item判断是否多选
+    outFun(item) {
+      if (this.morClick) {
+        this.selectedItem.push(item)
         item.thooseItem = true;
-        this.selectedItem.push(item);
-      } else {
-        for (var a = 0; a < this.eventList.length; a++) {
-          this.$set(this.eventList[a], 'thooseItem', false);
-        }
-        item.thooseItem = true;
-        this.selectedItem[0] = item;
       }
     },
     //删除病人麻醉事件记录
     deleteMedAnesthesiaEvent() {
-      console.log(this.selectedItem)
       if (this.selectedItem.length > 1) {
+        this.morClick = false;
         var addData = [];
         for (var a = 0; a < this.selectedItem.length; a++) {
           addData.push({

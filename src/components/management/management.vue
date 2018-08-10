@@ -44,8 +44,8 @@
 
                 </div>
                 <!-- <select v-else style="width:159px;height:18px;" v-model="oldDeptData">
-                                                    <option v-for="(item,index) in deptList" :value="item.deptCode">{{item.deptName}}</option>
-                                                </select> -->
+                                                        <option v-for="(item,index) in deptList" :value="item.deptCode">{{item.deptName}}</option>
+                                                    </select> -->
                 <p>用户名称</p>
                 <input style="width:159px;box-sizing:border-box;" type="text" :class="{backgroundGray:readOnlyUser}" v-bind:readonly="readOnlyUser" v-model="userName">
                 <p>登陆名称</p>
@@ -113,10 +113,6 @@ export default {
 
                 }
             }
-
-            console.log(list)
-            console.log(m)
-            console.log(newList)
             this.deptList = newList;
         },
         // 点击下拉框内容
@@ -275,6 +271,8 @@ export default {
                                 alert(newD.msg)
                                 this.cancel();
                                 this.getList();
+                            } else {
+                                console.log(newD.msg)
                             }
                         })
                 }
@@ -294,6 +292,8 @@ export default {
                             alert(change.msg)
                             this.cancel();
                             this.getList();
+                        } else {
+                            console.log(change.msg)
                         }
                     })
             } else if (this.thisNewFun == false && this.thisChangeUserFun == false && this.thisChangePassWord == true) {

@@ -189,6 +189,7 @@
             <button @click="openChangePassWordView" class="list_button">修改密码</button>
           </div>
         </div>
+        <div style="position: absolute;bottom:3px;width:100%;text-align:center;color:rgb(35, 78, 147);font-size:12px;">当前用户:{{nowUser}}</div>
       </div>
       <div class="content" style="overflow-y:hidden;overflow-x: hidden; ">
         <!-- <div class="patientList" :class="{animationClassNone:showData,animationClassShow:showDataTwo}"> -->
@@ -430,9 +431,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                                                                                                                                <div class="in_con">
-                                                                                                                                  {{patientInfo.QIEKOU_NUMBER}}
-                                                                                                                                </div> -->
+                                                                                                                                  <div class="in_con">
+                                                                                                                                    {{patientInfo.QIEKOU_NUMBER}}
+                                                                                                                                  </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -615,6 +616,7 @@ let LODOP
 export default {
   data() {
     return {
+      nowUser:'',
       showFormView: false, //显示几张单子按钮
       printed: false,
       isPrint: false,
@@ -2534,6 +2536,7 @@ export default {
 
   },
   mounted() {
+    this.nowUser = this.config.loginName;
     if (window.ipc) {
       this.electronListener();
     }
@@ -2696,6 +2699,7 @@ export default {
   height: 100%;
   background: rgb(142, 193, 238);
   min-width: 175px;
+  position: relative;
 }
 
 .content {
@@ -3052,6 +3056,7 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
 
 
 

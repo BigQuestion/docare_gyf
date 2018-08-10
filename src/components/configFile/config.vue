@@ -1,6 +1,7 @@
 <script type="text/javascript">
 const userId = "";
 const userInfo = "";
+const loginName = '';//登陆用户昵称
 const isPrintedView = false; //是否在打印预览
 const pageTotal = 1; //总页数
 const pagePercentNum = 1; //当前页
@@ -19,6 +20,7 @@ const timeSet = 6000000; //表格数据定时刷新时间 ms
 export default {
   userId,
   userInfo,
+  loginName,
   isPrintedView,
   pageTotal,
   pagePercentNum,
