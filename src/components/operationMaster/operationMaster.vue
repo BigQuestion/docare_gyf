@@ -143,7 +143,7 @@
             <div class="active_back" @click="concealmentOne"><img :class="{transform:isTransformOne}" src="../../assets/bottom.png"></div>
           </div>
           <div v-if="concealmentOneData" style="padding:5px;display:flex;flex-wrap:wrap;">
-            <button class="list_button">检查信息</button>
+            <button @click="openCheckInfoView" class="list_button">检查信息</button>
             <button class="list_button">检查结果</button>
             <button class="list_button">医嘱信息</button>
             <button class="list_button">病例病程</button>
@@ -506,6 +506,8 @@
     <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView" v-on:submitSave="submitPatientInfo" v-on:turnToSetting="toSetting"></patientOperationInfo>
     <operationRegister @refreshTime="timeChangeBus()" v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
+    <!-- 检验信息 -->
+    <checkInfo v-if="checkInfoView" v-on:closeView="closeCheckInfoView"></checkInfo>
     <!-- 密码修改 -->
     <div class="dictionaries" v-if="changePassWord">
       <changePassWord @closeChangePassWordView="closeChangePassWordView"></changePassWord>
@@ -612,10 +614,12 @@ import dateTime from '@/components/plugins/dateTime.vue';
 import html2canvas from 'html2canvas'
 import { Canvas2Image } from '@/assets/js/canvas2image';
 import changePassWord from '@/components/operationMaster/changePassWord.vue';
+import checkInfo from '@/components/checkInfo/checkInfo.vue';
 let LODOP
 export default {
   data() {
     return {
+      checkInfoView: false, //显示检验信息窗口
       showFormView: false, //显示几张单子按钮
       printed: false,
       isPrint: false,
@@ -2549,6 +2553,13 @@ export default {
     openChangePassWordView() {
       this.changePassWord = true;
     },
+    //打开检验信息窗口
+    openCheckInfoView() {
+      this.checkInfoView = true
+    },
+    closeCheckInfoView() {
+      this.checkInfoView = false
+    },
 
   },
   mounted() {
@@ -2610,6 +2621,7 @@ export default {
     myDatepicker,
     dateTime,
     changePassWord,
+    checkInfo,
 
   },
 }
@@ -3085,6 +3097,12 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
+
+
+
+
+
+
 
 
 
