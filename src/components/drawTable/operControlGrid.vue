@@ -13,10 +13,10 @@
         </g>
         <g v-for="(item,index1) in dataPathArray" style="z-index: 22">
           <!-- <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
-                                              <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '89'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-                                                <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-                                                <ellipse stroke="#000" ry="3pt" rx="3pt" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
-                                              </g> -->
+                                                <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '89'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+                                                  <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+                                                  <ellipse stroke="#000" ry="3pt" rx="3pt" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
+                                                </g> -->
           <!-- 中心静脉压 CODE:71 △ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '71'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="SpringGreen" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '71'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
@@ -41,21 +41,17 @@
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
           </g>
-          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'zzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'zzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
-          </g>
-          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'fzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'fzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
-          </g>
           <!-- ~ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'kzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'kzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <path stroke="magenta" id="svg_1" d="m-5.75,-2.75c0,0 4.705594,4.705594 4.567194,4.567194c0.1384,0.1384 4.290395,-4.013595 4.151995,-4.428795c0.002306,0.274494 4.807215,5.084015 4.705594,4.705594" opacity="0.5" stroke-width="1.5" fill="#fff" />
+          </g>
+          <!-- A -->
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'fzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
+          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'fzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)">
+            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+            <text stroke="#000" transform="matrix(0.4555555820465088,0,0,0.4555555820465088,0,0) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="22" id="svg_1" y="8" x="1" stroke-width="0" fill="magenta">A</text>
           </g>
           <!-- 体温 CODE:100 X -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '100'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="red" stroke-width="1.5"></line>
@@ -77,22 +73,22 @@
           </g>
           <!-- ETCO2 CODE:112 △ -->
           <!-- <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '112'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '112'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="blue" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
-          </g> -->
+            <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '112'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+              <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+              <path stroke="blue" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            </g> -->
           <!-- Sp02 CODE:188 ● -->
           <!-- <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '188'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '188'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <circle class="opercontrol" r="3" fill="blue"></circle>
-          </g> -->
+            <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '188'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+              <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+              <circle class="opercontrol" r="3" fill="blue"></circle>
+            </g> -->
           <!-- f CODE:202 △ 暂无此代码颜色-->
           <!-- <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '202'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '202'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
-          </g> -->
+            <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '202'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+              <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+              <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            </g> -->
           <!-- Ppeak CODE:208 △ 暂无此代码颜色-->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '208'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '208'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
@@ -113,10 +109,10 @@
           </g>
           <!-- TVE CODE:212 △ 暂无此代码颜色-->
           <!-- <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '212'" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="blue" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '212'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
-          </g> -->
+            <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '212'" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+              <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+              <path stroke="#000" d="m-3.3,2.49836l3.256205,-5.698359l3.256205,5.698359l-6.512411,0z" fill-opacity="null" stroke-opacity="null" fill="none" />
+            </g> -->
           <!-- 心率 CODE:40 ● -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '40'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="SeaGreen" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == '40'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
@@ -172,6 +168,8 @@
       <!-- <text stroke="null" transform="matrix(0.44269931316375727,0,0,0.44269931316375727,164.78615606576204,120.13502615876496) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_34" y="-260.674143" x="-380.226641" fill-opacity="null" stroke-opacity="null" stroke-width="0" fill="#000000">X</text> -->
       <!-- ~ -->
       <!-- <path stroke="#000" id="svg_1" d="m0.75,0.75c0,0 4.705594,4.705594 4.567194,4.567194c0.1384,0.1384 4.290395,-4.013595 4.151995,-4.428795c0.002306,0.274494 4.807215,5.084015 4.705594,4.705594" transform="rotate(-180)" opacity="0.5" stroke-width="1.5" fill="#fff"/> -->
+      <!-- A -->
+      <!-- <text stroke="#000" transform="matrix(0.5555555820465088,0,0,0.5555555820465088,0,0) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_1" y="22" x="1" stroke-width="0" fill="#000000">A</text> -->
       <div v-for="(data,index1) in spo2List">
         <div v-if="index2%2==0&&item.x<700&&item.value>0&&item.x>0" v-for="(item,index2) in data.dataList" style="position: absolute;top: 0px;color: blue;font-size:12px;" :style="{left:item.x+'px',top:index1*14+'px'}">
           {{item.value}}
@@ -285,14 +283,14 @@ export default {
       //构造器会将数据集中的每一个数据传入访问器函数，并使用其返回值作为 x坐标或y坐标：
       const dataone = d3.line()
         .x(
-          (data) => {
-            return data.x
-          }
+        (data) => {
+          return data.x
+        }
         )
         .y(
-          (data) => {
-            return data.y
-          }
+        (data) => {
+          return data.y
+        }
         );
       for (var i = 0; i < this.pathArray.length; i++) {
         dataone(this.pathArray[i])
@@ -365,20 +363,20 @@ export default {
 
       this.api.getSignName(params)
         .then(
-          res => {
-            // for (var i = 0; i < res.length; i++) {
-            //   res[i].itemValue = " ";
-            // }
-            if (res.length > 0) {
-              this.signNameLisg = res;
-              this.getSignTimeData();
-            } else {
-              this.signNameLisg = []
-              this.dataPathArray = []
-            }
+        res => {
+          // for (var i = 0; i < res.length; i++) {
+          //   res[i].itemValue = " ";
+          // }
+          if (res.length > 0) {
+            this.signNameLisg = res;
+            this.getSignTimeData();
+          } else {
+            this.signNameLisg = []
+            this.dataPathArray = []
+          }
 
-            // this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
-          })
+          // this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
+        })
     },
     getSignTimeData() {
       let param = {
@@ -389,29 +387,29 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(param)
         .then(
-          res => {
-            let list = res.list
-            this.breathData = list
-            let params = {
-              patientId: this.config.userInfo.patientId,
-              operId: this.config.userInfo.operId,
-              visitId: this.config.userInfo.visitId,
-              eventNo: 0
-            }
+        res => {
+          let list = res.list
+          this.breathData = list
+          let params = {
+            patientId: this.config.userInfo.patientId,
+            operId: this.config.userInfo.operId,
+            visitId: this.config.userInfo.visitId,
+            eventNo: 0
+          }
 
-            this.api.getNewTimeData(params)
-              .then(res => {
-                if (res.length > 0) {
-                  res.sort(function(a, b) {
-                    return Date.parse(a.time) - Date.parse(b.time); //时间正序
-                  });
-                  this.dataOperFun(res);
-                } else {
-                  this.dataPathArray = []
-                }
+          this.api.getNewTimeData(params)
+            .then(res => {
+              if (res.length > 0) {
+                res.sort(function(a, b) {
+                  return Date.parse(a.time) - Date.parse(b.time); //时间正序
+                });
+                this.dataOperFun(res);
+              } else {
+                this.dataPathArray = []
+              }
 
-              })
-          });
+            })
+        });
     },
 
     //计算时间差分钟
@@ -784,6 +782,5 @@ export default {
 
 </script>
 <style scoped>
-
 
 </style>
