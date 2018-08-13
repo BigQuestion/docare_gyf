@@ -135,7 +135,7 @@
     </div>
     <div class="down">
       <div class="left" style="overflow-y: auto;">
-        <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
+        <div v-if="lockedPatientInfo.patientId" style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
           <div class="stretch">
             <div style="display:flex;">
               <img style="height:21px;padding-right:3px;" src="../../assets/icon_1.png" alt=""> 电子病历
@@ -143,10 +143,10 @@
             <div class="active_back" @click="concealmentOne"><img :class="{transform:isTransformOne}" src="../../assets/bottom.png"></div>
           </div>
           <div v-if="concealmentOneData" style="padding:5px;display:flex;flex-wrap:wrap;">
-            <button @click="openCheckInfoView" class="list_button">检查信息</button>
-            <button class="list_button">检查结果</button>
-            <button class="list_button">医嘱信息</button>
-            <button class="list_button">病例病程</button>
+            <button v-if="lockedPatientInfo.patientId" @click="openCheckInfoView" class="list_button">检查信息</button>
+            <button v-if="lockedPatientInfo.patientId" @click="openMedical" class="list_button">检查结果</button>
+            <!-- <button v-if="lockedPatientInfo.patientId" class="list_button">医嘱信息</button>
+            <button v-if="lockedPatientInfo.patientId" class="list_button">病例病程</button> -->
           </div>
         </div>
         <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;" v-if="lockedPatientInfo.patientId">
@@ -159,7 +159,7 @@
           <div v-if="concealmentTweData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
             <button v-if="formDetail" class="list_button" @click="getOperationRegister">术中登记</button>
-            <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button>
+            <!-- <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button> -->
             <button @click="cancel" class="list_button">取消手术</button>
           </div>
         </div>
@@ -189,6 +189,7 @@
             <button @click="openChangePassWordView" class="list_button">修改密码</button>
           </div>
         </div>
+        <div style="position: absolute;bottom:3px;width:100%;text-align:center;color:rgb(35, 78, 147);font-size:12px;">当前用户:{{nowUser}}</div>
       </div>
       <div class="content" style="overflow-y:hidden;overflow-x: hidden; ">
         <!-- <div class="patientList" :class="{animationClassNone:showData,animationClassShow:showDataTwo}"> -->
@@ -430,9 +431,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                                                                                                                                <div class="in_con">
-                                                                                                                                  {{patientInfo.QIEKOU_NUMBER}}
-                                                                                                                                </div> -->
+                                                                                                                                  <div class="in_con">
+                                                                                                                                    {{patientInfo.QIEKOU_NUMBER}}
+                                                                                                                                  </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -620,6 +621,7 @@ export default {
   data() {
     return {
       checkInfoView: false, //显示检验信息窗口
+      nowUser: '',
       showFormView: false, //显示几张单子按钮
       printed: false,
       isPrint: false,
@@ -2560,9 +2562,17 @@ export default {
     closeCheckInfoView() {
       this.checkInfoView = false
     },
+    //检查结果
+    openMedical() {
+      console.log(this.config.userInfo)
+      if (window.ipc) {
+        window.ipc.send('openMedical', this.config.userInfo.inpNo);
+      }
+    },
 
   },
   mounted() {
+    this.nowUser = this.config.loginName;
     if (window.ipc) {
       this.electronListener();
     }
@@ -2741,6 +2751,7 @@ export default {
   height: 100%;
   background: rgb(142, 193, 238);
   min-width: 175px;
+  position: relative;
 }
 
 .content {
@@ -3097,27 +3108,5 @@ export default {
 .loading span:nth-child(5) {
   -webkit-animation-delay: 0.65s;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*::-webkit-datetime-edit-year-field {
-  display: none;
-}*/
 
 </style>

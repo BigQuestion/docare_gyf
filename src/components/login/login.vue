@@ -62,6 +62,20 @@ export default {
     }
   },
   methods: {
+    // 获取用户信息列表
+    getList() {
+      this.api.medUsersList()
+        .then(res => {
+          for (var a = 0; a <  res.list.length; a++) {
+            if(this.loginName == res.list[a].loginName){
+              this.config.loginName = res.list[a].userName;
+            }
+          }
+          this.$router.push({
+            path: 'menu'
+          })
+        })
+    },
     showItem() {
       debugger
       console.log(this.arr);
@@ -100,9 +114,7 @@ export default {
         .then(res => {
           if (res.success) {
             this.config.userId = this.loginName
-            this.$router.push({
-              path: 'menu'
-            })
+            this.getList();
           } else {
             alert(res.msg)
           }
@@ -141,7 +153,7 @@ export default {
     runexe() {
       window.ipc.send('runexe')
     },
-    nextInput(){
+    nextInput() {
       this.$refs.inputNext.focus();
     }
 

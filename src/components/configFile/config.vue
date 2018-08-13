@@ -1,6 +1,7 @@
 <script type="text/javascript">
 const userId = "admin";
 const userInfo = "";
+const loginName = '';//登陆用户昵称
 const isPrintedView = false; //是否在打印预览
 const pageTotal = 1; //总页数
 const pagePercentNum = 1; //当前页
@@ -20,6 +21,7 @@ const roomId = ''; //定义手术间
 export default {
   userId,
   userInfo,
+  loginName,
   isPrintedView,
   pageTotal,
   pagePercentNum,

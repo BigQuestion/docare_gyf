@@ -1,6 +1,6 @@
 import axios from 'axios'
-// axios.defaults.baseURL = 'http://182.61.36.247:8080';
-axios.defaults.baseURL = 'http://111.111.111.156:8080';
+axios.defaults.baseURL = 'http://182.61.36.247:8080';
+// axios.defaults.baseURL = 'http://111.111.111.156:8080';
 axios.defaults.baseURL = 'http://localhost:8088';
 
 
@@ -829,6 +829,14 @@ export default {
    */
   updateUserPassword(params, config) {
     return fetch('medicalsystem/rest/medUsers/updateUserPassword', params)
+  },
+
+  /**
+   * 获取用户检验信息
+   * 
+   */
+  getMedLabTestMasterList(params, config) {
+    return fetch('medicalsystem/rest/medLab/getMedLabTestMasterList', params)
   },
 
 
