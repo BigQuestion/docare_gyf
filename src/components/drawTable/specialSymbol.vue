@@ -1,15 +1,15 @@
 <template>
   <div>
     <!-- <p style="color:SeaGreen">●心率</p>
-                                        <p style="color:DarkGreen">●PULSE</p>
-                                        <p style="color:red">∨收缩压</p>
-                                        <p style="color:red">∧舒张压</p>
-                                        <p style="color:pink">○自主呼吸</p>
-                                        <p style="color:SpringGreen">△中心静脉压</p>
-                                        <p style="color:DarkGreen">X麻醉开始</p>
-                                        <p style="color:DarkGreen">⊙手术开始</p>
-                                        <p style="color:red">X手术结束</p>
-                                        <p style="color:red">ⓧ麻醉结束</p> -->
+                                              <p style="color:DarkGreen">●PULSE</p>
+                                              <p style="color:red">∨收缩压</p>
+                                              <p style="color:red">∧舒张压</p>
+                                              <p style="color:pink">○自主呼吸</p>
+                                              <p style="color:SpringGreen">△中心静脉压</p>
+                                              <p style="color:DarkGreen">X麻醉开始</p>
+                                              <p style="color:DarkGreen">⊙手术开始</p>
+                                              <p style="color:red">X手术结束</p>
+                                              <p style="color:red">ⓧ麻醉结束</p> -->
     <div v-for="item in eventTypeList" :style="{fontSize:object.fontSize*0.75+'pt'}">
       <p v-if="item == 71" style="color:Crimson">△中心静脉压</p>
       <p v-else-if="item == 89" style="color:Blue">∨无创收缩压</p>
@@ -43,6 +43,8 @@
         </svg>
         控制呼吸
       </p>
+      <p v-else-if="item == 'fzhx'" style="display:flex;align-items:center;color:magenta;">A辅助呼吸</p>
+      <p v-else-if="item == 'zzhx'" style="display:flex;align-items:center;color:magenta;">○自主呼吸</p>
     </div>
   </div>
   </div>
@@ -90,8 +92,7 @@ export default {
       if (this.config.userInfo.endDateTime) {
         this.eventTypeList.push('手术结束')
       }
-      // 控制呼吸
-      // 控制呼吸
+      // 全部呼吸
       let paramBr = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
@@ -102,7 +103,21 @@ export default {
         .then(add => {
           console.log(add.list)
           if (add.list.length > 0) {
-            this.eventTypeList.push('kzhx')
+            for (var m = 0; m < add.list.length; m++) {
+              this.eventTypeList.push(add.list[m].ITEM_CODE)
+            }
+            this.eventTypeList.sort(this.sortFun);
+            for (var k = 0; k < this.eventTypeList.length; k++) {
+              if (this.eventTypeList[k - 1]) {
+                if (this.eventTypeList[k] == this.eventTypeList[k - 1]) {
+                  this.eventTypeList.splice(k,1);
+                } else {
+                  
+                }
+              } else {
+
+              }
+            }
           }
         })
     }
