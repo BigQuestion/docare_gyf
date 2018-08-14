@@ -588,7 +588,7 @@ export default {
                 this.firstmonitor();
                 this.cancelData = '';
                 this.thisOnchange = false;
-                window.ipc.send('runexe', nameMonitorOne);
+                // window.ipc.send('runexe', nameMonitorOne);
               }
             }
           )
@@ -606,7 +606,7 @@ export default {
                 this.dataInAnesthesia();
                 this.cancelDataTwo = '';
                 this.thisOnchange = false;
-                window.ipc.send('runmzexe', nameMonitorTwo);
+                // window.ipc.send('runmzexe', nameMonitorTwo);
               }
             }
           )
@@ -706,7 +706,7 @@ export default {
                         this.dataInAnesthesia();
                         this.cancelDataTwo = '';
                         this.thisOnchange = false;
-                        window.ipc.send('runmzexe', nameMonitorTwo);
+                        // window.ipc.send('runmzexe', nameMonitorTwo);
                       }
                     }
                   )
