@@ -839,5 +839,13 @@ export default {
     return fetch('medicalsystem/rest/medLab/getMedLabTestMasterList', params)
   },
 
+  /**
+   * 修改手术主表信息
+   * 
+   */
+  updateMedOperationMaster(params, config) {
+    return fetch('medicalsystem/rest/medOperationMaster/updateMedOperationMaster', params)
+  },
+
 
 }

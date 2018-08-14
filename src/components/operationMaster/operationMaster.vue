@@ -143,7 +143,7 @@
             <div class="active_back" @click="concealmentOne"><img :class="{transform:isTransformOne}" src="../../assets/bottom.png"></div>
           </div>
           <div v-if="concealmentOneData" style="padding:5px;display:flex;flex-wrap:wrap;">
-            <button v-if="lockedPatientInfo.patientId" @click="openCheckInfoView" class="list_button">检查信息</button>
+            <!-- <button v-if="lockedPatientInfo.patientId" @click="openCheckInfoView" class="list_button">检查信息</button> -->
             <button v-if="lockedPatientInfo.patientId" @click="openMedical" class="list_button">检查结果</button>
             <!-- <button v-if="lockedPatientInfo.patientId" class="list_button">医嘱信息</button>
             <button v-if="lockedPatientInfo.patientId" class="list_button">病例病程</button> -->
@@ -157,6 +157,7 @@
             <div class="active_back" @click="concealmentTwe"><img :class="{transform:isTransformTwe}" src="../../assets/bottom.png"></div>
           </div>
           <div v-if="concealmentTweData" style="padding:5px;display:flex;flex-wrap:wrap;">
+            <button class="list_button" @click="monitor">手术间修改</button>
             <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
             <button v-if="formDetail" class="list_button" @click="getOperationRegister">术中登记</button>
             <!-- <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button> -->
