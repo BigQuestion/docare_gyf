@@ -456,6 +456,7 @@ export default {
         }
       }
       for (var i = 0; i < dest.length; i++) {
+        isData = false;
         //判断整个数据里面是否有体征呼吸数据
         if (dest[i].itemCode == 92) {
           isData = true

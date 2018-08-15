@@ -302,11 +302,13 @@ export default {
     },
     //保存
     submitJzInfo() {
+      if (!this.roomMasterNo) {
+        alert("请选择手术间")
+        return
+      }
       let params = {
         patientId: this.jzInfo.patientId,
         visitId: this.jzInfo.visitId,
-        // patientId: '123',
-        // visitId: '1',
         deptStayed: this.jzInfo.deptCode,
         diagBeforeOperation: this.jzInfo.diagBeforeOperation,
         bedNo: this.jzInfo.bedNo,
@@ -337,7 +339,14 @@ export default {
       }
       this.api.insertEmergencyWrite(params)
         .then(res => {
-          this.$emit('closeJzViewChild');
+          if (res.success) {
+            alert("操作成功");
+            this.$emit('closeJzViewChild');
+          } else {
+            alert("登记失败")
+          }
+
+
         })
     },
     getUsers() {
