@@ -1986,13 +1986,6 @@ export default {
                 }
                 )
             } else {
-              console.log(status)
-              // console.log(this.anesStartTime)
-              // console.log(this.startDateTime)
-              console.log(this.endDateTime)
-              // console.log(this.anesEndTime)
-              // console.log(this.anesEndTime)
-              // console.log(this.outDateTime)
               if (status == 5 && this.anesStartTime == '') {
                 this.inDateTime = '';
               } else if (status == 10 && this.startDateTime == '') {
@@ -2014,13 +2007,6 @@ export default {
 
           });
       } else {
-        console.log(status)
-        // console.log(this.anesStartTime)
-        // console.log(this.startDateTime)
-        console.log(this.endDateTime)
-        console.log(this.anesEndTime)
-        // console.log(this.anesEndTime)
-        // console.log(this.outDateTime)
         if (status == 5 && this.anesStartTime == '') {
           this.inDateTime = '';
         } else if (status == 10 && this.startDateTime == '') {
