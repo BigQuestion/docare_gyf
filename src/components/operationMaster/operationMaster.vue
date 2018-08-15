@@ -506,6 +506,8 @@
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
     <!-- 检验信息 -->
     <checkInfo v-if="checkInfoView" v-on:closeView="closeCheckInfoView"></checkInfo>
+    <!-- 检验结果 -->
+    <checkResult v-if="checkResultShow" v-on:closeView="closeCheckInfoShow"></checkResult>
     <!-- 密码修改 -->
     <div class="dictionaries" v-if="changePassWord">
       <changePassWord @closeChangePassWordView="closeChangePassWordView"></changePassWord>
@@ -618,11 +620,13 @@ import { Canvas2Image } from '@/assets/js/canvas2image';
 import changePassWord from '@/components/operationMaster/changePassWord.vue';
 import checkInfo from '@/components/checkInfo/checkInfo.vue';
 import changeRoom from '@/components/operationMaster/changeRoom.vue';
+import checkResult from '@/components/checkInfo/checkResult.vue';
 let LODOP
 export default {
   data() {
     return {
       checkInfoView: false, //显示检验信息窗口
+      checkResultShow: false,
       nowUser: '',
       showFormView: false, //显示几张单子按钮
       printed: false,
@@ -2005,6 +2009,21 @@ export default {
 
             });
       } else {
+        if (status == 5 && this.anesStartTime == '') {
+          this.inDateTime = '';
+        } else if (status == 10 && this.startDateTime == '') {
+          this.anesStartTime = '';
+        } else if (status == 15 && this.endDateTime == '') {
+          this.startDateTime = '';
+        } else if (status == 25 && this.anesEndTime == '') {
+          this.endDateTime = '';
+          console.log(this.endDateTime)
+        } else if (status == 30 && this.outDateTime == '') {
+          this.anesEndTime = '';
+        } else if (status == 35) {
+          this.outDateTime = '';
+        }
+
         alert('当前时间不能小于之前时间！')
       }
 
@@ -2588,6 +2607,7 @@ export default {
     },
     //检查结果
     openMedical() {
+      this.checkResultShow = true;
       console.log(this.config.userInfo)
       if (window.ipc) {
         window.ipc.send('openMedical', this.config.userInfo.inpNo);
@@ -2599,6 +2619,9 @@ export default {
     },
     closeChangeRoom() {
       this.changeRoomView = false
+    },
+    closeCheckInfoShow() {
+      this.checkResultShow = false;
     },
 
   },
@@ -2664,7 +2687,7 @@ export default {
     changePassWord,
     checkInfo,
     changeRoom,
-
+    checkResult,
   },
 }
 
