@@ -47,23 +47,30 @@ export default {
       // this.$refs.inSelect.focus()
 
       this.nameView = true;
+
       let params = {
         tableName: this.conInfo.dictTableName,
         dictSelect: this.conInfo.dictSelect,
         coluName: this.conInfo.dictField,
         dictShowFiled: this.conInfo.dictShowFiled, //字典显示字段名称
       }
-      this.api.allColumContext(params)
+      this.api.getColumContext(params)
         .then(res => {
           document.getElementById("inSelect").focus()
           this.medAnaesthesiaDictList = res;
-          this.allList = res;
+          // this.allList = res;
         })
-      this.api.allColumContext(params)
-        .then(res => {
-          this.allList = res;
+      if (this.conInfo.dictTableName == "MED_DIAGNOSIS_DICT") {
+        this.allList = this.config.allDiagnosis
+      } else if (this.conInfo.dictTableName == "MED_OPERATION_DICT") {
+        this.allList = this.config.allOperList
+      } else {
+        this.api.allColumContext(params)
+          .then(res => {
+            this.allList = res;
+          })
+      }
 
-        })
     },
     getSelected(item) {
       if (this.conInfo.dictShowFiled != '' && this.conInfo.dictShowFiled != null) {

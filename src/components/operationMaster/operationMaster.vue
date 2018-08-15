@@ -143,9 +143,9 @@
             <div class="active_back" @click="concealmentOne"><img :class="{transform:isTransformOne}" src="../../assets/bottom.png"></div>
           </div>
           <div v-if="concealmentOneData" style="padding:5px;display:flex;flex-wrap:wrap;">
-            <button v-if="lockedPatientInfo.patientId" @click="openCheckInfoView" class="list_button">检查信息</button>
+            <!-- <button v-if="lockedPatientInfo.patientId" @click="openCheckInfoView" class="list_button">检查信息</button> -->
             <button v-if="lockedPatientInfo.patientId" @click="openMedical" class="list_button">检查结果</button>
-            <button v-if="lockedPatientInfo.patientId" class="list_button">医嘱信息</button>
+            <!-- <button v-if="lockedPatientInfo.patientId" class="list_button">医嘱信息</button> -->
             <!-- <button v-if="lockedPatientInfo.patientId" class="list_button">病例病程</button> -->
           </div>
         </div>
@@ -851,21 +851,24 @@ export default {
     //打印插件初始化
     lodopInit() {
       LODOP = getLodop();
-      LODOP.SET_PRINT_PAGESIZE(0, "182mm", "270mm", "")
-      var _this = this;
-      if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
+      if (LODOP) {
+        LODOP.SET_PRINT_PAGESIZE(0, "182mm", "270mm", "")
+        var _this = this;
+        if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
 
-        //不在打印预览界面
-        if (Value) {
-          _this.printLoading = false;
-          _this.toChangePage(0);
-          if (window.ipc) {
-            window.ipc.send('deleteImages', "delete");
+          //不在打印预览界面
+          if (Value) {
+            _this.printLoading = false;
+            _this.toChangePage(0);
+            if (window.ipc) {
+              window.ipc.send('deleteImages', "delete");
+            }
+
           }
 
-        }
+        };
+      }
 
-      };
     },
     removeTempDom() {
       this.contentImageBox.removeChild(this.imageBox);
@@ -2623,6 +2626,25 @@ export default {
     closeCheckInfoShow() {
       this.checkResultShow = false;
     },
+    //预先加载所有手术名称以及诊断
+    loadAllOper() {
+      let params = {
+        tableName: "med_operation_dict",
+        dictShowFiled: "OPERATION_NAME", //字典显示字段名称
+      }
+      this.api.allColumContext(params)
+        .then(res => {
+          this.config.allOperList = res;
+        })
+      let params1 = {
+        tableName: "MED_DIAGNOSIS_DICT",
+        dictShowFiled: "DIAGNOSIS_NAME", //字典显示字段名称
+      }
+      this.api.allColumContext(params1)
+        .then(rest => {
+          this.config.allDiagnosis = rest;
+        })
+    },
 
   },
   mounted() {
@@ -2650,7 +2672,7 @@ export default {
     }
 
     this.getOperaRooms();
-
+    this.loadAllOper();
     this.setIntervaled();
     this.selectMedFormList();
     this.getHeight();
