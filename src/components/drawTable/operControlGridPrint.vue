@@ -41,19 +41,15 @@
           </g>
           <!-- ~ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'kzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'kzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mousedown.stop="itemMouseDown($event,cir,index1,index2)" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'kzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <path stroke="magenta" id="svg_1" d="m-5.75,-2.75c0,0 4.705594,4.705594 4.567194,4.567194c0.1384,0.1384 4.290395,-4.013595 4.151995,-4.428795c0.002306,0.274494 4.807215,5.084015 4.705594,4.705594" opacity="0.5" stroke-width="1.5" fill="#fff" />
           </g>
-          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'zzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'zzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
-            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
-          </g>
+          <!-- A -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'fzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
-          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'fzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'fzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)">
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
-            <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
+            <text stroke="#000" transform="matrix(0.4555555820465088,0,0,0.4555555820465088,0,0) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="22" id="svg_1" y="8" x="1" stroke-width="0" fill="magenta">A</text>
           </g>
           <!-- 肝温 CODE:104 X -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == '104'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="rgb(128,128,255)" stroke-width="1.5"></line>

@@ -66,8 +66,8 @@ export default {
     getList() {
       this.api.medUsersList()
         .then(res => {
-          for (var a = 0; a <  res.list.length; a++) {
-            if(this.loginName == res.list[a].loginName){
+          for (var a = 0; a < res.list.length; a++) {
+            if (this.loginName == res.list[a].loginName) {
               this.config.loginName = res.list[a].userName;
             }
           }
@@ -76,20 +76,10 @@ export default {
           })
         })
     },
-    showItem() {
-      debugger
-      console.log(this.arr);
-      // console.log(this.item.Format('yyyy-MM-dd hh:mm'))
-    },
     getValue(obj) {
       this.$set(this.arr, obj.index, obj.value)
-      console.log(this.timeTest + "---1")
     },
-    getValue2(value) {
-      debugger
-      console.log(value)
-      console.log(this.timeTest + "---2")
-    },
+    getValue2(value) {},
     doSql() {
       let params = {
         sql: this.sql
@@ -114,7 +104,10 @@ export default {
         .then(res => {
           if (res.success) {
             this.config.userId = this.loginName
-            this.getList();
+            this.config.loginName = res.obj.userName
+            this.$router.push({
+              path: 'menu'
+            })
           } else {
             alert(res.msg)
           }
@@ -202,4 +195,5 @@ export default {
 .timePicker::-webkit-inner-spin-button {
   display: none;
 }
+
 </style>
