@@ -432,9 +432,9 @@
                 <div class="in_con100">{{patientInfo.ANESTHESIA_ASSISTANT_NAME}}</div>
                 <div class="in_con100">{{patientInfo.THIRD_ANESTHESIA_DOCTOR_NAME}}</div>
                 <!--  <div class="left30">灌注医师</div>
-                                                                                                                                                    <div class="in_con">
-                                                                                                                                                      {{patientInfo.QIEKOU_NUMBER}}
-                                                                                                                                                    </div> -->
+                                                                                                                                                              <div class="in_con">
+                                                                                                                                                                {{patientInfo.QIEKOU_NUMBER}}
+                                                                                                                                                              </div> -->
               </div>
               <div class="container">
                 <div>手术医师</div>
@@ -510,6 +510,8 @@
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
     <!-- 检验信息 -->
     <checkInfo v-if="checkInfoView" v-on:closeView="closeCheckInfoView"></checkInfo>
+    <!-- 检验结果 -->
+    <checkResult v-if="checkResultShow" v-on:closeView="closeCheckInfoShow"></checkResult>
     <!-- 密码修改 -->
     <div class="dictionaries" v-if="changePassWord">
       <changePassWord @closeChangePassWordView="closeChangePassWordView"></changePassWord>
@@ -617,11 +619,13 @@ import html2canvas from 'html2canvas'
 import { Canvas2Image } from '@/assets/js/canvas2image';
 import changePassWord from '@/components/operationMaster/changePassWord.vue';
 import checkInfo from '@/components/checkInfo/checkInfo.vue';
+import checkResult from '@/components/checkInfo/checkResult.vue';
 let LODOP
 export default {
   data() {
     return {
       checkInfoView: false, //显示检验信息窗口
+      checkResultShow: false,
       nowUser: '',
       showFormView: false, //显示几张单子按钮
       printed: false,
@@ -1982,6 +1986,13 @@ export default {
                 }
                 )
             } else {
+              console.log(status)
+              // console.log(this.anesStartTime)
+              // console.log(this.startDateTime)
+              console.log(this.endDateTime)
+              // console.log(this.anesEndTime)
+              // console.log(this.anesEndTime)
+              // console.log(this.outDateTime)
               if (status == 5 && this.anesStartTime == '') {
                 this.inDateTime = '';
               } else if (status == 10 && this.startDateTime == '') {
@@ -2003,6 +2014,28 @@ export default {
 
           });
       } else {
+        console.log(status)
+        // console.log(this.anesStartTime)
+        // console.log(this.startDateTime)
+        console.log(this.endDateTime)
+        console.log(this.anesEndTime)
+        // console.log(this.anesEndTime)
+        // console.log(this.outDateTime)
+        if (status == 5 && this.anesStartTime == '') {
+          this.inDateTime = '';
+        } else if (status == 10 && this.startDateTime == '') {
+          this.anesStartTime = '';
+        } else if (status == 15 && this.endDateTime == '') {
+          this.startDateTime = '';
+        } else if (status == 25 && this.anesEndTime == '') {
+          this.endDateTime = '';
+          console.log(this.endDateTime)
+        } else if (status == 30 && this.outDateTime == '') {
+          this.anesEndTime = '';
+        } else if (status == 35) {
+          this.outDateTime = '';
+        }
+        
         alert('当前时间不能小于之前时间！')
       }
 
@@ -2586,10 +2619,14 @@ export default {
     },
     //检查结果
     openMedical() {
+      this.checkResultShow = true;
       console.log(this.config.userInfo)
       if (window.ipc) {
         window.ipc.send('openMedical', this.config.userInfo.inpNo);
       }
+    },
+    closeCheckInfoShow() {
+      this.checkResultShow = false;
     },
 
   },
@@ -2654,7 +2691,7 @@ export default {
     dateTime,
     changePassWord,
     checkInfo,
-
+    checkResult,
   },
 }
 
