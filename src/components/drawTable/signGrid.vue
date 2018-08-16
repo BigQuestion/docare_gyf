@@ -89,6 +89,7 @@ export default {
       this.api.selectSignMedAnesthesiaEventList(params)
         .then(
         res => {
+          console.log(res.list)
           this.config.OperatingData = res.list;
           for (var i = 0; i < res.list.length; i++) {
             var time = new Date(res.list[i].START_TIME).getTime();
@@ -152,33 +153,25 @@ export default {
               }
               this.api.selectMedAnesthesiaEventList(paramsThree)
                 .then(aff => {
-                  if (aff.list.length > 8) { 
-                    for (var hi = 0; hi < 8; hi++) {
-                      for (var h = 8; h < aff.list.length; h++) {
-                        if (aff.list[hi].ITEM_NAME !== aff.list[h].ITEM_NAME && aff.list[hi].ITEM_CLASS !== aff.list[h].ITEM_CLASS) {
-                          var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
-                          if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
-                            var time9 = timeMoreTwo - this.startTimeInPage
-                            var leftPlace9 = ((time9 * 2.78) / 60 / 1000);
-                            this.dataOfBottom.push({
-                              leftData: leftPlace9
-                            })
-                            dataBodyNew.push({
-                              left: leftPlace9,
-                              bottom: 0,
-                              name: aff.list[h].ITEM_NAME,
-                              time: aff.list[h].START_TIME,
-                            })
-                          }
-                        } else {
-
-                        }
+                  for (var h = 0; h < aff.list.length; h++) {
+                    if (aff.list[h].DURATIVE_INDICATOR == 0) {
+                      var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
+                      if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
+                        var time9 = timeMoreTwo - this.startTimeInPage
+                        var leftPlace9 = ((time9 * 2.78) / 60 / 1000);
+                        this.dataOfBottom.push({
+                          leftData: leftPlace9
+                        })
+                        dataBodyNew.push({
+                          left: leftPlace9,
+                          bottom: 0,
+                          name: aff.list[h].ITEM_NAME,
+                          time: aff.list[h].START_TIME,
+                        })
                       }
-                      break;
                     }
-                  } else {
-
                   }
+
                   if (this.config.userInfo.inDateTime) {
                     var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
                     if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
@@ -291,24 +284,26 @@ export default {
                     visitId: this.config.userInfo.visitId,
                     itemClass: 'Y'
                   }
-                  // this.api.selectMedAnesthesiaEventList(paramBr)
-                    // .then(add => {
-                      // if (add.list.length > 0) {
-                        // var timeBr = new Date(add.list[0].START_TIME).getTime();
-                        // if (this.startTimeInPage <= timeBr && timeBr <= this.maxTimeInPage) {
-                        //   var timekz = timeBr - this.startTimeInPage
-                        //   var leftPlaceBr = ((timekz * 2.78) / 60 / 1000);
-                        //   this.dataOfBottom.push({
-                        //     leftData: leftPlaceBr
-                        //   })
-                        //   dataBodyNew.push({
-                        //     left: leftPlaceBr,
-                        //     bottom: 0,
-                        //     name: '控制呼吸',
-                        //     time: add.list[0].START_TIME,
-                        //   })
-                        // }
-                      // }
+                  this.api.selectMedAnesthesiaEventList(paramBr)
+                    .then(add => {
+                      if (add.list.length > 0) {
+                        for (var h = 0; h < add.list.length; h++) {
+                          var timeBr = new Date(add.list[h].START_TIME).getTime();
+                          if (this.startTimeInPage <= timeBr && timeBr <= this.maxTimeInPage) {
+                            var timekz = timeBr - this.startTimeInPage
+                            var leftPlaceBr = ((timekz * 2.78) / 60 / 1000);
+                            this.dataOfBottom.push({
+                              leftData: leftPlaceBr
+                            })
+                            dataBodyNew.push({
+                              left: leftPlaceBr,
+                              bottom: 0,
+                              name: add.list[h].ITEM_NAME,
+                              time: add.list[h].START_TIME,
+                            })
+                          }
+                        }
+                      }
                       // 筛选重复项，使其往上位移
                       dataBodyNew.sort(this.sortFun);
                       var pei = 0;
@@ -327,11 +322,11 @@ export default {
                       this.dataBody = dataBodyNew;
                       this.lineArray = res.list;
                       // this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
-                    // })
+                      // })
 
+                    })
                 })
-            })
-
+            });
         });
 
     },

@@ -137,37 +137,29 @@ export default {
                 patientId: this.config.userInfo.patientId,
                 operId: this.config.userInfo.operId,
                 visitId: this.config.userInfo.visitId,
-                itemClass: "2C",
+                itemClass: "2C4",
               }
               this.api.selectMedAnesthesiaEventList(paramsTwo)
                 .then(aff => {
-                  if (aff.list.length > 8) {
-                    for (var hi = 0; hi < 8; hi++) {
-                      for (var h = 8; h < aff.list.length; h++) {
-                        if (aff.list[hi].ITEM_NAME !== aff.list[h].ITEM_NAME && aff.list[hi].ITEM_CLASS !== aff.list[h].ITEM_CLASS) {
-                          var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
-                          if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
-                            // var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
-                            var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME, '途径：' + aff.list[h].ADMINISTRATOR, '量：' + aff.list[h].DOSAGE, '单位：' + aff.list[h].DOSAGE_UNITS];
-                            var titleTwo = titleDataTwo.join('\n');
-                            this.dataBody.push({
-                              ITEM_NAME: aff.list[h].ITEM_NAME,
-                              START_TIME: aff.list[h].START_TIME,
-                              titleWord: titleTwo,
-                              sort: timeMoreOne,
-                              DOSAGE: aff.list[h].DOSAGE,
-                              DOSAGE_UNITS: aff.list[h].DOSAGE_UNITS,
-                            });
-                          }
-                        } else {
-
-                        }
-
+                  console.log(aff.list)
+                  for (var h = 0; h < aff.list.length; h++) {
+                    if (aff.list[h].DURATIVE_INDICATOR == 0) {
+                      var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
+                      if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                        // var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
+                        var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME, '途径：' + aff.list[h].ADMINISTRATOR, '量：' + aff.list[h].DOSAGE, '单位：' + aff.list[h].DOSAGE_UNITS];
+                        var titleTwo = titleDataTwo.join('\n');
+                        this.dataBody.push({
+                          ITEM_NAME: aff.list[h].ITEM_NAME,
+                          START_TIME: aff.list[h].START_TIME,
+                          titleWord: titleTwo,
+                          sort: timeMoreOne,
+                          DOSAGE: aff.list[h].DOSAGE,
+                          DOSAGE_UNITS: aff.list[h].DOSAGE_UNITS,
+                        });
                       }
-                      break;
                     }
-
-                  } else { }
+                  }
                   this.dataBody.sort(this.sortFun)
                   // this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
                 });
