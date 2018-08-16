@@ -53,10 +53,11 @@ export default {
         coluName: this.conInfo.dictField,
         dictShowFiled: this.conInfo.dictShowFiled, //字典显示字段名称
       }
-      this.api.getColumContext(params)
+      this.api.allColumContext(params)
         .then(res => {
           document.getElementById("inSelect").focus()
           this.medAnaesthesiaDictList = res;
+          this.allList = res;
         })
       this.api.allColumContext(params)
         .then(res => {
@@ -116,7 +117,7 @@ export default {
     //对于输入拼音简码进行筛选
     serchJm() {
       var list = this.allList;
-      var m = this.serchZm.toUpperCase();   
+      var m = this.serchZm.toUpperCase();
       var newList = [];
       for (var i = 0; i < list.length; i++) {
         if (list[i].PYJM && list[i].PYJM.indexOf(m) >= 0) {
@@ -125,6 +126,7 @@ export default {
 
       }
       this.medAnaesthesiaDictList = newList;
+      console.log(111)
     },
     //讲数据返回上级
     busToTop() {

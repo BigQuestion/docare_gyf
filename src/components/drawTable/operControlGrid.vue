@@ -283,14 +283,14 @@ export default {
       //构造器会将数据集中的每一个数据传入访问器函数，并使用其返回值作为 x坐标或y坐标：
       const dataone = d3.line()
         .x(
-        (data) => {
-          return data.x
-        }
+          (data) => {
+            return data.x
+          }
         )
         .y(
-        (data) => {
-          return data.y
-        }
+          (data) => {
+            return data.y
+          }
         );
       for (var i = 0; i < this.pathArray.length; i++) {
         dataone(this.pathArray[i])
@@ -363,20 +363,20 @@ export default {
 
       this.api.getSignName(params)
         .then(
-        res => {
-          // for (var i = 0; i < res.length; i++) {
-          //   res[i].itemValue = " ";
-          // }
-          if (res.length > 0) {
-            this.signNameLisg = res;
-            this.getSignTimeData();
-          } else {
-            this.signNameLisg = []
-            this.dataPathArray = []
-          }
+          res => {
+            // for (var i = 0; i < res.length; i++) {
+            //   res[i].itemValue = " ";
+            // }
+            if (res.length > 0) {
+              this.signNameLisg = res;
+              this.getSignTimeData();
+            } else {
+              this.signNameLisg = []
+              this.dataPathArray = []
+            }
 
-          // this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
-        })
+            // this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
+          })
     },
     getSignTimeData() {
       let param = {
@@ -387,29 +387,29 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(param)
         .then(
-        res => {
-          let list = res.list
-          this.breathData = list
-          let params = {
-            patientId: this.config.userInfo.patientId,
-            operId: this.config.userInfo.operId,
-            visitId: this.config.userInfo.visitId,
-            eventNo: 0
-          }
+          res => {
+            let list = res.list
+            this.breathData = list
+            let params = {
+              patientId: this.config.userInfo.patientId,
+              operId: this.config.userInfo.operId,
+              visitId: this.config.userInfo.visitId,
+              eventNo: 0
+            }
 
-          this.api.getNewTimeData(params)
-            .then(res => {
-              if (res.length > 0) {
-                res.sort(function(a, b) {
-                  return Date.parse(a.time) - Date.parse(b.time); //时间正序
-                });
-                this.dataOperFun(res);
-              } else {
-                this.dataPathArray = []
-              }
+            this.api.getNewTimeData(params)
+              .then(res => {
+                if (res.length > 0) {
+                  res.sort(function(a, b) {
+                    return Date.parse(a.time) - Date.parse(b.time); //时间正序
+                  });
+                  this.dataOperFun(res);
+                } else {
+                  this.dataPathArray = []
+                }
 
-            })
-        });
+              })
+          });
     },
 
     //计算时间差分钟
@@ -536,6 +536,7 @@ export default {
         }
       }
       for (var i = 0; i < dest.length; i++) {
+        isData = false;
         //判断整个数据里面是否有体征呼吸数据
         if (dest[i].itemCode == 92) {
           isData = true
@@ -697,7 +698,6 @@ export default {
       }
       this.spo2List = spo2List;
       this.calculatePath();
-
       return false;
       // var list = this.signNameLisg;
       // var newArray = [];
@@ -782,5 +782,6 @@ export default {
 
 </script>
 <style scoped>
+
 
 </style>
