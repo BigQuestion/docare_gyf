@@ -158,10 +158,10 @@
           </div>
           <div v-if="concealmentTweData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button class="list_button" @click="openChangeRoom">更换房间</button>
-            <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
             <button v-if="formDetail" class="list_button" @click="getOperationRegister">术中登记</button>
-            <!-- <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button> -->
             <button @click="cancel" class="list_button">取消手术</button>
+            <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
+            <!-- <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button> -->
           </div>
         </div>
         <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
@@ -173,7 +173,7 @@
           </div>
           <div v-if="concealmentThreeData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button @click="dictShow" class="list_button">字典</button>
-            <button class="list_button">模板管理</button>
+            <!-- <button class="list_button">模板管理</button> -->
           </div>
         </div>
         <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
@@ -259,8 +259,8 @@
               <ul style="padding-left:5px;">
                 <li>患者 {{item.patientName}} {{item.patientId}} 住院号 {{item.inpNo}}</li>
                 <li>手术 {{item.operationName}}</li>
-                <li v-if="item.inDateTime==null">时间 {{item.scheduledDateTime}}</li>
-                <li v-if="item.inDateTime!=null">时间 {{item.inDateTime}}</li>
+                <li v-if="item.inDateTime==null||item.inDateTime==''">时间 {{item.scheduledDateTime}}</li>
+                <li v-if="item.inDateTime!=null&&item.inDateTime!=''">时间 {{item.inDateTime}}</li>
                 <li>术者 {{item.surgeonName}} 麻醉 {{item.anesthesiaDoctorName}} {{item.anesthesiaAssistantName}}</li>
               </ul>
             </div>
@@ -1008,7 +1008,7 @@ export default {
       list.writeAble = true;
     },
     searchPatientList() {
-      if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
+      if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "" && this.operatingRoomNo == "") {
         var now = new Date();
         var year = now.getFullYear();
         var month = (now.getMonth() + 1).toString();
@@ -1127,7 +1127,7 @@ export default {
           });
     },
     searchPatientListScreen() {
-      if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
+      if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "" && this.operatingRoomNo == "") {
         var now = new Date();
         var year = now.getFullYear();
         var month = (now.getMonth() + 1).toString();
@@ -2610,8 +2610,6 @@ export default {
     },
     //检查结果
     openMedical() {
-      this.checkResultShow = true;
-      console.log(this.config.userInfo)
       if (window.ipc) {
         window.ipc.send('openMedical', this.config.userInfo.inpNo);
       }

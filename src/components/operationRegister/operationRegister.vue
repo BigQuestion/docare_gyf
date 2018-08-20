@@ -431,14 +431,14 @@ export default {
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
-        res => {
-          for (var a = 0; a < res.list.length; a++) {
-            this.$set(res.list[a], 'thooseItem', false);
-          }
-          this.eventList = res.list;
-          this.eventTempList = res.list;
-          this.selectedItem = [];
-        });
+          res => {
+            for (var a = 0; a < res.list.length; a++) {
+              this.$set(res.list[a], 'thooseItem', false);
+            }
+            this.eventList = res.list;
+            this.eventTempList = res.list;
+            this.selectedItem = [];
+          });
     },
     allMedAnesthesiaEventType() {
       let params = {}
@@ -538,6 +538,7 @@ export default {
     },
     //双击添加麻醉事件记录
     addEvent(item) {
+      debugger
       var obj = {
         TYPE_NAME: item.typeName,
         PATIENT_ID: this.objectItem.patientId,
@@ -975,6 +976,11 @@ export default {
       let params = this.updateDataList;
       this.api.updateMedPatientMonitorDatas(params)
         .then(res => {
+          if (res.success) {
+            alert("保存成功")
+          } else {
+            alert("保存失败")
+          }
           this.getSignName();
           this.updateDataList = [];
         })

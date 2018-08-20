@@ -39,12 +39,12 @@
     </div>
     <div v-if="value.type=='checkBoxAll'">
       <div v-if="isPage.isPage">
-        <div style="min-width: 100px;height: 40px;z-index: 5;display: flex;border:1px dashed;">
+        <div style="min-width: 100px;height: 23px;z-index: 5;display: flex;border:1px dashed;">
           <check-box :boxValue="value" :isEdit="isPage.isPage" v-on:toparentevent="getChlidValue"></check-box>
         </div>
       </div>
       <div v-else>
-        <div style="min-width: 100px;height: 40px;z-index: 5;display: flex;">
+        <div style="min-width: 100px;height: 23px;z-index: 5;display: flex;">
           <check-box :boxValue="value" :isEdit="isPage.isPage" v-on:toparentevent="getChlidValue"></check-box>
         </div>
       </div>

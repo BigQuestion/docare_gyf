@@ -183,7 +183,10 @@ export default {
         dosage: "",
         dosageUnits: "",
         concentration: "",
-        concentrationUnit: ""
+        concentrationUnit: "",
+        performSpeed: "",
+        speedUnit: "",
+        administrator: ""
       });
       this.isAdd = true;
       this.isCancle = false;
@@ -202,7 +205,6 @@ export default {
       let params = {};
 
       if (li[k].arrayStats == 0) {
-        console.log('这是新增操作')
         params = {
           itemNo: li[k].itemNo,
           itemClass: li[k].itemClass,
@@ -213,6 +215,9 @@ export default {
           dosageUnits: li[k].dosageUnits,
           concentration: li[k].concentration,
           concentrationUnit: li[k].concentrationUnit,
+          performSpeed: li[k].performSpeed,
+          speedUnit: li[k].speedUnit,
+          administrator: li[k].administrator
         };
         console.log(params)
         this.api.insertMedAnesthesiaEventOpen(params)
