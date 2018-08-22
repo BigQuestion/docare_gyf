@@ -255,6 +255,7 @@ export default {
       setTimeId: '', //定时器执行
       spo2List: [],
       breathData: [], //呼吸数据
+      patSetting: [],
     }
 
   },
@@ -355,10 +356,6 @@ export default {
     },
     //获取病人生命体征项目
     getSignName() {
-      // if (this.setTimeId) {
-      //   clearTimeout(this.setTimeId)
-      // }
-
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
@@ -408,7 +405,23 @@ export default {
                   res.sort(function(a, b) {
                     return Date.parse(a.time) - Date.parse(b.time); //时间正序
                   });
-                  this.dataOperFun(res);
+                  this.api.getMedPatSetting({
+                      patientId: this.config.userInfo.patientId,
+                      operId: this.config.userInfo.operId,
+                      visitId: this.config.userInfo.visitId
+                    })
+                    .then(rest => {
+                      this.patSetting = []
+                      if (rest.length > 0) {
+
+                        for (var i = 0; i < rest.length; i++) {
+                          this.patSetting.push(rest[i].itemCode)
+                        }
+                      }
+
+                      this.dataOperFun(res);
+                    })
+
                 } else {
                   this.dataPathArray = []
                 }
@@ -540,7 +553,21 @@ export default {
           }
         }
       }
+      // console.log(dest)
+      let listSet = this.patSetting
+      let ar = []
+      if (listSet.length > 0) {
+        for (let s = 0; s < dest.length; s++) {
+          if (listSet.indexOf(dest[s].itemCode) >= 0) {} else {
+            ar.push(dest[s])
+          }
+        }
+        dest = [];
+        dest = ar;
+      }
+
       for (var i = 0; i < dest.length; i++) {
+
         isData = false;
         //判断整个数据里面是否有体征呼吸数据
         if (dest[i].itemCode == 92) {
@@ -689,9 +716,12 @@ export default {
           allArrData[n].y = y;
 
         }
+
         this.pathArray.push(allArrData);
       }
       let list = this.pathArray
+
+
       let spo2List = []
       for (var i = 0; i < list.length; i++) {
         for (var j = 0; j < list[i].length; j++) {

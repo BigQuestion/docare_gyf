@@ -489,14 +489,15 @@
             <button v-if="tempButtonView" @click="applyTemplateFun">应用模板</button>
             <button v-if="tempButtonView" @click="openSaveTemView">保存模板</button>
             <button @click="submitSaveForm">保存</button>
+            <button v-if="personView" @click="openPatSetting">体征设置</button>
             <button @click="CreateOneFormPage">打印</button>
             <button @click="formSetting">配置</button>
             <button @click="refreshForm">刷新</button>
           </div>
         </div>
         <!-- 显示个性化体征设置 -->
-        <div v-if="personStyleView" style="position: absolute;top: 15%;left:30%;">
-          <personStyle></personStyle>
+        <div class="dictionaries" v-if="personStyleView">
+          <personStyle v-on:closePatSetting="closePatSetting"></personStyle>
         </div>
       </div>
     </div>
@@ -825,6 +826,7 @@ export default {
       operatingRoomNo: '', //手术间
       changePassWord: false, //修改密码界面
       changeRoomView: false, //更换手术间
+      personView: false,
 
     }
   },
@@ -851,23 +853,23 @@ export default {
     //打印插件初始化
     lodopInit() {
       LODOP = getLodop();
-      if (LODOP) {
-        LODOP.SET_PRINT_PAGESIZE(0, "182mm", "270mm", "")
-        var _this = this;
-        if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
+      // if (LODOP) {
+      LODOP.SET_PRINT_PAGESIZE(0, "182mm", "270mm", "")
+      var _this = this;
+      if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
 
-          //不在打印预览界面
-          if (Value) {
-            _this.printLoading = false;
-            _this.toChangePage(0);
-            if (window.ipc) {
-              window.ipc.send('deleteImages', "delete");
-            }
-
+        //不在打印预览界面
+        if (Value) {
+          _this.printLoading = false;
+          _this.toChangePage(0);
+          if (window.ipc) {
+            window.ipc.send('deleteImages', "delete");
           }
 
-        };
-      }
+        }
+
+      };
+      // }
 
     },
     removeTempDom() {
@@ -956,6 +958,10 @@ export default {
     },
     CreateOneFormPage() {
       console.log(new Date(), "打印按钮加载")
+      if (!LODOP) {
+        alert("请启动桌面上打印程序后重新打开麻醉程序")
+        return
+      }
       this.lodopInit();
       this.printLoading = true
       if (this.selectFormItemTemp.formName != '麻醉记录单') {
@@ -1651,7 +1657,7 @@ export default {
 
       if (item.formName == '麻醉记录单') {
         // this.getMaxTime();
-
+        this.personView = true
         let inDateTime = this.config.userInfo.inDateTime
         this.tempButtonView = false;
         //查找病人的最晚时间
@@ -2141,7 +2147,6 @@ export default {
     },
     //提交单子修改
     submitSaveForm() {
-      debugger
       if (this.selectFormItemTemp.formName == '手术清点单') {
         Bus.$emit('saveFun', '保存');
       } else {
@@ -2238,7 +2243,6 @@ export default {
         }
         //末页
         if (num == 2) {
-          debugger
           let m1 = this.config.pageTotal
           let m2 = this.config.pagePercentNum
           let m3 = m1 - m2
@@ -2272,6 +2276,7 @@ export default {
       this.config.pagePercentNum = 1;
       this.pageButtonView = false;
       this.formItems = [];
+      this.personView = false
       this.updateFormsData = [];
       if (this.setTimeId) {
         clearTimeout(this.setTimeId);
@@ -2643,6 +2648,14 @@ export default {
           this.config.allDiagnosis = rest;
         })
     },
+    //打开体征显示设置
+    openPatSetting() {
+      this.personStyleView = true
+    },
+    closePatSetting() {
+      this.personStyleView = false
+      this.refreshForm();
+    },
 
   },
   mounted() {
@@ -2674,6 +2687,17 @@ export default {
     this.setIntervaled();
     this.selectMedFormList();
     this.getHeight();
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = (now.getMonth() + 1).toString();
+    var day = (now.getDate()).toString();
+    if (month.length == 1) {
+      month = "0" + month;
+    }
+    if (day.length == 1) {
+      day = "0" + day;
+    }
+    this.getTime = year + "-" + month + "-" + day;
     // this.$toast("保存成功");
   },
   created() {

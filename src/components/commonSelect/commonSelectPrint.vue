@@ -92,6 +92,13 @@ export default {
       }
     })
   },
+  // watch: {
+  //   "conInfo.value": function() {
+  //     if (!this.conInfo.value) {
+  //       this.conInfo.value = this.conInfo.defaultValue
+  //     }
+  //   }
+  // }
 
 }
 

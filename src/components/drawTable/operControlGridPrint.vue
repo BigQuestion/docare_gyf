@@ -202,6 +202,7 @@ export default {
       signNameLisg: [],
       spo2List: [],
       breathData: [], //呼吸数据
+      patSetting: [],
     }
 
   },
@@ -356,7 +357,22 @@ export default {
                   res.sort(function(a, b) {
                     return Date.parse(a.time) - Date.parse(b.time); //时间正序
                   });
-                  this.dataOperFun(res);
+                  this.api.getMedPatSetting({
+                      patientId: this.config.userInfo.patientId,
+                      operId: this.config.userInfo.operId,
+                      visitId: this.config.userInfo.visitId
+                    })
+                    .then(rest => {
+                      this.patSetting = []
+                      if (rest.length > 0) {
+                        for (var i = 0; i < rest.length; i++) {
+                          this.patSetting.push(rest[i].itemCode)
+                        }
+                      }
+
+                      this.dataOperFun(res);
+                    })
+
                 } else {
                   this.dataPathArray = []
                 }
@@ -454,6 +470,17 @@ export default {
             }
           }
         }
+      }
+      let listSet = this.patSetting
+      let ar = []
+      if (listSet.length > 0) {
+        for (let s = 0; s < dest.length; s++) {
+          if (listSet.indexOf(dest[s].itemCode) >= 0) {} else {
+            ar.push(dest[s])
+          }
+        }
+        dest = [];
+        dest = ar;
       }
       for (var i = 0; i < dest.length; i++) {
         isData = false;

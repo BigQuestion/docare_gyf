@@ -17,7 +17,7 @@
           </div>
           <!-- @mousedown="downFun($event)" @mousemove="moveFun($event)" @mouseout="outFun($event)" -->
           <div @mousedown="downFun()" @mouseup="upFun()" style="width: 100%;border:1px solid #222;overflow-y: auto;height:270px;box-sizing: border-box;background-color:white;" ref="eventContent">
-            <div style="min-height: 280px;">
+            <div style="min-height: 268px;">
               <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @mouseleave="outFun(item)" @click="clickItem(item,$event)">
                 <!-- 判断是否为事件 -->
                 <div v-for="cl in tbconfig" v-if="item.ITEM_CLASS!='1'">

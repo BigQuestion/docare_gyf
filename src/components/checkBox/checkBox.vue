@@ -68,11 +68,20 @@ export default {
 
           if (this.boxValue.MultiSelectMode == 'false') {
             for (var i = 0; i < this.boxValue.listData.length; i++) {
-              if (this.boxValue.listData[i].ItemValue == res[field]) {
-                this.isSelected.push(true);
+              if (!res[field]) {
+                if (this.boxValue.listData[i].ItemValue == this.boxValue.defaultValue) {
+                  this.isSelected.push(true);
+                } else {
+                  this.isSelected.push(false);
+                }
               } else {
-                this.isSelected.push(false);
+                if (this.boxValue.listData[i].ItemValue == res[field]) {
+                  this.isSelected.push(true);
+                } else {
+                  this.isSelected.push(false);
+                }
               }
+
             }
           } else {
             if (res[field] != 'null' && res[field] != "" &&

@@ -1,7 +1,8 @@
 import axios from 'axios'
 axios.defaults.baseURL = 'http://182.61.36.247:8080';
 // axios.defaults.baseURL = 'http://111.111.111.156:8080';
-// axios.defaults.baseURL = 'http://localhost:8088';
+axios.defaults.baseURL = 'http://localhost:8088';
+
 
 
 
@@ -845,6 +846,30 @@ export default {
    */
   updateMedOperationMaster(params, config) {
     return fetch('medicalsystem/rest/medOperationMaster/updateMedOperationMaster', params)
+  },
+
+  /**
+   * 插入设置体征数据
+   * 
+   */
+  setPatMonitor(params, config) {
+    return fetch('medicalsystem/rest/medSignData/setPatMonitor', params)
+  },
+
+  /**
+   * 获取体征设置数据
+   * 
+   */
+  getMedPatSetting(params, config) {
+    return fetch('medicalsystem/rest/medSignData/getMedPatSetting', params)
+  },
+
+  /**
+   * 获取体征设置数据
+   * 
+   */
+  deletePatMonitor(params, config) {
+    return fetch('medicalsystem/rest/medSignData/deletePatMonitor', params)
   },
 
 
