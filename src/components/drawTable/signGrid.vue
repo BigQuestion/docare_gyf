@@ -309,7 +309,7 @@ export default {
                       var pei = 0;
                       for (var k = 0; k < dataBodyNew.length; k++) {
                         if (dataBodyNew[k - 1]) {
-                          if (dataBodyNew[k].left == dataBodyNew[k - 1].left || dataBodyNew[k].left < dataBodyNew[k - 1].left + 10) {
+                          if (dataBodyNew[k].left == dataBodyNew[k - 1].left || dataBodyNew[k].left < dataBodyNew[k - 1].left + 8) {
                             dataBodyNew[k].bottom = dataBodyNew[k - 1].bottom + 15;
                           } else {
                             dataBodyNew[k].bottom = 0;

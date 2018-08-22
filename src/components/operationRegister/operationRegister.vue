@@ -16,7 +16,7 @@
             </div>
           </div>
           <!-- @mousedown="downFun($event)" @mousemove="moveFun($event)" @mouseout="outFun($event)" -->
-          <div @mousedown="downFun()" @mouseup="upFun()" style="width: 100%;border:1px solid #222;overflow-y: auto;height:270px;box-sizing: border-box;background-color:white;" ref="eventContent">
+          <div @mousedown="downFun()" @mouseup="upFun()" style="width: 100%;border:1px solid #222;overflow-y: auto;height:275px;box-sizing: border-box;background-color:white;padding-bottom:5px;" ref="eventContent">
             <div style="min-height: 268px;">
               <div v-for="item in eventList" style="display:flex;" :class="{chooseItem:item.thooseItem}" @mouseleave="outFun(item)" @click="clickItem(item,$event)">
                 <!-- 判断是否为事件 -->
@@ -96,7 +96,7 @@
             <div>
               <button style="margin-right: 20px;width: 70px;font-size:12px;height:25px;" @click='saveBtn'>保存</button>
               <button style="margin-right: 20px;width: 70px;font-size:12px;height:25px;" @click="deleteMedAnesthesiaEvent">删除</button>
-              <button style="margin-right: 20px;width: 70px;font-size:12px;height:25px;" @click="selectMedAnesthesiaEventList">取消</button>
+              <button style="margin-right: 20px;width: 70px;font-size:12px;height:25px;" @click="canselEventList">取消</button>
             </div>
           </div>
         </div>
@@ -180,48 +180,48 @@
           </div>
         </div>
         <!--  <div style="display: flex;padding-left: 10px;">
-                                  <div>
-                                    <div style="width: 100px;">名称</div>
-                                    <div style="height: 22px;width: 100px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
-                                  </div>
-                                  <div class="flex">
-                                    <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
-                                      <div style="width: 60px;" :title="sItem.time">
-                                        {{sItem.time | discount}}
-                                      </div>
-                                      <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
-                                        <input :value="secItem" style="width: 60px;" @change="signChange($event,index,sItem)">
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div> -->
+                                                                  <div>
+                                                                    <div style="width: 100px;">名称</div>
+                                                                    <div style="height: 22px;width: 100px;" v-for="item in itemNameList" @click="getDeleteItem(item)">{{item.itemName}}</div>
+                                                                  </div>
+                                                                  <div class="flex">
+                                                                    <div v-for="sItem in signdataList" @click="getSignClickData(sItem)">
+                                                                      <div style="width: 60px;" :title="sItem.time">
+                                                                        {{sItem.time | discount}}
+                                                                      </div>
+                                                                      <div v-for="(secItem,index) in sItem.dataValue" style="height: 22px;">
+                                                                        <input :value="secItem" style="width: 60px;" @change="signChange($event,index,sItem)">
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </div> -->
         <!-- <div class="flex">
-                                        <div v-for="(title,index) in titleArr">
-                                          <div v-if="index==0" style="width: 100px;">{{title}}</div>
-                                          <div v-else style="width: 60px;" :title="title">{{title | discount}}</div>
-                                        </div>
-                                      </div>
-                                      <div class="flex" style="overflow-y:hidden;overflow-x: auto;">
-                                        <div>
-                                          <div style="height: 22px;width: 100px;" v-for="name in itemNameList">{{name.itemName}}</div>
-                                        </div>
-                                        <div>
-                                          <div v-for="item in dataArr" class="flex">
-                                            <div v-for="data in item">
-                                              <input :value="data" style="width: 60px;" @change="signChange($event,index,data)">
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div>
-                                        </div>
-                                      </div> -->
+                                                                        <div v-for="(title,index) in titleArr">
+                                                                          <div v-if="index==0" style="width: 100px;">{{title}}</div>
+                                                                          <div v-else style="width: 60px;" :title="title">{{title | discount}}</div>
+                                                                        </div>
+                                                                      </div>
+                                                                      <div class="flex" style="overflow-y:hidden;overflow-x: auto;">
+                                                                        <div>
+                                                                          <div style="height: 22px;width: 100px;" v-for="name in itemNameList">{{name.itemName}}</div>
+                                                                        </div>
+                                                                        <div>
+                                                                          <div v-for="item in dataArr" class="flex">
+                                                                            <div v-for="data in item">
+                                                                              <input :value="data" style="width: 60px;" @change="signChange($event,index,data)">
+                                                                            </div>
+                                                                          </div>
+                                                                        </div>
+                                                                        <div>
+                                                                        </div>
+                                                                      </div> -->
       </div>
       <div v-if="signItemView" id="codeSelect" ref="codeSelect" style="position: absolute;bottom:35px;left: 150px;">
         <!-- <select v-model="selected" v-on:change="getSeclectItem">
-                                <option v-for="option in allSignItems" v-bind:value="option">
-                                  {{ option.itemName }}
-                                </option>
-                              </select> -->
+                                                                <option v-for="option in allSignItems" v-bind:value="option">
+                                                                  {{ option.itemName }}
+                                                                </option>
+                                                              </select> -->
         <div>
           <input ref="inSelect" v-model="serchZmItem" @keyup="serchJmItem">
         </div>
@@ -307,75 +307,77 @@ export default {
     return {
       dataIn: this.parentToChild.dataInParent,
       tbconfig: [{
-          title: "",
-          fieldObj: "",
-          width: 10
-        },
-        {
-          title: "类型",
-          fieldObj: "TYPE_NAME",
-          width: 45
-        },
-        {
-          title: "事件名称",
-          fieldObj: "ITEM_NAME",
-          width: 260
-        },
-        {
-          title: "途径",
-          fieldObj: "ADMINISTRATOR",
-          width: 60
-        },
-        {
-          title: "浓度",
-          fieldObj: "CONCENTRATION",
-          width: 45
-        },
-        {
-          title: "单位",
-          fieldObj: "CONCENTRATION_UNIT",
-          width: 45
-        },
-        {
-          title: "速度",
-          fieldObj: "PERFORM_SPEED",
-          width: 45
-        },
-        {
-          title: "单位",
-          fieldObj: "SPEED_UNIT",
-          width: 45
-        },
-        {
-          title: "剂量",
-          fieldObj: "DOSAGE",
-          width: 45
-        },
-        {
-          title: "单位",
-          fieldObj: "DOSAGE_UNITS",
-          width: 45
-        },
-        {
-          title: "发生时间",
-          fieldObj: "START_TIME",
-          timeEdit: true,
-          width: 100
-        },
-        {
-          title: "是否持续",
-          fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
-          width: 75,
-          isChixu: true,
-        },
-        {
-          title: "结束时间",
-          fieldObj: "ENDDATE",
-          timeEdit: true,
-          width: 100
-        }
+        title: "",
+        fieldObj: "",
+        width: 10
+      },
+      {
+        title: "类型",
+        fieldObj: "TYPE_NAME",
+        width: 45
+      },
+      {
+        title: "事件名称",
+        fieldObj: "ITEM_NAME",
+        width: 260
+      },
+      {
+        title: "途径",
+        fieldObj: "ADMINISTRATOR",
+        width: 60
+      },
+      {
+        title: "浓度",
+        fieldObj: "CONCENTRATION",
+        width: 45
+      },
+      {
+        title: "单位",
+        fieldObj: "CONCENTRATION_UNIT",
+        width: 45
+      },
+      {
+        title: "速度",
+        fieldObj: "PERFORM_SPEED",
+        width: 45
+      },
+      {
+        title: "单位",
+        fieldObj: "SPEED_UNIT",
+        width: 45
+      },
+      {
+        title: "剂量",
+        fieldObj: "DOSAGE",
+        width: 45
+      },
+      {
+        title: "单位",
+        fieldObj: "DOSAGE_UNITS",
+        width: 45
+      },
+      {
+        title: "发生时间",
+        fieldObj: "START_TIME",
+        timeEdit: true,
+        width: 100
+      },
+      {
+        title: "是否持续",
+        fieldObj: "DURATIVE_INDICATOR", //1持续 0不持续
+        width: 75,
+        isChixu: true,
+      },
+      {
+        title: "结束时间",
+        fieldObj: "ENDDATE",
+        timeEdit: true,
+        width: 100
+      }
       ],
       eventList: [],
+      eventListNoSave: [],
+      SaveData: false,
       eventTempList: [],
       eventTypeList: [],
       eventNameList: [],
@@ -423,6 +425,24 @@ export default {
     noFunction() {
 
     },
+    canselEventList() {
+      let params = {
+        patientId: this.objectItem.patientId,
+        operId: this.objectItem.operId,
+        visitId: this.objectItem.visitId
+      }
+      this.api.selectMedAnesthesiaEventList(params)
+        .then(
+        res => {
+          for (var a = 0; a < res.list.length; a++) {
+            this.$set(res.list[a], 'thooseItem', false);
+          }
+          this.eventList = res.list;
+          this.eventTempList = res.list;
+          this.selectedItem = [];
+
+        });
+    },
     selectMedAnesthesiaEventList() {
       let params = {
         patientId: this.objectItem.patientId,
@@ -438,24 +458,33 @@ export default {
           this.eventList = res.list;
           this.eventTempList = res.list;
           this.selectedItem = [];
+          if (this.eventListNoSave.length > 0) {
+            for (var g = 0; g < this.eventListNoSave.length; g++) {
+              this.eventList.push(this.eventListNoSave[g])
+            }
+          }
+
         });
     },
     allMedAnesthesiaEventType() {
       let params = {}
       this.api.allMedAnesthesiaEventType(params)
         .then(
-          res => {
-            this.eventTypeList = res.list;
-          });
+        res => {
+          this.eventTypeList = res.list;
+        });
     },
     //根据类别获取麻醉事件定义
     medAnesthesiaEventOpenByItemClass(item) {
+      console.log(item)
       this.selectTypeTemp = item;
       let params = {
         itemClass: item.typeId
       }
       this.api.medAnesthesiaEventOpenByItemClass(params)
         .then(res => {
+          this.filterType = item.typeId;
+          this.selectTypeFun();
           this.eventNameList = res.list;
           if (this.eventNameList.length >= 6) {
             this.widthChange = false;
@@ -479,14 +508,25 @@ export default {
         this.eventList[i].thooseItem = false;
       }
       this.morClick = true;
+      this.selectedItem = [];
     },
     // 松开多选点击
     upFun() {
+      console.log(this.selectedItem)
       this.morClick = false;
+      if (this.selectedItem.length > 1) {
+        for (var a = 0; a < this.selectedItem.length; a++) {
+          if (this.selectedItem[a].addFlag) {
+            this.SaveData = false;
+          } else {
+            this.SaveData = true;
+          }
+        }
+      }
     },
     // 鼠标位移多个item判断是否多选
     outFun(item) {
-      if (this.morClick) {
+      if (this.morClick && item.thooseItem == false) {
         this.selectedItem.push(item)
         item.thooseItem = true;
       }
@@ -497,16 +537,34 @@ export default {
         this.morClick = false;
         var addData = [];
         for (var a = 0; a < this.selectedItem.length; a++) {
-          addData.push({
-            patientId: this.selectedItem[a].PATIENT_ID,
-            visitId: this.selectedItem[a].VISIT_ID,
-            operId: this.selectedItem[a].OPER_ID,
-            itemNo: this.selectedItem[a].ITEM_NO,
-            eventNo: this.selectedItem[a].EVENT_NO
-          })
+          if (this.selectedItem[a].addFlag) {
+            for (var b = 0; b < this.eventList.length; b++) {
+              if (this.selectedItem[a] == this.eventList[b]) {
+                this.eventList.splice(b, 1);
+              }
+            }
+            this.selectedItem.splice(a, 1);
+            a = a - 1;
+            console.log(this.selectedItem)
+            console.log(this.eventList)
+          } else {
+            addData.push({
+              patientId: this.selectedItem[a].PATIENT_ID,
+              visitId: this.selectedItem[a].VISIT_ID,
+              operId: this.selectedItem[a].OPER_ID,
+              itemNo: this.selectedItem[a].ITEM_NO,
+              eventNo: this.selectedItem[a].EVENT_NO
+            })
+          }
         }
-        this.api.deleteBatchMedAnesthesiaEvent(addData)
-          .then(
+        for (var c = 0; c < this.eventList.length; c++) {
+          if (this.eventList[c].addFlag) {
+            this.eventListNoSave.push(this.eventList[c])
+          }
+        }
+        if (this.SaveData == true) {
+          this.api.deleteBatchMedAnesthesiaEvent(addData)
+            .then(
             res => {
               if (res.success) {
                 alert("删除成功")
@@ -515,24 +573,40 @@ export default {
               }
               this.selectMedAnesthesiaEventList();
             })
+        }
       } else {
-        let params = {
-          patientId: this.selectedItem[0].PATIENT_ID,
-          visitId: this.selectedItem[0].VISIT_ID,
-          operId: this.selectedItem[0].OPER_ID,
-          itemNo: this.selectedItem[0].ITEM_NO,
-          eventNo: this.selectedItem[0].EVENT_NO
-        }
-        this.api.deleteMedAnesthesiaEvent(params)
-          .then(
-            res => {
-              if (res.success) {
-                alert("删除成功")
-              } else {
-                alert("删除失败")
+        if (this.selectedItem.length !== 0) {
+          console.log(this.selectedItem)
+          if (this.selectedItem[0].addFlag) {
+            for (var b = 0; b < this.eventList.length; b++) {
+              if (this.selectedItem[0] == this.eventList[b]) {
+                this.eventList.splice(b, 1);
               }
-              this.selectMedAnesthesiaEventList();
-            })
+            }
+            this.selectedItem.splice(0, 1);
+            alert("删除成功")
+          } else {
+            let params = {
+              patientId: this.selectedItem[0].PATIENT_ID,
+              visitId: this.selectedItem[0].VISIT_ID,
+              operId: this.selectedItem[0].OPER_ID,
+              itemNo: this.selectedItem[0].ITEM_NO,
+              eventNo: this.selectedItem[0].EVENT_NO
+            }
+            this.api.deleteMedAnesthesiaEvent(params)
+              .then(
+              res => {
+                if (res.success) {
+                  alert("删除成功")
+                } else {
+                  alert("删除失败")
+                }
+                this.selectMedAnesthesiaEventList();
+              })
+          }
+        } else {
+          alert('您还没有选择')
+        }
       }
 
     },
@@ -558,7 +632,8 @@ export default {
         ITEM_SPEC: item.itemSpec,
         addFlag: true,
         DURATIVE_INDICATOR: 0,
-        ITEM_CODE: item.itemCode
+        ITEM_CODE: item.itemCode,
+        thooseItem: false,
       };
       this.eventList.push(obj);
       this.$nextTick(() => {
@@ -649,13 +724,13 @@ export default {
       }
       this.api.getSignName(params)
         .then(
-          res => {
-            if (res.length < 1) {
-              this.itemNameList = []
-              this.itemNameList.push({
-                itemName: "心率",
-                itemCode: 40,
-              }, {
+        res => {
+          if (res.length < 1) {
+            this.itemNameList = []
+            this.itemNameList.push({
+              itemName: "心率",
+              itemCode: 40,
+            }, {
                 itemName: "PULSE",
                 itemCode: 44,
               }, {
@@ -671,35 +746,35 @@ export default {
                 itemName: "SP02",
                 itemCode: 188,
               });
-              this.getSignTimeData(this.itemNameList.length);
-            } else {
-              for (var i = 0; i < res.length; i++) {
-                res[i].itemValue = "";
-              }
-              //定义一个排序方法
-              let compare = function(prop) {
-                return function(obj1, obj2) {
-                  let val1 = obj1[prop]
-                  let val2 = obj2[prop]
-                  if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                    val1 = Number(val1);
-                    val2 = Number(val2);
-                  }
-                  if (val1 < val2) {
-                    return -1;
-                  } else if (val1 > val2) {
-                    return 1;
-                  } else {
-                    return 0;
-                  }
+            this.getSignTimeData(this.itemNameList.length);
+          } else {
+            for (var i = 0; i < res.length; i++) {
+              res[i].itemValue = "";
+            }
+            //定义一个排序方法
+            let compare = function(prop) {
+              return function(obj1, obj2) {
+                let val1 = obj1[prop]
+                let val2 = obj2[prop]
+                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                  val1 = Number(val1);
+                  val2 = Number(val2);
+                }
+                if (val1 < val2) {
+                  return -1;
+                } else if (val1 > val2) {
+                  return 1;
+                } else {
+                  return 0;
                 }
               }
-              //根据itemcode排序
-              this.itemNameList = res.sort(compare("itemCode"));
-              this.getSignTimeData(res.length);
             }
+            //根据itemcode排序
+            this.itemNameList = res.sort(compare("itemCode"));
+            this.getSignTimeData(res.length);
+          }
 
-          })
+        })
     },
     getSignTimeData(len) {
       let params = {
@@ -758,27 +833,27 @@ export default {
       return false
       this.api.getSignTimeData(params)
         .then(
-          res => {
-            var sortArray = [];
-            if (res.length < 1)
-              return false;
-            for (var i = 0; i < res.length; i++) {
-              let item = res[i].dataValue;
-              item = eval('(' + item + ')');
-              //item = JSON.parse(item);
-              let xL = len - item.length
-              if (xL > 0) {
-                for (var j = 0; j < xL; j++) {
-                  item.push('');
-                }
+        res => {
+          var sortArray = [];
+          if (res.length < 1)
+            return false;
+          for (var i = 0; i < res.length; i++) {
+            let item = res[i].dataValue;
+            item = eval('(' + item + ')');
+            //item = JSON.parse(item);
+            let xL = len - item.length
+            if (xL > 0) {
+              for (var j = 0; j < xL; j++) {
+                item.push('');
               }
-              this.signdataList = sortArray;
             }
-          })
+            this.signdataList = sortArray;
+          }
+        })
     },
     //获取改变的值
     getChangeValue(item) {
-      debugger
+      // debugger
       let params = {}
       if (item.addFlag) {
         params = {
@@ -1149,33 +1224,33 @@ export default {
     //获取途径列表
     getRoadList() {
       this.api.getMedAnesthesiaCommDictByItemClass({
-          itemClass: '用药途径'
-        })
+        itemClass: '用药途径'
+      })
         .then(
-          res => {
-            this.roadList = res.list;
-          });
+        res => {
+          this.roadList = res.list;
+        });
       this.api.getMedAnesthesiaCommDictByItemClass({
-          itemClass: '用药浓度单位'
-        })
+        itemClass: '用药浓度单位'
+      })
         .then(
-          rest => {
-            this.concentrationList = rest.list
-          });
+        rest => {
+          this.concentrationList = rest.list
+        });
       this.api.getMedAnesthesiaCommDictByItemClass({
-          itemClass: '用药速度单位'
-        })
+        itemClass: '用药速度单位'
+      })
         .then(
-          rs => {
-            this.speedUnitList = rs.list
-          });
+        rs => {
+          this.speedUnitList = rs.list
+        });
       this.api.getMedAnesthesiaCommDictByItemClass({
-          itemClass: '用药单位'
-        })
+        itemClass: '用药单位'
+      })
         .then(
-          rt => {
-            this.dosageUnitsList = rt.list
-          });
+        rt => {
+          this.dosageUnitsList = rt.list
+        });
     },
     serchJmItem() {
       var list = this.allSignItems;
@@ -1229,7 +1304,7 @@ export default {
     })
   },
   beforeDestroy() {
-    document.removeEventListener('click', (e) => {})
+    document.removeEventListener('click', (e) => { })
   },
 }
 
@@ -1336,5 +1411,4 @@ button {
   background-color: #1E90FF;
   color: #fff;
 }
-
 </style>
