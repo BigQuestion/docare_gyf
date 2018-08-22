@@ -516,8 +516,8 @@ export default {
       console.log(this.selectedItem)
       this.morClick = false;
       if (this.selectedItem.length > 1) {
-        for (var a = 0; a < this.selectedItem.length; a++) {
-          if (this.selectedItem[a].addFlag) {
+        for (var a = this.selectedItem.length-1; a < this.selectedItem.length; a++) {
+          if (this.selectedItem[a].addFlag&&this.selectedItem[0].addFlag) {
             this.SaveData = false;
           } else {
             this.SaveData = true;
