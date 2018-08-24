@@ -52,7 +52,7 @@
       <signGridPrint :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></signGridPrint>
     </div>
     <div v-if="value.type=='dataOfGrid'">
-      <dataOfGridPrint :page="isPage.isPage" :width="value.width" :height="value.height" :dataOfPeo="objectItem"></dataOfGridPrint>
+      <dataOfGridPrint :page="isPage.isPage" :width="value.width" :height="value.height" :value="value" :dataOfPeo="objectItem"></dataOfGridPrint>
     </div>
     <div v-if="value.type=='div'">
       <div style="box-sizing:border-box;" :style="{width:value.width*0.75+'pt',height:value.height*0.75+'pt',border:value.borderStyle}"></div>

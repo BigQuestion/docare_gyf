@@ -433,7 +433,7 @@ export default {
                 if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
                   list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
                   arrayList.push(list[i]);
-                } else {}
+                } else { }
               } else {
                 if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
                   list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
@@ -644,5 +644,4 @@ path {
   stroke: red;
   stroke-width: 1px;
 }
-
 </style>
