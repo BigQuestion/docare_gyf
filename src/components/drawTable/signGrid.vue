@@ -143,33 +143,33 @@ export default {
 
               }
 
-              // // 麻醉用药
-              // let paramsThree = {
-              //   patientId: this.config.userInfo.patientId,
-              //   operId: this.config.userInfo.operId,
-              //   visitId: this.config.userInfo.visitId,
-              //   itemClass: "2C4",
-              // }
-              // this.api.selectMedAnesthesiaEventList(paramsThree)
-              //   .then(aff => {
-              //     for (var h = 0; h < aff.list.length; h++) {
-              //       if (aff.list[h].DURATIVE_INDICATOR == 0) {
-              //         var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
-              //         if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
-              //           var time9 = timeMoreTwo - this.startTimeInPage
-              //           var leftPlace9 = ((time9 * 2.78) / 60 / 1000);
-              //           this.dataOfBottom.push({
-              //             leftData: leftPlace9
-              //           })
-              //           dataBodyNew.push({
-              //             left: leftPlace9,
-              //             bottom: 0,
-              //             name: aff.list[h].ITEM_NAME,
-              //             time: aff.list[h].START_TIME,
-              //           })
-              //         }
-              //       }
-              //     }
+              // 事件
+              let paramsThree = {
+                patientId: this.config.userInfo.patientId,
+                operId: this.config.userInfo.operId,
+                visitId: this.config.userInfo.visitId,
+                itemClass: "sz",
+              }
+              this.api.selectMedAnesthesiaEventList(paramsThree)
+                .then(aff => {
+                  for (var h = 0; h < aff.list.length; h++) {
+                    if (aff.list[h].DURATIVE_INDICATOR == 0) {
+                      var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
+                      if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
+                        var time9 = timeMoreTwo - this.startTimeInPage
+                        var leftPlace9 = ((time9 * 2.78) / 60 / 1000);
+                        this.dataOfBottom.push({
+                          leftData: leftPlace9
+                        })
+                        dataBodyNew.push({
+                          left: leftPlace9,
+                          bottom: 0,
+                          name: aff.list[h].ITEM_NAME,
+                          time: aff.list[h].START_TIME,
+                        })
+                      }
+                    }
+                  }
 
                   if (this.config.userInfo.inDateTime) {
                     var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
@@ -323,7 +323,7 @@ export default {
                       // })
 
                     })
-                // })
+                })
             });
         // });
 
