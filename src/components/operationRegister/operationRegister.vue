@@ -516,8 +516,8 @@ export default {
       console.log(this.selectedItem)
       this.morClick = false;
       if (this.selectedItem.length > 1) {
-        for (var a = this.selectedItem.length-1; a < this.selectedItem.length; a++) {
-          if (this.selectedItem[a].addFlag&&this.selectedItem[0].addFlag) {
+        for (var a = this.selectedItem.length - 1; a < this.selectedItem.length; a++) {
+          if (this.selectedItem[a].addFlag && this.selectedItem[0].addFlag) {
             this.SaveData = false;
           } else {
             this.SaveData = true;
@@ -1084,7 +1084,7 @@ export default {
         alert("选择删除项目")
         return false;
       }
-      if (this.deleteTzItem.itemCode == 40 || this.deleteTzItem.itemCode == 44 || this.deleteTzItem.itemCode == 92 || this.deleteTzItem.itemCode == 188 ||
+      if (this.deleteTzItem.itemCode == 40 || this.deleteTzItem.itemCode == 44 || this.deleteTzItem.itemCode == 188 ||
         this.deleteTzItem.itemCode == 89 || this.deleteTzItem.itemCode == 90) {
         alert("此项目不能删除")
         return false;
