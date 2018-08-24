@@ -71,6 +71,27 @@ export default {
           } else {
             this.eventTypeList = []
           }
+          this.api.getMedPatSetting({
+              patientId: this.config.userInfo.patientId,
+              operId: this.config.userInfo.operId,
+              visitId: this.config.userInfo.visitId
+            })
+            .then(rest => {
+              let list = []
+              if (rest.length > 0) {
+                for (var i = 0; i < rest.length; i++) {
+                  list.push(rest[i].itemCode)
+                }
+                if (this.eventTypeList.length > 0) {
+                  for (var k = 0; k < this.eventTypeList.length; k++) {
+                    if (list.indexOf(this.eventTypeList[k]) >= 0) {
+                      this.eventTypeList.splice(k, 1)
+                    }
+                  }
+                }
+              }
+
+            })
           this.pushFun();
         });
 
@@ -110,9 +131,9 @@ export default {
             for (var k = 0; k < this.eventTypeList.length; k++) {
               if (this.eventTypeList[k - 1]) {
                 if (this.eventTypeList[k] == this.eventTypeList[k - 1]) {
-                  this.eventTypeList.splice(k,1);
+                  this.eventTypeList.splice(k, 1);
                 } else {
-                  
+
                 }
               } else {
 
@@ -139,5 +160,6 @@ export default {
 
 </script>
 <style scoped>
+
 
 </style>

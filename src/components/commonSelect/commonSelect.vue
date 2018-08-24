@@ -47,23 +47,30 @@ export default {
       // this.$refs.inSelect.focus()
 
       this.nameView = true;
+
       let params = {
         tableName: this.conInfo.dictTableName,
         dictSelect: this.conInfo.dictSelect,
         coluName: this.conInfo.dictField,
         dictShowFiled: this.conInfo.dictShowFiled, //字典显示字段名称
       }
-      this.api.allColumContext(params)
+      this.api.getColumContext(params)
         .then(res => {
           document.getElementById("inSelect").focus()
           this.medAnaesthesiaDictList = res;
-          this.allList = res;
+          // this.allList = res;
         })
-      this.api.allColumContext(params)
-        .then(res => {
-          this.allList = res;
+      if (this.conInfo.dictTableName == "MED_DIAGNOSIS_DICT") {
+        this.allList = this.config.allDiagnosis
+      } else if (this.conInfo.dictTableName == "MED_OPERATION_DICT") {
+        this.allList = this.config.allOperList
+      } else {
+        this.api.allColumContext(params)
+          .then(res => {
+            this.allList = res;
+          })
+      }
 
-        })
     },
     getSelected(item) {
       if (this.conInfo.dictShowFiled != '' && this.conInfo.dictShowFiled != null) {
@@ -126,11 +133,15 @@ export default {
 
       }
       this.medAnaesthesiaDictList = newList;
-      console.log(111)
     },
-    //讲数据返回上级
+    //数据返回上级
     busToTop() {
-      this.$set(this.conInfo, 'modifyFiledValue', this.conInfo.value);
+      if (this.conInfo.value) {
+        this.$set(this.conInfo, 'modifyFiledValue', this.conInfo.value);
+      } else {
+        this.$set(this.conInfo, 'modifyFiledValue', "");
+      }
+      // this.$set(this.conInfo, 'modifyFiledValue', this.conInfo.value);
       this.$emit('toparentevent', this.conInfo);
     },
 
@@ -151,10 +162,15 @@ export default {
         return time;
       }
     }
+
   },
   props: ['conInfo', 'attrName', 'data', 'infoData'],
   mounted() {
     this.conInfo.modifyFiledValue = '';
+    // console.log(this.conInfo.value)
+    if (!this.conInfo.value) {
+      this.conInfo.value = this.conInfo.defaultValue
+    }
   },
   created() {
     // 点击其他不在的区域触发事件
@@ -165,15 +181,13 @@ export default {
       }
     })
   },
-  // watch: {
-  //   "conInfo.value": function() {
-  //     this.changeTimes = this.changeTimes + 1;
-  //     if (this.changeTimes > 1) {
-  //       debugger
-  //       // this.$emit('toparentevent', this.conInfo);
-  //     }
-  //   }
-  // }
+  watch: {
+    "conInfo.value": function() {
+      if (!this.conInfo.value) {
+        this.conInfo.value = this.conInfo.defaultValue
+      }
+    }
+  }
 }
 
 </script>

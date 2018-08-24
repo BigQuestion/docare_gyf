@@ -66,9 +66,12 @@ export function getLodop(oOBJECT, oEMBED) {
       try { LODOP = getCLodop(); } catch (err) {};
       if (!LODOP && document.readyState !== "complete") { alert("C-Lodop没准备好，请稍后再试！"); return; };
       if (!LODOP) {
-        if (isIE) document.write(strCLodopInstall);
+        // if (isIE) document.write(strCLodopInstall);
+        // else
+        //   document.body.innerHTML = strCLodopInstall + document.body.innerHTML;
+        if (isIE) console.log(strCLodopInstall);
         else
-          document.body.innerHTML = strCLodopInstall + document.body.innerHTML;
+          console.log(strCLodopInstall);
         return;
       } else {
 

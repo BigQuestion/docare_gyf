@@ -41,6 +41,11 @@
             <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
             <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
           </g>
+          <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'zzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
+          <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'zzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)" @mouseleave="showData(cir,$event)">
+            <ellipse ry="8pt" rx="8pt" id="svg_8" cy="0" cx="0" stroke-width="0.1" fill="rgba(0,0,0,0)" />
+            <ellipse stroke="magenta" ry="3" rx="3" id="svg_8" cy="0" cx="0" stroke-width="0.8" fill="none" />
+          </g>
           <!-- ~ -->
           <line v-for="(cir,index2) in item.circleData" v-if="index2<item.circleData.length-1&&cir.x<=700&&item.circleData[index2+1].x<700&&item.circleData[index2+1].x-cir.x<20&&cir.itemData.itemCode == 'kzhx'&&cir.value>0&&item.circleData[index2+1].y!=420" :x1="cir.x" :x2="item.circleData[index2+1].x" :y1="cir.y" :y2="item.circleData[index2+1].y" stroke="magenta" stroke-width="1.5"></line>
           <g v-for="(cir,index2) in item.circleData" v-if="cir.itemData.itemCode == 'kzhx'&&cir.value>0&&cir.x<=700" :transform="'translate('+cir.x+','+cir.y+')'" fill="green" @mouseenter="showData(cir,$event)">
@@ -250,6 +255,7 @@ export default {
       setTimeId: '', //定时器执行
       spo2List: [],
       breathData: [], //呼吸数据
+      patSetting: [],
     }
 
   },
@@ -350,10 +356,6 @@ export default {
     },
     //获取病人生命体征项目
     getSignName() {
-      // if (this.setTimeId) {
-      //   clearTimeout(this.setTimeId)
-      // }
-
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
@@ -373,6 +375,7 @@ export default {
             } else {
               this.signNameLisg = []
               this.dataPathArray = []
+              this.getSignTimeData();
             }
 
             // this.setTimeId = setTimeout(_ => this.getSignName(), this.config.timeSet)
@@ -403,9 +406,26 @@ export default {
                   res.sort(function(a, b) {
                     return Date.parse(a.time) - Date.parse(b.time); //时间正序
                   });
-                  this.dataOperFun(res);
+                  this.api.getMedPatSetting({
+                      patientId: this.config.userInfo.patientId,
+                      operId: this.config.userInfo.operId,
+                      visitId: this.config.userInfo.visitId
+                    })
+                    .then(rest => {
+                      this.patSetting = []
+                      if (rest.length > 0) {
+
+                        for (var i = 0; i < rest.length; i++) {
+                          this.patSetting.push(rest[i].itemCode)
+                        }
+                      }
+
+                      this.dataOperFun(res);
+                    })
+
                 } else {
                   this.dataPathArray = []
+                  this.dataOperNoFun();
                 }
 
               })
@@ -498,6 +518,68 @@ export default {
       return arr;
     },
 
+    dataOperNoFun() {
+      debugger
+      let list = this.breathData;
+      //定义一个总数组把几个呼吸数据进行组合
+      let allArrData = []
+      for (let i = 0; i < list.length; i++) {
+        let endEvTime = ''
+        //如果有结束时间
+        if (list[i].ENDDATE) {
+          endEvTime = list[i].ENDDATE
+
+        } else {
+          endEvTime = this.config.patientMaxTime
+        }
+        let countMin = this.coutTimes(new Date(list[i].START_TIME), new Date(endEvTime), 'minute');
+        let numCount = countMin / 5
+        let dataArr = []
+        for (let l = 0; l < numCount; l++) {
+          dataArr.push({
+            itemCode: list[i].ITEM_CODE,
+            time: new Date(new Date(list[i].START_TIME).getTime() + 1000 * 60 * 5 * l).Format("yyyy-MM-dd hh:mm"),
+            value: list[i].DOSAGE,
+            itemData: {
+              itemCode: list[i].ITEM_CODE,
+              itemName: list[i].ITEM_NAME
+            }
+          })
+        }
+        allArrData.push.apply(allArrData, dataArr)
+
+      }
+      for (var n = 0; n < allArrData.length; n++) {
+        let min = '';
+        if (new Date(allArrData[n].time) > new Date(this.config.maxTime)) {
+          min = 700 + 1;
+        } else {
+          min = this.getMinuteDif(this.config.initTime, allArrData[n].time);
+        }
+        let x = Math.round(min / this.tbMin * (this.svgWidth / this.columns))
+        let y = this.svgHeight - Math.round(allArrData[n].value / 10 * (this.svgHeight / this.rows))
+        allArrData[n].x = x;
+        allArrData[n].y = y;
+
+      }
+
+      this.pathArray.push(allArrData);
+
+      let list1 = this.pathArray
+
+
+      let spo2List = []
+      for (var i = 0; i < list1.length; i++) {
+        for (var j = 0; j < list1[i].length; j++) {
+          if (list1[i][j].itemCode == 188 || list1[i][j].itemCode == 212 || list1[i][j].itemCode == 112 || list1[i][j].itemCode == 202) {
+            spo2List.push({ codeName: list1[i][j].itemData.itemName, dataList: list1[i] })
+            break;
+          }
+        }
+      }
+      this.spo2List = spo2List;
+      this.calculatePath();
+    },
 
     //数据处理
     dataOperFun(sortArray) {
@@ -535,7 +617,21 @@ export default {
           }
         }
       }
+      // console.log(dest)
+      let listSet = this.patSetting
+      let ar = []
+      if (listSet.length > 0) {
+        for (let s = 0; s < dest.length; s++) {
+          if (listSet.indexOf(dest[s].itemCode) >= 0) {} else {
+            ar.push(dest[s])
+          }
+        }
+        dest = [];
+        dest = ar;
+      }
+
       for (var i = 0; i < dest.length; i++) {
+
         isData = false;
         //判断整个数据里面是否有体征呼吸数据
         if (dest[i].itemCode == 92) {
@@ -684,9 +780,12 @@ export default {
           allArrData[n].y = y;
 
         }
+
         this.pathArray.push(allArrData);
       }
       let list = this.pathArray
+
+
       let spo2List = []
       for (var i = 0; i < list.length; i++) {
         for (var j = 0; j < list[i].length; j++) {

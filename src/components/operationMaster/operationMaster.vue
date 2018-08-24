@@ -143,9 +143,9 @@
             <div class="active_back" @click="concealmentOne"><img :class="{transform:isTransformOne}" src="../../assets/bottom.png"></div>
           </div>
           <div v-if="concealmentOneData" style="padding:5px;display:flex;flex-wrap:wrap;">
-            <button v-if="lockedPatientInfo.patientId" @click="openCheckInfoView" class="list_button">检查信息</button>
+            <!-- <button v-if="lockedPatientInfo.patientId" @click="openCheckInfoView" class="list_button">检查信息</button> -->
             <button v-if="lockedPatientInfo.patientId" @click="openMedical" class="list_button">检查结果</button>
-            <button v-if="lockedPatientInfo.patientId" class="list_button">医嘱信息</button>
+            <!-- <button v-if="lockedPatientInfo.patientId" class="list_button">医嘱信息</button> -->
             <!-- <button v-if="lockedPatientInfo.patientId" class="list_button">病例病程</button> -->
           </div>
         </div>
@@ -158,10 +158,10 @@
           </div>
           <div v-if="concealmentTweData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button class="list_button" @click="openChangeRoom">更换房间</button>
-            <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
             <button v-if="formDetail" class="list_button" @click="getOperationRegister">术中登记</button>
-            <!-- <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button> -->
             <button @click="cancel" class="list_button">取消手术</button>
+            <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
+            <!-- <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button> -->
           </div>
         </div>
         <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
@@ -173,7 +173,7 @@
           </div>
           <div v-if="concealmentThreeData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button @click="dictShow" class="list_button">字典</button>
-            <button class="list_button">模板管理</button>
+            <!-- <button class="list_button">模板管理</button> -->
           </div>
         </div>
         <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
@@ -259,8 +259,8 @@
               <ul style="padding-left:5px;">
                 <li>患者 {{item.patientName}} {{item.patientId}} 住院号 {{item.inpNo}}</li>
                 <li>手术 {{item.operationName}}</li>
-                <li v-if="item.inDateTime==null">时间 {{item.scheduledDateTime}}</li>
-                <li v-if="item.inDateTime!=null">时间 {{item.inDateTime}}</li>
+                <li v-if="item.inDateTime==null||item.inDateTime==''">时间 {{item.scheduledDateTime}}</li>
+                <li v-if="item.inDateTime!=null&&item.inDateTime!=''">时间 {{item.inDateTime}}</li>
                 <li>术者 {{item.surgeonName}} 麻醉 {{item.anesthesiaDoctorName}} {{item.anesthesiaAssistantName}}</li>
               </ul>
             </div>
@@ -489,14 +489,15 @@
             <button v-if="tempButtonView" @click="applyTemplateFun">应用模板</button>
             <button v-if="tempButtonView" @click="openSaveTemView">保存模板</button>
             <button @click="submitSaveForm">保存</button>
+            <button v-if="personView" @click="openPatSetting">体征设置</button>
             <button @click="CreateOneFormPage">打印</button>
             <button @click="formSetting">配置</button>
             <button @click="refreshForm">刷新</button>
           </div>
         </div>
         <!-- 显示个性化体征设置 -->
-        <div v-if="personStyleView" style="position: absolute;top: 15%;left:30%;">
-          <personStyle></personStyle>
+        <div class="dictionaries" v-if="personStyleView">
+          <personStyle v-on:closePatSetting="closePatSetting"></personStyle>
         </div>
       </div>
     </div>
@@ -825,6 +826,7 @@ export default {
       operatingRoomNo: '', //手术间
       changePassWord: false, //修改密码界面
       changeRoomView: false, //更换手术间
+      personView: false,
 
     }
   },
@@ -851,6 +853,7 @@ export default {
     //打印插件初始化
     lodopInit() {
       LODOP = getLodop();
+      // if (LODOP) {
       LODOP.SET_PRINT_PAGESIZE(0, "182mm", "270mm", "")
       var _this = this;
       if (LODOP.CVERSION) CLODOP.On_Return = function(TaskID, Value) {
@@ -866,6 +869,8 @@ export default {
         }
 
       };
+      // }
+
     },
     removeTempDom() {
       this.contentImageBox.removeChild(this.imageBox);
@@ -953,6 +958,10 @@ export default {
     },
     CreateOneFormPage() {
       console.log(new Date(), "打印按钮加载")
+      if (!LODOP) {
+        alert("请启动桌面上打印程序后重新打开麻醉程序")
+        return
+      }
       this.lodopInit();
       this.printLoading = true
       if (this.selectFormItemTemp.formName != '麻醉记录单') {
@@ -1005,7 +1014,7 @@ export default {
       list.writeAble = true;
     },
     searchPatientList() {
-      if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
+      if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "" && this.operatingRoomNo == "") {
         var now = new Date();
         var year = now.getFullYear();
         var month = (now.getMonth() + 1).toString();
@@ -1124,7 +1133,7 @@ export default {
           });
     },
     searchPatientListScreen() {
-      if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "") {
+      if (this.getTime == "" && this.operStatus == "" && this.patientName == "" && this.patientId == "" && this.operatingRoomNo == "") {
         var now = new Date();
         var year = now.getFullYear();
         var month = (now.getMonth() + 1).toString();
@@ -1648,7 +1657,7 @@ export default {
 
       if (item.formName == '麻醉记录单') {
         // this.getMaxTime();
-
+        this.personView = true
         let inDateTime = this.config.userInfo.inDateTime
         this.tempButtonView = false;
         //查找病人的最晚时间
@@ -1797,6 +1806,43 @@ export default {
               }
               let tempItems = JSON.parse(res.formContent);
               this.formItems = JSON.parse(res.formContent);
+              var list = this.formItems;
+              for (var i = 0; i < list.length; i++) {
+                if (list[i].fieldName) {
+                  arry.push({
+                    "patientId": this.lockedPatientInfo.patientId,
+                    "visitId": this.lockedPatientInfo.visitId,
+                    "operId": this.lockedPatientInfo.operId,
+                    "tableName": list[i].tableName,
+                    "coluName": list[i].fieldName,
+                    "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
+                    "dictTableName": list[i].dictTableName, //字典表名称
+                    "dictField": list[i].dictField, //字典字段名称
+                    "dictSelect": list[i].dictSelect,
+                  })
+                }
+              }
+              this.api.getFormSqlResult(arry)
+                .then(
+                  result => {
+                    for (var i = 0; i < list.length; i++) {
+                      if (list[i].fieldName) {
+                        if (list[i].fieldName == "page") {
+                          let obj = this.formItems[i];
+                          obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
+                          let tempObj = JSON.parse(JSON.stringify(obj));
+                          this.$set(this.formItems, i, tempObj);
+                        } else {
+                          let obj = this.formItems[i];
+                          obj.value = result[list[i].tableName + list[i].fieldName];
+                          let tempObj = JSON.parse(JSON.stringify(obj));
+                          this.$set(this.formItems, i, tempObj);
+                        }
+
+                      }
+                    }
+
+                  });
             })
       }
     },
@@ -2138,7 +2184,6 @@ export default {
     },
     //提交单子修改
     submitSaveForm() {
-      debugger
       if (this.selectFormItemTemp.formName == '手术清点单') {
         Bus.$emit('saveFun', '保存');
       } else {
@@ -2235,7 +2280,6 @@ export default {
         }
         //末页
         if (num == 2) {
-          debugger
           let m1 = this.config.pageTotal
           let m2 = this.config.pagePercentNum
           let m3 = m1 - m2
@@ -2269,6 +2313,7 @@ export default {
       this.config.pagePercentNum = 1;
       this.pageButtonView = false;
       this.formItems = [];
+      this.personView = false
       this.updateFormsData = [];
       if (this.setTimeId) {
         clearTimeout(this.setTimeId);
@@ -2607,8 +2652,6 @@ export default {
     },
     //检查结果
     openMedical() {
-      this.checkResultShow = true;
-      console.log(this.config.userInfo)
       if (window.ipc) {
         window.ipc.send('openMedical', this.config.userInfo.inpNo);
       }
@@ -2622,6 +2665,33 @@ export default {
     },
     closeCheckInfoShow() {
       this.checkResultShow = false;
+    },
+    //预先加载所有手术名称以及诊断
+    loadAllOper() {
+      let params = {
+        tableName: "med_operation_dict",
+        dictShowFiled: "OPERATION_NAME", //字典显示字段名称
+      }
+      this.api.allColumContext(params)
+        .then(res => {
+          this.config.allOperList = res;
+        })
+      let params1 = {
+        tableName: "MED_DIAGNOSIS_DICT",
+        dictShowFiled: "DIAGNOSIS_NAME", //字典显示字段名称
+      }
+      this.api.allColumContext(params1)
+        .then(rest => {
+          this.config.allDiagnosis = rest;
+        })
+    },
+    //打开体征显示设置
+    openPatSetting() {
+      this.personStyleView = true
+    },
+    closePatSetting() {
+      this.personStyleView = false
+      this.refreshForm();
     },
 
   },
@@ -2650,10 +2720,21 @@ export default {
     }
 
     this.getOperaRooms();
-
+    this.loadAllOper();
     this.setIntervaled();
     this.selectMedFormList();
     this.getHeight();
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = (now.getMonth() + 1).toString();
+    var day = (now.getDate()).toString();
+    if (month.length == 1) {
+      month = "0" + month;
+    }
+    if (day.length == 1) {
+      day = "0" + day;
+    }
+    this.getTime = year + "-" + month + "-" + day;
     // this.$toast("保存成功");
   },
   created() {

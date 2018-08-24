@@ -9,7 +9,7 @@ f
       </div>
       <div>
         <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px',lineHeight:svgHeight/rows+'px',}" style="width: 160px;border-bottom: 1px solid #8391a2;  font-size: 14px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
-          <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span>
+          <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}},{{item.ADMINISTRATOR}})</span>
         </div>
         <div v-for="(item,index2) in dataArray" v-if="index2==rows-1" :style="{top:svgHeight/rows*index2+20+'px',height:svgHeight/rows+'px',lineHeight:svgHeight/rows+'px',}" style="width: 160px; font-size: 14px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
           <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span>
@@ -364,85 +364,101 @@ export default {
           if (i == -1)
             break;
           else {
-            //开始时间间隔
-            let sMin = ''
-            //结束时间间隔
-            let eMin = ''
-            let maxPatTime = this.config.patientMaxTime
-            //判断是否在当前时间内
-            if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
-              continue;
-            }
-            if (list[i].DURATIVE_INDICATOR == 0) {
-              if (new Date(list[i].START_TIME) < new Date(this.config.initTime)) {
+            if (list[i].DURATIVE_INDICATOR == 1) {
+              //开始时间间隔
+              let sMin = ''
+              //结束时间间隔
+              let eMin = ''
+              let maxPatTime = this.config.patientMaxTime
+              //判断是否在当前时间内
+              if (new Date(list[i].START_TIME) > new Date(this.config.maxTime)) {
                 continue;
               }
-            }
-            //如果是持续用药
-            if (list[i].DURATIVE_INDICATOR == 1) {
-              //判断是否有结束时间
-              if (list[i].ENDDATE) {
-                if (new Date(list[i].ENDDATE) < new Date(this.config.initTime)) {
-                  continue;
-                }
-              } else {
-                if (new Date(this.config.patientMaxTime) < new Date(this.config.initTime)) {
+              if (list[i].DURATIVE_INDICATOR == 0) {
+                if (new Date(list[i].START_TIME) < new Date(this.config.initTime)) {
                   continue;
                 }
               }
-            }
-            sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
-            if (sMin < 0) {
-              sMin = 0;
-            }
-
-            //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
-            if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
-              if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
-                eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
-              } else {
-                eMin = this.getMinuteDif(this.config.initTime, new Date(this.config.patientMaxTime));
-              }
-            } else {
-
-              if (new Date(list[i].ENDDATE) >= this.config.maxTime) {
-                eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
-              } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
-                eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
-              } else {
-                // list[i].DURATIVE_INDICATOR = 0;
-                eMin = 0;
-              }
-            }
-            let x1 = Math.round(sMin / lMin * (w / this.columns))
-            let x2 = Math.round(eMin / lMin * (w / this.columns))
-            let y1
-            let y2
-            let flag = true;
-            let topi
-            y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
-            //判断是否同一种药品
-            if (this.dataArray.length > 0) {
-              for (var j = 0; j < this.dataArray.length; j++) {
-                if (list[i].ITEM_NAME == this.dataArray[j].ITEM_NAME && list[i].ITEM_CLASS == this.dataArray[j].ITEM_CLASS) {
-                  y1 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
-                  y2 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
-                  flag = false;
-                  topi = j;
-                  break;
+              //如果是持续用药
+              if (list[i].DURATIVE_INDICATOR == 1) {
+                //判断是否有结束时间
+                if (list[i].ENDDATE) {
+                  if (new Date(list[i].ENDDATE) < new Date(this.config.initTime)) {
+                    continue;
+                  }
+                } else {
+                  if (new Date(this.config.patientMaxTime) < new Date(this.config.initTime)) {
+                    continue;
+                  }
                 }
               }
-            }
+              sMin = this.getMinuteDif(this.config.initTime, list[i].START_TIME);
+              if (sMin < 0) {
+                sMin = 0;
+              }
 
-            list[i].vStartTime = '';
-            if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0 && m < this.rows) {
-              this.createLine(x1, x2, y1, y2, list[i]);
-            }
+              //如果病人这个用药没有结束时间那么默认使用过程中最大的时间
+              if (list[i].ENDDATE == null || list[i].ENDDATE == "") {
+                if (new Date(this.config.patientMaxTime) > this.config.maxTime) {
+                  eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
+                } else {
+                  eMin = this.getMinuteDif(this.config.initTime, new Date(this.config.patientMaxTime));
+                }
+              } else {
+
+                if (new Date(list[i].ENDDATE) >= this.config.maxTime) {
+                  eMin = this.getMinuteDif(this.config.initTime, this.config.maxTime);
+                } else if (this.config.initTime < new Date(list[i].ENDDATE) < this.config.maxTime) {
+                  eMin = this.getMinuteDif(this.config.initTime, new Date(list[i].ENDDATE));
+                } else {
+                  // list[i].DURATIVE_INDICATOR = 0;
+                  eMin = 0;
+                }
+              }
+              let x1 = Math.round(sMin / lMin * (w / this.columns))
+              let x2 = Math.round(eMin / lMin * (w / this.columns))
+              let y1
+              let y2
+              let flag = true;
+              let topi
+              y1 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+              y2 = Math.round(h / this.rows / 2 * (m + 1) + h / this.rows * m / 2)
+              //判断是否同一种药品
+              if (this.dataArray.length > 0) {
+                for (var j = 0; j < this.dataArray.length; j++) {
+                  if (list[i].ITEM_NAME == this.dataArray[j].ITEM_NAME && list[i].ITEM_CLASS == this.dataArray[j].ITEM_CLASS) {
+                    y1 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
+                    y2 = Math.round(h / this.rows / 2 * (j + 1) + h / this.rows * j / 2)
+                    flag = false;
+                    topi = j;
+                    break;
+                  }
+                }
+              }
+
+              list[i].vStartTime = '';
+              if (list[i].DURATIVE_INDICATOR == 1 && x2 >= 0 && m < this.rows) {
+                this.createLine(x1, x2, y1, y2, list[i]);
+              }
 
 
-            if (flag) {
-              if (m < this.rows) {
+              if (flag) {
+                if (m < this.rows) {
+                  this.xArray.push({
+                    x1: x1,
+                    y1: y1,
+                    x2: x2,
+                    y2: y2,
+                    w: x2 - x1,
+                    obj: list[i],
+                    top: m * (this.svgHeight / this.rows)
+
+                  })
+                  this.dataArray.push(list[i]);
+                  m++;
+                }
+
+              } else {
                 this.xArray.push({
                   x1: x1,
                   y1: y1,
@@ -450,26 +466,11 @@ export default {
                   y2: y2,
                   w: x2 - x1,
                   obj: list[i],
-                  top: m * (this.svgHeight / this.rows)
-
+                  top: topi * (this.svgHeight / this.rows)
                 })
-                this.dataArray.push(list[i]);
-                m++;
+
               }
-
-            } else {
-              this.xArray.push({
-                x1: x1,
-                y1: y1,
-                x2: x2,
-                y2: y2,
-                w: x2 - x1,
-                obj: list[i],
-                top: topi * (this.svgHeight / this.rows)
-              })
-
             }
-
           }
         }
       }

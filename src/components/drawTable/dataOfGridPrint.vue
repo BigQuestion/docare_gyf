@@ -31,7 +31,7 @@ export default {
     }
   },
   methods: {
-    selectMedAnesthesiaEventList() {
+        selectMedAnesthesiaEventList() {
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
@@ -305,5 +305,6 @@ export default {
 
 </script>
 <style scoped>
+
 
 </style>

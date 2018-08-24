@@ -177,6 +177,12 @@
             </div>
             <div v-if="chooseItems[0]" class="ediclass">
               <div class="ediChild">
+                默认值：
+              </div>
+              <input type="" name="" v-model="chooseItems[0].defaultValue">
+            </div>
+            <div v-if="chooseItems[0]" class="ediclass">
+              <div class="ediChild">
                 TextAlign:
               </div>
               <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].TextAlign,'isData',chooseItems[0].TextAlignMode)" v-model="chooseItems[0].TextAlignMode">
@@ -302,6 +308,14 @@
             </div>
             <div class="ediclass">
               <div class="ediChild">
+                默认值：
+              </div>
+              <select style="min-width:173px;" name="" id="" v-model="chooseItems[0].defaultValue">
+                <option v-for="btn in chooseItemsTemp.listData" :value="btn.ItemValue">{{btn.ItemValue}}</option>
+              </select>
+            </div>
+            <div class="ediclass">
+              <div class="ediChild">
                 MultiSelect:
               </div>
               <select style="min-width:173px;" name="" id="" v-on:change="selectData(chooseItems[0].MultiSelect,'isData',chooseItems[0].MultiSelectMode)" v-model="chooseItems[0].MultiSelectMode">
@@ -382,165 +396,167 @@ export default {
     return {
       formItems: [],
       btns: [{
-        text: '自动获取',
-        type: 'autoInput',
-        value: '输入文字',
-        selectKeyfield: 'id',
-        ForeColor: '#000',
-        fontSize: '13',
-      },
-      {
-        text: '文本控件',
-        type: 'title',
-        value: '输入文字',
-        width: '80',
-        ForeColor: '#000',
-        height: '',
-        fontSize: '13',
-      }, {
-        text: '文本',
-        type: 'text',
-        value: '输入文字',
-        width: '80',
-        height: '',
-        fieldName: '',
-        tableName: '',
-        ForeColor: '#0000FF',
-        borderStyle: '1px solid #222',
-        fontSize: '13',
-      }, {
-        text: '输入框',
-        type: 'input',
-        width: '80',
-        fieldName: '',
-        tableName: '',
-        dictTableName: '',
-        dictSelect: '',
-        dictShowFiled: '',
-        dictField: '',
-        borderStyle: '1px solid #222',
-        fontSize: '13',
-        value: '',
-        ForeColor: '#0000FF',
-        opacity: 1,
-        TextAlign: [{ isData: 'left' }, { isData: 'center' }, { isData: 'right' }],
-        TextAlignMode: 'left', //真为多选，假为单选
-        MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
-        MultiSelectMode: 'false', //真为多选，假为单选
-        isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
-        readOnlyMode: 'false',
-        isEdit: [{ isData: 'true' }, { isData: 'false' }],
-        isEditMode: 'true',
-        strFormat: [{ isData: '' }, { isData: 'yyyy-MM-dd' }, { isData: 'hh:mm' }, { isData: 'yyyy-MM-dd hh:mm' }], //格式化字符串
-        strFormatMode: '', //格式化字符串
-        nullString: [{ isData: 'true' }, { isData: 'false' }], //真可以为空，假不能为空
-        topMostMode: 'false',
-        topMost: [{ isData: 'true' }, { isData: 'false' }],
-        bottomLine: [{ isData: 'true' }, { isData: 'false' }], //打印底线
-        bottomLineMode: 'true',
-        lineType: [{ isData: 'solid' }, { isData: 'dashed' }], //底线风格
-        lineTypeMode: 'solid',
-        lineColor: '#222222',
-        nullStringMode: 'true',
-        cursor: [
-          { isData: 'auto' },
-          { isData: 'ibeam' },
-          { isData: 'pointer' },
-          { isData: 'wait' },
-          { isData: 'not-allowed' },
-          { isData: 'text' },
-        ],
-        cursorMode: 'auto',
+          text: '自动获取',
+          type: 'autoInput',
+          value: '输入文字',
+          selectKeyfield: 'id',
+          ForeColor: '#000',
+          fontSize: '13',
+        },
+        {
+          text: '文本控件',
+          type: 'title',
+          value: '输入文字',
+          width: '80',
+          ForeColor: '#000',
+          height: '',
+          fontSize: '13',
+        }, {
+          text: '文本',
+          type: 'text',
+          value: '输入文字',
+          width: '80',
+          height: '',
+          fieldName: '',
+          tableName: '',
+          ForeColor: '#0000FF',
+          borderStyle: '1px solid #222',
+          fontSize: '13',
+        }, {
+          text: '输入框',
+          type: 'input',
+          width: '80',
+          fieldName: '',
+          tableName: '',
+          dictTableName: '',
+          dictSelect: '',
+          dictShowFiled: '',
+          dictField: '',
+          borderStyle: '1px solid #222',
+          fontSize: '13',
+          value: '',
+          ForeColor: '#0000FF',
+          opacity: 1,
+          TextAlign: [{ isData: 'left' }, { isData: 'center' }, { isData: 'right' }],
+          TextAlignMode: 'left', //真为多选，假为单选
+          MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
+          MultiSelectMode: 'false', //真为多选，假为单选
+          isReadOnly: [{ isData: 'true' }, { isData: 'false' }],
+          readOnlyMode: 'false',
+          isEdit: [{ isData: 'true' }, { isData: 'false' }],
+          isEditMode: 'true',
+          strFormat: [{ isData: '' }, { isData: 'yyyy-MM-dd' }, { isData: 'hh:mm' }, { isData: 'yyyy-MM-dd hh:mm' }], //格式化字符串
+          strFormatMode: '', //格式化字符串
+          nullString: [{ isData: 'true' }, { isData: 'false' }], //真可以为空，假不能为空
+          topMostMode: 'false',
+          topMost: [{ isData: 'true' }, { isData: 'false' }],
+          bottomLine: [{ isData: 'true' }, { isData: 'false' }], //打印底线
+          bottomLineMode: 'true',
+          lineType: [{ isData: 'solid' }, { isData: 'dashed' }], //底线风格
+          lineTypeMode: 'solid',
+          lineColor: '#222222',
+          nullStringMode: 'true',
+          cursor: [
+            { isData: 'auto' },
+            { isData: 'ibeam' },
+            { isData: 'pointer' },
+            { isData: 'wait' },
+            { isData: 'not-allowed' },
+            { isData: 'text' },
+          ],
+          cursorMode: 'auto',
+          defaultValue: '/',
 
-      }, {
-        text: '单选',
-        type: 'radio'
-      }, {
-        text: '多选',
-        type: 'checkbox'
-      }, {
-        text: '横线',
-        type: 'line',
-        width: '100',
-        ForeColor: '#0000FF',
-      }, {
-        text: '竖线',
-        type: 'verticalLine',
-        height: '100',
-      }, {
-        text: "文本区",
-        type: "textarea",
-        height: "100",
-        width: "300",
-        fontSize: '12',
-        ForeColor: '#0000FF',
-        fieldName: '',
-        tableName: '',
-        dictTableName: '',
-        dictSelect: '',
-        dictShowFiled: '',
-        dictField: '',
-        MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
-        MultiSelectMode: 'false', //真为多选，假为单选
-      }, {
-        text: "麻醉量表格组件",
-        type: "formDiv",
-        fontSize: '1',
-      }, {
-        text: "入量表格组件",
-        type: "formInGrid",
-        fontSize: '1',
-      }, {
-        text: "监控组件",
-        type: "operControlGrid",
-      }, {
-        text: "标记组件",
-        type: "signGrid",
-        width: 600,
-        height: 72,
-        fontSize: '1',
-      }, {
-        text: "标记详细组件",
-        type: "dataOfGrid",
-        width: 600,
-        height: 72,
-        fontSize: '13',
-      }, {
-        text: "自定义控件",
-        type: "checkBoxAll",
-        defaultItems: "集合",
-        SourceFieldName: "",
-        SourceTableName: "",
-        listData: [],
-        MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
-        MultiSelectMode: 'false',
-      }, {
-        text: "MedLegengGraph",
-        type: "div",
-        width: "300",
-        height: "300",
-        borderStyle: '1px solid #222',
-        cursor: [
-          { isData: 'auto' },
-          { isData: 'ibeam' },
-          { isData: 'pointer' },
-          { isData: 'wait' },
-          { isData: 'not-allowed' },
-          { isData: 'text' },
-        ],
-        cursorMode: 'auto',
-        opacity: 1,
-      }, {
-        text: "器械清单显示",
-        type: "qixieList",
-        width: "850",
-        height: "800",
-      }, {
-        text: "特殊符号标识",
-        type: "specialSymbol",
-        width: "140",
-        height: "400",
-      },
+        }, {
+          text: '单选',
+          type: 'radio'
+        }, {
+          text: '多选',
+          type: 'checkbox'
+        }, {
+          text: '横线',
+          type: 'line',
+          width: '100',
+          ForeColor: '#0000FF',
+        }, {
+          text: '竖线',
+          type: 'verticalLine',
+          height: '100',
+        }, {
+          text: "文本区",
+          type: "textarea",
+          height: "100",
+          width: "300",
+          fontSize: '12',
+          ForeColor: '#0000FF',
+          fieldName: '',
+          tableName: '',
+          dictTableName: '',
+          dictSelect: '',
+          dictShowFiled: '',
+          dictField: '',
+          MultiSelect: [{ isData: 'true' }, { isData: 'false' }], //真为多选，假为单选
+          MultiSelectMode: 'false', //真为多选，假为单选
+        }, {
+          text: "麻醉量表格组件",
+          type: "formDiv",
+          fontSize: '1',
+        }, {
+          text: "入量表格组件",
+          type: "formInGrid",
+          fontSize: '1',
+        }, {
+          text: "监控组件",
+          type: "operControlGrid",
+        }, {
+          text: "标记组件",
+          type: "signGrid",
+          width: 600,
+          height: 72,
+          fontSize: '1',
+        }, {
+          text: "标记详细组件",
+          type: "dataOfGrid",
+          width: 600,
+          height: 72,
+          fontSize: '13',
+        }, {
+          text: "自定义控件",
+          type: "checkBoxAll",
+          defaultItems: "集合",
+          SourceFieldName: "",
+          SourceTableName: "",
+          listData: [],
+          MultiSelect: [{ isData: 'true' }, { isData: 'false' }],
+          MultiSelectMode: 'false',
+          defaultValue: '',
+        }, {
+          text: "MedLegengGraph",
+          type: "div",
+          width: "300",
+          height: "300",
+          borderStyle: '1px solid #222',
+          cursor: [
+            { isData: 'auto' },
+            { isData: 'ibeam' },
+            { isData: 'pointer' },
+            { isData: 'wait' },
+            { isData: 'not-allowed' },
+            { isData: 'text' },
+          ],
+          cursorMode: 'auto',
+          opacity: 1,
+        }, {
+          text: "器械清单显示",
+          type: "qixieList",
+          width: "850",
+          height: "800",
+        }, {
+          text: "特殊符号标识",
+          type: "specialSymbol",
+          width: "140",
+          height: "400",
+        },
       ],
       handleItem: {},
       offsetX: '',
@@ -677,6 +693,7 @@ export default {
         this.formItems[i].chosen = false;
       }
       e.preventDefault();
+
     },
     itemChoose(e, item) {
       this.dataInCanDelete = true;
@@ -699,6 +716,7 @@ export default {
         // this.domItems = [e.currentTarget];
         item.chosen = true;
       }
+      this.chooseItemsTemp = this.chooseItems[0];
     },
     drag(e, btn) {
       // debugger
@@ -730,9 +748,9 @@ export default {
         }
         this.api.updateMedFormContent(params)
           .then(
-          res => {
-            this.selectMedFormTemp();
-          });
+            res => {
+              this.selectMedFormTemp();
+            });
       } else {
 
       }
@@ -747,14 +765,14 @@ export default {
         }
         this.api.selectMedFormTemp(params)
           .then(
-          res => {
-            if (res.formContent == "null" || res.formContent == null) {
-              this.formItems = [];
-            } else {
-              this.formItems = JSON.parse(res.formContent);
-            }
+            res => {
+              if (res.formContent == "null" || res.formContent == null) {
+                this.formItems = [];
+              } else {
+                this.formItems = JSON.parse(res.formContent);
+              }
 
-          });
+            });
       }
     },
     show(index, ev) {
@@ -796,7 +814,6 @@ export default {
     },
     //增加集合里面配置内容
     addDefaultItemCon() {
-      debugger
       this.chooseItemsTemp.listData.push({ "ItemName": "", "ItemValue": "", "addFlag": true });
       this.selectItemCon = { "ItemName": "", "ItemValue": "", "addFlag": true };
       this.selectItemCon.indexFlag = this.chooseItemsTemp.listData.length - 1;
@@ -804,7 +821,6 @@ export default {
     },
     //获取当前选中配置项内容
     getClickItem(item, index) {
-      debugger
       this.selectItemCon = item;
       this.selectItemCon.indexFlag = index;
     },
@@ -1167,4 +1183,5 @@ export default {
   margin: 3px auto 0;
   position: relative;
 }
+
 </style>
