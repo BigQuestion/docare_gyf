@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       dataBody: [],
-      dataBodySz:[],
+      dataBodySz: [],
       tipTop: '',
       tipLeft: '',
       tipView: false,
@@ -31,14 +31,14 @@ export default {
     }
   },
   methods: {
-        selectMedAnesthesiaEventList() {
+    selectMedAnesthesiaEventList() {
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
-        itemclass: "yp",
+        itemClass: "yp",
       }
       if (this.setTimeId) {
         clearTimeout(this.setTimeId)
@@ -52,14 +52,18 @@ export default {
             ITEM_NAME: "《术中用药》"
           })
           for (var i = 0; i < res.list.length; i++) {
-            if (res.list[i].ITEM_CLASS == "3" || res.list[i].ITEM_CLASS == "2") {
+            if (res.list[i].ITEM_CLASS == "C" || res.list[i].ITEM_CLASS == "2") {
 
             } else {
               var time = new Date(res.list[i].START_TIME).getTime();
-              // console.log(time)
               if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
                 this.$set(res.list[i], 'sort', time);
-                var nameDate = res.list[i].START_TIME.split(" ");
+                if(res.list[i].START_TIME){
+                  var nameDate = res.list[i].START_TIME.split(" ");
+                }else{
+                  var nameDate = '';
+                }
+                
                 if (res.list[i].DOSAGE !== null) {
                   if (res.list[i].DURATIVE_INDICATOR == 1) {
                     if (res.list[i].ADMINISTRATOR !== null) {
@@ -107,7 +111,11 @@ export default {
                 for (var ti = 0; ti < 6; ti++) {
                   for (var t = 6; t < zze.list.length; t++) {
                     if (zze.list[ti].ITEM_NAME !== zze.list[t].ITEM_NAME && zze.list[ti].ITEM_CLASS !== zze.list[t].ITEM_CLASS) {
-                      var nameDate1 = zze.list[t].START_TIME.split(" ");
+                      if (zze.list[t].START_TIME) {
+                        var nameDate1 = zze.list[t].START_TIME.split(" ");
+                      } else {
+                        var nameDate1 = '';
+                      }
                       var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
                       if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
                         var titleDataTwo = [zze.list[t].ITEM_NAME, '================', '时间：' + zze.list[t].START_TIME];
@@ -141,11 +149,15 @@ export default {
               }
               this.api.selectMedAnesthesiaEventList(paramsTwo)
                 .then(aff => {
-                  // console.log(aff.list)
                   let pushCXData = [];
                   for (var h = 0; h < aff.list.length; h++) {
                     if (aff.list[h].DURATIVE_INDICATOR == 0) {
-                      var nameDate2 = aff.list[h].START_TIME.split(" ");
+                      if (aff.list[h].START_TIME) {
+                        var nameDate2 = aff.list[h].START_TIME.split(" ");
+                      } else {
+                        var nameDate2 = '';
+                      }
+
                       var timeMoreOne = new Date(aff.list[h].START_TIME).getTime();
                       if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
                         // var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
@@ -282,7 +294,6 @@ export default {
   },
   props: ['dataOfPeo', 'page', 'value'],
   mounted() {
-    console.log(this.value)
     if (this.setTimeId) {
       clearTimeout(this.setTimeId);
     }
@@ -305,6 +316,5 @@ export default {
 
 </script>
 <style scoped>
-
 
 </style>
