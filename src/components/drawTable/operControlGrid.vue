@@ -519,7 +519,6 @@ export default {
     },
 
     dataOperNoFun() {
-      debugger
       let list = this.breathData;
       //定义一个总数组把几个呼吸数据进行组合
       let allArrData = []

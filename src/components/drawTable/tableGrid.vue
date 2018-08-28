@@ -6,11 +6,11 @@
         <div v-else style="width: 12px;display: inline-block;"></div>
       </div>
       <div>
-        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows+'px',lineHeight:svgHeight/rows+'px',}" style="line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 14px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
+        <div v-for="(item,index) in dataArray" v-if="index < rows-1" :style="{top:svgHeight/rows*index+20+'px',height:svgHeight/rows-2.7+'px',lineHeight:svgHeight/rows+'px',}" style="line-height: 14px;width: 160px;border-bottom: 1px solid #8391a2;  font-size: 14px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
           <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}},{{item.ADMINISTRATOR}})</span>
           <span v-if="item.ADMINISTRATOR"></span>
         </div>
-        <div v-for="(item,index2) in dataArray" v-if="index2==rows-1" :style="{top:svgHeight/rows*index2+20+'px',height:svgHeight/rows+'px',lineHeight:svgHeight/rows+'px',}" style="width: 160px; font-size: 14px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
+        <div v-for="(item,index2) in dataArray" v-if="index2==rows-1" :style="{top:svgHeight/rows*index2+20+'px',height:svgHeight/rows-2.7+'px',lineHeight:svgHeight/rows+'px',}" style="width: 160px; font-size: 14px;position: absolute;left: -165px;padding-left: 5px;white-space:nowrap;word-break: keep-all;">
           <span v-if="item.ITEM_NAME"> {{item.ITEM_NAME}}({{item.DOSAGE_UNITS}})</span>
         </div>
       </div>
@@ -434,7 +434,7 @@ export default {
                 if (new Date(this.config.patientMaxTime) > new Date(this.config.initTime)) {
                   list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
                   arrayList.push(list[i]);
-                } else { }
+                } else {}
               } else {
                 if (new Date(list[i].ENDDATE) > new Date(this.config.initTime)) {
                   list[i].vStartTime = new Date(this.config.initTime).Format("yyyy-MM-dd hh:mm:ss");
@@ -628,4 +628,5 @@ path {
   stroke: red;
   stroke-width: 1px;
 }
+
 </style>
