@@ -106,226 +106,228 @@ export default {
       //         })
       //       }
       //     }
-          // 输液
-          let paramsTwo = {
+      // 输液
+      let paramsTwo = {
+        patientId: this.config.userInfo.patientId,
+        operId: this.config.userInfo.operId,
+        visitId: this.config.userInfo.visitId,
+        itemClass: "3B",
+      }
+      this.api.selectMedAnesthesiaEventList(paramsTwo)
+        .then(zze => {
+          if (zze.list.length > 6) {
+            for (var ti = 0; ti < 6; ti++) {
+              for (var t = 6; t < zze.list.length; t++) {
+                if (zze.list[ti].ITEM_NAME == zze.list[t].ITEM_NAME && zze.list[ti].ITEM_CLASS == zze.list[t].ITEM_CLASS) {
+
+                } else {
+                  var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
+                  if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
+                    var time8 = timeMoreOne - this.startTimeInPage
+                    var leftPlace8 = ((time8 * 2.78) / 60 / 1000);
+                    this.dataOfBottom.push({
+                      leftData: leftPlace8
+                    })
+                    dataBodyNew.push({
+                      left: leftPlace8,
+                      bottom: 0,
+                      name: zze.list[t].ITEM_NAME,
+                      time: zze.list[t].START_TIME,
+                    })
+                  }
+                }
+
+              }
+            }
+          } else {
+
+          }
+
+          // 事件
+          let paramsThree = {
             patientId: this.config.userInfo.patientId,
             operId: this.config.userInfo.operId,
             visitId: this.config.userInfo.visitId,
-            itemClass: "3B",
+            itemClass: "sz",
           }
-          this.api.selectMedAnesthesiaEventList(paramsTwo)
-            .then(zze => {
-              if (zze.list.length > 6) {
-                for (var ti = 0; ti < 6; ti++) {
-                  for (var t = 6; t < zze.list.length; t++) {
-                    if (zze.list[ti].ITEM_NAME == zze.list[t].ITEM_NAME && zze.list[ti].ITEM_CLASS == zze.list[t].ITEM_CLASS) {
+          this.api.selectMedAnesthesiaEventList(paramsThree)
+            .then(aff => {
+              for (var h = 0; h < aff.list.length; h++) {
+                if (aff.list[h].ITEM_CLASS == 'Y'){
 
-                    } else {
-                      var timeMoreOne = new Date(zze.list[t].START_TIME).getTime();
-                      if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
-                        var time8 = timeMoreOne - this.startTimeInPage
-                        var leftPlace8 = ((time8 * 2.78) / 60 / 1000);
-                        this.dataOfBottom.push({
-                          leftData: leftPlace8
-                        })
-                        dataBodyNew.push({
-                          left: leftPlace8,
-                          bottom: 0,
-                          name: zze.list[t].ITEM_NAME,
-                          time: zze.list[t].START_TIME,
-                        })
-                      }
-                    }
-
+                } else {
+                  var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
+                  if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
+                    var time9 = timeMoreTwo - this.startTimeInPage
+                    var leftPlace9 = ((time9 * 2.78) / 60 / 1000);
+                    this.dataOfBottom.push({
+                      leftData: leftPlace9
+                    })
+                    dataBodyNew.push({
+                      left: leftPlace9,
+                      bottom: 0,
+                      name: aff.list[h].ITEM_NAME,
+                      time: aff.list[h].START_TIME,
+                    })
                   }
                 }
-              } else {
-
               }
 
-              // 事件
-              let paramsThree = {
+              if (this.config.userInfo.inDateTime) {
+                var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
+                if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
+                  var time6 = timeFive - this.startTimeInPage
+                  var leftPlace5 = ((time6 * 2.78) / 60 / 1000);
+                  this.dataOfBottom.push({
+                    leftData: leftPlace5
+                  })
+                  dataBodyNew.push({
+                    left: leftPlace5,
+                    bottom: 0,
+                    name: '入手术室',
+                    time: this.config.userInfo.inDateTime,
+                  })
+                }
+              }
+
+
+              if (this.config.userInfo.outDateTime) {
+                var timeSix = new Date(this.config.userInfo.outDateTime).getTime();
+                if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
+                  var time7 = timeSix - this.startTimeInPage
+                  var leftPlace6 = ((time7 * 2.78) / 60 / 1000);
+                  this.dataOfBottom.push({
+                    leftData: leftPlace6
+                  })
+                  dataBodyNew.push({
+                    left: leftPlace6,
+                    bottom: 0,
+                    name: '出手术室',
+                    time: this.config.userInfo.outDateTime,
+                  })
+                }
+              }
+              dataBodyNew.sort(this.sortFun);
+              for (var t = 0; t < dataBodyNew.length; t++) {
+                this.$set(dataBodyNew[t], 'hasNum', t + 1);
+              }
+              // 特殊图标数据
+              if (this.config.userInfo.startDateTime) {
+                var timeOne = new Date(this.config.userInfo.startDateTime).getTime();
+                if (this.startTimeInPage <= timeOne && timeOne <= this.maxTimeInPage) {
+                  var time2 = timeOne - this.startTimeInPage
+                  var leftPlace1 = ((time2 * 2.78) / 60 / 1000);
+                  this.dataOfBottom.push({
+                    leftData: leftPlace1
+                  })
+                  dataBodyNew.push({
+                    left: leftPlace1,
+                    bottom: 0,
+                    name: '手术开始',
+                    time: this.config.userInfo.startDateTime,
+                  })
+                }
+              }
+              if (this.config.userInfo.anesStartTime) {
+                var timeTwo = new Date(this.config.userInfo.anesStartTime).getTime();
+                if (this.startTimeInPage <= timeTwo && timeTwo <= this.maxTimeInPage) {
+                  var time3 = timeTwo - this.startTimeInPage
+                  var leftPlace2 = ((time3 * 2.78) / 60 / 1000);
+                  this.dataOfBottom.push({
+                    leftData: leftPlace2
+                  })
+                  dataBodyNew.push({
+                    left: leftPlace2,
+                    bottom: 0,
+                    name: '麻醉开始',
+                    time: this.config.userInfo.anesStartTime,
+                  })
+                }
+              }
+              if (this.config.userInfo.anesEndTime) {
+                var timeThree = new Date(this.config.userInfo.anesEndTime).getTime();
+                if (this.startTimeInPage <= timeThree && timeThree <= this.maxTimeInPage) {
+                  var time4 = timeThree - this.startTimeInPage
+                  var leftPlace3 = ((time4 * 2.78) / 60 / 1000);
+                  this.dataOfBottom.push({
+                    leftData: leftPlace3
+                  })
+                  dataBodyNew.push({
+                    left: leftPlace3,
+                    bottom: 0,
+                    name: '麻醉结束',
+                    time: this.config.userInfo.anesEndTime,
+                  })
+                }
+              }
+              if (this.config.userInfo.endDateTime) {
+                var timeFour = new Date(this.config.userInfo.endDateTime).getTime();
+                // console.log(timeFour)
+                if (this.startTimeInPage <= timeFour && timeFour <= this.maxTimeInPage) {
+                  var time5 = timeFour - this.startTimeInPage
+                  // console.log(time5)
+                  var leftPlace4 = ((time5 * 2.78) / 60 / 1000);
+                  this.dataOfBottom.push({
+                    leftData: leftPlace4
+                  })
+                  dataBodyNew.push({
+                    left: leftPlace4,
+                    bottom: 0,
+                    name: '手术结束',
+                    time: this.config.userInfo.endDateTime,
+                  })
+                }
+              }
+              // 全部呼吸
+              let paramBr = {
                 patientId: this.config.userInfo.patientId,
                 operId: this.config.userInfo.operId,
                 visitId: this.config.userInfo.visitId,
-                itemClass: "sz",
+                itemClass: 'Y'
               }
-              this.api.selectMedAnesthesiaEventList(paramsThree)
-                .then(aff => {
-                  for (var h = 0; h < aff.list.length; h++) {
-                    if (aff.list[h].DURATIVE_INDICATOR == 0) {
-                      var timeMoreTwo = new Date(aff.list[h].START_TIME).getTime();
-                      if (this.startTimeInPage <= timeMoreTwo && timeMoreTwo <= this.maxTimeInPage) {
-                        var time9 = timeMoreTwo - this.startTimeInPage
-                        var leftPlace9 = ((time9 * 2.78) / 60 / 1000);
+              this.api.selectMedAnesthesiaEventList(paramBr)
+                .then(add => {
+                  if (add.list.length > 0) {
+                    for (var h = 0; h < add.list.length; h++) {
+                      var timeBr = new Date(add.list[h].START_TIME).getTime();
+                      if (this.startTimeInPage <= timeBr && timeBr <= this.maxTimeInPage) {
+                        var timekz = timeBr - this.startTimeInPage
+                        var leftPlaceBr = ((timekz * 2.78) / 60 / 1000);
                         this.dataOfBottom.push({
-                          leftData: leftPlace9
+                          leftData: leftPlaceBr
                         })
                         dataBodyNew.push({
-                          left: leftPlace9,
+                          left: leftPlaceBr,
                           bottom: 0,
-                          name: aff.list[h].ITEM_NAME,
-                          time: aff.list[h].START_TIME,
+                          name: add.list[h].ITEM_NAME,
+                          time: add.list[h].START_TIME,
                         })
                       }
                     }
                   }
-
-                  if (this.config.userInfo.inDateTime) {
-                    var timeFive = new Date(this.config.userInfo.inDateTime).getTime();
-                    if (this.startTimeInPage <= timeFive && timeFive <= this.maxTimeInPage) {
-                      var time6 = timeFive - this.startTimeInPage
-                      var leftPlace5 = ((time6 * 2.78) / 60 / 1000);
-                      this.dataOfBottom.push({
-                        leftData: leftPlace5
-                      })
-                      dataBodyNew.push({
-                        left: leftPlace5,
-                        bottom: 0,
-                        name: '入手术室',
-                        time: this.config.userInfo.inDateTime,
-                      })
-                    }
-                  }
-
-
-                  if (this.config.userInfo.outDateTime) {
-                    var timeSix = new Date(this.config.userInfo.outDateTime).getTime();
-                    if (this.startTimeInPage <= timeSix && timeSix <= this.maxTimeInPage) {
-                      var time7 = timeSix - this.startTimeInPage
-                      var leftPlace6 = ((time7 * 2.78) / 60 / 1000);
-                      this.dataOfBottom.push({
-                        leftData: leftPlace6
-                      })
-                      dataBodyNew.push({
-                        left: leftPlace6,
-                        bottom: 0,
-                        name: '出手术室',
-                        time: this.config.userInfo.outDateTime,
-                      })
-                    }
-                  }
+                  // 筛选重复项，使其往上位移
                   dataBodyNew.sort(this.sortFun);
-                  for (var t = 0; t < dataBodyNew.length; t++) {
-                    this.$set(dataBodyNew[t], 'hasNum', t + 1);
-                  }
-                  // 特殊图标数据
-                  if (this.config.userInfo.startDateTime) {
-                    var timeOne = new Date(this.config.userInfo.startDateTime).getTime();
-                    if (this.startTimeInPage <= timeOne && timeOne <= this.maxTimeInPage) {
-                      var time2 = timeOne - this.startTimeInPage
-                      var leftPlace1 = ((time2 * 2.78) / 60 / 1000);
-                      this.dataOfBottom.push({
-                        leftData: leftPlace1
-                      })
-                      dataBodyNew.push({
-                        left: leftPlace1,
-                        bottom: 0,
-                        name: '手术开始',
-                        time: this.config.userInfo.startDateTime,
-                      })
-                    }
-                  }
-                  if (this.config.userInfo.anesStartTime) {
-                    var timeTwo = new Date(this.config.userInfo.anesStartTime).getTime();
-                    if (this.startTimeInPage <= timeTwo && timeTwo <= this.maxTimeInPage) {
-                      var time3 = timeTwo - this.startTimeInPage
-                      var leftPlace2 = ((time3 * 2.78) / 60 / 1000);
-                      this.dataOfBottom.push({
-                        leftData: leftPlace2
-                      })
-                      dataBodyNew.push({
-                        left: leftPlace2,
-                        bottom: 0,
-                        name: '麻醉开始',
-                        time: this.config.userInfo.anesStartTime,
-                      })
-                    }
-                  }
-                  if (this.config.userInfo.anesEndTime) {
-                    var timeThree = new Date(this.config.userInfo.anesEndTime).getTime();
-                    if (this.startTimeInPage <= timeThree && timeThree <= this.maxTimeInPage) {
-                      var time4 = timeThree - this.startTimeInPage
-                      var leftPlace3 = ((time4 * 2.78) / 60 / 1000);
-                      this.dataOfBottom.push({
-                        leftData: leftPlace3
-                      })
-                      dataBodyNew.push({
-                        left: leftPlace3,
-                        bottom: 0,
-                        name: '麻醉结束',
-                        time: this.config.userInfo.anesEndTime,
-                      })
-                    }
-                  }
-                  if (this.config.userInfo.endDateTime) {
-                    var timeFour = new Date(this.config.userInfo.endDateTime).getTime();
-                    // console.log(timeFour)
-                    if (this.startTimeInPage <= timeFour && timeFour <= this.maxTimeInPage) {
-                      var time5 = timeFour - this.startTimeInPage
-                      // console.log(time5)
-                      var leftPlace4 = ((time5 * 2.78) / 60 / 1000);
-                      this.dataOfBottom.push({
-                        leftData: leftPlace4
-                      })
-                      dataBodyNew.push({
-                        left: leftPlace4,
-                        bottom: 0,
-                        name: '手术结束',
-                        time: this.config.userInfo.endDateTime,
-                      })
-                    }
-                  }
-                  // 全部呼吸
-                  let paramBr = {
-                    patientId: this.config.userInfo.patientId,
-                    operId: this.config.userInfo.operId,
-                    visitId: this.config.userInfo.visitId,
-                    itemClass: 'Y'
-                  }
-                  this.api.selectMedAnesthesiaEventList(paramBr)
-                    .then(add => {
-                      if (add.list.length > 0) {
-                        for (var h = 0; h < add.list.length; h++) {
-                          var timeBr = new Date(add.list[h].START_TIME).getTime();
-                          if (this.startTimeInPage <= timeBr && timeBr <= this.maxTimeInPage) {
-                            var timekz = timeBr - this.startTimeInPage
-                            var leftPlaceBr = ((timekz * 2.78) / 60 / 1000);
-                            this.dataOfBottom.push({
-                              leftData: leftPlaceBr
-                            })
-                            dataBodyNew.push({
-                              left: leftPlaceBr,
-                              bottom: 0,
-                              name: add.list[h].ITEM_NAME,
-                              time: add.list[h].START_TIME,
-                            })
-                          }
-                        }
+                  var pei = 0;
+                  for (var k = 0; k < dataBodyNew.length; k++) {
+                    if (dataBodyNew[k - 1]) {
+                      if (dataBodyNew[k].left == dataBodyNew[k - 1].left || dataBodyNew[k].left < dataBodyNew[k - 1].left + 8) {
+                        dataBodyNew[k].bottom = dataBodyNew[k - 1].bottom + 15;
+                      } else {
+                        dataBodyNew[k].bottom = 0;
                       }
-                      // 筛选重复项，使其往上位移
-                      dataBodyNew.sort(this.sortFun);
-                      var pei = 0;
-                      for (var k = 0; k < dataBodyNew.length; k++) {
-                        if (dataBodyNew[k - 1]) {
-                          if (dataBodyNew[k].left == dataBodyNew[k - 1].left || dataBodyNew[k].left < dataBodyNew[k - 1].left + 8) {
-                            dataBodyNew[k].bottom = dataBodyNew[k - 1].bottom + 15;
-                          } else {
-                            dataBodyNew[k].bottom = 0;
-                          }
-                        } else {
+                    } else {
 
-                        }
-                      }
-                      console.log(dataBodyNew)
-                      this.dataBody = dataBodyNew;
-                      // this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
-                      // })
+                    }
+                  }
+                  // console.log(dataBodyNew)
+                  this.dataBody = dataBodyNew;
+                  // this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
+                  // })
 
-                    })
                 })
-            });
-        // });
+            })
+        });
+      // });
 
     },
     noFunction() {
