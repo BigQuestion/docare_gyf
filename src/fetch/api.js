@@ -524,6 +524,14 @@ export default {
   },
 
   /**
+   * 批量修改模板内容
+   * 
+   */
+  updateBatch(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/updateBatch', params)
+  },
+
+  /**
    * 根据单子读取相关信息
    * 
    */

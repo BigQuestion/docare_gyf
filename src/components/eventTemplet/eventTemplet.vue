@@ -1,6 +1,6 @@
 <template>
   <!-- <div style="position:absolute;z-index:12;cursor:not-allowed;width:100%;height:100%;"> -->
-  <div style="cursor:auto;width:85%;min-height: 600px;background-color: rgb(228, 240, 255);z-index: 13;border:2px solid rgb(68,170,211);position: absolute;">
+  <div style="cursor:auto;width:100%;min-height: 600px;background-color: rgb(228, 240, 255);z-index: 13;border:2px solid rgb(68,170,211);position: absolute;">
     <div class="load_top" style="height: 30px;padding: 0px 10px;background-color:rgb(68,170,211);color: white;">
       <div>套用模板</div>
       <div @click="closeWin" class="top_active">X</div>
@@ -79,16 +79,54 @@
           </ul>
         </div>
       </div>
-      <div style="width: 75%;overflow-y: auto;box-sizing:border-box;border:1px solid #97B1D1;">
+      <!-- <div style="width: 75%;overflow-y: auto;box-sizing:border-box;border:1px solid #97B1D1;">
         <div style="display: flex;margin-left: 10px;background-color:rgb(228, 240, 255);">
-          <div :style="{width:cell.width+'px'}" v-for="cell in contentConfig" style="padding-left:5px;box-sizing:border-box;border:1px solid #97B1D1;">
+          <div :style="{width:cell.width+'px'}" v-for="cell in contentConfig" style="box-sizing:border-box;border:1px solid #97B1D1;">
             {{cell.title}}
           </div>
         </div>
         <div>
           <div v-for="item in tempDetailList" style="display: flex;margin-left: 10px;">
-            <div v-for="cell in contentConfig" :style="{width:cell.width+'px'}" style="padding-left:5px;box-sizing:border-box;border:1px solid #97B1D1;">
+            <div v-for="cell in contentConfig" :style="{width:cell.width+'px'}" style="box-sizing:border-box;border:1px solid #97B1D1;">
               {{item[cell.fieldObj]}}
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div style="width: 75%;overflow-y: auto;box-sizing:border-box;border:1px solid #97B1D1;">
+        <div style="display: flex;margin-left: 10px;background-color:rgb(228, 240, 255);">
+          <div :style="{width:cell.width+'px'}" v-for="cell in contentConfig" style="text-align: center;box-sizing:border-box;border:1px solid #97B1D1;">
+            {{cell.title}}
+          </div>
+        </div>
+        <div style="width: 100%;">
+          <div v-for="(item,index) in tempDetailList" @click="clickItem(item,index)" style="display: flex;margin-left: 10px;" :class="{chooseItem:item.chooseItem}">
+            <div v-for="cell in contentConfig" style="box-sizing:border-box;border:1px solid #97B1D1;">
+              <select :class="{selectchooseItem:item.chooseItem}" v-if="cell.fieldObj=='itemClass'" @change="changeItem(item)" v-model="item[cell.fieldObj]" :style="{width:cell.width-2+'px'}" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option v-for="option in eventTypeList" v-bind:value="option.typeId">
+                  {{ option.typeName }}
+                </option>
+              </select>
+              <select :class="{selectchooseItem:item.chooseItem}" :style="{width:cell.width-2+'px'}" v-else-if="cell.fieldObj == 'administrator'" v-model="item[cell.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option value=""></option>
+                <option :style="{width:cell.width-2+'px'}" style="background-color: white;" v-for="(item,index) in roadList" :value="item.itemName">{{ item.itemName }}</option>
+              </select>
+              <select :class="{selectchooseItem:item.chooseItem}" :style="{width:cell.width-2+'px'}" v-else-if="cell.fieldObj == 'concentrationUnit'" v-model="item[cell.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option value=""></option>
+                <option style="background-color: white;" v-for="(item,index) in concentrationList" :value="item.itemName">{{ item.itemName }}</option>
+              </select>
+              <select :class="{selectchooseItem:item.chooseItem}" :style="{width:cell.width-2+'px'}" v-else-if="cell.fieldObj == 'speedUnit'" v-model="item[cell.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option value=""></option>
+                <option style="background-color: white;" v-for="(item,index) in speedUnitList" :value="item.itemName">{{ item.itemName }}</option>
+              </select>
+              <select :class="{selectchooseItem:item.chooseItem}" :style="{width:cell.width-2+'px'}" v-else-if="cell.fieldObj == 'dosageUnits'" v-model="item[cell.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option value=""></option>
+                <option style="background-color: white;" v-for="(item,index) in dosageUnitsList" :value="item.itemName">{{ item.itemName }}</option>
+              </select>
+              <!--  <div v-else-if="cell.fieldObj=='itemNo'">
+                <input readonly="readonly" style="height:20px;border:0;display:block;font-size:13px;text-align: center;" type="text" :style="{width:(cell.width-2)+'px'}" v-model="item[cell.fieldObj]">
+              </div> -->
+              <input v-else @change="changeItem(item)" style="height:20px;border:0;display:block;font-size:13px;text-align: center;" type="text" :style="{width:cell.width-2+'px'}" v-model="item[cell.fieldObj]">
             </div>
           </div>
         </div>
@@ -100,6 +138,10 @@
       <button @click="closeWin">取消</button>
       <button @click="selectTemplet">套用模板</button>
       <!-- <button @click="deleteTemplet">删除模板</button> -->
+      <button @click="updateBatch">保存</button>
+      <button @click="addItem">新增</button>
+      <button @click="downMove(0)">下移</button>
+      <button @click="downMove(1)">上移</button>
     </div>
   </div>
   <!-- </div> -->
@@ -108,20 +150,21 @@
 export default {
   data() {
     return {
-      contentConfig: [{
-          title: '序号',
-          fieldObj: 'itemNo',
-          width: '60'
-        },
+      contentConfig: [
+        // {
+        //     title: '序号',
+        //     fieldObj: 'itemNo',
+        //     width: '40'
+        //   },
         {
           title: '类型',
-          fieldObj: 'itemTypeName',
+          fieldObj: 'itemClass',
           width: '60'
         },
         {
           title: '事件名称',
           fieldObj: 'itemName',
-          width: '200'
+          width: '350'
         },
         {
           title: '途径',
@@ -131,17 +174,17 @@ export default {
         {
           title: '浓度',
           fieldObj: 'concentration',
-          width: '90'
+          width: '50'
         },
         {
           title: '单位',
           fieldObj: 'concentrationUnit',
-          width: '90'
+          width: '60'
         },
         {
           title: '速度',
           fieldObj: 'performSpeed',
-          width: '90'
+          width: '45'
         },
         {
           title: '单位',
@@ -151,12 +194,12 @@ export default {
         {
           title: '剂量',
           fieldObj: 'dosage',
-          width: '90'
+          width: '50'
         },
         {
           title: '单位',
           fieldObj: 'dosageUnits',
-          width: '90'
+          width: '80'
         }
       ],
       publicNameList: [],
@@ -165,6 +208,12 @@ export default {
       privateTempNameList: [],
       tempDetailList: [],
       state: false,
+      eventTypeList: [], //所有事件类型
+      roadList: [], //途径列表
+      concentrationList: [], //用药浓度列表,
+      speedUnitList: [], //速度单位列表
+      dosageUnitsList: [], //用药单位列表
+      selectItem: '', //选中对象
 
     }
 
@@ -257,6 +306,9 @@ export default {
       }
       this.api.getTempletDetail(params)
         .then(res => {
+          for (var a = 0; a < res.list.length; a++) {
+            this.$set(res.list[a], 'chooseItem', false);
+          }
           this.tempDetailList = res.list;
         })
     },
@@ -320,6 +372,110 @@ export default {
     //是否套用剂量
     getSelectState() {
       this.state = !this.state;
+    },
+
+    allMedAnesthesiaEventType() {
+      let params = {}
+      this.api.allMedAnesthesiaEventType(params)
+        .then(
+          res => {
+            this.eventTypeList = res.list;
+          });
+    },
+
+    changeItem(item) {
+
+    },
+
+    updateBatch() {
+      this.api.updateBatch(this.tempDetailList)
+        .then(res => {
+          if (res.success)
+            alert("保存成功")
+        })
+    },
+
+    //得到选中的并集麻醉事件记录
+    clickItem(item, index) {
+      for (var a = 0; a < this.tempDetailList.length; a++) {
+        this.$set(this.tempDetailList[a], 'chooseItem', false);
+      }
+      item.index = index;
+      item.chooseItem = true;
+      this.selectItem = item;
+    },
+    //新增模板事件
+    addItem() {
+      this.tempDetailList.push({
+        itemClass: '',
+        itemName: '',
+        administrator: '',
+        concentration: '',
+        concentrationUnit: '',
+        performSpeed: '',
+        speedUnit: '',
+        dosage: '',
+        dosageUnits: '',
+        addFlag: true,
+      })
+    },
+
+    //获取途径列表
+    getRoadList() {
+      this.api.getMedAnesthesiaCommDictByItemClass({
+          itemClass: '用药途径'
+        })
+        .then(
+          res => {
+            this.roadList = res.list;
+          });
+      this.api.getMedAnesthesiaCommDictByItemClass({
+          itemClass: '用药浓度单位'
+        })
+        .then(
+          rest => {
+            this.concentrationList = rest.list
+          });
+      this.api.getMedAnesthesiaCommDictByItemClass({
+          itemClass: '用药速度单位'
+        })
+        .then(
+          rs => {
+            this.speedUnitList = rs.list
+          });
+      this.api.getMedAnesthesiaCommDictByItemClass({
+          itemClass: '用药单位'
+        })
+        .then(
+          rt => {
+            this.dosageUnitsList = rt.list
+          });
+    },
+    //向下移动
+    downMove(flag) {
+      if (this.selectItem) {
+        if (flag == 0) {
+          if (this.selectItem.index + 1 != this.tempDetailList.length) {
+            this.tempDetailList = this.swapArray(this.tempDetailList, this.selectItem.index, this.selectItem.index + 1);
+          } else {
+            alert('已经处于置底，无法下移');
+          }
+        }
+        if (flag == 1) {
+          if (this.selectItem.index != 0) {
+            this.tempDetailList = this.swapArray(this.tempDetailList, this.selectItem.index, this.selectItem.index - 1);
+          } else {
+            alert('已经处于置顶，无法上移');
+          }
+        }
+
+      }
+    },
+
+    swapArray(arr, index1, index2) {
+      arr[index1] = arr.splice(index2, 1, arr[index1])[0];
+      this.selectItem.index = index2
+      return arr;
     }
 
 
@@ -330,9 +486,25 @@ export default {
   props: ['tempView', 'itemList'],
   mounted() {
     this.getMethodNames();
+    this.allMedAnesthesiaEventType();
+    this.getRoadList();
 
   }
 }
 
 </script>
-<style scoped></style>
+<style scoped>
+.chooseItem {}
+
+.chooseItem div,
+.chooseItem input {
+  background-color: #CCE8FF;
+  /* border: 1px solid #A9A9A9; */
+}
+
+.selectchooseItem {
+  background-color: #CCE8FF;
+  /* border: 1px solid #A9A9A9; */
+}
+
+</style>
