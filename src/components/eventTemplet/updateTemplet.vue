@@ -79,7 +79,7 @@
           </ul>
         </div>
       </div>
-      <div style="width: 75%;overflow-y: auto;box-sizing:border-box;border:1px solid #97B1D1;">
+      <!-- <div style="width: 75%;overflow-y: auto;box-sizing:border-box;border:1px solid #97B1D1;">
         <div style="display: flex;margin-left: 10px;background-color:rgb(228, 240, 255);">
           <div :style="{width:cell.width+'px'}" v-for="cell in contentConfig" style="box-sizing:border-box;border:1px solid #97B1D1;">
             {{cell.title}}
@@ -92,6 +92,44 @@
             </div>
           </div>
         </div>
+      </div> -->
+      <div style="width: 75%;overflow-y: auto;box-sizing:border-box;border:1px solid #97B1D1;">
+        <div style="display: flex;margin-left: 10px;background-color:rgb(228, 240, 255);">
+          <div :style="{width:cell.width+'px'}" v-for="cell in contentConfig" style="text-align: center;box-sizing:border-box;border:1px solid #97B1D1;">
+            {{cell.title}}
+          </div>
+        </div>
+        <div style="width: 100%;">
+          <div v-for="(item,index) in tempDetailList" @click="clickItem(item,index)" style="display: flex;margin-left: 10px;" :class="{chooseItem:item.chooseItem}">
+            <div v-for="cell in contentConfig" style="box-sizing:border-box;border:1px solid #97B1D1;">
+              <select :class="{selectchooseItem:item.chooseItem}" v-if="cell.fieldObj=='itemClass'" @change="changeItem(item)" v-model="item[cell.fieldObj]" :style="{width:cell.width-2+'px'}" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option v-for="option in eventTypeList" v-bind:value="option.typeId">
+                  {{ option.typeName }}
+                </option>
+              </select>
+              <select :class="{selectchooseItem:item.chooseItem}" :style="{width:cell.width-2+'px'}" v-else-if="cell.fieldObj == 'administrator'" v-model="item[cell.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option value=""></option>
+                <option :style="{width:cell.width-2+'px'}" style="background-color: white;" v-for="(item,index) in roadList" :value="item.itemName">{{ item.itemName }}</option>
+              </select>
+              <select :class="{selectchooseItem:item.chooseItem}" :style="{width:cell.width-2+'px'}" v-else-if="cell.fieldObj == 'concentrationUnit'" v-model="item[cell.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option value=""></option>
+                <option style="background-color: white;" v-for="(item,index) in concentrationList" :value="item.itemName">{{ item.itemName }}</option>
+              </select>
+              <select :class="{selectchooseItem:item.chooseItem}" :style="{width:cell.width-2+'px'}" v-else-if="cell.fieldObj == 'speedUnit'" v-model="item[cell.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option value=""></option>
+                <option style="background-color: white;" v-for="(item,index) in speedUnitList" :value="item.itemName">{{ item.itemName }}</option>
+              </select>
+              <select :class="{selectchooseItem:item.chooseItem}" :style="{width:cell.width-2+'px'}" v-else-if="cell.fieldObj == 'dosageUnits'" v-model="item[cell.fieldObj]" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
+                <option value=""></option>
+                <option style="background-color: white;" v-for="(item,index) in dosageUnitsList" :value="item.itemName">{{ item.itemName }}</option>
+              </select>
+              <!--  <div v-else-if="cell.fieldObj=='itemNo'">
+                <input readonly="readonly" style="height:20px;border:0;display:block;font-size:13px;text-align: center;" type="text" :style="{width:(cell.width-2)+'px'}" v-model="item[cell.fieldObj]">
+              </div> -->
+              <input v-else @change="changeItem(item)" style="height:20px;border:0;display:block;font-size:13px;text-align: center;" type="text" :style="{width:cell.width-2+'px'}" v-model="item[cell.fieldObj]">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div style="position: absolute;height: 50px;bottom: 0px;padding-left: 20px;">
@@ -100,10 +138,10 @@
       <button @click="closeWin">取消</button>
       <button @click="selectTemplet">套用模板</button>
       <!-- <button @click="deleteTemplet">删除模板</button> -->
-      <!-- <button @click="updateBatch">保存</button>
+      <button @click="updateBatch">保存</button>
       <button @click="addItem">新增</button>
       <button @click="downMove(0)">下移</button>
-      <button @click="downMove(1)">上移</button> -->
+      <button @click="downMove(1)">上移</button>
     </div>
   </div>
   <!-- </div> -->
@@ -120,7 +158,7 @@ export default {
         //   },
         {
           title: '类型',
-          fieldObj: 'itemTypeName',
+          fieldObj: 'itemClass',
           width: '60'
         },
         {
@@ -182,7 +220,7 @@ export default {
   },
   methods: {
     closeWin() {
-      this.tempView.view = 'f';
+      this.$emit('closeWin')
     },
     //获取所有模板的麻醉方法 
     getMethodNames() {
@@ -448,8 +486,8 @@ export default {
   props: ['tempView', 'itemList'],
   mounted() {
     this.getMethodNames();
-    // this.allMedAnesthesiaEventType();
-    // this.getRoadList();
+    this.allMedAnesthesiaEventType();
+    this.getRoadList();
 
   }
 }

@@ -53,6 +53,7 @@ export default {
 
     getItemValue() {
       let params = [];
+      this.isSelected = []
       params.push({
         "patientId": this.config.userInfo.patientId,
         "visitId": this.config.userInfo.visitId,
@@ -65,11 +66,10 @@ export default {
         .then(res => {
           let field = this.boxValue.SourceTableName + this.boxValue.SourceFieldName
           this.resultValue = res[field];
-
           if (this.boxValue.MultiSelectMode == 'false') {
             for (var i = 0; i < this.boxValue.listData.length; i++) {
-              if (!res[field]) {
-                if (this.boxValue.listData[i].ItemValue == this.boxValue.defaultValue) {
+              if (res[field] == "") {
+                if (this.boxValue.listData[i].ItemValue == this.boxValue.defaultValue && this.boxValue.defaultValue) {
                   this.isSelected.push(true);
                 } else {
                   this.isSelected.push(false);

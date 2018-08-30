@@ -311,6 +311,7 @@
                 默认值：
               </div>
               <select style="min-width:173px;" name="" id="" v-model="chooseItems[0].defaultValue">
+                <option value=""></option>
                 <option v-for="btn in chooseItemsTemp.listData" :value="btn.ItemValue">{{btn.ItemValue}}</option>
               </select>
             </div>

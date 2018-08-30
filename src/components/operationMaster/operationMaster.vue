@@ -173,7 +173,7 @@
           </div>
           <div v-if="concealmentThreeData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button @click="dictShow" class="list_button">字典</button>
-            <!-- <button class="list_button">模板管理</button> -->
+            <!-- <button @click="tempManage" class="list_button">模板管理</button> -->
           </div>
         </div>
         <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
@@ -504,6 +504,9 @@
     <monitor v-if="monitorDataShow.noneData" :dataOfNoneClick="firstRoom" :parentToChild="monitorDataShow"></monitor>
     <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView" v-on:submitSave="submitPatientInfo" v-on:turnToSetting="toSetting"></patientOperationInfo>
     <operationRegister @refreshTime="timeChangeBus()" v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
+    <div v-if="tempView" style="position: absolute;top: 10%;left: 20%;width: 1214px;">
+      <updateTemplet v-on:closeWin="closeTempManage"></updateTemplet>
+    </div>
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
     <!-- 检验信息 -->
     <checkInfo v-if="checkInfoView" v-on:closeView="closeCheckInfoView"></checkInfo>
@@ -622,6 +625,7 @@ import changePassWord from '@/components/operationMaster/changePassWord.vue';
 import checkInfo from '@/components/checkInfo/checkInfo.vue';
 import changeRoom from '@/components/operationMaster/changeRoom.vue';
 import checkResult from '@/components/checkInfo/checkResult.vue';
+import updateTemplet from '@/components/eventTemplet/updateTemplet.vue';
 let LODOP
 export default {
   data() {
@@ -827,6 +831,7 @@ export default {
       changePassWord: false, //修改密码界面
       changeRoomView: false, //更换手术间
       personView: false,
+      tempView: false, //模板管理
 
     }
   },
@@ -2693,6 +2698,13 @@ export default {
       this.personStyleView = false
       this.refreshForm();
     },
+    //模板管理
+    tempManage() {
+      this.tempView = true
+    },
+    closeTempManage() {
+      this.tempView = false
+    }
 
   },
   mounted() {
@@ -2769,6 +2781,7 @@ export default {
     checkInfo,
     changeRoom,
     checkResult,
+    updateTemplet,
   },
 }
 

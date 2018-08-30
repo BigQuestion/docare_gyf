@@ -8,11 +8,11 @@
         <div>
           <input id="inSelect" ref="inSelect" v-model="serchZm" @keyup="serchJm" :style="{width:conInfo.width+'px'}">
         </div>
-        <div class="listIngt" @click="getSelected(item)" v-for="item in medAnaesthesiaDictList" :style="{width:conInfo.width+'px'}">
-          <div v-if="conInfo.dictShowFiled!=''&&conInfo.dictShowFiled!=null">
+        <div class="listIngt" v-for="item in medAnaesthesiaDictList" :style="{width:conInfo.width+'px'}">
+          <div @click="getSelected(item)" v-if="conInfo.dictShowFiled!=''&&conInfo.dictShowFiled!=null">
             {{item.DICTSHOWFILED}}
           </div>
-          <div v-else>{{item.DICTFILED}}</div>
+          <div @click="getSelected(item)" v-else>{{item.DICTFILED}}</div>
         </div>
       </div>
     </div>
@@ -73,6 +73,7 @@ export default {
 
     },
     getSelected(item) {
+      debugger
       if (this.conInfo.dictShowFiled != '' && this.conInfo.dictShowFiled != null) {
         if (this.infoData.MultiSelectMode == 'true') {
           if (this.conInfo.value == null || this.conInfo.value == '') {
