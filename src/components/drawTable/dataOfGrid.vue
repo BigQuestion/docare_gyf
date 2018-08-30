@@ -32,6 +32,8 @@ export default {
   },
   methods: {
     selectMedAnesthesiaEventList() {
+      let masterData = [];
+      let masterDataSz = [];
       this.maxTimeInPage = new Date(this.config.maxTime).getTime()
       this.startTimeInPage = new Date(this.config.initTime).getTime()
       let params = {
@@ -48,7 +50,7 @@ export default {
         res => {
           this.dataBody = [];
           this.dataBodySz = [];
-          this.dataBody.push({
+          masterData.push({
             ITEM_NAME: "《术中用药》"
           })
           for (var i = 0; i < res.list.length; i++) {
@@ -87,7 +89,7 @@ export default {
                   this.title = titleData.join('\n');
                   this.$set(res.list[i], 'titleWord', this.title);
                 }
-                this.dataBody.push({
+                masterData.push({
                   ADDTIME: nextTime[0] + ":" + nextTime[1],
                   ITEM_NAME: res.list[i].ITEM_NAME,
                   DOSAGE: res.list[i].DOSAGE,
@@ -124,7 +126,7 @@ export default {
                   if (this.startTimeInPage <= timeMoreOne && timeMoreOne <= this.maxTimeInPage) {
                     var titleDataTwo = [zze.list[t].ITEM_NAME, '================', '时间：' + zze.list[t].START_TIME];
                     var titleTwo = titleDataTwo.join('\n');
-                    this.dataBody.push({
+                    masterData.push({
                       ADDTIME: nextTime1[0] + ":" + nextTime1[1],
                       ITEM_NAME: zze.list[t].ITEM_NAME,
                       START_TIME: zze.list[t].START_TIME,
@@ -168,7 +170,7 @@ export default {
                         // var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME];
                         var titleDataTwo = [aff.list[h].ITEM_NAME, '================', '开始时间：' + aff.list[h].START_TIME, '途径：' + aff.list[h].ADMINISTRATOR, '量：' + aff.list[h].DOSAGE, '单位：' + aff.list[h].DOSAGE_UNITS];
                         var titleTwo = titleDataTwo.join('\n');
-                        this.dataBody.push({
+                        masterData.push({
                           ADDTIME: nextTime2[0] + ":" + nextTime2[1],
                           ADMINISTRATOR: aff.list[h].ADMINISTRATOR,
                           ITEM_NAME: aff.list[h].ITEM_NAME,
@@ -208,7 +210,7 @@ export default {
                         var titleDataTwo = [pushCXData[d].ITEM_NAME, '================', '开始时间：' + pushCXData[d].START_TIME, '结束时间：' + pushCXData[d].ENDDATE, '途径：' + pushCXData[d].ADMINISTRATOR, '量：' + pushCXData[d].DOSAGE, '单位：' + pushCXData[d].DOSAGE_UNITS];
                         var titleTwo = titleDataTwo.join('\n');
                         if (nextTime4[0] == ''&&nextTime4[1] == '') {
-                          this.dataBody.push({
+                          masterData.push({
                             ADDTIME: nextTime3[0] + ":" + nextTime3[1] + '→',
                             ADMINISTRATOR: pushCXData[d].ADMINISTRATOR,
                             ITEM_NAME: pushCXData[d].ITEM_NAME,
@@ -219,7 +221,7 @@ export default {
                             DOSAGE_UNITS: pushCXData[d].DOSAGE_UNITS,
                           });
                         } else {
-                          this.dataBody.push({
+                          masterData.push({
                             ADDTIME: nextTime3[0] + ":" + nextTime3[1] + '→'+ nextTime4[0] + ":" + nextTime4[1],
                             ADMINISTRATOR: pushCXData[d].ADMINISTRATOR,
                             ITEM_NAME: pushCXData[d].ITEM_NAME,
@@ -236,8 +238,8 @@ export default {
                       // }
                     }
                   }
-                  this.dataBody.sort(this.sortFun)
-                  this.dataBody.push({
+                  masterData.sort(this.sortFun)
+                  masterData.push({
                     ITEM_NAME: "《术中事件》"
                   })
                   if (this.config.userInfo.inDateTime) {
@@ -245,7 +247,7 @@ export default {
                     if (this.startTimeInPage <= time1 && time1 <= this.maxTimeInPage) {
                       var titleDataOne = ['入手术室', '================', '时间：' + this.config.userInfo.inDateTime];
                       var titleOne = titleDataOne.join('\n');
-                      this.dataBodySz.push({
+                      masterDataSz.push({
                         ITEM_NAME: '入手术室',
                         START_TIME: this.config.userInfo.inDateTime,
                         titleWord: titleOne,
@@ -258,7 +260,7 @@ export default {
                     if (this.startTimeInPage <= time2 && time2 <= this.maxTimeInPage) {
                       var titleDataTwo = ['出手术室', '================', '时间：' + this.config.userInfo.outDateTime];
                       var titleTwo = titleDataTwo.join('\n');
-                      this.dataBodySz.push({
+                      masterDataSz.push({
                         itemNom: '',
                         ITEM_NAME: '出手术室',
                         START_TIME: this.config.userInfo.outDateTime,
@@ -285,7 +287,7 @@ export default {
                             this.$set(waa.list[B], 'sort', timesz);
                             var titleDataOneSz = [waa.list[B].ITEM_NAME, '================', '时间：' + this.config.userInfo.inDateTime];
                             var titleTwoSz = titleDataOneSz.join('\n');
-                            this.dataBodySz.push({
+                            masterDataSz.push({
                               itemNom: '',
                               ITEM_NAME: waa.list[B].ITEM_NAME,
                               DOSAGE: waa.list[B].DOSAGE,
@@ -297,12 +299,12 @@ export default {
                           }
                         }
                       }
-                      this.dataBodySz.sort(this.sortFun)
-                      for (var s = 0; s < this.dataBodySz.length; s++) {
-                        this.dataBodySz[s].itemNom = s + 1;
-                        this.dataBody.push(this.dataBodySz[s])
+                      masterDataSz.sort(this.sortFun)
+                      for (var s = 0; s < masterDataSz.length; s++) {
+                        masterDataSz[s].itemNom = s + 1;
+                        masterData.push(masterDataSz[s])
                       }
-
+                      this.dataBody = masterData;
                     })
                   // this.setTimeId = setTimeout(_ => this.selectMedAnesthesiaEventList(), this.config.timeSet)
                 });
