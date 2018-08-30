@@ -2146,6 +2146,7 @@ export default {
     },
     //获取单子修改的数据
     getValue(dataValue) {
+      debugger
       var modifyValue = '';
       if (dataValue.dictShowFiled != '' && dataValue.dictShowFiled != null) {
         modifyValue = dataValue.modifyFiledValue
