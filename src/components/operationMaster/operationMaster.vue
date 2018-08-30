@@ -2146,13 +2146,13 @@ export default {
     },
     //获取单子修改的数据
     getValue(dataValue) {
-      debugger
       var modifyValue = '';
       if (dataValue.dictShowFiled != '' && dataValue.dictShowFiled != null) {
         modifyValue = dataValue.modifyFiledValue
       } else {
         modifyValue = dataValue.value;
       }
+      modifyValue = dataValue.value;
       var tempData = this.updateFormsData;
       if (modifyValue == null || modifyValue == 'null') {
         return
