@@ -23,17 +23,17 @@ export function fetch(url, params, config) {
   return new Promise((resolve, reject) => {
     params = params ? params : {};
     axios({
-      method: 'post',
-      url: url,
-      data: JSON.stringify(params),
-      timeout: config.timeout,
-      headers: {
-        'Content-type': 'application/json',
-        "Accept": "*/*",
-      },
-      datatype: "json",
-    })
-      .then(function (response) {
+        method: 'post',
+        url: url,
+        data: JSON.stringify(params),
+        timeout: config.timeout,
+        headers: {
+          'Content-type': 'application/json',
+          "Accept": "*/*",
+        },
+        datatype: "json",
+      })
+      .then(function(response) {
         resolve(response.data);
         // if (!config.noAlert) {
         //   if (response.data.success) {
@@ -45,7 +45,7 @@ export function fetch(url, params, config) {
         //   }
         // }
 
-      }).catch(function (error) {
+      }).catch(function(error) {
         reject(error);
         alert("网络请求失败")
       });
