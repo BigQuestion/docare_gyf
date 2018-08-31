@@ -173,7 +173,7 @@
           </div>
           <div v-if="concealmentThreeData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button @click="dictShow" class="list_button">字典</button>
-            <!-- <button @click="tempManage" class="list_button">模板管理</button> -->
+            <button @click="tempManage" class="list_button">模板管理</button>
           </div>
         </div>
         <div style="height: auto;background-color: rgb(29,117,181);margin-bottom:5px;">
@@ -504,9 +504,13 @@
     <monitor v-if="monitorDataShow.noneData" :dataOfNoneClick="firstRoom" :parentToChild="monitorDataShow"></monitor>
     <patientOperationInfo v-if="patientOperationInfoView.dataInParent" :info="patientInfo" :parentToChild="patientOperationInfoView" v-on:submitSave="submitPatientInfo" v-on:turnToSetting="toSetting"></patientOperationInfo>
     <operationRegister @refreshTime="timeChangeBus()" v-if="operationRegisterView.dataInParent" :objectItem="lockedPatientInfo" :parentToChild="operationRegisterView"></operationRegister>
-    <div v-if="tempView" style="position: absolute;top: 10%;left: 20%;width: 1214px;">
-      <updateTemplet v-on:closeWin="closeTempManage"></updateTemplet>
+    <!-- 模板管理 -->
+    <div v-if="tempView" class="dictionaries">
+      <updateTemplet style="position: absolute;top: 10%;" :style="{left:inleft+'px'}" v-on:closeWin="closeTempManage"></updateTemplet>
     </div>
+    <!-- <div  style="position: absolute;top: 10%;width: 1214px;" :style="{left:inleft+'px'}">
+      <updateTemplet v-on:closeWin="closeTempManage"></updateTemplet>
+    </div> -->
     <aboutUs v-if="aboutUsData.dataInParent" :parentToChild="aboutUsData"></aboutUs>
     <!-- 检验信息 -->
     <checkInfo v-if="checkInfoView" v-on:closeView="closeCheckInfoView"></checkInfo>
@@ -832,6 +836,7 @@ export default {
       changeRoomView: false, //更换手术间
       personView: false,
       tempView: false, //模板管理
+      inleft: '',
 
     }
   },
@@ -2709,6 +2714,7 @@ export default {
 
   },
   mounted() {
+    this.inleft = (window.innerWidth - 1214) / 2
     this.nowUser = this.config.loginName;
     if (window.ipc) {
       this.electronListener();

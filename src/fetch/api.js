@@ -1,7 +1,7 @@
 import axios from 'axios'
 // axios.defaults.baseURL = 'http://182.61.36.247:8080';
 axios.defaults.baseURL = 'http://111.111.111.156:8080';
-// axios.defaults.baseURL = 'http://localhost:8088';
+axios.defaults.baseURL = 'http://localhost:8088';
 
 
 
@@ -529,6 +529,21 @@ export default {
    */
   updateBatch(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/updateBatch', params)
+  },
+  /**
+   * 删除模板内容
+   * 
+   */
+  deleteMedAnesthesiaEventTemplet(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnesthesiaEventTemplet', params)
+  },
+
+  /**
+   * 批量删除模板内容
+   * 
+   */
+  deleteBatchTemplet(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/deleteBatchTemplet', params)
   },
 
   /**
