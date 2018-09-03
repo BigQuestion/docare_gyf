@@ -387,7 +387,7 @@ export default {
         addFlag: true,
         orderBy: this.tempDetailList.length + 1,
         templet: this.selectTemp,
-        itemNo: this.tempDetailList.length + 1,
+        itemNo: new Date().getTime(),
         anesthesiaMethod: this.selectMethodName,
         createBy: this.createBy,
       })
@@ -514,7 +514,7 @@ export default {
         dosageUnits: '',
         orderBy: 1,
         templet: this.templetName,
-        itemNo: 1,
+        itemNo: new Date().getTime(),
         anesthesiaMethod: this.methodName,
         createBy: createBy,
       });
