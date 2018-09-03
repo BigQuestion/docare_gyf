@@ -81,14 +81,14 @@
           </ul>
         </div>
       </div>
-      <div style="width: 75%;overflow-y: auto;box-sizing:border-box;border:1px solid #97B1D1;">
+      <div @mousedown="downFun()" @mouseup="upFun()" style="width: 75%;overflow-y: auto;box-sizing:border-box;border:1px solid #97B1D1;" ref="eventContent">
         <div style="display: flex;margin-left: 10px;background-color:rgb(228, 240, 255);">
           <div :style="{width:cell.width+'px'}" v-for="cell in contentConfig" style="text-align: center;box-sizing:border-box;border:1px solid #97B1D1;">
             {{cell.title}}
           </div>
         </div>
-        <div style="width: 100%;">
-          <div v-for="(item,index) in tempDetailList" @click="clickItem(item,index)" style="display: flex;margin-left: 10px;" :class="{chooseItem:item.chooseItem}">
+        <div style="width: 100%;padding-bottom:20px;box-sizing:border-box;" >
+          <div v-for="(item,index) in tempDetailList" @click="clickItem(item,index)" @mouseleave="outFun(item)" style="display: flex;margin-left: 10px;" :class="{chooseItem:item.chooseItem}">
             <div v-for="cell in contentConfig" style="box-sizing:border-box;border:1px solid #97B1D1;">
               <select :class="{selectchooseItem:item.chooseItem}" v-if="cell.fieldObj=='itemClass'" v-model="item[cell.fieldObj]" :style="{width:cell.width-2+'px'}" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
                 <option v-for="option in eventTypeList" v-bind:value="option.typeId">
@@ -112,8 +112,8 @@
                 <option style="background-color: white;" v-for="(item,index) in dosageUnitsList" :value="item.itemName">{{ item.itemName }}</option>
               </select>
               <!--  <div v-else-if="cell.fieldObj=='itemNo'">
-                <input readonly="readonly" style="height:20px;border:0;display:block;font-size:13px;text-align: center;" type="text" :style="{width:(cell.width-2)+'px'}" v-model="item[cell.fieldObj]">
-              </div> -->
+                                                <input readonly="readonly" style="height:20px;border:0;display:block;font-size:13px;text-align: center;" type="text" :style="{width:(cell.width-2)+'px'}" v-model="item[cell.fieldObj]">
+                                              </div> -->
               <input v-else style="height:20px;border:0;display:block;font-size:13px;text-align: center;" type="text" :style="{width:cell.width-2+'px'}" v-model="item[cell.fieldObj]">
             </div>
           </div>
@@ -126,7 +126,7 @@
       <button @click="downMove(0)">下移</button>
       <button @click="downMove(1)">上移</button>
       <button @click="deleteTemp">删除</button>
-      <button @click="closeWin">取消</button>
+      <button @click="cancal">取消</button>
     </div>
     <!-- 保存模板输入内容 -->
     <div v-if="saveTempletView" style="width: 500px;min-height: 200px;background-color: white;z-index: 3;position: absolute;top: 20%;left: 20%;border:2px solid rgb(61,164,206);">
@@ -212,26 +212,39 @@ export default {
       publicTempNameList: [],
       privateTempNameList: [],
       tempDetailList: [],
+      tempDetailListTwo: [],
       eventTypeList: [], //所有事件类型
       roadList: [], //途径列表
       concentrationList: [], //用药浓度列表,
       speedUnitList: [], //速度单位列表
       dosageUnitsList: [], //用药单位列表
       selectItem: '', //选中模板事件对象
+      selectMore: [],//款选模板事件对象
       selectTempName: '', //选中的模板
       selectMethodName: '', //选中的麻醉方法名称
+      selectTypeItem: '',//选中的typeid
       createBy: '', //公有或者私有
       checkState: true,
       methodName: '',
       templetName: '',
       saveTempletView: false,
-
+      morClick: false,
     }
 
   },
   methods: {
     closeWin() {
       this.$emit('closeWin')
+    },
+    cancal() {
+      this.$emit('closeWin')
+      // this.selectItem = '';
+      // console.log(this.databodyCopy)
+      // for (var a = 0; a < this.databodyCopy.length; a++) {
+      //   this.databodyCopy[a].chooseItem = false;
+      // }
+      // this.tempDetailList = this.databodyCopy
+
     },
     //获取所有模板的麻醉方法 
     getMethodNames() {
@@ -305,6 +318,7 @@ export default {
     getPublicTempletDetail(tempLetName, methodName, typeItem) {
       this.selectTemp = tempLetName
       this.selectMethodName = methodName
+      this.selectTypeItem = typeItem;
       let params = {
         templet: tempLetName,
         anesthesiaMethod: methodName,
@@ -319,6 +333,7 @@ export default {
         params.createBy = this.config.userId;
         this.createBy = this.config.userId
       }
+
       this.api.getTempletDetail(params)
         .then(res => {
           for (var a = 0; a < res.list.length; a++) {
@@ -326,6 +341,7 @@ export default {
             res.list[a].orderBy = a + 1
           }
           this.tempDetailList = res.list;
+          // this.databodyCopy = res.list;
         })
     },
 
@@ -334,9 +350,9 @@ export default {
       let params = {}
       this.api.allMedAnesthesiaEventType(params)
         .then(
-          res => {
-            this.eventTypeList = res.list;
-          });
+        res => {
+          this.eventTypeList = res.list;
+        });
     },
 
 
@@ -354,6 +370,7 @@ export default {
         .then(res => {
           if (res.success)
             alert("保存成功")
+          this.getPublicTempletDetail(this.selectTemp, this.selectMethodName, this.selectTypeItem)
         })
       if (insertArr.length > 0) {
         this.api.insertBtchMedAnesthesiaEventTemplet(insertArr)
@@ -362,14 +379,35 @@ export default {
           })
       }
     },
-
+    // 鼠标点击判断是否持续
+    downFun() {
+      for (var i = 0; i < this.tempDetailList.length; i++) {
+        this.tempDetailList[i].chooseItem = false;
+      }
+      this.morClick = true;
+      // this.selectMore = [];
+    },
+    // 松开多选点击
+    upFun() {
+      this.morClick = false;
+    },
+    // 鼠标位移多个item判断是否多选
+    outFun(item) {
+      if (this.morClick && item.chooseItem == false) {
+        this.selectItem = '';
+        this.selectMore.push(item)
+        item.chooseItem = true;
+      }
+    },
     //得到选中的并集麻醉事件记录
     clickItem(item, index) {
+      console.log(item)
       for (var a = 0; a < this.tempDetailList.length; a++) {
         this.$set(this.tempDetailList[a], 'chooseItem', false);
       }
       item.index = index;
       item.chooseItem = true;
+      this.selectMore = [];
       this.selectItem = item;
     },
     //新增模板事件
@@ -377,6 +415,7 @@ export default {
       this.tempDetailList.push({
         itemClass: '',
         itemName: '',
+        chooseItem: false,
         administrator: '',
         concentration: '',
         concentrationUnit: '',
@@ -391,38 +430,42 @@ export default {
         anesthesiaMethod: this.selectMethodName,
         createBy: this.createBy,
       })
+      this.$nextTick(() => {
+        var div = this.$refs.eventContent
+        div.scrollTop = div.scrollHeight
+      })
     },
 
     //获取途径列表
     getRoadList() {
       this.api.getMedAnesthesiaCommDictByItemClass({
-          itemClass: '用药途径'
-        })
+        itemClass: '用药途径'
+      })
         .then(
-          res => {
-            this.roadList = res.list;
-          });
+        res => {
+          this.roadList = res.list;
+        });
       this.api.getMedAnesthesiaCommDictByItemClass({
-          itemClass: '用药浓度单位'
-        })
+        itemClass: '用药浓度单位'
+      })
         .then(
-          rest => {
-            this.concentrationList = rest.list
-          });
+        rest => {
+          this.concentrationList = rest.list
+        });
       this.api.getMedAnesthesiaCommDictByItemClass({
-          itemClass: '用药速度单位'
-        })
+        itemClass: '用药速度单位'
+      })
         .then(
-          rs => {
-            this.speedUnitList = rs.list
-          });
+        rs => {
+          this.speedUnitList = rs.list
+        });
       this.api.getMedAnesthesiaCommDictByItemClass({
-          itemClass: '用药单位'
-        })
+        itemClass: '用药单位'
+      })
         .then(
-          rt => {
-            this.dosageUnitsList = rt.list
-          });
+        rt => {
+          this.dosageUnitsList = rt.list
+        });
     },
     //向下移动
     downMove(flag) {
@@ -468,13 +511,52 @@ export default {
     },
     //删除
     deleteTemp() {
-      let par = this.selectItem
-      this.api.deleteMedAnesthesiaEventTemplet(par)
-        .then(res => {
-          if (res.success) {
-            alert("删除成功")
+      let par = '';
+      let parSd = [];
+      console.log(this.selectItem)
+      console.log(this.selectMore)
+      if (this.selectItem == '' && this.selectMore.length > 0) {
+        for (var a = 0; a < this.selectMore.length; a++) {
+          if (this.selectMore[a].addFlag) {
+            for (var b = 0; b < this.tempDetailList.length; b++) {
+              if (this.selectMore[a] == this.tempDetailList[b]) {
+                this.tempDetailList.splice(b, 1);
+              }
+            }
+          } else {
+            parSd.push(this.selectMore[a])
           }
-        })
+        }
+        if (parSd.length > 0) {
+          this.api.deleteBatchTemplet(parSd)
+            .then(res => {
+              if (res.success) {
+                alert("删除成功")
+                this.getPublicTempletDetail(this.selectTemp, this.selectMethodName, this.selectTypeItem)
+              }
+            })
+        }
+      } else {
+        if (this.selectItem.addFlag) {
+          for (var b = 0; b < this.tempDetailList.length; b++) {
+            if (this.selectItem == this.tempDetailList[b]) {
+              this.tempDetailList.splice(b, 1);
+            }
+          }
+        } else {
+          par = this.selectItem;
+          this.api.deleteMedAnesthesiaEventTemplet(par)
+            .then(res => {
+              if (res.success) {
+                alert("删除成功")
+                this.getPublicTempletDetail(this.selectTemp, this.selectMethodName, this.selectTypeItem)
+              }
+            })
+        }
+      }
+
+
+
     },
     //取消保存模板界面
     cancleSaveTemp() {
@@ -557,5 +639,4 @@ export default {
   background-color: #CCE8FF;
   /* border: 1px solid #A9A9A9; */
 }
-
 </style>
