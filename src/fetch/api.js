@@ -530,6 +530,21 @@ export default {
   updateBatch(params, config) {
     return fetch('medicalsystem/rest/medAnesthesiaComm/updateBatch', params)
   },
+  /**
+   * 删除模板内容
+   * 
+   */
+  deleteMedAnesthesiaEventTemplet(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/deleteMedAnesthesiaEventTemplet', params)
+  },
+
+  /**
+   * 批量删除模板内容
+   * 
+   */
+  deleteBatchTemplet(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/deleteBatchTemplet', params)
+  },
 
   /**
    * 根据单子读取相关信息

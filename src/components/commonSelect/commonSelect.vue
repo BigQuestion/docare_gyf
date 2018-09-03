@@ -73,7 +73,6 @@ export default {
 
     },
     getSelected(item) {
-      debugger
       if (this.conInfo.dictShowFiled != '' && this.conInfo.dictShowFiled != null) {
         if (this.infoData.MultiSelectMode == 'true') {
           if (this.conInfo.value == null || this.conInfo.value == '') {
@@ -169,7 +168,7 @@ export default {
   mounted() {
     this.conInfo.modifyFiledValue = '';
     // console.log(this.conInfo.value)
-    if (!this.conInfo.value) {
+    if (this.conInfo.value == '' && this.conInfo.defaultValue) {
       this.conInfo.value = this.conInfo.defaultValue
     }
   },
