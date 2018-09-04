@@ -32,16 +32,17 @@
                         +
                       </div>
                       <div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
-                      <div style="width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+                      <div @click="getSelectClass(item,index)" :class="{chooseItemDiv:item.chooseItem}" style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
                         {{item.anesthesiaMethod}}
                       </div>
                     </div>
                     <ul style="padding-left: 20px;">
-                      <li v-if="item.tempView" v-for="itemTemp in item.listTempName" @click="getPublicTempletDetail(itemTemp.templet,item.anesthesiaMethod,0)">
+                      <li v-if="item.tempView" v-for="(itemTemp,index1) in item.listTempName" @click="getPublicTempletDetail(itemTemp.templet,item.anesthesiaMethod,0)">
                         <div style="display: flex;align-items: center;">
                           <div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
-                          <div style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+                          <div @contextmenu="changeReadOnly(itemTemp,$event,item,index)" :class="{chooseItemDiv:itemTemp.chooseItem}" style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
                             {{itemTemp.templet}}
+                            <!-- <input v-bind:readonly="itemTemp.isReadOnly" v-model="itemTemp.templet" style="width: 98%;border:0;"> -->
                           </div>
                         </div>
                       </li>
@@ -87,7 +88,7 @@
             {{cell.title}}
           </div>
         </div>
-        <div style="width: 100%;padding-bottom:20px;box-sizing:border-box;" >
+        <div style="width: 100%;padding-bottom:20px;box-sizing:border-box;">
           <div v-for="(item,index) in tempDetailList" @click="clickItem(item,index)" @mouseleave="outFun(item)" style="display: flex;margin-left: 10px;" :class="{chooseItem:item.chooseItem}">
             <div v-for="cell in contentConfig" style="box-sizing:border-box;border:1px solid #97B1D1;">
               <select :class="{selectchooseItem:item.chooseItem}" v-if="cell.fieldObj=='itemClass'" v-model="item[cell.fieldObj]" :style="{width:cell.width-2+'px'}" style="border:0;display:inline-block;height:100%;width:100%;height:22px;">
@@ -144,6 +145,20 @@
       <div style="padding-left: 15px;">
         <input type="checkbox" name="" v-model="checkState" v-bind:value="checkState">
         <span>是否私有</span>
+        <button @click="saveTemplet">保存</button>
+        <button @click="cancleSaveTemp">取消</button>
+      </div>
+    </div>
+    <!-- 修改模板或者麻醉方法名称 -->
+    <div v-if="updateMethodView" style="width: 400px;min-height: 150px;background-color: white;z-index: 3;position: absolute;top: 20%;left: 20%;border:2px solid rgb(61,164,206);">
+      <div style="height: 30px;background-color:rgb(47,150,196);color: white;padding-left: 15px;line-height: 30px;">
+        <span>修改</span>
+      </div>
+      <div style="padding: 15px;display: flex;">
+        <span>修改值:&nbsp;</span>
+        <input v-model="methodName" style="width: 250px;">
+      </div>
+      <div style="padding-left: 15px;">
         <button @click="saveTemplet">保存</button>
         <button @click="cancleSaveTemp">取消</button>
       </div>
@@ -219,16 +234,17 @@ export default {
       speedUnitList: [], //速度单位列表
       dosageUnitsList: [], //用药单位列表
       selectItem: '', //选中模板事件对象
-      selectMore: [],//款选模板事件对象
+      selectMore: [], //款选模板事件对象
       selectTempName: '', //选中的模板
       selectMethodName: '', //选中的麻醉方法名称
-      selectTypeItem: '',//选中的typeid
+      selectTypeItem: '', //选中的typeid
       createBy: '', //公有或者私有
       checkState: true,
       methodName: '',
       templetName: '',
       saveTempletView: false,
       morClick: false,
+      updateMethodView: false, //修改模板名称或者麻醉方法名称
     }
 
   },
@@ -272,6 +288,20 @@ export default {
       item.tempView = !item.tempView;
       this.$set(this.publicNameList, index, item);
     },
+    changeReadOnly(item, parameter, list, index) {
+      debugger
+
+      list.listTempName.forEach(items => {
+        items.isReadOnly = true
+      })
+      this.$set(this.publicNameList, index, list);
+      parameter.preventDefault();
+      item.isReadOnly = false;
+    },
+    getSelectClass(item, index) {
+      item.chooseItem = true;
+      this.$set(this.publicNameList, index, item);
+    },
     //获取模板名称
     getPrivateTempletNames(item, index) {
       item.tempView = !item.tempView;
@@ -288,8 +318,12 @@ export default {
           }
           this.api.getTempletNames(params)
             .then(res => {
+              res.list.forEach(item => {
+                item.isReadOnly = true
+              })
               temp[i].listTempName = res.list;
               temp[i].tempView = true;
+              temp[i].chooseItem = false;
               this.$set(this.publicNameList, i, temp[i]);
             })
         }
@@ -350,9 +384,9 @@ export default {
       let params = {}
       this.api.allMedAnesthesiaEventType(params)
         .then(
-        res => {
-          this.eventTypeList = res.list;
-        });
+          res => {
+            this.eventTypeList = res.list;
+          });
     },
 
 
@@ -401,7 +435,6 @@ export default {
     },
     //得到选中的并集麻醉事件记录
     clickItem(item, index) {
-      console.log(item)
       for (var a = 0; a < this.tempDetailList.length; a++) {
         this.$set(this.tempDetailList[a], 'chooseItem', false);
       }
@@ -439,33 +472,33 @@ export default {
     //获取途径列表
     getRoadList() {
       this.api.getMedAnesthesiaCommDictByItemClass({
-        itemClass: '用药途径'
-      })
+          itemClass: '用药途径'
+        })
         .then(
-        res => {
-          this.roadList = res.list;
-        });
+          res => {
+            this.roadList = res.list;
+          });
       this.api.getMedAnesthesiaCommDictByItemClass({
-        itemClass: '用药浓度单位'
-      })
+          itemClass: '用药浓度单位'
+        })
         .then(
-        rest => {
-          this.concentrationList = rest.list
-        });
+          rest => {
+            this.concentrationList = rest.list
+          });
       this.api.getMedAnesthesiaCommDictByItemClass({
-        itemClass: '用药速度单位'
-      })
+          itemClass: '用药速度单位'
+        })
         .then(
-        rs => {
-          this.speedUnitList = rs.list
-        });
+          rs => {
+            this.speedUnitList = rs.list
+          });
       this.api.getMedAnesthesiaCommDictByItemClass({
-        itemClass: '用药单位'
-      })
+          itemClass: '用药单位'
+        })
         .then(
-        rt => {
-          this.dosageUnitsList = rt.list
-        });
+          rt => {
+            this.dosageUnitsList = rt.list
+          });
     },
     //向下移动
     downMove(flag) {
@@ -639,4 +672,10 @@ export default {
   background-color: #CCE8FF;
   /* border: 1px solid #A9A9A9; */
 }
+
+.chooseItemDiv {
+  background-color: #CCE8FF;
+  /* border: 1px solid #A9A9A9; */
+}
+
 </style>
