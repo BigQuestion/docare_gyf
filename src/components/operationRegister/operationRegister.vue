@@ -1142,7 +1142,6 @@ export default {
     },
     //筛选类型
     selectTypeFun() {
-      console.log(this.filterType)
       if (this.filterType == "全部") {
         this.eventList = this.eventTempList;
       } else {
@@ -1293,8 +1292,7 @@ export default {
     dateTime
   },
   mounted() {
-    // this.filterType = "全部";
-    console.log(this.filterType)
+    this.filterType = "全部";
     this.canselEventList();
     this.allMedAnesthesiaEventType();
     this.getSignName();
