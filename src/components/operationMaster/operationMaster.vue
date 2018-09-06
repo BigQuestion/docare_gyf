@@ -159,6 +159,7 @@
           <div v-if="concealmentTweData" style="padding:5px;display:flex;flex-wrap:wrap;">
             <button class="list_button" @click="openChangeRoom">更换房间</button>
             <button v-if="formDetail" class="list_button" @click="getOperationRegister">术中登记</button>
+            <button v-if="formDetail" class="list_button" @click="getRecoverRegister">复苏登记</button>
             <button @click="cancel" class="list_button">取消手术</button>
             <button v-if="formDetail" class="list_button" @click="monitor">监护仪</button>
             <!-- <button v-if="lockedPatientInfo.patientId" class="list_button" @click="getPatientOperationInfo">手术信息</button> -->
@@ -1654,6 +1655,7 @@ export default {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
         "operId": this.lockedPatientInfo.operId,
+        "eventNo": this.config.eventNo
       }
       for (var i = 0; i <= this.medBillList.length - 1; i++) {
         this.$set(this.medBillList[i], 'bindClassData', this.bindClassData);
@@ -1667,6 +1669,7 @@ export default {
 
       if (item.formName == '麻醉记录单') {
         // this.getMaxTime();
+        this.config.eventNo = 0
         this.personView = true
         let inDateTime = this.config.userInfo.inDateTime
         this.tempButtonView = false;
@@ -2090,6 +2093,12 @@ export default {
     },
     //术中登记
     getOperationRegister() {
+      this.config.eventNo = 0;
+      this.operationRegisterView.dataInParent = !this.operationRegisterView.dataInParent;
+    },
+    //复苏登记
+    getRecoverRegister() {
+      this.config.eventNo = 1;
       this.operationRegisterView.dataInParent = !this.operationRegisterView.dataInParent;
     },
     // 监护仪
@@ -2366,6 +2375,7 @@ export default {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
         "operId": this.lockedPatientInfo.operId,
+        "eventNo": this.config.eventNo
       }
       this.api.getBeginTime(timeParam)
         .then(rest => {
@@ -2405,6 +2415,7 @@ export default {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
         "operId": this.lockedPatientInfo.operId,
+        "eventNo": this.config.eventNo
       }
       this.api.getBeginTime(timeParam)
         .then(rest => {
@@ -2538,6 +2549,7 @@ export default {
           "patientId": this.lockedPatientInfo.patientId,
           "visitId": this.lockedPatientInfo.visitId,
           "operId": this.lockedPatientInfo.operId,
+          "eventNo": this.config.eventNo
         }
         //查找病人的最晚时间
         this.api.selectMaxTime(timeParam)
@@ -2580,6 +2592,7 @@ export default {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
         "operId": this.lockedPatientInfo.operId,
+        "eventNo": this.config.eventNo
       }
       //查找病人的最晚时间
       this.api.selectMaxTime(timeParam)

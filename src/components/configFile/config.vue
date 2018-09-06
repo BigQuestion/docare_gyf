@@ -19,6 +19,7 @@ const timeSet = 6000000; //表格数据定时刷新时间 ms
 const roomId = ''; //定义手术间
 const allOperList = []; //所有手术名称
 const allDiagnosis = []; //所有诊断
+const eventNo = ''; //在麻醉室还是复苏室 0代表麻醉室 1代表复苏室
 
 export default {
   userId,
@@ -40,6 +41,7 @@ export default {
   roomId,
   allOperList,
   allDiagnosis,
+  eventNo,
 }
 
 </script>

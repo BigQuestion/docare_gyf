@@ -547,6 +547,22 @@ export default {
   },
 
   /**
+   * 修改模板名称或者方法
+   * 
+   */
+  updateMethodTemp(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/updateMethodTemp', params)
+  },
+
+  /**
+   * 删除模板名称或者方法
+   * 
+   */
+  deleteTempMethod(params, config) {
+    return fetch('medicalsystem/rest/medAnesthesiaComm/deleteTempMethod', params)
+  },
+
+  /**
    * 根据单子读取相关信息
    * 
    */

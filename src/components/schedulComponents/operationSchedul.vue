@@ -240,9 +240,8 @@
             <div class="newClassDiv">日期</div>
             <div class="newClassDiv">{{dateValue}}</div>
             <div class="newClassDiv">申请医生</div>
-            <div class="newClassDiv"></div>
+            <div class="newClassDiv">{{handSchedulItem.enteredBy}}</div>
           </div>
-
         </div>
         <div class="modalFoot">
           <!-- <button @click="modalSure"></button> -->
@@ -372,128 +371,128 @@ export default {
         optin: false,
       }],
       infoMode: [{
-        text: '申请时间',
-        value: 'scheduledDateTime',
-        width: 60,
-        optin: false,
-      }, {
-        text: '科室名称',
-        value: 'deptName',
-        width: 60,
-        optin: false,
-      }, {
-        text: '手术医师',
-        value: 'surgeonName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '手术名称',
-        value: 'operationSchName',
-        width: 250,
-        optin: false,
-      }, {
-        text: '台次',
-        value: 'sequence',
-        width: 60,
-        optin: false,
-      }, {
-        text: '病人姓名',
-        value: 'patientName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '年龄',
-        value: 'patienAge',
-        width: 60,
-      }, {
-        text: '性别',
-        value: 'patientSex',
-        width: 60,
-        optin: false,
-      }, {
-        text: '床号',
-        value: 'bedNo',
-        width: 60,
-        optin: false,
-      }, {
-        text: '诊断',
-        value: 'diagBeforeOperation',
-        width: 200,
-        optin: false,
-      }, {
-        text: "手术审核时间",
-        type: "inSelect",
-        value: "reqDateTime",
-        width: 120,
-        optin: false,
-      },
-      {
-        text: '主麻医师',
-        value: 'anesthesiaDoctorName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '副麻医师1',
-        value: 'firstAnesthesiaAssistantName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '副麻医师2',
-        value: 'secondAnesthesiaAssistantName',
-        width: 100,
-        optin: false,
-      },
-      {
-        text: '手术助手1',
-        value: 'firstAssistantName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '手术助手2',
-        value: 'secondAssistantName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '洗手护士1',
-        value: 'firstOperationNurseName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '洗手护士2',
-        value: 'secondOperationNurseName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '巡回护士1',
-        value: 'firstSupplyNurseName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '巡回护士2',
-        value: 'secondSupplyNurseName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '洗手护士2',
-        value: 'secondOperationNurseName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '巡回护士1',
-        value: 'firstSupplyNurseName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '巡回护士2',
-        value: 'secondSupplyNurseName',
-        width: 100,
-        optin: false,
-      }, {
-        text: '备注',
-        value: 'notesOnOperation',
-        width: 100,
-        optin: false,
-      }
+          text: '申请时间',
+          value: 'scheduledDateTime',
+          width: 60,
+          optin: false,
+        }, {
+          text: '科室名称',
+          value: 'deptName',
+          width: 60,
+          optin: false,
+        }, {
+          text: '手术医师',
+          value: 'surgeonName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '手术名称',
+          value: 'operationSchName',
+          width: 250,
+          optin: false,
+        }, {
+          text: '台次',
+          value: 'sequence',
+          width: 60,
+          optin: false,
+        }, {
+          text: '病人姓名',
+          value: 'patientName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '年龄',
+          value: 'patienAge',
+          width: 60,
+        }, {
+          text: '性别',
+          value: 'patientSex',
+          width: 60,
+          optin: false,
+        }, {
+          text: '床号',
+          value: 'bedNo',
+          width: 60,
+          optin: false,
+        }, {
+          text: '诊断',
+          value: 'diagBeforeOperation',
+          width: 200,
+          optin: false,
+        }, {
+          text: "手术审核时间",
+          type: "inSelect",
+          value: "reqDateTime",
+          width: 120,
+          optin: false,
+        },
+        {
+          text: '主麻医师',
+          value: 'anesthesiaDoctorName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '副麻医师1',
+          value: 'firstAnesthesiaAssistantName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '副麻医师2',
+          value: 'secondAnesthesiaAssistantName',
+          width: 100,
+          optin: false,
+        },
+        {
+          text: '手术助手1',
+          value: 'firstAssistantName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '手术助手2',
+          value: 'secondAssistantName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '洗手护士1',
+          value: 'firstOperationNurseName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '洗手护士2',
+          value: 'secondOperationNurseName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '巡回护士1',
+          value: 'firstSupplyNurseName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '巡回护士2',
+          value: 'secondSupplyNurseName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '洗手护士2',
+          value: 'secondOperationNurseName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '巡回护士1',
+          value: 'firstSupplyNurseName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '巡回护士2',
+          value: 'secondSupplyNurseName',
+          width: 100,
+          optin: false,
+        }, {
+          text: '备注',
+          value: 'notesOnOperation',
+          width: 100,
+          optin: false,
+        }
       ],
       getLength: '0',
       listChooseBody: [
@@ -644,11 +643,11 @@ export default {
       // if (dataInName) {
       this.api.submitMedOperationScheduleList(commitData)
         .then(
-        res => {
-          dataInName = false;
-          this.getList(this.dateValue)
-          alert('提交成功!')
-        })
+          res => {
+            dataInName = false;
+            this.getList(this.dateValue)
+            alert('提交成功!')
+          })
 
 
       // } else {
@@ -2382,4 +2381,5 @@ export default {
 .hoverClass {
   background-color: #A3BDD9;
 }
+
 </style>

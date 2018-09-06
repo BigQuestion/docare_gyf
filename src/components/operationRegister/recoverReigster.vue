@@ -430,8 +430,7 @@ export default {
       let params = {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
-        visitId: this.objectItem.visitId,
-        eventNo: this.config.eventNo
+        visitId: this.objectItem.visitId
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
@@ -449,8 +448,7 @@ export default {
       let params = {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
-        visitId: this.objectItem.visitId,
-        eventNo: this.config.eventNo
+        visitId: this.objectItem.visitId
       }
       this.api.selectMedAnesthesiaEventList(params)
         .then(
@@ -616,6 +614,7 @@ export default {
     },
     //双击添加麻醉事件记录
     addEvent(item) {
+      debugger
       var obj = {
         TYPE_NAME: item.typeName,
         PATIENT_ID: this.objectItem.patientId,
@@ -638,7 +637,6 @@ export default {
         DURATIVE_INDICATOR: 0,
         ITEM_CODE: item.itemCode,
         thooseItem: false,
-        EVENT_NO: this.config.eventNo
       };
       this.eventList.push(obj);
       this.$nextTick(() => {
@@ -693,7 +691,7 @@ export default {
             administrator: list[i].ADMINISTRATOR,
             startTime: list[i].START_TIME,
             endDate: list[i].ENDDATE,
-            eventNo: this.config.eventNo,
+            eventNo: 0,
             durativeIndicator: list[i].DURATIVE_INDICATOR,
             concentration: list[i].CONCENTRATION,
             concentrationUnit: list[i].CONCENTRATION_UNIT,
@@ -726,7 +724,7 @@ export default {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
         visitId: this.objectItem.visitId,
-        eventNo: this.config.eventNo,
+        eventNo: 0,
       }
       this.api.getSignName(params)
         .then(
@@ -787,7 +785,7 @@ export default {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
-        eventNo: this.config.eventNo
+        eventNo: 0
       }
       this.api.getNewTimeData(params)
         .then(res => {
@@ -922,11 +920,12 @@ export default {
         alert("请选择删除的时间点数据")
         return false;
       }
+      console.log(this.getClickSignData)
       let params = {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
         visitId: this.objectItem.visitId,
-        eventNo: this.config.eventNo,
+        eventNo: 0,
         timePoint: this.stringToDate(this.getClickSignData.time),
       }
       this.api.deleteMedPatientMonitorData(params)
@@ -989,7 +988,7 @@ export default {
             patientId: this.config.userInfo.patientId,
             operId: this.config.userInfo.operId,
             visitId: this.config.userInfo.visitId,
-            eventNo: this.config.eventNo,
+            eventNo: 0,
             itemName: item.itemCode,
             itemValue: item.itemValue,
             timePoint: this.datetimeLocalToDate(this.insertStartTime),
@@ -1018,7 +1017,7 @@ export default {
               patientId: this.objectItem.patientId,
               operId: this.objectItem.operId,
               visitId: this.objectItem.visitId,
-              eventNo: this.config.eventNo,
+              eventNo: 0,
               itemName: this.addItemList[j].itemName,
               itemValue: this.addItemList[j].itemValue,
               timePoint: time2,
@@ -1044,7 +1043,7 @@ export default {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
         visitId: this.objectItem.visitId,
-        eventNo: this.config.eventNo,
+        eventNo: 0,
         timePoint: new Date(sItem.time),
         itemValue: e.currentTarget.value,
         operator: this.config.userId
@@ -1096,7 +1095,7 @@ export default {
         patientId: this.objectItem.patientId,
         operId: this.objectItem.operId,
         visitId: this.objectItem.visitId,
-        eventNo: this.config.eventNo,
+        eventNo: 0,
         itemName: this.deleteTzItem.itemCode
       }
       this.api.deleteMedPatientMonitorDataCode(params)
@@ -1290,8 +1289,6 @@ export default {
     dateTime
   },
   mounted() {
-    // this.filterType = "全部";
-    console.log(this.filterType)
     this.canselEventList();
     this.allMedAnesthesiaEventType();
     this.getSignName();

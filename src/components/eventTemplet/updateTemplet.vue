@@ -13,7 +13,7 @@
         <div style="height: 24px;padding-left: 20px;background-color: rgb(228, 240, 255);">
           <span>模板名称</span>
           <button @click="saveTempletViewFun" style="height:22px;width: 60px;font-size:14px;line-height: 22px;">增加</button>
-          <button style="height:22px;width: 60px;font-size:14px;line-height: 22px;">删除</button>
+          <button @click="deleteTempMeth" style="height:22px;width: 60px;font-size:14px;line-height: 22px;">删除</button>
         </div>
         <div style="padding-left: 25px;overflow-y: auto;height: 420px;">
           <div>
@@ -32,7 +32,7 @@
                         +
                       </div>
                       <div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
-                      <div @click="getSelectClass(item,index)" :class="{chooseItemDiv:item.chooseItem}" style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+                      <div @dblclick="changeReadOnly(item,0)" @click="getSelectClass(item,index,0)" style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
                         {{item.anesthesiaMethod}}
                       </div>
                     </div>
@@ -40,7 +40,7 @@
                       <li v-if="item.tempView" v-for="(itemTemp,index1) in item.listTempName" @click="getPublicTempletDetail(itemTemp.templet,item.anesthesiaMethod,0)">
                         <div style="display: flex;align-items: center;">
                           <div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
-                          <div @contextmenu="changeReadOnly(itemTemp,$event,item,index)" :class="{chooseItemDiv:itemTemp.chooseItem}" style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+                          <div @dblclick="changeReadOnly(itemTemp,1)" @click="getSelectClass(itemTemp,index,1)" style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
                             {{itemTemp.templet}}
                             <!-- <input v-bind:readonly="itemTemp.isReadOnly" v-model="itemTemp.templet" style="width: 98%;border:0;"> -->
                           </div>
@@ -61,7 +61,7 @@
                         +
                       </div>
                       <div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
-                      <div style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+                      <div @dblclick="changeReadOnly(item,2)" @click="getSelectClass(item,index,2)" style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
                         {{item.anesthesiaMethod}}
                       </div>
                     </div>
@@ -69,7 +69,7 @@
                       <li v-if="item.tempView" v-for="itemTemp in item.listTempName" @click="getPublicTempletDetail(itemTemp.templet,item.anesthesiaMethod,1)">
                         <div style="display: flex;align-items: center;">
                           <div style="height: 12px;line-height: 12px;width: 12px;text-align: center;">...</div>
-                          <div style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
+                          <div @dblclick="changeReadOnly(itemTemp,3)" @click="getSelectClass(itemTemp,index,3)" style="cursor:pointer;width: 100%;border-left:1px solid rgb(228, 240, 255);border-bottom:1px solid rgb(228, 240, 255)">
                             {{itemTemp.templet}}
                           </div>
                         </div>
@@ -156,11 +156,11 @@
       </div>
       <div style="padding: 15px;display: flex;">
         <span>修改值:&nbsp;</span>
-        <input v-model="methodName" style="width: 250px;">
+        <input v-model="updateStr" style="width: 250px;">
       </div>
       <div style="padding-left: 15px;">
-        <button @click="saveTemplet">保存</button>
-        <button @click="cancleSaveTemp">取消</button>
+        <button @click="saveUpdateTemplet">保存</button>
+        <button @click="cancleUpdateView">取消</button>
       </div>
     </div>
   </div>
@@ -245,6 +245,11 @@ export default {
       saveTempletView: false,
       morClick: false,
       updateMethodView: false, //修改模板名称或者麻醉方法名称
+      updateStr: '', //修改模板名称或者方法
+      dblClickItem: '',
+      updateFlag: '',
+      deleteFlag: '',
+      getSelectItem: '',
     }
 
   },
@@ -288,19 +293,23 @@ export default {
       item.tempView = !item.tempView;
       this.$set(this.publicNameList, index, item);
     },
-    changeReadOnly(item, parameter, list, index) {
-      debugger
-
-      list.listTempName.forEach(items => {
-        items.isReadOnly = true
-      })
-      this.$set(this.publicNameList, index, list);
-      parameter.preventDefault();
-      item.isReadOnly = false;
+    //双击模板名称或者方法
+    changeReadOnly(item, flag) {
+      this.dblClickItem = item
+      this.updateMethodView = true
+      this.updateFlag = flag
     },
-    getSelectClass(item, index) {
+    cancleUpdateView() {
+      this.updateMethodView = false
+      this.updateFlag = ''
+      this.dblClickItem = ''
+      this.updateStr = ''
+    },
+    getSelectClass(item, index, flag) {
+      this.deleteFlag = flag
+      this.getSelectItem = item
       item.chooseItem = true;
-      this.$set(this.publicNameList, index, item);
+      // this.$set(this.publicNameList, index, item);
     },
     //获取模板名称
     getPrivateTempletNames(item, index) {
@@ -637,10 +646,97 @@ export default {
         .then(res => {
           if (res.success) {
             alert("保存成功")
+            this.getMethodNames();
           } else {
             alert("保存失败")
           }
           this.cancleSaveTemp();
+        })
+    },
+    //保存修改模板名称或者方法
+    saveUpdateTemplet() {
+      if (!this.updateStr) {
+        alert("修改内容不能为空")
+        return false
+      }
+      let par = {}
+      console.log(this.dblClickItem)
+      if (this.updateFlag == 0) {
+        par = {
+          createBy: '公用',
+          updateMethod: this.updateStr,
+          anesthesiaMethod: this.dblClickItem.anesthesiaMethod
+        }
+      }
+      if (this.updateFlag == 1) {
+        par = {
+          createBy: '公用',
+          updateTemplet: this.updateStr,
+          templet: this.dblClickItem.templet
+        }
+      }
+      if (this.updateFlag == 2) {
+        par = {
+          createBy: this.config.userId,
+          updateMethod: this.updateStr,
+          anesthesiaMethod: this.dblClickItem.anesthesiaMethod
+        }
+      }
+      if (this.updateFlag == 3) {
+        par = {
+          createBy: this.config.userId,
+          updateTemplet: this.updateStr,
+          templet: this.dblClickItem.templet
+        }
+      }
+      this.api.updateMethodTemp(par)
+        .then(res => {
+          if (res.success) {
+            alert("修改成功")
+            this.getMethodNames();
+          } else {
+            alert("修改失败")
+          }
+          this.cancleUpdateView();
+        })
+    },
+    //删除模板或者方法
+    deleteTempMeth() {
+      let par = {}
+      if (this.deleteFlag == 0) {
+        par = {
+          createBy: '公用',
+          anesthesiaMethod: this.getSelectItem.anesthesiaMethod
+        }
+      }
+      if (this.deleteFlag == 1) {
+        par = {
+          createBy: '公用',
+          templet: this.getSelectItem.templet
+        }
+      }
+      if (this.deleteFlag == 2) {
+        par = {
+          createBy: this.config.userId,
+          anesthesiaMethod: this.getSelectItem.anesthesiaMethod
+        }
+      }
+      if (this.deleteFlag == 3) {
+        par = {
+          createBy: this.config.userId,
+          templet: this.getSelectItem.templet
+        }
+      }
+      this.api.deleteTempMethod(par)
+        .then(res => {
+          if (res.success) {
+            alert("删除成功")
+            this.getMethodNames();
+          } else {
+            alert("删除失败")
+          }
+          this.getSelectItem = ''
+
         })
     },
 
