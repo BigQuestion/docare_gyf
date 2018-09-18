@@ -1651,6 +1651,13 @@ export default {
     },
     selectMedFormTemp(item) {
       this.lodopInit();
+      if (item.formName == '麻醉记录单') {
+        this.config.eventNo = 0
+      }
+      if (item.formName == '复苏记录单') {
+        this.config.eventNo = 1
+      }
+
       let timeParam = {
         "patientId": this.lockedPatientInfo.patientId,
         "visitId": this.lockedPatientInfo.visitId,
@@ -1667,9 +1674,9 @@ export default {
       item.isPage = false;
       this.selectFormItemTemp = item;
 
-      if (item.formName == '麻醉记录单') {
+      if (item.formName == '麻醉记录单' || item.formName == '复苏记录单') {
         // this.getMaxTime();
-        this.config.eventNo = 0
+        // this.config.eventNo = 0
         this.personView = true
         let inDateTime = this.config.userInfo.inDateTime
         this.tempButtonView = false;
@@ -1802,66 +1809,6 @@ export default {
             })
         this.tempButtonView = true;
         this.initComponementConfig();
-      } else if (item.formName == '复苏记录单') {
-        this.config.eventNo = 1
-
-        let params = {
-          formName: item.formName,
-          id: item.id
-        }
-        let arry = [];
-        // this.formItems = [];
-        this.api.selectMedFormTemp(params)
-          .then(
-            res => {
-              if (res.formContent == "null" || res.formContent == null) {
-                return;
-              }
-              let tempItems = JSON.parse(res.formContent);
-              this.formItems = JSON.parse(res.formContent);
-              var list = this.formItems;
-              if (this.setTimeId) {
-                this.$nextTick(function() {
-                  Bus.$emit('timeSetChange');
-                })
-              }
-              for (var i = 0; i < list.length; i++) {
-                if (list[i].fieldName) {
-                  arry.push({
-                    "patientId": this.lockedPatientInfo.patientId,
-                    "visitId": this.lockedPatientInfo.visitId,
-                    "operId": this.lockedPatientInfo.operId,
-                    "tableName": list[i].tableName,
-                    "coluName": list[i].fieldName,
-                    "dictShowFiled": list[i].dictShowFiled, //字典显示字段名称
-                    "dictTableName": list[i].dictTableName, //字典表名称
-                    "dictField": list[i].dictField, //字典字段名称
-                    "dictSelect": list[i].dictSelect,
-                  })
-                }
-              }
-              this.api.getFormSqlResult(arry)
-                .then(
-                  result => {
-                    for (var i = 0; i < list.length; i++) {
-                      if (list[i].fieldName) {
-                        if (list[i].fieldName == "page") {
-                          let obj = this.formItems[i];
-                          obj.value = this.config.pagePercentNum + '/' + this.config.pageTotal + '页';
-                          let tempObj = JSON.parse(JSON.stringify(obj));
-                          this.$set(this.formItems, i, tempObj);
-                        } else {
-                          let obj = this.formItems[i];
-                          obj.value = result[list[i].tableName + list[i].fieldName];
-                          let tempObj = JSON.parse(JSON.stringify(obj));
-                          this.$set(this.formItems, i, tempObj);
-                        }
-
-                      }
-                    }
-
-                  });
-            })
       } else {
         this.tempButtonView = false;
         this.initComponementConfig();
