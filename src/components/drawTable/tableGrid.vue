@@ -229,7 +229,8 @@ export default {
         patientId: this.config.userInfo.patientId,
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
-        itemClass: '2C4'
+        itemClass: '2C4',
+        eventNo: this.config.eventNo
       }
       for (var i = 0; i < this.rows; i++) {
         this.dataArray.push(i);
