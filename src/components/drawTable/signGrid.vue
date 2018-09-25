@@ -112,6 +112,7 @@ export default {
         operId: this.config.userInfo.operId,
         visitId: this.config.userInfo.visitId,
         itemClass: "3B",
+        eventNo:this.config.eventNo,
       }
       this.api.selectMedAnesthesiaEventList(paramsTwo)
         .then(zze => {
@@ -149,6 +150,7 @@ export default {
             operId: this.config.userInfo.operId,
             visitId: this.config.userInfo.visitId,
             itemClass: "sz",
+            eventNo:this.config.eventNo,
           }
           this.api.selectMedAnesthesiaEventList(paramsThree)
             .then(aff => {
@@ -283,7 +285,8 @@ export default {
                 patientId: this.config.userInfo.patientId,
                 operId: this.config.userInfo.operId,
                 visitId: this.config.userInfo.visitId,
-                itemClass: 'Y'
+                itemClass: 'Y',
+                eventNo:this.config.eventNo,
               }
               this.api.selectMedAnesthesiaEventList(paramBr)
                 .then(add => {
