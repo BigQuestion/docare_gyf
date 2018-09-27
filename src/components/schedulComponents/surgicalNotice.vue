@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 10px 30px;width: 1300px;">
+  <div style="margin: 10px 30px;width: 1300px;padding-top:100px;">
     <div>
       <input type="date" v-model="dateTimeValue">
       <button @click="getView">查询</button>

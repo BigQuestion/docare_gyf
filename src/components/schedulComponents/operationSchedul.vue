@@ -1,5 +1,5 @@
 <template>
-  <div @click="cleanOutShow()">
+  <div @click="cleanOutShow()" style="padding-top:145px;">
     <div class="dataOfButton">
       <span style="color:blue;">注：绿色的手术为正在进行中，红色的手术为未提交</span>
       <span style="font-weight: bold;">手术人员安排表</span>
@@ -462,22 +462,7 @@ export default {
           value: 'secondOperationNurseName',
           width: 100,
           optin: false,
-        }, {
-          text: '巡回护士1',
-          value: 'firstSupplyNurseName',
-          width: 100,
-          optin: false,
-        }, {
-          text: '巡回护士2',
-          value: 'secondSupplyNurseName',
-          width: 100,
-          optin: false,
-        }, {
-          text: '洗手护士2',
-          value: 'secondOperationNurseName',
-          width: 100,
-          optin: false,
-        }, {
+        },{
           text: '巡回护士1',
           value: 'firstSupplyNurseName',
           width: 100,
