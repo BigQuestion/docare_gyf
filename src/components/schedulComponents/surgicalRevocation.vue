@@ -4,6 +4,7 @@
             手术日期：<input type="date" v-model="dateTimeValue" @change="getTime($event)">
             <button @click="getView(dateTimeValue)">查询</button>
             <button style="width:120px;margin-left:15px;" @click="goBack()">撤销已选手术</button>
+            <button style="width:80px;margin-left:15px;" @click="all()">{{buttonWord}}</button>
         </div>
         <div style="overflow:auto;width:100%;height:calc(100% - 40px);box-sizing:border-box;margin:auto;border:1px solid #000;">
             <div class="" style="display:flex;width:1850px;box-sizing:border-box;">
@@ -16,24 +17,12 @@
                     <div v-for="cell in infoMode" class="titleBox" :style="{width:cell.width+'px'}" style="box-sizing: border-box;">
                         <span v-if="cell.value == 'index'">{{index+1}}</span>
                         <span v-else-if="cell.value == 'checkbox'">
-                            <input type="checkbox" @change="getListForCancel(item)">
+                            <input type="checkbox" :checked="item.checkData"  @change="getListForCancel(item)">
                         </span>
                         <span v-else>{{item[cell.value]}}</span>
                     </div>
                 </div>
             </div>
-            <!-- <div class="flex head">
-                                                                <div v-for="(item,index) in tableConfig" class="cell resizeAble" :style="{width:item.width+'px'}" style="text-align: center;position: relative;border: 1px solid #222;display: inline-block;box-sizing: border-box;">
-                                                                    <div style="width:100%;overflow-x: hidden;white-space: nowrap">{{item.text}}</div>
-                                                                </div>
-                                                            </div>
-                                                            <div style="position:relative;">
-                                                                <div v-for="(item,index) in scheduleList" class="flex rows" :class="{state2:item.state==2,state3:item.state==3,hoverClass:item.clickShadowData}">
-                                                                    <div v-for="cell in tableConfig" class="cell" :style="{width:cell.width+'px'}" style="box-sizing: border-box; ">
-                                                                        {{item[cell.value]}}
-                                                                    </div>
-                                                                </div>
-                                                            </div> -->
         </div>
     </div>
 </template>
@@ -42,6 +31,7 @@ export default {
     data() {
         return {
             dateTimeValue: '',
+            buttonWord: '全部',
             infoMode: [{
                 text: '序号',
                 value: 'index',
@@ -179,6 +169,7 @@ export default {
                     for (var a = 0; a < res.list.length; a++) {
                         if (res.list[a].state == 2) {
                             this.$set(res.list[a], 'clickShadowData', false)
+                            this.$set(res.list[a], 'checkData', false)
                             this.scheduleList.push(res.list[a]);
                         }
                     }
@@ -186,6 +177,8 @@ export default {
         },
         getListForCancel(item) {
             item.clickShadowData = !item.clickShadowData;
+            item.checkData = !item.checkData;
+            this.buttonWord = '取消';
             if (item.clickShadowData == true) {
                 this.cancelData.push(item);
             } else {
@@ -197,6 +190,7 @@ export default {
                     }
                 }
             }
+
         },
         goBack() {
             let parm = [];
@@ -212,16 +206,30 @@ export default {
                 }
                 this.api.cancleSubmit(parm)
                     .then(cal => {
-                        console.log(cal)
-                        if(cal.success){
+                        if (cal.success) {
                             alert(cal.msg)
                             this.getView(this.dateTimeValue);
-                        }else{
+                        } else {
                             alert(cal.msg)
                         }
                     })
             }
 
+        },
+        all() {
+            if (this.buttonWord == '全部') {
+                for (var i = 0; i < this.scheduleList.length; i++) {
+                    this.cancelData.push(this.scheduleList[i]);
+                    this.scheduleList[i].checkData = true;
+                }
+                this.buttonWord = '取消';
+            } else if (this.buttonWord == '取消') {
+                for (var a = 0; a < this.scheduleList.length; a++) {
+                    this.scheduleList[a].checkData = false;
+                }
+                this.cancelData = [];
+                this.buttonWord = '全部';
+            }
         }
 
     },
