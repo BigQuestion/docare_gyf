@@ -32,6 +32,9 @@ const drawTable = resolve => {
 const management = resolve => {
   require(['../components/management/management.vue'], resolve)
 };
+const statsFilesLogin = resolve => {
+  require(['../components/statsFiles/login/login.vue'], resolve)
+};
 export default new Router({
   routes: [ {
     path: '/',
@@ -68,5 +71,8 @@ export default new Router({
   },{
     path: '/management',
     component: management
+  },{
+    path: '/statsFilesLogin',
+    component: statsFilesLogin
   },]
 })

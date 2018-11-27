@@ -9,7 +9,7 @@
           <img style="width:225px;height:auto;" src="../../assets/doc.png">
         </div>
         <div style="width:60%;">
-          <h2 style="color:white;">DoCare麻醉临床信息系统V5.0</h2>
+          <h2 style="color:#fff;">DoCare麻醉临床信息系统V5.0</h2>
           <div style="margin-top:20px;height:24px;">
             <span style="display:inline-block;width:65px;height:100%;color:#fff;">用户名：</span>
             <input type="" name="" style="width: 180px;height:22px;box-sizing:border-box;" v-model="loginName" @keyup.enter='nextInput' ref="inputEml">
@@ -186,10 +186,12 @@ export default {
   top: 50%;
   background: url('../../assets/loginBoxBack.jpg')no-repeat;
   background-size: cover;
+  background-color: #fff;
   width: 650px;
   height: 340px;
   margin-left: -325px;
   margin-top: -170px;
+  /* border: 1px solid #999; */
 }
 
 .timePicker::-webkit-inner-spin-button {

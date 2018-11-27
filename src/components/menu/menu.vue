@@ -16,8 +16,8 @@
         <div @click="goUrl('/management')" class="systemButton" style="left:540px;bottom:0;">
           <span>用户管理</span>
         </div>
-        <div @click="goUrl('/formDesigner')" class="systemButton" style="left:720px;top:0;">
-          <span>表单设计器</span>
+        <div @click="goUrl('/statsFilesLogin')" class="systemButton" style="left:720px;top:0;">
+          <span>统计系统</span>
         </div>
         <div @click="exitSystem()" class="systemButton" style="left:900px;bottom:0;">
           <span>退出系统</span>
@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     goUrl(url) {
-      if (url == '/statistics' || url == '/formDesigner') {
+      if (url == '/statistics') {
         alert('暂无权限。')
       } else if (url == '/management') {
         if (this.config.userId == 'admin') {
@@ -47,6 +47,10 @@ export default {
         } else {
           alert('暂无权限。')
         }
+      } else if (url == '/statsFilesLogin') {
+        this.$router.push({
+          path: url
+        })
       } else {
         this.$router.push({
           path: url
@@ -60,7 +64,7 @@ export default {
         this.$router.push({
           path: 'login'
         })
-      } else {}
+      } else { }
     },
   },
   mounted() {
@@ -122,11 +126,6 @@ export default {
   box-shadow: 1px 2px 10px rgba(142, 193, 238, 0.5);
 }
 
-.systemButton:hover {
-  color: #fff;
-  /* background-color: #00242D; */
-}
-
 .copyRight {
   color: #fff;
   font-size: 12px;
@@ -136,5 +135,4 @@ export default {
   bottom: 0;
   padding-bottom: 5px;
 }
-
 </style>
