@@ -261,7 +261,7 @@
             <textarea style="outline:none;" v-if="item.text == '备注'" readonly name="" id="" v-model="handleItem[item.value]"></textarea>
             <select @change="getNewPushData(item,index)" v-else-if="item.optin == true&&item.value == 'anesthesiaDoctorName'" style="width:134px;" v-model="handleItem[item.value]">
               <option value=""></option>
-              <option v-for="all in options" v-bind:value="all.userName">{{all.userName}}</option>
+              <option v-for="all in options"  v-bind:value="all.userName">{{all.userName}}</option>
             </select>
             <select @change="getNewPushData(item,index)" v-else-if="item.optin == true&&(item.value == 'firstAnesthesiaAssistantName'||item.value == 'secondAnesthesiaAssistantName')" style="width:134px;" v-model="handleItem[item.value]">
               <option value=""></option>
@@ -643,65 +643,65 @@ export default {
     getNewPushData(item, index) {
       // console.log(item)
       // console.log(index)
-      // console.log(this.handleItem[item.value])
-      // console.log(this.tableConfig[index])
-      if (this.tableConfig[index].value == 'anesthesiaDoctorName') {
+      // console.log(this.infoMode)
+      // console.log(this.infoMode[index])
+      if (this.infoMode[index].value == 'anesthesiaDoctorName') {
         // console.log(this.options)
         for (var a = 0; a < this.options.length; a++) {
           if (this.options[a].userName == this.handleItem[item.value]) {
             this.onchangeData.anesthesiaDoctorName = this.options[a].userId;
           }
         }
-      } else if (this.tableConfig[index].value == 'firstAnesthesiaAssistantName') {
+      } else if (this.infoMode[index].value == 'firstAnesthesiaAssistantName') {
         // console.log(this.MzkUsers)
         for (var a = 0; a < this.MzkUsers.length; a++) {
           if (this.MzkUsers[a].userName == this.handleItem[item.value]) {
             this.onchangeData.firstAnesthesiaAssistantName = this.MzkUsers[a].userId;
           }
         }
-      } else if (this.tableConfig[index].value == 'secondAnesthesiaAssistantName') {
+      } else if (this.infoMode[index].value == 'secondAnesthesiaAssistantName') {
         // console.log(this.MzkUsers)
         for (var a = 0; a < this.MzkUsers.length; a++) {
           if (this.MzkUsers[a].userName == this.handleItem[item.value]) {
             this.onchangeData.secondAnesthesiaAssistantName = this.MzkUsers[a].userId;
           }
         }
-      } else if (this.tableConfig[index].value == 'firstAssistantName') {
+      } else if (this.infoMode[index].value == 'firstAssistantName') {
         // console.log(this.assistant)
         for (var a = 0; a < this.assistant.length; a++) {
           if (this.assistant[a].userName == this.handleItem[item.value]) {
             this.onchangeData.firstAssistantName = this.assistant[a].userId;
           }
         }
-      } else if (this.tableConfig[index].value == 'secondAssistantName') {
+      } else if (this.infoMode[index].value == 'secondAssistantName') {
         // console.log(this.assistant)
         for (var a = 0; a < this.assistant.length; a++) {
           if (this.assistant[a].userName == this.handleItem[item.value]) {
             this.onchangeData.secondAssistantName = this.assistant[a].userId;
           }
         }
-      } else if (this.tableConfig[index].value == 'firstOperationNurseName') {
+      } else if (this.infoMode[index].value == 'firstOperationNurseName') {
         // console.log(this.wash)
         for (var a = 0; a < this.wash.length; a++) {
           if (this.wash[a].userName == this.handleItem[item.value]) {
             this.onchangeData.firstOperationNurseName = this.wash[a].userId;
           }
         }
-      } else if (this.tableConfig[index].value == 'secondOperationNurseName') {
+      } else if (this.infoMode[index].value == 'secondOperationNurseName') {
         // console.log(this.wash)
         for (var a = 0; a < this.wash.length; a++) {
           if (this.wash[a].userName == this.handleItem[item.value]) {
             this.onchangeData.secondOperationNurseName = this.wash[a].userId;
           }
         }
-      } else if (this.tableConfig[index].value == 'firstSupplyNurseName') {
+      } else if (this.infoMode[index].value == 'firstSupplyNurseName') {
         // console.log(this.tour)
         for (var a = 0; a < this.tour.length; a++) {
           if (this.tour[a].userName == this.handleItem[item.value]) {
             this.onchangeData.firstSupplyNurseName = this.tour[a].userId;
           }
         }
-      } else if (this.tableConfig[index].value == 'secondSupplyNurseName') {
+      } else if (this.infoMode[index].value == 'secondSupplyNurseName') {
         // console.log(this.tour)
         for (var a = 0; a < this.tour.length; a++) {
           if (this.tour[a].userName == this.handleItem[item.value]) {
@@ -729,6 +729,7 @@ export default {
         state: 1,
       }
       // console.log(params)
+      // debugger
       this.api.editSchedule(params)
         .then(res => {
           // this.getList(this.dateValue)
@@ -1420,6 +1421,7 @@ export default {
       }
       this.api.getScheduleList(params)
         .then(res => {
+          // debugger
           // 0为未分配 1为已分配未提交
           for (var j = 0; j < res.list.length; j++) {
             if (res.list[j].state == 0) {

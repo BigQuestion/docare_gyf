@@ -1,5 +1,5 @@
 <template>
-  <div style="margin: 10px 30px;width: 1300px;">
+  <div style="margin: 10px 30px;width: 1300px;padding-top:100px;">
     <div>
       <span>同步开始日期:</span>
       <input type="date" v-model="startTimeValue">

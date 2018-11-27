@@ -233,6 +233,10 @@ export default {
         }
 
     },
+    mounted(){
+        this.dateTimeValue = new Date().Format("yyyy-MM-dd");
+        this.getView(this.dateTimeValue)
+    }
 
 }
 </script>
