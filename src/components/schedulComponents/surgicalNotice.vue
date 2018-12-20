@@ -31,14 +31,32 @@ export default {
     return {
       viewList: [],
       dateTimeValue: '',
-      tableTitleList: [{
-          title: '预约时间',
-          field: 'SCHEDULED_TIME'
+      tableTitleList: [
+        {
+          title: '手术费',
+          field: ''
         },
         {
-          title: '间次',
+          title: '方四',
+          field: ''
+        },
+        {
+          title: '四级',
+          field: ''
+        },
+        {
+          title: '手术间',
           field: 'OPERATING_ROOM_NO_SEQUENCE'
-        }, {
+        },
+        {
+          title: '科室',
+          field: ''
+        },
+        // {
+        //   title: '预约时间',
+        //   field: 'SCHEDULED_TIME'
+        // },
+        {
           title: '姓名',
           field: 'PAT_NAME'
         }, {
@@ -47,37 +65,53 @@ export default {
         }, {
           title: '年龄',
           field: 'PAT_AGE'
-        }, {
-          title: '病区',
-          field: 'OPERATING_DEPT_NAME'
-        }, {
+        },
+        //  {
+        //   title: '病区',
+        //   field: 'OPERATING_DEPT_NAME'
+        // },
+        {
+          title: '住院号',
+          field: ''
+        },
+        {
           title: '床号',
           field: 'BED_NO'
         }, {
-          title: '手术名称',
-          field: 'OPERATION_NAME'
-        }, {
-          title: '麻醉方式',
-          field: 'ANESTHESIA_METHOD'
-        }, {
-          title: '主麻医生',
-          field: 'ANESTHESIA_DOCTOR_NAME'
-        }, {
-          title: '副麻医生',
+          title: '术前诊断',
           field: ''
         }, {
-          title: '麻醉助手',
-          field: 'ANESTHESIA_ASSISTANT_NAME'
-        }, {
-          title: '主刀医师',
+          title: '手术名称',
+          field: 'OPERATION_NAME'
+        },
+        //  {
+        //   title: '麻醉方式',
+        //   field: 'ANESTHESIA_METHOD'
+        // }, 
+        {
+          title: '术者',
           field: 'SURGEON_NAME'
-        }, {
-          title: '洗手护士',
+        },
+        {
+          title: '助手',
+          field: ''
+        },
+        {
+          title: '洗手',
           field: 'FIRST_OPERATION_NURSE_NAME'
-        }, {
-          title: '巡回护士',
+        },
+        {
+          title: '主麻医生',
+          field: 'ANESTHESIA_DOCTOR_NAME'
+        },
+        {
+          title: '巡回',
           field: 'FIRST_SUPPLY_NURSE_NAME'
         },
+        //  {
+        //   title: '麻醉助手',
+        //   field: 'ANESTHESIA_ASSISTANT_NAME'
+        // },
       ]
     }
   },

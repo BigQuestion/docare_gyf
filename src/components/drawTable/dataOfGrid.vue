@@ -58,10 +58,12 @@ export default {
             if (res.list[i].ITEM_CLASS == "C" || res.list[i].ITEM_CLASS == "2" || res.list[i].ITEM_CLASS == "3" || res.list[i].ITEM_CLASS == "B"|| res.list[i].ITEM_CLASS == "4") {
 
             } else {
+              
               var time = new Date(res.list[i].START_TIME).getTime();
               if (this.startTimeInPage <= time && time <= this.maxTimeInPage) {
                 this.$set(res.list[i], 'sort', time);
                 if (res.list[i].START_TIME) {
+                  
                   var nameDate = res.list[i].START_TIME.split(" ");
                   var nextTime = nameDate[1].split(":");
                   console.log(nextTime)

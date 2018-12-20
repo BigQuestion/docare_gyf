@@ -1138,7 +1138,7 @@ export default {
       this.maxL = [];
       this.roomNum = [];
       this.stateOfNum = false;
-      // console.log(item)
+      console.log(item)
       for (var i = 0; i < this.roomId.length; i++) {
         this.$set(this.roomId[i], 'chooseClass', false)
       }
@@ -1575,8 +1575,9 @@ export default {
       this.maskOfSchedul = true;
     },
     arrange(event, item, index) {
+      // debugger
       // console.log(event)
-      // console.log(item)
+      console.log(item)
       // console.log(index)
       // console.log(this.$refs.normal.scrollLeft)
       // this.showarrange = true;
@@ -1652,7 +1653,11 @@ export default {
       if (this.stateOfNum == false) {
         this.pushDataBody.sequence = this.dataNum + 1;
       } else {
-        this.pushDataBody.sequence = Math.max.apply(Math, this.roomNum) + 1
+          if(this.roomNum.length !== 0){
+            this.pushDataBody.sequence = Math.max.apply(Math, this.roomNum) + 1
+          }else{
+            this.pushDataBody.sequence = 1;
+          }        
       }
       // 自动添加台次
       // this.scheduleListRight2.push(this.pushDataBody)
@@ -1758,12 +1763,12 @@ export default {
       }
     },
     goBackFun(cell, index) {
-      // console.log(cell)
+      console.log(cell)
       this.roomNum = [];
       for (var b = index; b < this.scheduleListRight.length; b++) {
         if (cell.operatingRoomNo == this.scheduleListRight[b].operatingRoomNo && cell.sequence < this.scheduleListRight[b].sequence) {
           this.scheduleListRight[b].sequence = this.scheduleListRight[b].sequence - 1;
-          // console.log(this.scheduleListRight)
+          console.log(this.scheduleListRight)
         }
       }
       this.scheduleListRight.splice(index, 1);

@@ -8,28 +8,27 @@
       <div style="height:50px;padding-left: 20px;font-size: 18px;line-height: 50px;">
         <span>检验信息</span>
       </div>
-      <div style="height: calc(100% - 100px);width: 100%;display: flex;">
-        <div style="width: 40%;height:100%;overflow-y: auto;background-color: white;">
-          <div style="display: flex;margin-left: 10px;">
-            <!-- <div style="width: 25%;border: 1px solid rgb(177, 207, 243);color: #4C79BB;" v-for="cell in contentConfig">{{cell.text}}</div> -->
-            <div class="flex head" :style="{width:totalWidth+'px'}">
-              <div v-for="(item,index) in contentConfig" class="cell resizeAble" :style="{width:item.width+'px'}" style="text-align: center;position: relative;border: 1px solid #E6E6E6;display: inline-block;box-sizing: border-box;">
-                <div style="width:100%;overflow-x: hidden;white-space: nowrap">{{item.text}}</div>
-                <div class="resizeIcon" :style="{left:item.width-2}" @mousedown="resizeStart($event,index,item)"></div>
+      <div style="height: calc(100% - 80px);width: 100%;display: flex;">
+        <div style="width: 59%;height:100%;overflow-y: auto;background-color: white;">
+          <div style="min-height:530px;">
+            <div style="display: flex;">
+              <div v-for="item in contentConfig" :style="{width:item.width+'px'}" class="leftTitle" style="background-color:rgb(219,235,253)">{{item.text}}</div>
+            </div>
+            <div>
+              <div style="display:flex;" class="hover" :class="{hoverClick:item.clickClass}" v-for="item in dataList" @click="getDetail(item)">
+                <div v-for="cell in contentConfig" :style="{width:cell.width+'px'}" class="leftTitle">{{item[cell.value]}}</div>
               </div>
             </div>
-            <!-- <div>
-                <div v-for="(item,index) in scheduleList" :style="{width:totalWidth+'px'}" class="flex rows" :class="{state2:item.state==2,state3:item.state==3}">
-                  <div v-for="cell in contentConfig" class="cell" :style="{width:cell.width+'px'}" style="box-sizing: border-box; ">
-                    {{item[cell.value]}}
-                  </div>
-                </div>
-              </div> -->
           </div>
-          <div v-for="list in dataList" style="display: flex;margin-left: 10px;">
-            <div v-for="cl in contentConfig" style="width: 160px;border:1px solid rgb(177,207,243);overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-              <span v-if="[cl.value]=='resultsRptDateTime'">{{list[cl.value]|timeStampToDateStr}}</span>
-              <span :title="list[cl.value]" v-else>{{list[cl.value]}}</span>
+        </div>
+        <div class="autoLine"></div>
+        <div style="width: calc(41% - 5px);;height:100%;overflow-y: auto;background-color: white;">
+          <div style="display: flex;">
+            <div v-for="item in contentConfigDetails" :style="{width:item.width+'px'}" class="leftTitle" style="background-color:rgb(219,235,253)">{{item.text}}</div>
+          </div>
+          <div>
+            <div style="display:flex;" class="hover" @click="changeColor(item)" :class="{hoverClick:item.clickClass}" v-for="item in detailsList">
+              <div v-for="cell in contentConfigDetails" :style="{width:cell.width+'px'}" class="leftTitle">{{item[cell.value]}}</div>
             </div>
           </div>
         </div>
@@ -43,18 +42,22 @@ export default {
   data() {
     return {
       contentConfig: [{
+        text: "",
+        width: 10,
+        value: "num"
+      }, {
         text: "检验号",
-        width: 80,
+        width: 90,
         value: "testNo"
       },
       {
         text: "检验名称",
-        width: 80,
+        width: 405,
         value: "testCause"
       },
       {
         text: "检验类别",
-        width: 80,
+        width: 70,
         value: "specimen"
       },
       {
@@ -63,13 +66,33 @@ export default {
         value: "resultsRptDateTime"
       },
       ],
-      totalWidth: '',
-      startX: '',
+      contentConfigDetails: [{
+        text: "",
+        width: 10,
+        value: "num"
+      }, {
+        text: "项目名称",
+        width: 220,
+        value: "reportItemName"
+      },
+      {
+        text: "测试结果",
+        width: 80,
+        value: "result"
+      },
+      {
+        text: "单位",
+        width: 70,
+        value: "units"
+      },
+      {
+        text: "参考值",
+        width: 70,
+        value: "referenceResult"
+      },
+      ],
       dataList: [],
-      handleCol: '',
-      nextCol: '',
-      maxWidth: '',
-      area: '',
+      detailsList: [],
     }
   },
   methods: {
@@ -83,39 +106,38 @@ export default {
       }
       this.api.getMedLabTestMasterList(parm)
         .then(res => {
-          console.log(res)
+          for (var a = 0; a < res.length; a++) {
+            this.$set(res[a], 'clickClass', false)
+            this.$set(res[a], 'resultsRptDateTime', new Date(res[a].resultsRptDateTime).Format('yyyy-MM-dd'))
+          }
           this.dataList = res;
         })
     },
-    resizeStart(e, index, col) {
-      if (index == this.contentConfig.length - 1) {
-        return;
+    getDetail(item) {
+      for (var a = 0; a < this.dataList.length; a++) {
+        this.dataList[a].clickClass = false;
       }
-      this.startX = e.clientX;
-      //this.handleCol = col;
-      this.handleCol = this.contentConfig[index - 1];
-      this.nextCol = this.contentConfig[index + 1];
-      this.maxWidth = this.handleCol.width + this.nextCol.width - 10;
-      this.area.addEventListener('mousemove', this.resizeMove);
-      this.area.addEventListener('mouseup', this.stopDrag);
-    },
-    resizeMove(e) {
-      let dX = e.clientX - this.startX;
-      if (this.maxWidth >= this.handleCol.width + dX && this.minWidth <= this.handleCol.width + dX) {
-        this.startX = e.clientX;
-        this.handleCol.width += dX;
-        this.totalWidth += dX;
-        //this.nextCol.width -= dX;
+      item.clickClass = true;
+      let parm = {
+        testNo: item.testNo,
       }
+      this.api.getLabReultList(parm)
+        .then(res => {
+          for (var a = 0; a < res.length; a++) {
+            this.$set(res[a], 'clickClass', false)
+          }
+          this.detailsList = res;
+        })
     },
-    stopDrag(e) {
-      this.area.removeEventListener('mousemove', this.resizeMove);
-      this.area.removeEventListener('mouseup', this.stopDrag);
-    },
+    changeColor(item) {
+      for (var a = 0; a < this.detailsList.length; a++) {
+        this.detailsList[a].clickClass = false;
+      }
+      item.clickClass = true;
+    }
   },
   mounted() {
-    // this.getData();
-    this.area = window;
+    this.getData();
   },
   created() { },
   beforeDestroy() { },
@@ -127,6 +149,13 @@ export default {
 
 </script>
 <style scoped>
+.window_load {
+  width: 1200px;
+  height: 600px;
+  top: calc(50% - 300px);
+  left: calc(50% - 570px);
+}
+
 .flex {
   height: 25px;
   line-height: 25px;
@@ -155,6 +184,7 @@ export default {
   background-color: #39578A;
   color: #fff;
 }
+
 .resizeIcon {
   position: absolute;
   top: 0px;
@@ -166,5 +196,32 @@ export default {
 
 .resizeIcon:hover {
   cursor: w-resize;
+}
+
+.leftTitle {
+  border: 1px solid rgb(193, 211, 243);
+  padding-left: 5px;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.autoLine {
+  height: calc(100% - 2px);
+  width: 5px;
+  border: 1px solid rgb(193, 211, 243);
+  background-color: rgb(118, 163, 219);
+}
+
+.hoverClick {
+  background-color: rgb(48, 106, 197);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.hover:hover {
+  background-color: rgb(48, 106, 197);
+  color: #ffffff;
+  cursor: pointer;
 }
 </style>
